@@ -39,3 +39,7 @@ hs_err_pid*
 # Other
 target
 webapp/target
+interfaces/target
+persistence/target
+model/target
+service/target

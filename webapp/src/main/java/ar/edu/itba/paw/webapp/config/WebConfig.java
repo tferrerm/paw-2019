@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.config;
+package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
-@ComponentScan({ "ar.edu.itba.paw.controller" })
+@ComponentScan({ "ar.edu.itba.paw.webapp.controller" })
 @Configuration
 public class WebConfig {
 	
