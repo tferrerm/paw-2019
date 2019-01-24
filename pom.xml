@@ -8,6 +8,10 @@
   <name>paw-project-2019-1C</name>
   <modules>
     <module>webapp</module>
+    <module>model</module>
+    <module>interfaces</module>
+    <module>service</module>
+    <module>persistence</module>
   </modules>
   <properties>
     <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
