@@ -21,10 +21,8 @@ org.apache.maven.archetypes:maven-archetype-webapp
 ar.edu.itba.paw # groupId
 webapp # artifactId
 # default version
-# default package
+ar.edu.itba.paw.webapp # package
 ```
-
-Make sure to remove `config` in all appearances of `ar.edu.itba.paw.webapp.config.WebConfig`.
 
 By default, jetty starts at `http://localhost:8080/<WEBAPP_ARTIFACT_ID>`.
 
@@ -37,11 +35,9 @@ org.apache.maven.archetypes:maven-archetype-quickstart
 # select default version
 ar.edu.itba.paw # groupId
 model # artifactId
-# default
-# default
+# default version
+ar.edu.itba.paw.model # package
 ```
-
-Then, rename the package `ar.edu.itba.paw` to `ar.edu.itba.paw.model`.
 
 ### Interfaces
 
@@ -52,11 +48,9 @@ org.apache.maven.archetypes:maven-archetype-quickstart
 # select default version
 ar.edu.itba.paw # groupId
 interfaces # artifactId (note that interface is a reserved word)
-# default
-# default
+# default version
+ar.edu.itba.paw.interfaces # package
 ```
-
-Then, rename the package `ar.edu.itba.paw` to `ar.edu.itba.paw.interfaces`.
 
 ### Service
 
@@ -67,11 +61,10 @@ org.apache.maven.archetypes:maven-archetype-quickstart
 # select default version
 ar.edu.itba.paw # groupId
 service # artifactId
-# default
-# default
+# default version
+ar.edu.itba.paw.service # package
 ```
 
-Then, rename the package `ar.edu.itba.paw` to `ar.edu.itba.paw.service`.
 Do not forget to add the dependency `persistence` in `pom.xml`.
 
 ### Persistence
@@ -83,9 +76,8 @@ org.apache.maven.archetypes:maven-archetype-quickstart
 # select default version
 ar.edu.itba.paw # groupId
 persistence # artifactId
-# default
-# default
+# default version
+ar.edu.itba.paw.persistence # package
 ```
 
-Then, rename the package `ar.edu.itba.paw` to `ar.edu.itba.paw.persistence`.
 Do not forget to add the dependency `interfaces` in `pom.xml`.
