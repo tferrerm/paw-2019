@@ -27,7 +27,7 @@ public class UserController {
 		return mav;
 	}
 	
-	@RequestMapping("/create")
+	@RequestMapping("/user/create")
 	public ModelAndView create(
 			@RequestParam(value = "username", required = true) final String username) {
 		final User u = us.create(username, "12345678");

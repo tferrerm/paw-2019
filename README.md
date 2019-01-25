@@ -28,3 +28,8 @@ CREATE ROLE root WITH CREATEDB LOGIN PASSWORD 'root';
 Then, we need to run ```createdb paw -O root``` where ```root``` is the role created earlier and ```paw``` the name of the database to be used.  
 Also, we might need to change the file ```/etc/postgresql/<version>/main/pg_hba.conf``` and replace ```peer``` with ```md5```.  
 To start/reload the postgresql service, just type ```sudo service postgresql start``` or reload.
+
+## Unit tests
+
+When the `src/test/resources` folder is added to the build path, it is important to set its output path to
+`target/test-classes`, and it is also recommended to add the exclusion filter `**/*.java` to this source folder.
