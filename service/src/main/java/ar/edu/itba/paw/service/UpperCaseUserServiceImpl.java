@@ -8,14 +8,16 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UpperCaseUserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDao ud;
 
 	@Override
-	public User findById(final long userid) {
-		return ud.findById(userid);
+	public User findById(long userid) {
+		final User u = ud.findById(userid);
+		u.setUsername(u.getUsername().toUpperCase());
+		return u;
 	}
 
 }
