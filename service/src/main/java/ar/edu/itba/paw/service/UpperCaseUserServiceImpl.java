@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,20 @@ public class UpperCaseUserServiceImpl implements UserService {
 	private UserDao ud;
 
 	@Override
-	public User findById(long userid) {
-		final User u = ud.findById(userid);
+	public Optional<User> findById(long userid) {
+		final User u = ud.findById(userid).get();
 		u.setUsername(u.getUsername().toUpperCase());
-		return u;
+		return Optional.ofNullable(u);
+	}
+	
+	@Override
+	public Optional<User> findByUsername(final String username) {
+		return ud.findByUsername(username);
+	}
+
+	@Override
+	public User create(String username, String password) {
+		return ud.create(username, password);
 	}
 
 }
