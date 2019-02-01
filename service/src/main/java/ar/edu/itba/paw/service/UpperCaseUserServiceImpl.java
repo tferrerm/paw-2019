@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -18,7 +19,7 @@ public class UpperCaseUserServiceImpl implements UserService {
 	@Override
 	public Optional<User> findById(long userid) {
 		final User u = ud.findById(userid).get();
-		u.setUsername(u.getUsername().toUpperCase());
+		//u.setUsername(u.getUsername().toUpperCase());
 		return Optional.ofNullable(u);
 	}
 	
@@ -28,8 +29,8 @@ public class UpperCaseUserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User create(String username, String password) {
-		return ud.create(username, password);
+	public User create(String username, String password, Role role) {
+		return ud.create(username, password, role);
 	}
 
 }
