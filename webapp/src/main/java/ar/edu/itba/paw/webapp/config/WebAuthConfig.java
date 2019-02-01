@@ -105,7 +105,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/css/**", "/js/**", "/img/**",
-                        "/favicon.ico", "/403", "/404", "/");
+                        "/favicon.ico", "/403", "/404", "/oops", "/");
     }
     
     @Bean

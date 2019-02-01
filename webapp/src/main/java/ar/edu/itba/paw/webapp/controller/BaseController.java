@@ -8,7 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
@@ -36,6 +38,11 @@ public class BaseController {
 		final Optional<User> user = us.findByUsername(auth.getName());
 //		user.isPresent((u) -> (LOGGER.debug("Currently logged user is {}", user.get().getId())));
 		return user.get();
+	}
+	
+    @ExceptionHandler({ Exception.class })
+	private ModelAndView generalExceptionHandler() {
+		return new ModelAndView("oops");
 	}
 
 }
