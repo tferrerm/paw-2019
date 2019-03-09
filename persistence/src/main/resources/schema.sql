@@ -6,3 +6,10 @@ CREATE TABLE IF NOT EXISTS users(
   created_at TIMESTAMP NOT NULL,
   deleted_at TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS profile_pictures(
+  profile_picture_id SERIAL PRIMARY KEY,
+  userid INTEGER UNIQUE NOT NULL,
+  data BYTEA NOT NULL,
+  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE
+);

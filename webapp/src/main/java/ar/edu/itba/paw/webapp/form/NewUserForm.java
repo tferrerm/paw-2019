@@ -17,6 +17,8 @@ public class NewUserForm {
 
 	@Size(min = 6, max = 100)
 	private String repeatPassword;
+	
+	// private MultipartFile profilePicture;
 
 	public boolean repeatPasswordMatching() {
 		return password.equals(repeatPassword);
@@ -44,5 +46,13 @@ public class NewUserForm {
 	public void setRepeatPassword(String repeatPassword) {
 		this.repeatPassword = repeatPassword;
 	}
+	
+//	public MultipartFile getProfilePicture() {
+//		return profilePicture;
+//	}
+//
+//	public void setProfilePicture(MultipartFile profilePicture) {
+//		this.profilePicture = profilePicture;
+//	}
 
 }
