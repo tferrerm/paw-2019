@@ -22,7 +22,7 @@
         <span class="formError">Error!</span>
       </c:if>
       <div class="submitButton">
-        <input class="submitInput" type="submit" value="Login"/>
+        <input class="submitInput" type="submit" value=<spring:message code="login"/>/>
       </div>
     </form>
   </body>

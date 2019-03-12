@@ -1,0 +1,85 @@
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    background-color: snow;
+    margin: 0;
+}
+
+h1 {
+    color: lightgray;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+}
+
+h2 {
+    align-self: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    padding: 20px 0;
+}
+
+h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+span {
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+span.link-text{
+    color: blue;
+    text-decoration: underline;
+}
+
+.form-container {
+    align-self: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display:flex;
+    justify-content: center;
+    width: 500px;
+}
+
+.form-container form {
+    min-width: 400px;
+    padding: 20px;
+}
+
+.form-container form div{
+    padding: 10px 0;
+}
+
+.form-container .bottom-message {
+    display: flex;
+    justify-content: center;
+}
+
+.header {
+    align-items: center;
+    background-color: darkblue;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display: flex;
+    font-weight: 500;
+    min-height: 100px;
+    padding-left: 30px;
+}
+
+.submit-btn {
+    align-self: center;
+    margin-top: 20px ;
+    min-width: 150px;
+}
+
+.submit-container {
+    display: flex;
+    justify-content: center;
+}
