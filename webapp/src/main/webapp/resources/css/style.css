@@ -1,14 +1,22 @@
+a, a:link, a:visited, a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
 body {
-    display: flex;
-    flex-direction: column;
+    background-color: snow;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 18px;
-    background-color: snow;
     margin: 0;
 }
 
+button {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+}
+
 h1 {
-    color: lightgray;
+    color: white;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 40px;
     font-weight: 600;
@@ -29,14 +37,30 @@ h3 {
 }
 
 span {
-    font-family: 'Archivo Narrow', sans-serif;
-    font-size: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
     font-weight: 400;
 }
 
 span.link-text{
     color: blue;
     text-decoration: underline;
+}
+
+.content-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.custom-row {
+    border-bottom: 1px lightgrey solid;
+}
+
+.custom-row:last-child {
+    border-bottom: none;
 }
 
 .form-container {
@@ -59,18 +83,84 @@ span.link-text{
 }
 
 .form-container .bottom-message {
-    display: flex;
-    justify-content: center;
+    display: block;
+    text-align: center;
+    width: 100%;
 }
 
 .header {
     align-items: center;
-    background-color: darkblue;
+    background-color: dodgerblue;
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     display: flex;
     font-weight: 500;
+    justify-content: space-between;
     min-height: 100px;
     padding-left: 30px;
+}
+
+.header a {
+    background-color: white;
+    border: none;
+    border-radius: 7px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    margin: 5px;
+    padding: 5px 12px;
+}
+
+.header div:last-child {
+    margin-right: 15px;
+}
+
+.main-container {
+    display: flex;
+}
+
+.navigator-button {
+    background-color: dodgerblue;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+}
+
+.sidebar {
+    background-color: #444444;
+    box-shadow: 0 3px 3px 3px rgba(57, 63, 72, 0.3);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 300px;
+}
+
+.sidebar li a {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+.sidebar ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    align-items: center;
+    border-bottom: grey 1px solid;
+    color: white;
+    display: flex;
+    font-size: 20px;
+    height: 60px;
+    justify-content: center;
+}
+
+.sidebar li:hover {
+    background-color: grey;
 }
 
 .submit-btn {
@@ -82,4 +172,48 @@ span.link-text{
 .submit-container {
     display: flex;
     justify-content: center;
+}
+
+.table-header {
+    border-bottom: 2px lightgrey solid;
+}
+
+.table-header, .custom-row {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    width: 100%;
+}
+
+.table-header div {
+    font-weight: 600;
+}
+
+.table-header div, .custom-row div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 20%;
+}
+
+.table-navigator {
+    color: grey;
+    display: flex;
+    margin: 40px 0 20px 0;
+}
+
+.table-navigator span{
+    margin: 0 15px;
+}
+
+.tbl {
+    align-items: flex-start;
+    align-self: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 1000px;
 }

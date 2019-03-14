@@ -8,13 +8,12 @@
     <title>Title</title>
 </head>
 <body>
-    <div class="header">
-        <h1 class="title">Company Name</h1>
-        <div>
-            <a href="<c:url value='/login' />"><spring:message code="login"/></a>
-            <spring:message code="or"/>
-            <a href="<c:url value='/' />"><spring:message code="register"/></a>
-        </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="<c:url value='/home' />">Home</a></li>
+            <li><a href="<c:url value='/list' />">List</a></li>
+            <li>Settings</li>
+        </ul>
     </div>
 </body>
 </html>

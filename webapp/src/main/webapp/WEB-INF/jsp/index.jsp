@@ -9,33 +9,39 @@
 	</head>
 	<body>
 	<%@include file="header.jsp" %>
-	<h2>Register</h2>
-	<div class="form-container">
-		<c:url value="/user/create" var="postPath"/>
-		<form:form modelAttribute="signupForm" action="${postPath}"	method="post">
-			<div>
-				<form:label path="username">Username: </form:label>
-				<form:input  cssClass="form-control" type="text" path="username"/>
-				<form:errors path="username" cssClass="formError" element="p"/>
+	<div class="main-container">
+		<div class="content-container">
+			<h2><spring:message code="register"/></h2>
+			<div class="form-container">
+				<c:url value="/user/create" var="postPath"/>
+				<form:form modelAttribute="signupForm" action="${postPath}"	method="post">
+					<div>
+						<form:label path="username"><spring:message code="username"/> </form:label>
+						<form:input  cssClass="form-control" type="text" path="username"/>
+						<form:errors path="username" cssClass="formError" element="p"/>
+					</div>
+					<div>
+						<form:label path="password"><spring:message code="password"/> </form:label>
+						<form:input	cssClass="form-control" type="password"	path="password"/>
+						<form:errors path="password" cssClass="formError" element="p"/>
+					</div>
+					<div>
+						<form:label	path="repeatPassword"><spring:message code="repeat_password"/> </form:label>
+						<form:input	cssClass="form-control" type="password"	path="repeatPassword"/>
+						<form:errors path="repeatPassword" cssClass="formError"	element="p"/>
+					</div>
+					<div class="submit-container">
+						<button type="submit" class="btn btn-primary submit-btn"><spring:message code="register"/></button>
+					</div>
+					<div class="bottom-message">
+						<span><spring:message code="already_have_account"/></span>
+						<span class="link-text"><spring:message code="login"/></span>
+					</div>
+				</form:form>
 			</div>
-			<div>
-				<form:label path="password">Password: </form:label>
-				<form:input	cssClass="form-control" type="password"	path="password"/>
-				<form:errors path="password" cssClass="formError" element="p"/>
-			</div>
-			<div>
-				<form:label	path="repeatPassword">Repeat password: </form:label>
-				<form:input	cssClass="form-control" type="password"	path="repeatPassword"/>
-				<form:errors path="repeatPassword" cssClass="formError"	element="p"/>
-			</div>
-			<div class="submit-container">
-				<button type="submit" class="btn btn-primary submit-btn"><spring:message code="register"/></button>
-			</div>
-			<div class="bottom-message">
-				<span><spring:message code="already_have_account"/> </span><span class="link-text"><spring:message code="login"/></span>
-			</div>
-		</form:form>
+		</div>
 	</div>
+
 
 	</body>
 </html>

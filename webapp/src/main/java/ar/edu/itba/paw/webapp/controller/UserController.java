@@ -86,6 +86,6 @@ public class UserController extends BaseController {
 		authToken.setDetails(new WebAuthenticationDetails(request));
 		Authentication authentication = authenticationManager.authenticate(authToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return new ModelAndView("redirect:/user/" + u.getUserid());
+		return new ModelAndView("redirect:/home");
 	}
 }
