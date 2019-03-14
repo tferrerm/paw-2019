@@ -11,9 +11,20 @@
     <div class="header">
         <h1 class="title">Company Name</h1>
         <div>
-            <a href="<c:url value='/login' />"><spring:message code="login"/></a>
-            <spring:message code="or"/>
-            <a href="<c:url value='/' />"><spring:message code="register"/></a>
+            <c:choose>
+                <c:when test = "${loggedUser != null}">
+                    <span class="username"><c:out value="${loggedUser.username}"/></span>
+                    <span class="headerLoginSpan">
+						<a href="<c:url value='/logout' />"><spring:message code="logout"/></a>
+					</span>
+                </c:when>
+                <c:otherwise>
+                    <a href="<c:url value='/login' />"><spring:message code="login"/></a>
+                    <spring:message code="or"/>
+                    <a href="<c:url value='/' />"><spring:message code="register"/></a>
+                </c:otherwise>
+            </c:choose>
+
         </div>
     </div>
 </body>

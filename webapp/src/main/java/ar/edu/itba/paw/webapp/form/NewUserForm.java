@@ -7,9 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class NewUserForm {
 
-	@NotBlank
-	@Size(min = 5, max = 100)
-	@Pattern(regexp = "[a-zA-Z0-9\\s]*")
+	@Pattern(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	private String username;
 
 	@Size(min = 6, max = 100)

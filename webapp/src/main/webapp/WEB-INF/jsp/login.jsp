@@ -24,15 +24,15 @@
         <input id="password"  class="form-control" name="login_password" type="password"/>
       </div>
       <div class="form-check">
-        <input type="checkbox" value="" id="defaultCheck1">
+        <input type="checkbox" value="" id="defaultCheck1" name="login_remember_me"/>
         <label class="form-check-label" for="defaultCheck1"><spring:message code="remember_me"/></label>
       </div>
-      <c:if test="${error == true}">
-        <span class="formError">Error!</span>
-      </c:if>
       <div class="submit-container">
         <button type="submit" class="btn btn-primary submit-btn"><spring:message code="login"/></button>
       </div>
+      <c:if test="${error == true}">
+        <div class="form-error login-error"><spring:message code="login_error"/></div>
+      </c:if>
     </form>
   </body>
 </html>

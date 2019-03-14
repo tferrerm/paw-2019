@@ -42,7 +42,7 @@ span {
     font-weight: 400;
 }
 
-span.link-text{
+a.link-text{
     color: blue;
     text-decoration: underline;
 }
@@ -59,6 +59,10 @@ span.link-text{
     border-bottom: 1px lightgrey solid;
 }
 
+.custom-row:hover {
+    background-color: lightgrey;
+}
+
 .custom-row:last-child {
     border-bottom: none;
 }
@@ -69,13 +73,15 @@ span.link-text{
     border-radius: 10px;
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     display:flex;
+    flex-direction: column;
     justify-content: center;
     width: 500px;
 }
 
 .form-container form {
     min-width: 400px;
-    padding: 20px;
+    margin: 0;
+    padding: 20px 40px;
 }
 
 .form-container form div{
@@ -86,6 +92,11 @@ span.link-text{
     display: block;
     text-align: center;
     width: 100%;
+}
+
+.form-error {
+    color: red;
+    font-size: 16px;
 }
 
 .header {
@@ -111,6 +122,10 @@ span.link-text{
 
 .header div:last-child {
     margin-right: 15px;
+}
+
+.login-error {
+    text-align: center;
 }
 
 .main-container {

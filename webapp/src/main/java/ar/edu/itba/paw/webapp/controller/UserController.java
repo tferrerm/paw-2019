@@ -15,10 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
@@ -38,10 +35,12 @@ public class UserController extends BaseController {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
-	@RequestMapping("/login")
-	public ModelAndView login()	{
-		return new ModelAndView("login");
+
+	@RequestMapping(value = "/login", method = {RequestMethod.GET})
+	public ModelAndView login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
+		ModelAndView mav = new ModelAndView("login");
+		mav.addObject("error", error);
+		return mav;
 	}
 	
     @RequestMapping(value = "/logout" , method = RequestMethod.GET)

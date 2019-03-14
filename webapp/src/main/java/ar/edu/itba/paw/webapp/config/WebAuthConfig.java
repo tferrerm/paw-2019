@@ -90,7 +90,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/home")
                 .loginPage("/login")
                 .and().rememberMe()
-                .rememberMeParameter("login_rememberme")
+                .rememberMeParameter("login_remember_me")
                 .userDetailsService(userDetailsService)
                 .key(getRememberMeKey())
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
