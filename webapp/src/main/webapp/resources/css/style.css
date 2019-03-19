@@ -38,6 +38,7 @@ h3 {
 
 label {
     margin: 0;
+
 }
 
 span {
@@ -69,6 +70,42 @@ a.link-text{
 
 .custom-row:last-child {
     border-bottom: none;
+}
+
+.description-body {
+    display: flex;
+    width: 100%;
+}
+
+.description-body div:first-child{
+    flex-basis: 170%;
+}
+
+.description-item {
+    background-color: #fff2e6;
+    border-radius: 5px;
+    flex-grow: 1;
+    margin: 10px 10px 10px 0;
+    padding: 10px;
+    width: 100%;
+}
+
+.detail-container {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    width: 60%;
+}
+
+.double-box {
+    display: flex;
+    margin: -10px -10px 0 0;
+    padding: 0;
+}
+
+.event-info-label {
+    display: flex;
+    font-weight: bold;
 }
 
 .form-container {
@@ -128,6 +165,15 @@ a.link-text{
     margin-right: 15px;
 }
 
+.join-button {
+    align-self: center;
+    font-size: 20px;
+    margin-top: 30px;
+    width: 139px;
+    height: 57px;
+
+}
+
 .login-error {
     text-align: center;
 }
@@ -136,11 +182,23 @@ a.link-text{
     display: flex;
 }
 
-.navigator-button {
-    background-color: dodgerblue;
+.participants-list{
+    background-color: #fff2e6;
     border-radius: 5px;
-    color: white;
-    padding: 5px 10px;
+    flex-grow: 1;
+    margin: 10px 0 10px 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+.participants-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.progress-bar-completion {
+    align-self: center;
+    padding-top: 10px;
 }
 
 .sidebar {
@@ -182,6 +240,13 @@ a.link-text{
     background-color: grey;
 }
 
+.status {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
 .submit-btn {
     align-self: center;
     margin-top: 20px ;
@@ -221,11 +286,15 @@ a.link-text{
     margin: 40px 0 20px 0;
 }
 
-.table-navigator span{
-    margin: 0 15px;
+.table-navigator button{
+    margin: 0 10px;
 }
 
-.tbl {
+.table-navigator span{
+    margin: 0 20px;
+}
+
+.tbl, .detail-container {
     align-items: flex-start;
     align-self: center;
     background-color: white;
@@ -234,5 +303,15 @@ a.link-text{
     display:flex;
     flex-direction: column;
     justify-content: center;
+
+}
+
+.tbl {
     min-width: 1000px;
+}
+
+.view-event {
+    height: 30px;
+    font-size: 13px;
+    text-align: center;
 }

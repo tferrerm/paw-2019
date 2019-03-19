@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="header">
-        <h1 class="title">Company Name</h1>
+        <h1 class="title"><spring:message code="sport_matcher"/></h1>
         <div>
             <c:choose>
                 <c:when test = "${loggedUser != null}">
