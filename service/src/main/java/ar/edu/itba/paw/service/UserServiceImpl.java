@@ -12,6 +12,7 @@ import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import exception.UserAlreadyExistsException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,10 +33,10 @@ public class UserServiceImpl implements UserService {
 		return ud.findByUsername(username);
 	}
 
-	@Transactional(rollbackFor = { Exception.class })
+	@Transactional
 	@Override
 	public User create(String username, String password, Role role, byte[] picture)
-		throws IOException {
+		throws UserAlreadyExistsException, IOException {
 		User user = ud.create(username, password, role);
 		if(picture != null) {
 			pps.create(user.getUserid(), picture);

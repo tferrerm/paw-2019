@@ -20,7 +20,6 @@ public class NewUserForm {
 	@NotBlank
 	private String lastName;
 
-	@Size(min = 6, max = 100)
 	private String repeatPassword;
 	
 	private MultipartFile profilePicture;

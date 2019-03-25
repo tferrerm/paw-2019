@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import exception.UserAlreadyExistsException;
 
 @Sql("classpath:schema.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,7 +43,7 @@ public class UserJdbcDaoTest {
 	
 	@Rollback
 	@Test
-	public void testCreate() {
+	public void testCreate() throws UserAlreadyExistsException {
 		JdbcTestUtils.deleteFromTables(jdbcTemplate,"users");
 		final User user = userDao.create(USERNAME, PASSWORD, Role.ROLE_USER);
 		Assert.assertNotNull(user);

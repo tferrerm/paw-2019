@@ -12,11 +12,13 @@ import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.model.ProfilePicture;
 
+@Service
 public class ProfilePictureServiceImpl implements ProfilePictureService {
 	
 	@Autowired

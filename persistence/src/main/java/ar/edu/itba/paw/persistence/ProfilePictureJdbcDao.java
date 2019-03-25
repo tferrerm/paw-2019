@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.ProfilePictureDao;
 import ar.edu.itba.paw.model.ProfilePicture;
 
+@Repository
 public class ProfilePictureJdbcDao implements ProfilePictureDao {
 	
 	private JdbcTemplate jdbcTemplate;

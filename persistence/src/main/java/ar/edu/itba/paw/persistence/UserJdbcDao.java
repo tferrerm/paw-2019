@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import exception.UserAlreadyExistsException;
 
 @Repository
 public class UserJdbcDao implements UserDao {
@@ -52,7 +54,8 @@ public class UserJdbcDao implements UserDao {
 	}
 	
 	@Override
-	public User create(final String username, final String password, final Role role) {
+	public User create(final String username, final String password, final Role role)
+		throws UserAlreadyExistsException {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("username", username); // username == column name
@@ -60,8 +63,14 @@ public class UserJdbcDao implements UserDao {
 		args.put("role", role);
 		args.put("created_at", Timestamp.from(now));
 		args.put("deleted_at", null);
-		final Number userId = jdbcInsert.executeAndReturnKey(args);
-		return new User(userId.longValue(), username, password, role, now, null);
+		try {
+			final Number userId = jdbcInsert.executeAndReturnKey(args);
+			return new User(userId.longValue(), username, password, role, now, null);
+		} catch(DuplicateKeyException e) {
+			throw new UserAlreadyExistsException("User with the username " +
+				username + " already exists");
+		}
+		
 	}
 
 }

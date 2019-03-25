@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import exception.UserAlreadyExistsException;
 
 public interface UserService {
 	
@@ -13,6 +14,6 @@ public interface UserService {
 	public Optional<User> findByUsername(final String username);
 	
 	public User create(String username, String password, Role role, byte[] picture)
-		throws IOException;
+		throws UserAlreadyExistsException, IOException;
 
 }

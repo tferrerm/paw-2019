@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +31,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
+import exception.UserAlreadyExistsException;
 
 @Controller
 public class UserController extends BaseController {
@@ -87,13 +87,12 @@ public class UserController extends BaseController {
 			final BindingResult errors,
 			HttpServletRequest request
 	) {
-		boolean repeatPasswordMatches = form.repeatPasswordMatching();
-		if(!repeatPasswordMatches)
-			errors.rejectValue("repeatPassword", "different");
+		if(!form.repeatPasswordMatching())
+		 	errors.rejectValue("repeatPassword", "different_passwords");
 		if(errors.hasErrors()) {
 			return index(form);
 		}
-		User u = null;
+		User u;
 		final MultipartFile profilePicture = form.getProfilePicture();
 		final String encodedPassword = passwordEncoder.encode(form.getPassword());
 		try {
@@ -104,7 +103,7 @@ public class UserController extends BaseController {
 			ModelAndView mav = index(form);
 			mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
 			return mav;
-		} catch(DataAccessException e) {
+		} catch(UserAlreadyExistsException e) {
 			LOGGER.error("User tried to register with repeated email {}", form.getUsername());
 			ModelAndView mav = index(form);
 			mav.addObject("emailError", form.getUsername());
@@ -115,6 +114,6 @@ public class UserController extends BaseController {
 		authToken.setDetails(new WebAuthenticationDetails(request));
 		Authentication authentication = authenticationManager.authenticate(authToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return new ModelAndView("redirect:/home");
+		return new ModelAndView("redirect:/user/" + u.getUserid());
 	}
 }

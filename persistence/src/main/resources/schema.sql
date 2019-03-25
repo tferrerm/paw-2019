@@ -13,3 +13,21 @@ CREATE TABLE IF NOT EXISTS profile_pictures(
   data BYTEA NOT NULL,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS events(
+  eventid SERIAL PRIMARY KEY,
+  event_name VARCHAR(100) NOT NULL,
+  location VARCHAR(100),
+  starts_at TIMESTAMP NOT NULL,
+  ends_at TIMESTAMP,
+  created_at TIMESTAMP NOT NULL,
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS events_users(
+  userid INTEGER NOT NULL,
+  eventid INTEGER NOT NULL,
+  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
+  FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
+  PRIMARY KEY (userid, eventid)
+);

@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -17,6 +19,8 @@ import ar.edu.itba.paw.model.User;
 
 public class BaseController {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
+	
 	@Qualifier("userServiceImpl")
 	@Autowired
 	private UserService us;
@@ -28,10 +32,10 @@ public class BaseController {
 	public User loggedUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(auth == null) {
-			//LOGGER.warn("Returning null as logged user");
+			LOGGER.warn("Returning null as logged user");
 			return null;
 		}
-		//LOGGER.debug("Auth is: {}", auth.isAuthenticated());
+		LOGGER.debug("Auth is: {}", auth.isAuthenticated());
 		if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
 			return null;
 		}
@@ -40,9 +44,9 @@ public class BaseController {
 		return user.get();
 	}
 	
-    @ExceptionHandler({ Exception.class })
-	private ModelAndView generalExceptionHandler() {
-		return new ModelAndView("oops");
-	}
+//    @ExceptionHandler({ Exception.class })
+//	private ModelAndView generalExceptionHandler() {
+//		return new ModelAndView("oops");
+//	}
 
 }
