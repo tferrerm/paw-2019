@@ -1,11 +1,16 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,7 +20,12 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
@@ -25,6 +35,8 @@ import ar.edu.itba.paw.webapp.form.NewUserForm;
 
 @Controller
 public class UserController extends BaseController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	
 	@Qualifier("userServiceImpl")
 	@Autowired
@@ -75,11 +87,29 @@ public class UserController extends BaseController {
 			final BindingResult errors,
 			HttpServletRequest request
 	) {
+		boolean repeatPasswordMatches = form.repeatPasswordMatching();
+		if(!repeatPasswordMatches)
+			errors.rejectValue("repeatPassword", "different");
 		if(errors.hasErrors()) {
 			return index(form);
 		}
-		String encodedPassword = passwordEncoder.encode(form.getPassword());
-		final User u = us.create(form.getUsername(), encodedPassword, Role.ROLE_USER);
+		User u = null;
+		final MultipartFile profilePicture = form.getProfilePicture();
+		final String encodedPassword = passwordEncoder.encode(form.getPassword());
+		try {
+			byte[] picture = profilePicture.getBytes();
+			u = us.create(form.getUsername(), encodedPassword, Role.ROLE_USER, picture);
+		} catch(IllegalArgumentException | IOException e) {
+			LOGGER.error("Bad profile picture {}", profilePicture.getOriginalFilename());
+			ModelAndView mav = index(form);
+			mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
+			return mav;
+		} catch(DataAccessException e) {
+			LOGGER.error("User tried to register with repeated email {}", form.getUsername());
+			ModelAndView mav = index(form);
+			mav.addObject("emailError", form.getUsername());
+			return mav;
+		}
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 				u.getUsername(), u.getPassword());
 		authToken.setDetails(new WebAuthenticationDetails(request));

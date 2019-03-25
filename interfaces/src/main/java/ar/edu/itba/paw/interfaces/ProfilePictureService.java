@@ -9,6 +9,6 @@ public interface ProfilePictureService {
 	
 	public Optional<ProfilePicture> findByUserId(long userid);
 	
-	public ProfilePicture create(long userid, byte[] data) throws IOException;
+	public void create(long userid, byte[] data) throws IOException;
 
 }

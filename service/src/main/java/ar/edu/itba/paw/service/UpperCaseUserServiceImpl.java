@@ -29,7 +29,7 @@ public class UpperCaseUserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User create(String username, String password, Role role) {
+	public User create(String username, String password, Role role, byte[] picture) {
 		return ud.create(username, password, role);
 	}
 

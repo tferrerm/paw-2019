@@ -41,12 +41,11 @@ public class ProfilePictureJdbcDao implements ProfilePictureDao {
 	}
 
 	@Override
-	public ProfilePicture create(long userid, byte[] data) {
+	public void create(long userid, byte[] data) {
 		final Map<String, Object> args = new HashMap<>();
 		args.put("userid", userid);
 		args.put("data", data);
-		final Number profilePictureId = jdbcInsert.executeAndReturnKey(args);
-		return new ProfilePicture(profilePictureId.longValue(), userid);
+		jdbcInsert.executeAndReturnKey(args);
 	}
 
 }

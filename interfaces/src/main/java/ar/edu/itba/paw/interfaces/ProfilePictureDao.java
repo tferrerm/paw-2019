@@ -7,6 +7,6 @@ public interface ProfilePictureDao {
 	
 	public Optional<ProfilePicture> findByUserId(long userid);
 	
-	public ProfilePicture create(long userid, byte[] data);
+	public void create(long userid, byte[] data);
 
 }

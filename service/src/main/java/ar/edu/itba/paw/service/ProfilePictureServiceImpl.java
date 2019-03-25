@@ -33,7 +33,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 	}
 
 	@Override
-	public ProfilePicture create(long userid, byte[] data) 
+	public void create(long userid, byte[] data) 
 		throws IOException {
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
 		if(img.getType() == BufferedImage.TYPE_CUSTOM) {
@@ -48,7 +48,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 		ImageIO.write(newImg, FORMAT, convertedImage);
 		img.flush();
 		newImg.flush();
-		return ppd.create(userid, convertedImage.toByteArray());
+		ppd.create(userid, convertedImage.toByteArray());
 	}
 	
 	private int[] processImageSize(int width, int height) {
