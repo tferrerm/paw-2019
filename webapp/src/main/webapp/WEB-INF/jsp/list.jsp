@@ -21,13 +21,42 @@
 			<h2>List title</h2>
 			<div class="tbl">
 				<div class="table-header">
-					<div><spring:message code="establishment"/></div>
-					<div><spring:message code="sport"/></div>
-                    <div><spring:message code="organizer"/></div>
-                    <div><spring:message code="vacancies"/></div>
-                    <div><spring:message code="date"/></div>
-                    <div></div>
-				</div>
+                        <c:url value='/events' var="postPath"/>
+                        <form:form id="searchfilters" class="searchfilters" modelAttribute="filtersForm"
+                                   action="${postPath}">
+                            <div class="table-titles">
+                                <div>
+                                    <form:label path="establishment"><spring:message code="establishment" /></form:label>
+                                    <form:input class="form-control" type="text" path="establishment"/>
+                                    <form:errors path="establishment" cssClass="formError" element="p"/>
+                                </div>
+                                <div>
+                                    <form:label path="sport"><spring:message code="sport" /></form:label>
+                                    <form:input class="form-control" type="text" path="sport"/>
+                                    <form:errors path="sport" cssClass="form-error" element="p"/>
+                                </div>
+                                <div>
+                                    <form:label path="organizer"><spring:message code="organizer" /></form:label>
+                                    <form:input class="form-control" type="text" path="organizer"/>
+                                    <form:errors path="organizer" cssClass="form-error" element="p"/>
+                                </div>
+                                <div>
+                                    <form:label path="vacancies"><spring:message code="vacancies" /></form:label>
+                                    <form:input class="form-control" type="text" path="vacancies"/>
+                                    <form:errors path="vacancies" cssClass="form-error" element="p"/>
+                                </div>
+                                <div>
+                                    <form:label path="date"><spring:message code="date" /></form:label>
+                                    <form:input class="form-control" type="text" path="date"/>
+                                    <form:errors path="date" cssClass="form-error" element="p"/>
+                                </div>
+                                <div>
+                                    <button class="btn btn-light" type="submit"><spring:message code="filter" /></button>
+                                </div>
+                            </div>
+                        </form:form>
+
+                    </div>
 				<div class="custom-row">
 					<div>These</div>
 					<div>Values</div>
