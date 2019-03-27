@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import exception.UserAlreadyExistsException;
 
 @Service
 public class UserServiceImpl implements UserService {

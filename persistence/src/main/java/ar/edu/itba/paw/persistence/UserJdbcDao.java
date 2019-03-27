@@ -15,10 +15,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import exception.UserAlreadyExistsException;
 
 @Repository
 public class UserJdbcDao implements UserDao {
@@ -55,7 +55,7 @@ public class UserJdbcDao implements UserDao {
 	
 	@Override
 	public User create(final String username, final String password, final Role role)
-		throws UserAlreadyExistsException {
+			throws UserAlreadyExistsException {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("username", username); // username == column name

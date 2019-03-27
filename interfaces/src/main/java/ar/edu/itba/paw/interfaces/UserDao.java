@@ -2,9 +2,9 @@ package ar.edu.itba.paw.interfaces;
 
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import exception.UserAlreadyExistsException;
 
 public interface UserDao {
 	

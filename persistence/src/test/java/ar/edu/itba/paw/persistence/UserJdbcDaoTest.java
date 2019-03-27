@@ -15,9 +15,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import exception.UserAlreadyExistsException;
 
 @Sql("classpath:schema.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
