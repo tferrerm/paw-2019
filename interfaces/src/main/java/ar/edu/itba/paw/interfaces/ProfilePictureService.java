@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.interfaces;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.ProfilePicture;
@@ -9,6 +8,6 @@ public interface ProfilePictureService {
 	
 	public Optional<ProfilePicture> findByUserId(long userid);
 	
-	public void create(long userid, byte[] data) throws IOException;
+	public void create(long userid, byte[] data);
 
 }

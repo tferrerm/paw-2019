@@ -14,6 +14,7 @@ import org.imgscalr.Scalr.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.itba.paw.exception.FileProcessingException;
 import ar.edu.itba.paw.interfaces.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.model.ProfilePicture;
@@ -36,21 +37,26 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 
 	@Override
 	public void create(long userid, byte[] data) 
-		throws IOException {
-		BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
-		if(img.getType() == BufferedImage.TYPE_CUSTOM) {
+		throws FileProcessingException {
+		try {
+			BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
+			if(img.getType() == BufferedImage.TYPE_CUSTOM) {
+				img.flush();
+				throw new IllegalArgumentException();
+			}
+			int[] dimensions = processImageSize(img.getWidth(), img.getHeight());
+			BufferedImage newImg = Scalr.resize(
+					img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, dimensions[WIDTH],
+					dimensions[HEIGHT], Scalr.OP_ANTIALIAS);
+			ByteArrayOutputStream convertedImage = new ByteArrayOutputStream();
+			ImageIO.write(newImg, FORMAT, convertedImage);
 			img.flush();
-			throw new IllegalArgumentException();
+			newImg.flush();
+			ppd.create(userid, convertedImage.toByteArray());
+		} catch(IOException e) {
+			throw new FileProcessingException("The profile picture could not be processed. " + 
+					e.getMessage());
 		}
-		int[] dimensions = processImageSize(img.getWidth(), img.getHeight());
-		BufferedImage newImg = Scalr.resize(
-				img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, dimensions[WIDTH],
-				dimensions[HEIGHT], Scalr.OP_ANTIALIAS);
-		ByteArrayOutputStream convertedImage = new ByteArrayOutputStream();
-		ImageIO.write(newImg, FORMAT, convertedImage);
-		img.flush();
-		newImg.flush();
-		ppd.create(userid, convertedImage.toByteArray());
 	}
 	
 	private int[] processImageSize(int width, int height) {

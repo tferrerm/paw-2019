@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public User create(String username, String password, Role role, byte[] picture)
-		throws UserAlreadyExistsException, IOException {
+		throws UserAlreadyExistsException {
 		User user = ud.create(username, password, role);
 		if(picture != null) {
 			pps.create(user.getUserid(), picture);
