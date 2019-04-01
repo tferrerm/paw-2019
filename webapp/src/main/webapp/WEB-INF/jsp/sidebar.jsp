@@ -11,7 +11,7 @@
     <div class="sidebar">
         <ul>
             <li><a href="<c:url value='/home' />">Home</a></li>
-            <li><a href="<c:url value='/list' />">List</a></li>
+            <li><a href="<c:url value='/events/1' />">List</a></li>
             <li>Settings</li>
         </ul>
     </div>

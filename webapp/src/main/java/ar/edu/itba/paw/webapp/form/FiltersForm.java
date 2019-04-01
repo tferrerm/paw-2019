@@ -7,15 +7,19 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class FiltersForm {
-
+	@Size(max=64)
 	private String establishment;
 
+	@Size(max=64)
 	private String sport;
 
+	@Size(max=64)
 	private String organizer;
 
+	@Size(max=64)
 	private String vacancies;
 
+	@Size(max=64)
 	private String date;
 
 	public String getEstablishment() {

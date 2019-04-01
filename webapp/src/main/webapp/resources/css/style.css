@@ -260,7 +260,7 @@ a.link-text{
 }
 
 .table-header {
-    background-color: #666666;
+    background-color: white;
     border-bottom: 1px grey solid;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -274,7 +274,8 @@ a.link-text{
 }
 
 .table-header div {
-    color: white;
+    color: black;
+    font-weight: bold;
 }
 
 .table-header form {

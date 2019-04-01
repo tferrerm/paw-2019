@@ -18,10 +18,10 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h2>List title</h2>
+			<h2><spring:message code="events" /></h2>
 			<div class="tbl">
 				<div class="table-header">
-                        <c:url value='/events' var="postPath"/>
+                        <c:url value='/events/filter' var="postPath"/>
                         <form:form id="searchfilters" class="searchfilters" modelAttribute="filtersForm"
                                    action="${postPath}">
                             <div class="table-titles">
@@ -51,7 +51,7 @@
                                     <form:errors path="date" cssClass="form-error" element="p"/>
                                 </div>
                                 <div>
-                                    <button class="btn btn-light" type="submit"><spring:message code="filter" /></button>
+                                    <button class="btn btn-primary" type="submit"><spring:message code="filter" /></button>
                                 </div>
                             </div>
                         </form:form>
@@ -190,9 +190,14 @@
                 </div>
 			</div>
 			<div class="table-navigator">
-				<div><button type="button" class="btn btn-secondary"><spring:message code="first"/></button><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></div>
+				<div>
+                    <a href="<c:url value='/events/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
+                    <a href="<c:url value='/events/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+                </div>
 				<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
-				<div><button type="button" class="btn btn-secondary"><spring:message code="next"/></button><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></div>
+				<div>
+                    <a href="<c:url value='/events/${page+1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
+                    <a href="<c:url value='/events/${lastPageNum}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></div>
 			</div>
         </div>
 
