@@ -1,11 +1,5 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 public class FiltersForm {
 	@Size(max=64)
 	private String establishment;

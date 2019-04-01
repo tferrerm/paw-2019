@@ -27,11 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.FileProcessingException;
+import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
-import exception.UserAlreadyExistsException;
 
 @Controller
 public class UserController extends BaseController {
@@ -98,7 +99,7 @@ public class UserController extends BaseController {
 		try {
 			byte[] picture = profilePicture.getBytes();
 			u = us.create(form.getUsername(), encodedPassword, Role.ROLE_USER, picture);
-		} catch(IllegalArgumentException | IOException e) {
+		} catch(IllegalArgumentException | FileProcessingException | IOException e) {
 			LOGGER.error("Bad profile picture {}", profilePicture.getOriginalFilename());
 			ModelAndView mav = index(form);
 			mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
