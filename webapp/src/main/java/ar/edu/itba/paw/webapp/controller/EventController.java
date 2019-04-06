@@ -1,17 +1,26 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.EmailService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
+
 
 @Controller
 public class EventController extends BaseController {
+
+    @Autowired
+    private EmailService es;
 	
 	@RequestMapping("/home")
 	public ModelAndView home()	{
-		return new ModelAndView("home");
+//		es.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", getLocale());
+	    return new ModelAndView("home");
 	}
 
 	@RequestMapping("/list")

@@ -25,22 +25,23 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	private TemplateEngine htmlTemplateEngine;
 
-	private static final String OFFER_ACCEPTED_TEMPLATE = "templates/offerAcceptedTemplate.html";
+	private static final String EVENT_JOINED_TEMPLATE = "templates/joinedEventMailTemplate.html";
 
 	@Override
 	public void joinEventEmail(String email, String eventOwnerName, String eventName,
 							   final Locale locale) {
 		final Context ctx = new Context(locale);
-		ctx.setVariable("email", email);
+		ctx.setVariable("mailTitle", email);
+		ctx.setVariable("mailBody", "Body");
 
 		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
 		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
 		try {
-			message.setSubject(applicationContext.getMessage("offerAcceptedTitle", null, locale));
-			message.setFrom("");
+			message.setSubject(applicationContext.getMessage("mailTitle", null, locale));
+			message.setFrom("nosotros");
 			message.setTo(email);
 
-			final String htmlContent = this.htmlTemplateEngine.process(OFFER_ACCEPTED_TEMPLATE, ctx);
+			final String htmlContent = this.htmlTemplateEngine.process(EVENT_JOINED_TEMPLATE, ctx);
 			message.setText(htmlContent, true );
 		} catch (Exception e) {
 			//LOGGER.error("Message sending exception", e);
