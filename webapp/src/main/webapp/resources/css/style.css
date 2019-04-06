@@ -109,6 +109,32 @@ a.link-text{
     font-weight: bold;
 }
 
+.events-column {
+
+}
+
+.events-column div {
+    padding: 5px 10px;
+}
+
+.events-column div:hover{
+    background-color: grey;
+    color: white;
+}
+
+.flex{
+    display: flex;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
+.flex-grow {
+    display: flex;
+    flex-grow: 1;
+}
+
 .form-container {
     align-self: center;
     background-color: white;
@@ -175,12 +201,21 @@ a.link-text{
 
 }
 
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
 .login-error {
     text-align: center;
 }
 
 .main-container {
     display: flex;
+}
+
+.my-events-tbl-sub {
+    padding-top: 10px;
 }
 
 .participants-list{
@@ -200,6 +235,10 @@ a.link-text{
 .progress-bar-completion {
     align-self: center;
     padding-top: 10px;
+}
+
+.right-border {
+    border-right: solid 1px;
 }
 
 .sidebar {
@@ -349,3 +388,12 @@ a.link-text{
     font-size: 13px;
     text-align: center;
 }
+
+.w-50 {
+    width: 50%;
+}
+
+.w-100 {
+    width: 100%;
+}
+

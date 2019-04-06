@@ -10,9 +10,9 @@
 <body>
     <div class="sidebar">
         <ul>
-            <li><a href="<c:url value='/home' />">Home</a></li>
-            <li><a href="<c:url value='/events/1' />">List</a></li>
-            <li>Settings</li>
+            <li><a href="<c:url value='/events/1' />"><spring:message code="allEvents"/></a></li>
+            <li><a href="<c:url value='/my-events/1' />"><spring:message code="myEvents"/></a></li>
+            <li><a href="<c:url value='/user/1' />"><spring:message code="profile"/></a></li>
         </ul>
     </div>
 </body>

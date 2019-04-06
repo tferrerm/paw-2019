@@ -18,7 +18,7 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h2><spring:message code="events" /></h2>
+			<h2><spring:message code="allEvents" /></h2>
 			<div class="tbl">
 				<div class="table-header">
                         <c:url value='/events/filter' var="postPath"/>

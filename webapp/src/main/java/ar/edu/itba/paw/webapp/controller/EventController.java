@@ -23,9 +23,10 @@ public class EventController extends BaseController {
 	    return new ModelAndView("home");
 	}
 
-	@RequestMapping("/list")
-	public ModelAndView list(@ModelAttribute("filtersForm") final FiltersForm form)	{
-		return new ModelAndView("list");
+	@RequestMapping("/my-events/{page}")
+	public ModelAndView list(@PathVariable("page") final int pageNum)	{
+
+	    return new ModelAndView("myEvents");
 	}
 
     @RequestMapping(value = "/event/{id}")
