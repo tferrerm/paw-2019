@@ -19,7 +19,7 @@
 			<h2><spring:message code="register"/></h2>
 			<div class="form-container">
 				<c:url value="/user/create" var="postPath"/>
-				<form:form modelAttribute="signupForm" action="${postPath}"	method="post">
+				<form:form modelAttribute="signupForm" action="${postPath}"	method="post" enctype="multipart/form-data">
 					<div>
 						<form:label path="username"><spring:message code="username"/> * </form:label>
 						<form:input  cssClass="form-control" type="text" path="username"/>

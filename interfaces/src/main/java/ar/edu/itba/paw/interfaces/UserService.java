@@ -12,6 +12,15 @@ public interface UserService {
 	
 	public Optional<User> findByUsername(final String username);
 	
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 * @param role
+	 * @param picture
+	 * @return
+	 * @throws UserAlreadyExistsException If a user with that username existed already
+	 */
 	public User create(String username, String password, Role role, byte[] picture)
 		throws UserAlreadyExistsException;
 

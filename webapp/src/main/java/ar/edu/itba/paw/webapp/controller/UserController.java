@@ -100,12 +100,12 @@ public class UserController extends BaseController {
 			byte[] picture = profilePicture.getBytes();
 			u = us.create(form.getUsername(), encodedPassword, Role.ROLE_USER, picture);
 		} catch(IllegalArgumentException | FileProcessingException | IOException e) {
-			LOGGER.error("Bad profile picture {}", profilePicture.getOriginalFilename());
+			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
 			ModelAndView mav = index(form);
 			mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
 			return mav;
 		} catch(UserAlreadyExistsException e) {
-			LOGGER.error("User tried to register with repeated email {}", form.getUsername());
+			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
 			ModelAndView mav = index(form);
 			mav.addObject("emailError", form.getUsername());
 			return mav;
