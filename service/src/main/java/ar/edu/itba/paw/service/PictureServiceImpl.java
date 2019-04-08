@@ -10,9 +10,11 @@ import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
+import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.PictureService;
 
+@Service
 public class PictureServiceImpl implements PictureService {
 	
 	private static final int DEFAULT_MAX_WIDTH = 1000;

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +31,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.FileProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
@@ -42,6 +46,9 @@ public class UserController extends BaseController {
 	@Qualifier("userServiceImpl")
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private ProfilePictureService pps;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -117,4 +124,20 @@ public class UserController extends BaseController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		return new ModelAndView("redirect:/user/" + u.getUserid());
 	}
+	
+	@RequestMapping("/user/{userId}/picture")
+	public void getUserProfilePicture(@PathVariable("userId") long userid,
+			HttpServletResponse response) {
+		Optional<ProfilePicture> picOptional = pps.findByUserId(userid);
+		try {
+			if(picOptional.isPresent()) {
+				response.setContentType(MediaType.IMAGE_PNG_VALUE);
+				response.getOutputStream().write(picOptional.get().getData());
+			}
+		}
+		catch(IOException e) {
+			LOGGER.error("Reading of user #{}'s picture failed.", userid);
+		}
+	}
+
 }
