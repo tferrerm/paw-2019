@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -138,6 +139,11 @@ public class UserController extends BaseController {
 		catch(IOException e) {
 			LOGGER.error("Reading of user #{}'s picture failed.", userid);
 		}
+	}
+	
+	@ExceptionHandler({UserNotFoundException.class})
+	private ModelAndView userNotFound() {
+		return new ModelAndView("404");
 	}
 
 }
