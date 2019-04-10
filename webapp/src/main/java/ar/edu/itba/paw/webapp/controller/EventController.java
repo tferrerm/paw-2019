@@ -1,38 +1,53 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.EmailService;
-import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
+import ar.edu.itba.paw.interfaces.EmailService;
+import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.webapp.form.FiltersForm;
+import ar.edu.itba.paw.webapp.form.NewUserForm;
 
 
 @Controller
 public class EventController extends BaseController {
+	
+	@Autowired
+	private EventService es;
 
     @Autowired
-    private EmailService es;
+    private EmailService ems;
 	
 	@RequestMapping("/home")
 	public ModelAndView home()	{
-//		es.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", getLocale());
+//		ems.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", getLocale());
 	    return new ModelAndView("home");
 	}
 
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
-
-	    return new ModelAndView("myEvents");
+		ModelAndView mav = new ModelAndView("myEvents");
+		mav.addObject("events", es.findByUsername(loggedUser().getUsername()));
+	    return mav;
 	}
 
     @RequestMapping(value = "/event/{id}")
-    public ModelAndView retrieveElement(@PathVariable long id) {
+    public ModelAndView retrieveElement(@PathVariable long id)
+    	throws EventNotFoundException {
 	    ModelAndView mav = new ModelAndView("event");
-        /*Query*/
+        mav.addObject("event", es.findByEventId(id).orElseThrow(EventNotFoundException::new));
         return mav;
     }
 
@@ -52,6 +67,24 @@ public class EventController extends BaseController {
         mav.addObject("lastPageNum", 10);
         return mav;
     }
+    
+    @RequestMapping(value = "/event/create", method = { RequestMethod.POST })
+    public ModelAndView createEvent(
+    		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
+			final BindingResult errors,
+			HttpServletRequest request) {
+    	if(errors.hasErrors())
+    		return newEvent(form);
+    	Event e = es.create(form.getName(), form.getLocation(), form.getDescription(),
+    			form.getStartsAt(), form.getEndsAt());
+    	return new ModelAndView("redirect:/event/" + e.getEventId());
+    	
+    }
+    
+	@RequestMapping("/event/new")
+	public ModelAndView newEvent(@ModelAttribute("newEventForm") final NewEventForm form) {
+		return new ModelAndView("newEvent");
+	}
 
     @RequestMapping(value = "/events/filter")
     public ModelAndView applyFilter( @ModelAttribute("filtersForm") final FiltersForm form) {
@@ -78,7 +111,10 @@ public class EventController extends BaseController {
         return strBuilder.toString();
     }
 
-    
+	@ExceptionHandler({EventNotFoundException.class})
+	private ModelAndView eventNotFound() {
+		return new ModelAndView("404");
+	}
 
 
 
