@@ -8,6 +8,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
 	</head>
 	<body>
+	<%@include file="header.jsp" %>
 	<div class="main-container">
 		<div class="content-container">
 			<h2><spring:message code="create_event"/></h2>

@@ -13,9 +13,9 @@ public class NewEventForm {
 	
 	private String description;
 	
-	private Instant startsAt;
+	private String startsAt;
 	
-	private Instant endsAt;
+	private String endsAt;
 
 	public String getName() {
 		return name;
@@ -41,19 +41,19 @@ public class NewEventForm {
 		this.description = description;
 	}
 
-	public Instant getStartsAt() {
+	public String getStartsAt() {
 		return startsAt;
 	}
 
-	public void setStartsAt(Instant startsAt) {
+	public void setStartsAt(String startsAt) {
 		this.startsAt = startsAt;
 	}
 
-	public Instant getEndsAt() {
+	public String getEndsAt() {
 		return endsAt;
 	}
 
-	public void setEndsAt(Instant endsAt) {
+	public void setEndsAt(String endsAt) {
 		this.endsAt = endsAt;
 	}
 	

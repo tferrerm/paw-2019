@@ -18,7 +18,7 @@ import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
-import ar.edu.itba.paw.webapp.form.NewUserForm;
+import ar.edu.itba.paw.webapp.form.NewEventForm;
 
 
 @Controller
