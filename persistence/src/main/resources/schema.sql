@@ -16,8 +16,9 @@ CREATE TABLE IF NOT EXISTS profile_pictures(
 
 CREATE TABLE IF NOT EXISTS events(
   eventid SERIAL PRIMARY KEY,
-  event_name VARCHAR(100) NOT NULL,
+  name VARCHAR(100) NOT NULL,
   location VARCHAR(100),
+  description VARCHAR(500),
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
   created_at TIMESTAMP NOT NULL,
