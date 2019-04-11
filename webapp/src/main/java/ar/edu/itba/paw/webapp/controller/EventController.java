@@ -1,8 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,6 +29,8 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 
 @Controller
 public class EventController extends BaseController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	
 	@Autowired
 	private EventService es;
@@ -73,10 +81,14 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) {
-    	if(errors.hasErrors())
+    	if(errors.hasErrors()) {
+    		LOGGER.error(errors.getAllErrors() + "");
     		return newEvent(form);
-    	Event e = es.create(form.getName(), form.getLocation(), form.getDescription(),
-    			form.getStartsAt(), form.getEndsAt());
+    	}
+    	Instant from = LocalDateTime.parse(form.getStartsAt()).atZone(ZoneId.of("America/Toronto")).toInstant();
+    	Instant to = LocalDateTime.parse(form.getStartsAt()).atZone(ZoneId.of("America/Toronto")).toInstant();
+    	Event e = es.create(form.getName(), form.getLocation(), form.getDescription(), from, to);
+    		//Instant.form.getStartsAt(), form.getEndsAt());
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     	
     }

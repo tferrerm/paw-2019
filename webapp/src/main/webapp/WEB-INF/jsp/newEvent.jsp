@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
@@ -14,7 +15,7 @@
 			<h2><spring:message code="create_event"/></h2>
 			<div class="form-container">
 				<c:url value="/event/create" var="postPath"/>
-				<form:form modelAttribute="newEventForm" action="${postPath}"	method="post">
+				<form:form modelAttribute="newEventForm" action="${postPath}" method="post" enctype="multipart/form-data">
 					<div>
 						<form:label path="name"><spring:message code="event_name"/> * </form:label>
 						<form:input  cssClass="form-control" type="text" path="name"/>
@@ -32,12 +33,12 @@
 					</div>
 					<div>
 						<form:label path="startsAt"><spring:message code="event_startsAt"/> *</form:label>
-						<form:input	cssClass="form-control" type="text"	path="startsAt"/>
+						<form:input	cssClass="form-control" type="datetime-local"	path="startsAt"/>
 						<form:errors path="startsAt" cssClass="form-error" element="span"/>
 					</div>
 					<div>
 						<form:label path="endsAt"><spring:message code="event_endsAt"/> *</form:label>
-						<form:input	cssClass="form-control" type="text"	path="startsAt"/>
+						<form:input	cssClass="form-control" type="datetime-local"	path="endsAt"/>
 						<form:errors path="endsAt" cssClass="form-error" element="span"/>
 					</div>
 					<div class="submit-container">

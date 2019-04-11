@@ -1,20 +1,27 @@
 package ar.edu.itba.paw.webapp.form;
 
-import java.time.Instant;
+import java.util.Date;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class NewEventForm {
 	
-	@Pattern(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+	@NotBlank
 	private String name;
-
+	
+	@NotBlank
 	private String location;
 	
 	private String description;
 	
+	@NotNull
 	private String startsAt;
 	
+	@NotNull
 	private String endsAt;
 
 	public String getName() {
