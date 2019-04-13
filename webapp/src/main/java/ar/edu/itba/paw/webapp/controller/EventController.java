@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,6 +33,9 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
+	private static final String TIME_ZONE = "America/Toronto";
+	private static final String startDate = "startsAt";
+	private static final String endDate = "endsAt";
 	
 	@Autowired
 	private EventService es;
@@ -81,14 +86,22 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) {
+    	Instant from = null, to = null;
+    	Integer duration = null;
+    	try {
+    		duration = Integer.parseInt(form.getEndsAt());
+    	} catch(NumberFormatException e) {
+    		errors.rejectValue(endDate, "wrong_int_format");
+    	}
+    	if(!form.getStartsAt().isEmpty()) {
+    		from = performDateValidations(form.getStartsAt());
+    		checkDate(from, startDate, errors);
+    	}
     	if(errors.hasErrors()) {
-    		LOGGER.error(errors.getAllErrors() + "");
     		return newEvent(form);
     	}
-    	Instant from = LocalDateTime.parse(form.getStartsAt()).atZone(ZoneId.of("America/Toronto")).toInstant();
-    	Instant to = LocalDateTime.parse(form.getStartsAt()).atZone(ZoneId.of("America/Toronto")).toInstant();
-    	Event e = es.create(form.getName(), form.getLocation(), form.getDescription(), from, to);
-    		//Instant.form.getStartsAt(), form.getEndsAt());
+    	Event e = es.create(form.getName(), form.getLocation(), form.getDescription(),
+    			from, from.plus(duration, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     	
     }
@@ -121,6 +134,21 @@ public class EventController extends BaseController {
         if(date != null && !date.isEmpty()) { strBuilder.append("date=").append(date); }
         else {strBuilder.deleteCharAt(strBuilder.length()-1);}
         return strBuilder.toString();
+    }
+    
+    private Instant performDateValidations(String date) {
+    	Instant inst;
+    	try {
+    		inst = LocalDateTime.parse(date).atZone(ZoneId.of(TIME_ZONE)).toInstant();
+       	} catch(DateTimeParseException e) {
+    		return null;
+    	}
+    	return inst;
+    }
+    
+    private void checkDate(Instant date, String fieldName, BindingResult errors) {
+    	if(date == null)
+    		errors.rejectValue(fieldName, "wrong_date_format");
     }
 
 	@ExceptionHandler({EventNotFoundException.class})

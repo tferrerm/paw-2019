@@ -37,8 +37,8 @@
 						<form:errors path="startsAt" cssClass="form-error" element="span"/>
 					</div>
 					<div>
-						<form:label path="endsAt"><spring:message code="event_endsAt"/> *</form:label>
-						<form:input	cssClass="form-control" type="datetime-local"	path="endsAt"/>
+						<form:label path="endsAt"><spring:message code="event_duration"/> *</form:label>
+						<form:input	cssClass="form-control" type="number"	path="endsAt"/>
 						<form:errors path="endsAt" cssClass="form-error" element="span"/>
 					</div>
 					<div class="submit-container">

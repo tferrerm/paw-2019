@@ -1,12 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class NewEventForm {
 	
@@ -18,10 +14,11 @@ public class NewEventForm {
 	
 	private String description;
 	
-	@NotNull
+	@NotBlank
 	private String startsAt;
 	
-	@NotNull
+	@NotBlank
+	@Pattern(regexp = "[0-9]*")
 	private String endsAt;
 
 	public String getName() {
