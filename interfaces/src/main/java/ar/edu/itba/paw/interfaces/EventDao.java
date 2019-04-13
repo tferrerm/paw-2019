@@ -12,6 +12,8 @@ public interface EventDao {
 	
 	public List<Event> findByUsername(final String username);
 	
+	public List<Event> findFutureEvents();
+	
 	public Event create(final String name, final String location, final String description,
 			final Instant startsAt, final Instant endsAt);
 
