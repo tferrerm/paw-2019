@@ -28,8 +28,9 @@ public class UserJdbcDao implements UserDao {
 	private static final int MAX_ROWS = 10;
 	
 	private static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-	new User(rs.getLong("userId"), rs.getString("username"), rs.getString("password"),
-			 Role.valueOf(rs.getString("role")), rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
+	new User(rs.getLong("userId"), rs.getString("username"), rs.getString("firstname"),
+			 rs.getString("lastname"), rs.getString("password"), Role.valueOf(rs.getString("role")),
+			 rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
 	
 	@Autowired
 	public UserJdbcDao(final DataSource ds) {
@@ -54,18 +55,21 @@ public class UserJdbcDao implements UserDao {
 	}
 	
 	@Override
-	public User create(final String username, final String password, final Role role)
-			throws UserAlreadyExistsException {
+	public User create(final String username, final String firstname, final String lastname,
+			final String password, final Role role) throws UserAlreadyExistsException {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("username", username); // username == column name
+		args.put("firstname", firstname);
+		args.put("lastname", lastname);
 		args.put("password", password);
 		args.put("role", role);
 		args.put("created_at", Timestamp.from(now));
 		args.put("deleted_at", null);
 		try {
 			final Number userId = jdbcInsert.executeAndReturnKey(args);
-			return new User(userId.longValue(), username, password, role, now, null);
+			return new User(userId.longValue(), username, firstname, lastname,
+					password, role, now, null);
 		} catch(DuplicateKeyException e) {
 			throw new UserAlreadyExistsException("User with the username " +
 				username + " already exists");

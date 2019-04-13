@@ -15,13 +15,15 @@ public interface UserService {
 	/**
 	 * 
 	 * @param username
+	 * @param firstname
+	 * @param lastname
 	 * @param password
 	 * @param role
 	 * @param picture
 	 * @return
 	 * @throws UserAlreadyExistsException If a user with that username existed already
 	 */
-	public User create(String username, String password, Role role, byte[] picture)
-		throws UserAlreadyExistsException;
+	public User create(String username, String firstname, String lastname, 
+			String password, Role role, byte[] picture) throws UserAlreadyExistsException;
 
 }

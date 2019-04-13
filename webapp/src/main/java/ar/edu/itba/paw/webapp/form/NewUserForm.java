@@ -8,16 +8,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class NewUserForm {
 
+	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	private String username;
 
+	@NotBlank
 	@Size(min = 6, max = 100)
 	private String password;
 
 	@NotBlank
+	@Pattern(regexp = "[a-zA-Z]+")
+	@Size(max = 100)
 	private String firstName;
 
 	@NotBlank
+	@Pattern(regexp = "[a-zA-Z]+")
+	@Size(max = 100)
 	private String lastName;
 
 	private String repeatPassword;

@@ -109,7 +109,8 @@ public class UserController extends BaseController {
 		final String encodedPassword = passwordEncoder.encode(form.getPassword());
 		try {
 			byte[] picture = profilePicture.getBytes();
-			u = us.create(form.getUsername(), encodedPassword, Role.ROLE_USER, picture);
+			u = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
+					encodedPassword, Role.ROLE_USER, picture);
 		} catch(IllegalArgumentException | FileProcessingException | IOException e) {
 			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
 			ModelAndView mav = index(form);
@@ -121,21 +122,25 @@ public class UserController extends BaseController {
 			mav.addObject("emailError", form.getUsername());
 			return mav;
 		}
+		authenticate(u.getUsername(), u.getPassword(), request);
+		return new ModelAndView("redirect:/user/" + u.getUserid());
+	}
+	
+	private void authenticate(String username, String password, HttpServletRequest request) {
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				u.getUsername(), u.getPassword());
+				username, password);
 		authToken.setDetails(new WebAuthenticationDetails(request));
 		Authentication authentication = authenticationManager.authenticate(authToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return new ModelAndView("redirect:/user/" + u.getUserid());
 	}
 	
 	@RequestMapping("/user/{userId}/picture")
 	public void getUserProfilePicture(@PathVariable("userId") long userid,
 			HttpServletResponse response) {
 		Optional<ProfilePicture> picOptional = pps.findByUserId(userid);
+		response.setContentType(MediaType.IMAGE_PNG_VALUE);
 		try {
 			if(picOptional.isPresent()) {
-				response.setContentType(MediaType.IMAGE_PNG_VALUE);
 				response.getOutputStream().write(picOptional.get().getData());
 			}
 			else {

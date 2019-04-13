@@ -12,7 +12,7 @@ public interface UserDao {
 	
 	public Optional<User> findByUsername(final String username);
 	
-	public User create(String username, String password, Role role)
-		throws UserAlreadyExistsException;
+	public User create(String username, String firstname, String lastname, 
+			String password, Role role) throws UserAlreadyExistsException;
 
 }

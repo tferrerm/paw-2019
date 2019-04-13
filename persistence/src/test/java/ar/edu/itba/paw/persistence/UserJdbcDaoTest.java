@@ -39,15 +39,19 @@ public class UserJdbcDaoTest {
 	}
 	
 	private static final String USERNAME = "test_username";
+	private static final String FIRSTNAME = "firstname";
+	private static final String LASTNAME = "lastname";
 	private static final String PASSWORD = "test_password";
-	
+
 	@Rollback
 	@Test
 	public void testCreate() throws UserAlreadyExistsException {
 		JdbcTestUtils.deleteFromTables(jdbcTemplate,"users");
-		final User user = userDao.create(USERNAME, PASSWORD, Role.ROLE_USER);
+		final User user = userDao.create(USERNAME, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER);
 		Assert.assertNotNull(user);
 		Assert.assertEquals(USERNAME, user.getUsername());
+		Assert.assertEquals(FIRSTNAME, user.getFirstname());
+		Assert.assertEquals(LASTNAME, user.getLastname());
 		Assert.assertEquals(PASSWORD, user.getPassword());
 		Assert.assertEquals(Role.ROLE_USER, user.getRole());
 		Assert.assertNotNull(user.getCreatedAt());
