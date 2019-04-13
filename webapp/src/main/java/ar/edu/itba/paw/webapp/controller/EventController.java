@@ -35,7 +35,7 @@ public class EventController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Toronto";
 	private static final String START_DATE = "startsAt";
-	private static final String END_DATE = "endsAt";
+	private static final String DURATION = "endsAt";
 	
 	@Autowired
 	private EventService es;
@@ -136,6 +136,11 @@ public class EventController extends BaseController {
     		inst = LocalDateTime.parse(date).atZone(ZoneId.of(TIME_ZONE)).toInstant();
        	} catch(DateTimeParseException e) {
     		errors.rejectValue(START_DATE, "wrong_date_format");
+    		return null;
+    	}
+    	if(inst.isBefore(Instant.now())) {
+    		errors.rejectValue(START_DATE, "future_date_required");
+    		return null;
     	}
     	return inst;
     }
@@ -145,7 +150,12 @@ public class EventController extends BaseController {
     	try {
     		duration = Integer.parseInt(form.getEndsAt());
     	} catch(NumberFormatException e) {
-    		errors.rejectValue(END_DATE, "wrong_int_format");
+    		errors.rejectValue(DURATION, "wrong_int_format");
+    		return null;
+    	}
+    	if(duration <= 0) {
+    		errors.rejectValue(DURATION, "gt_zero");
+    		return null;
     	}
     	return duration;
     }
