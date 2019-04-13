@@ -28,7 +28,7 @@ public class EventJdbcDao implements EventDao {
 	private static final RowMapper<Event> ROW_MAPPER = (rs, rowNum) ->
 		new Event(rs.getLong("eventid"), rs.getString("name"), rs.getString("location"),
 				rs.getString("description"), rs.getTimestamp("starts_at"), rs.getTimestamp("ends_at"),
-				rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at")););
+				rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {

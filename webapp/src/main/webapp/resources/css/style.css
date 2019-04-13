@@ -232,6 +232,22 @@ a.link-text{
     padding: 0;
 }
 
+.profile-cont {
+    padding: 30px;
+}
+
+.profile-second {
+    margin-top:  30px;
+}
+
+.profile-top {
+    display: flex;
+}
+
+.profile-pic-container {
+    margin-right: 30px;
+}
+
 .progress-bar-completion {
     align-self: center;
     padding-top: 10px;
@@ -278,6 +294,15 @@ a.link-text{
 
 .sidebar li:hover {
     background-color: grey;
+}
+
+.stats{
+    background-color: blanchedalmond;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 30px;
 }
 
 .status {

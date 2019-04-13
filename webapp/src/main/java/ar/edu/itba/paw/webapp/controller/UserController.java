@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,6 +45,7 @@ import ar.edu.itba.paw.webapp.form.NewUserForm;
 public class UserController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	private static final String DEFAULT_PROFILE_PICTURE = "profile_default.png";
 	
 	@Qualifier("userServiceImpl")
 	@Autowired
@@ -134,6 +137,10 @@ public class UserController extends BaseController {
 			if(picOptional.isPresent()) {
 				response.setContentType(MediaType.IMAGE_PNG_VALUE);
 				response.getOutputStream().write(picOptional.get().getData());
+			}
+			else {
+				LOGGER.debug("Returning default profile picture");
+				IOUtils.copy(new ClassPathResource(DEFAULT_PROFILE_PICTURE).getInputStream(), response.getOutputStream());
 			}
 		}
 		catch(IOException e) {

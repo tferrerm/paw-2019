@@ -11,6 +11,7 @@
 	<body>
 	<%@include file="header.jsp" %>
 	<div class="main-container">
+		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="create_event"/></h2>
 			<div class="form-container">
@@ -38,7 +39,7 @@
 					</div>
 					<div>
 						<form:label path="endsAt"><spring:message code="event_duration"/> *</form:label>
-						<form:input	cssClass="form-control" type="number"	path="endsAt"/>
+						<form:input	cssClass="form-control" type="number" min="1"	path="endsAt"/>
 						<form:errors path="endsAt" cssClass="form-error" element="span"/>
 					</div>
 					<div class="submit-container">
