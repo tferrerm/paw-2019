@@ -50,6 +50,12 @@ public class EventJdbcDao implements EventDao {
 		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN events_users NATURAL JOIN users"
 				+ " WHERE username = ?", ROW_MAPPER, username);
 	}
+	
+	@Override
+	public List<Event> findFutureEvents() {
+		return jdbcTemplate.query("SELECT * FROM events WHERE starts_at > ?",
+				ROW_MAPPER, Timestamp.from(Instant.now()));
+	}
 
 	@Override
 	public Event create(String name, String location, String description, Instant startsAt, Instant endsAt) {

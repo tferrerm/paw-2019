@@ -34,8 +34,8 @@ public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Toronto";
-	private static final String startDate = "startsAt";
-	private static final String endDate = "endsAt";
+	private static final String START_DATE = "startsAt";
+	private static final String DURATION = "endsAt";
 	
 	@Autowired
 	private EventService es;
@@ -86,17 +86,8 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) {
-    	Instant from = null, to = null;
-    	Integer duration = null;
-    	try {
-    		duration = Integer.parseInt(form.getEndsAt());
-    	} catch(NumberFormatException e) {
-    		errors.rejectValue(endDate, "wrong_int_format");
-    	}
-    	if(!form.getStartsAt().isEmpty()) {
-    		from = performDateValidations(form.getStartsAt());
-    		checkDate(from, startDate, errors);
-    	}
+    	Integer duration = performDurationValidations(form, errors);
+    	Instant from = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
     		return newEvent(form);
     	}
@@ -136,19 +127,37 @@ public class EventController extends BaseController {
         return strBuilder.toString();
     }
     
-    private Instant performDateValidations(String date) {
-    	Instant inst;
+    private Instant performDateValidations(NewEventForm form, BindingResult errors) {
+    	Instant inst = null;
+    	String date = form.getStartsAt();
+    	if(date.isEmpty())
+    		return null;
     	try {
     		inst = LocalDateTime.parse(date).atZone(ZoneId.of(TIME_ZONE)).toInstant();
        	} catch(DateTimeParseException e) {
+    		errors.rejectValue(START_DATE, "wrong_date_format");
+    		return null;
+    	}
+    	if(inst.isBefore(Instant.now())) {
+    		errors.rejectValue(START_DATE, "future_date_required");
     		return null;
     	}
     	return inst;
     }
     
-    private void checkDate(Instant date, String fieldName, BindingResult errors) {
-    	if(date == null)
-    		errors.rejectValue(fieldName, "wrong_date_format");
+    private Integer performDurationValidations(NewEventForm form, BindingResult errors) {
+    	Integer duration = null;
+    	try {
+    		duration = Integer.parseInt(form.getEndsAt());
+    	} catch(NumberFormatException e) {
+    		errors.rejectValue(DURATION, "wrong_int_format");
+    		return null;
+    	}
+    	if(duration <= 0) {
+    		errors.rejectValue(DURATION, "gt_zero");
+    		return null;
+    	}
+    	return duration;
     }
 
 	@ExceptionHandler({EventNotFoundException.class})

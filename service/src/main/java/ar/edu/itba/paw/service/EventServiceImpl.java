@@ -27,6 +27,11 @@ public class EventServiceImpl implements EventService {
 	public List<Event> findByUsername(String username) {
 		return ed.findByUsername(username);
 	}
+	
+	@Override
+	public List<Event> findFutureEvents() {
+		return ed.findFutureEvents();
+	}
 
 	@Transactional
 	@Override
