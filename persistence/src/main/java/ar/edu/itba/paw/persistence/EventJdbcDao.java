@@ -46,15 +46,38 @@ public class EventJdbcDao implements EventDao {
 	}
 
 	@Override
-	public List<Event> findByUsername(String username) {
+	public List<Event> findByUsername(String username, int pageNum) {
+		int offset = (pageNum - 1) * MAX_ROWS;
 		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN events_users NATURAL JOIN users"
-				+ " WHERE username = ?", ROW_MAPPER, username);
+				+ " WHERE username = ?"
+				+ " OFFSET ?", ROW_MAPPER, username, offset);
 	}
 	
 	@Override
-	public List<Event> findFutureEvents() {
-		return jdbcTemplate.query("SELECT * FROM events WHERE starts_at > ?",
-				ROW_MAPPER, Timestamp.from(Instant.now()));
+	public long countUserEventPages(final long userid) {
+		Long rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events_users WHERE userid = ?",
+				Long.class, userid);
+		long pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
+	}
+	
+	@Override
+	public List<Event> findFutureEvents(int pageNum) {
+		int offset = (pageNum - 1) * MAX_ROWS;
+		return jdbcTemplate.query("SELECT * FROM events WHERE starts_at > ?"
+				+ " OFFSET ?", ROW_MAPPER, Timestamp.from(Instant.now()), offset);
+	}
+	
+	@Override
+	public long countFutureEventPages() {
+		Long rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events WHERE "
+				+ " starts_at > ?",	Long.class, Timestamp.from(Instant.now()));
+		long pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 	@Override

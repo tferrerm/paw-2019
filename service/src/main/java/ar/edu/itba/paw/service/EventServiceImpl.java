@@ -24,13 +24,23 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> findByUsername(String username) {
-		return ed.findByUsername(username);
+	public List<Event> findByUsername(String username, int pageNum) {
+		return ed.findByUsername(username, pageNum);
 	}
 	
 	@Override
-	public List<Event> findFutureEvents() {
-		return ed.findFutureEvents();
+	public long countUserEventPages(long userid) {
+		return ed.countUserEventPages(userid);
+	}
+	
+	@Override
+	public List<Event> findFutureEvents(int pageNum) {
+		return ed.findFutureEvents(pageNum);
+	}
+	
+	@Override
+	public long countFutureEventPages() {
+		return ed.countFutureEventPages();
 	}
 
 	@Transactional

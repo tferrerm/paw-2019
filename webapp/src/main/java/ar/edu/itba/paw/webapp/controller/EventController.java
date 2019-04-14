@@ -52,7 +52,7 @@ public class EventController extends BaseController {
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
-		mav.addObject("events", es.findByUsername(loggedUser().getUsername()));
+		mav.addObject("events", es.findByUsername(loggedUser().getUsername(), pageNum));
 	    return mav;
 	}
 
@@ -164,7 +164,5 @@ public class EventController extends BaseController {
 	private ModelAndView eventNotFound() {
 		return new ModelAndView("404");
 	}
-
-
 
 }
