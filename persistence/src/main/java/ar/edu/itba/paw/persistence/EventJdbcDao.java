@@ -10,10 +10,13 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.User;
@@ -24,6 +27,7 @@ public class EventJdbcDao implements EventDao {
 	
 	private JdbcTemplate jdbcTemplate;
 	private final SimpleJdbcInsert jdbcInsert;
+	private final SimpleJdbcInsert jdbcInscriptionInsert; // PREGUNTARRRRRRRRRRRRRRRRRRRRRRRRRR
 	private static final int MAX_ROWS = 10;
 	
 	/*private static final RowMapper<Event> ROW_MAPPER = (rs, rowNum) ->
@@ -41,6 +45,8 @@ public class EventJdbcDao implements EventDao {
 		jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
 				.withTableName("events")
 				.usingGeneratedKeyColumns("eventid");
+		jdbcInscriptionInsert = new SimpleJdbcInsert(jdbcTemplate)
+				.withTableName("events_users");
 	}
 	
 	@Override
@@ -87,19 +93,46 @@ public class EventJdbcDao implements EventDao {
 	}
 
 	@Override
-	public Event create(String name, User owner, String location, String description, Instant startsAt, Instant endsAt) {
+	public Event create(String name, User owner, String location, String description, 
+			int maxParticipants, Instant startsAt, Instant endsAt) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("name", name);
 		args.put("userid", owner.getUserid());
 		args.put("location", location);
 		args.put("description", description);
+		args.put("max_participants", maxParticipants);
 		args.put("starts_at", Timestamp.from(startsAt));
 		args.put("ends_at", Timestamp.from(endsAt));
 		args.put("created_at", Timestamp.from(now));
 		args.put("deleted_at", null);
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
-		return new Event(eventId.longValue(), name, owner, location, description, startsAt, endsAt);
+		return new Event(eventId.longValue(), name, owner, location, description, 
+				maxParticipants, startsAt, endsAt);
+	}
+	
+	@Override
+	public int countParticipants(long eventid) {
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM events_users WHERE "
+				+ " eventid = ?", Integer.class, eventid);
+	}
+
+	@Override // BOOLEANNNNNNNNNNNNNNNNNNNN
+	public boolean joinEvent(final User user, final Event event)
+			throws UserAlreadyJoinedException, EventFullException {
+		if(countParticipants(event.getEventId()) > event.getMaxParticipants()) {
+			throw new EventFullException();
+		}
+		final Map<String, Object> args = new HashMap<>();
+		args.put("userid", user.getUserid());
+		args.put("eventid", event.getEventId());
+		try {
+			jdbcInscriptionInsert.execute(args);
+		} catch(DuplicateKeyException e) {
+			throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
+					+ event.getEventId());
+		}
+		return true;
 	}
 
 }

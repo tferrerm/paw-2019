@@ -15,11 +15,16 @@ public class NewEventForm {
 	private String description;
 	
 	@NotBlank
+	@Pattern(regexp = "[0-9]*")
+	private String maxParticipants;
+	
+	@NotBlank
 	private String startsAt;
 	
 	@NotBlank
 	@Pattern(regexp = "[0-9]*")
 	private String endsAt;
+
 
 	public String getName() {
 		return name;
@@ -43,6 +48,14 @@ public class NewEventForm {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getMaxParticipants() {
+		return maxParticipants;
+	}
+
+	public void setMaxParticipants(String maxParticipants) {
+		this.maxParticipants = maxParticipants;
 	}
 
 	public String getStartsAt() {

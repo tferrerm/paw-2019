@@ -33,6 +33,11 @@
 						<form:errors path="description" cssClass="form-error" element="span"/>
 					</div>
 					<div>
+						<form:label path="maxParticipants"><spring:message code="event_max_participants"/></form:label>
+						<form:input  cssClass="form-control" type="number" path="maxParticipants"/>
+						<form:errors path="maxParticipants" cssClass="form-error" element="span"/>
+					</div>
+					<div>
 						<form:label path="startsAt"><spring:message code="event_startsAt"/> *</form:label>
 						<form:input	cssClass="form-control" type="datetime-local"	path="startsAt"/>
 						<form:errors path="startsAt" cssClass="form-error" element="span"/>

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
@@ -46,8 +48,19 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional
 	@Override
-	public Event create(String name, User owner, String location, String description, Instant startsAt, Instant endsAt) {
-		return ed.create(name, owner, location, description, startsAt, endsAt);
+	public Event create(String name, User owner, String location, String description,
+			int maxParticipants, Instant startsAt, Instant endsAt) {
+		return ed.create(name, owner, location, description, maxParticipants, startsAt, endsAt);
+	}
+
+	@Override
+	public boolean joinEvent(final User user, final Event event)
+			throws UserAlreadyJoinedException, EventFullException {
+		return ed.joinEvent(user, event);
+	}
+	
+	public int countParticipants(long eventid) {
+		return ed.countParticipants(eventid);
 	}
 
 }

@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.User;
 
@@ -19,7 +21,12 @@ public interface EventDao {
 	
 	public int countFutureEventPages();
 	
+	public int countParticipants(long eventid);
+	
 	public Event create(final String name, final User owner, final String location, final String description,
-			final Instant startsAt, final Instant endsAt);
+			final int maxParticipants, final Instant startsAt, final Instant endsAt);
+	
+	public boolean joinEvent(final User user, final Event event)
+			throws UserAlreadyJoinedException, EventFullException;
 
 }

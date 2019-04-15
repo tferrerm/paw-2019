@@ -9,42 +9,51 @@ public class Event {
 	private User owner;
 	private String location;
 	private String description;
+	private int maxParticipants;
 	private Instant startsAt;
 	private Instant endsAt;
 	private Instant createdAt;
 	private Instant deletedAt;
 	
-	public Event(long eventId, String name, User owner, String location, String description, Instant startsAt,
-			Instant endsAt) {
+	public Event(long eventId, String name, User owner, String location, String description,
+			int maxParticipants, Instant startsAt, Instant endsAt) {
 		this.eventId = eventId;
 		this.name = name;
 		this.owner = owner;
 		this.location = location;
 		this.description = description;
+		this.maxParticipants = maxParticipants;
 		this.startsAt = startsAt;
 		this.endsAt = endsAt;
 	}
 	
-	public Event(long eventId, String name, User owner, String location, String description, Instant startsAt,
-			Instant endsAt, Instant createdAt, Instant deletedAt) {
-		this(eventId, name, owner, location, description, startsAt,
+	public Event(long eventId, String name, User owner, String location, String description, 
+			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt,
+			Instant deletedAt) {
+		this(eventId, name, owner, location, description, maxParticipants, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
 		this.deletedAt = deletedAt;
 	}
 	
-	public Event(long eventId, String name, User owner, String location, String description, Timestamp startsAt,
-			Timestamp endsAt, Timestamp createdAt, Timestamp deletedAt) {
+	public Event(long eventId, String name, User owner, String location, String description, 
+			int maxParticipants, Timestamp startsAt, Timestamp endsAt, Timestamp createdAt, Timestamp deletedAt) {
 		this.eventId = eventId;
 		this.name = name;
 		this.owner = owner;
 		this.location = location;
 		this.description = description;
+		this.maxParticipants = maxParticipants;
 		this.startsAt = startsAt.toInstant();
 		this.endsAt = endsAt.toInstant();
 		this.createdAt = createdAt.toInstant();
 		if(deletedAt != null)
 			this.deletedAt = deletedAt.toInstant();
+	}
+	
+	@Override
+	public String toString() {
+		return "Eventid: " + eventId + " Name: " + name;
 	}
 	
 	public long getEventId() {
@@ -78,6 +87,22 @@ public class Event {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public int getMaxParticipants() {
+		return maxParticipants;
+	}
+	
+	public void setMaxParticipants(int maxParticipants) {
+		this.maxParticipants = maxParticipants;
+	}
 
 	public Instant getStartsAt() {
 		return startsAt;
@@ -109,14 +134,6 @@ public class Event {
 
 	public void setDeletedAt(Instant deletedAt) {
 		this.deletedAt = deletedAt;
-	}
-	
-	public String getDescription() {
-		return this.description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 }

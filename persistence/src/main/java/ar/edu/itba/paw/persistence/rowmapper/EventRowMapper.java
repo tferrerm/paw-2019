@@ -23,6 +23,7 @@ public class EventRowMapper implements RowMapper<Event> {
 				urm.mapRow(rs, rowNum),
 				rs.getString("location"),
 				rs.getString("description"),
+				rs.getInt("max_participants"),
 				rs.getTimestamp("starts_at"),
 				rs.getTimestamp("ends_at"),
 				rs.getTimestamp("created_at"),

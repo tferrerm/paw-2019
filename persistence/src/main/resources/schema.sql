@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS events(
   userid INTEGER NOT NULL,
   location VARCHAR(100),
   description VARCHAR(500),
+  max_participants INTEGER NOT NULL,
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
   created_at TIMESTAMP NOT NULL,

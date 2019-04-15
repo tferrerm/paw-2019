@@ -15,6 +15,11 @@ public class ProfilePicture {
 		this(profilePictureId, userid);
 		this.data = data;
 	}
+	
+	@Override
+	public String toString() {
+		return "Profile Picture id: " + profilePictureId + " User id: " + userid;
+	}
 
 	public long getProfilePictureId() {
 		return profilePictureId;

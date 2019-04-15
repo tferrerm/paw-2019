@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
@@ -60,12 +62,28 @@ public class EventController extends BaseController {
     public ModelAndView retrieveElement(@PathVariable long id)
     	throws EventNotFoundException {
 	    ModelAndView mav = new ModelAndView("event");
-        mav.addObject("event", es.findByEventId(id).orElseThrow(EventNotFoundException::new));
+	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+        mav.addObject("event", event);
+        mav.addObject("participant_count", es.countParticipants(event.getEventId()));
         return mav;
+    }
+    
+    @RequestMapping(value = "/event/{id}/join", method = { RequestMethod.POST })
+    public ModelAndView joinEvent(@PathVariable long id)
+    	throws EventNotFoundException {
+	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+	    try {
+	    	es.joinEvent(loggedUser(), event);
+	    } catch(EventFullException e) {
+	    	return new ModelAndView("redirect:/event/" + id + "?error=event-full");
+	    } catch(UserAlreadyJoinedException e) {
+	    	return new ModelAndView("redirect:/event/" + id + "?error=already-joined");
+	    }
+        return new ModelAndView("redirect:/event/" + id);
     }
 
     @RequestMapping(value = "/events/{pageNum}")
-    public ModelAndView retrieveEvents( @ModelAttribute("filtersForm") final FiltersForm form,
+    public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,
                                          @RequestParam(value = "est" ,required = false) String establishment,
                                          @RequestParam(value = "sport", required = false) String sport,
@@ -89,14 +107,14 @@ public class EventController extends BaseController {
 			final BindingResult errors,
 			HttpServletRequest request) {
     	Integer duration = performDurationValidations(form, errors);
+    	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
     	Instant from = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
     		return newEvent(form);
     	}
     	Event e = es.create(form.getName(), loggedUser(), form.getLocation(), form.getDescription(),
-    			from, from.plus(duration, ChronoUnit.HOURS));
+    			maxParticipants, from, from.plus(duration, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
-    	
     }
     
 	@RequestMapping("/event/new")
@@ -160,6 +178,21 @@ public class EventController extends BaseController {
     		return null;
     	}
     	return duration;
+    }
+    
+    private Integer performMaxParticipantsValidations(NewEventForm form, BindingResult errors) {
+    	Integer maxParticipants = null;
+    	try {
+    		maxParticipants = Integer.parseInt(form.getMaxParticipants());
+    	} catch(NumberFormatException e) {
+    		errors.rejectValue("maxParticipants", "wrong_int_format");
+    		return null;
+    	}
+    	if(maxParticipants <= 0) {
+    		errors.rejectValue("maxParticipants", "gt_zero");
+    		return null;
+    	}
+    	return maxParticipants;
     }
 
 	@ExceptionHandler({EventNotFoundException.class})

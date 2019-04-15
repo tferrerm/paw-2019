@@ -17,9 +17,9 @@
 				<div class="status">
 					<h3><spring:message code="status"/> Uncompleted</h3>
 					<div class="progress">
-						<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+						<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 					</div>
-					<h4 class="progress-bar-completion">3/11</h4>
+					<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 				</div>
 				<div class="description-body">
 					<div>
@@ -63,7 +63,7 @@
 					</div>
 				</div>
 			</div>
-			<button type="button" class="btn btn-success join-button"><spring:message code="join"/></button>
+			<button type="submit" class="btn btn-success join-button" href="<c:url value="/event/${event.eventId}/join"/>"><spring:message code="join"/></button>
 		</div>
 	</div>
 

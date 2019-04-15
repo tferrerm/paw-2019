@@ -38,6 +38,11 @@ public class User {
 		if(deletedAt != null)
 			this.deletedAt = deletedAt.toInstant();
 	}
+	
+	@Override
+	public String toString() {
+		return "Userid: " + userid + " Username: " + username;
+	}
 
 	public long getUserid() {
 		return userid;
