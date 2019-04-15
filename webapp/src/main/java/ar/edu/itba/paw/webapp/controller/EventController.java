@@ -66,6 +66,7 @@ public class EventController extends BaseController {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
         mav.addObject("event", event);
         mav.addObject("participant_count", es.countParticipants(event.getEventId()));
+        mav.addObject("participants", es.findEventUsers(event.getEventId(), 1));
         return mav;
     }
     

@@ -21,6 +21,7 @@ import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
+import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
 @Repository
 public class EventJdbcDao implements EventDao {
@@ -37,6 +38,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private EventRowMapper erm;
+	
+	@Autowired
+	private UserRowMapper urm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -133,6 +137,13 @@ public class EventJdbcDao implements EventDao {
 					+ event.getEventId());
 		}
 		return true;
+	}
+
+	@Override
+	public List<User> findEventUsers(final long eventid, final int pageNum) {
+		int offset = (pageNum - 1) * MAX_ROWS;
+		return jdbcTemplate.query("SELECT * FROM events_users NATURAL JOIN users "
+				+ " WHERE eventid = ? OFFSET ?", urm, eventid, offset);
 	}
 
 }

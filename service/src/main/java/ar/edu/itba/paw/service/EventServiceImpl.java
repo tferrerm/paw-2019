@@ -53,14 +53,21 @@ public class EventServiceImpl implements EventService {
 		return ed.create(name, owner, location, description, maxParticipants, startsAt, endsAt);
 	}
 
+	@Transactional
 	@Override
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException {
 		return ed.joinEvent(user, event);
 	}
 	
-	public int countParticipants(long eventid) {
+	@Override
+	public int countParticipants(final long eventid) {
 		return ed.countParticipants(eventid);
+	}
+
+	@Override
+	public List<User> findEventUsers(final long eventid, final int pageNum) {
+		return ed.findEventUsers(eventid, pageNum);
 	}
 
 }

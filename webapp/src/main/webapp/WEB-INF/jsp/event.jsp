@@ -50,16 +50,10 @@
 					<div class="participants-list">
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
-							<li>Santiago Swinnen</li>
-							<li>Guido Princ</li>
-							<li>Marcos Lund</li>
-							<li>Tomas Ferrer</li>
-							<li>Jorgito Trapito</li>
-							<li>Santiago Swinnen</li>
-							<li>Guido Princ</li>
-							<li>Marcos Lund</li>
-							<li>Tomas Ferrer</li>
-						</ul>
+					    <c:forEach var="user" items="${participants}">
+	              <a href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
+	            </c:forEach>
+          	</ul>
 					</div>
 				</div>
 			</div>
