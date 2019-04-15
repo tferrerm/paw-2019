@@ -29,7 +29,7 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public long countUserEventPages(long userid) {
+	public int countUserEventPages(long userid) {
 		return ed.countUserEventPages(userid);
 	}
 	
@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public long countFutureEventPages() {
+	public int countFutureEventPages() {
 		return ed.countFutureEventPages();
 	}
 

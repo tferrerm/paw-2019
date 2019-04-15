@@ -14,9 +14,9 @@ public interface EventService {
 	
 	public List<Event> findFutureEvents(int pageNum);
 	
-	public long countUserEventPages(final long userid);
+	public int countUserEventPages(final long userid);
 	
-	public long countFutureEventPages();
+	public int countFutureEventPages();
 	
 	public Event create(final String name, final String location, final String description,
 			final Instant startsAt, final Instant endsAt);

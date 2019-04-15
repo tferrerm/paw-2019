@@ -37,8 +37,8 @@ public class EventJdbcDao implements EventDao {
 		jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
 				.withTableName("events")
 				.usingGeneratedKeyColumns("eventid");
-		
 	}
+	
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
 		return jdbcTemplate.query("SELECT * FROM events WHERE eventid = ?", ROW_MAPPER, eventid)
@@ -54,10 +54,10 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public long countUserEventPages(final long userid) {
-		Long rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events_users WHERE userid = ?",
-				Long.class, userid);
-		long pageCount = rows / MAX_ROWS;
+	public int countUserEventPages(final long userid) {
+		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events_users WHERE userid = ?",
+				Integer.class, userid);
+		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
 		return pageCount;
@@ -71,10 +71,10 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public long countFutureEventPages() {
-		Long rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events WHERE "
-				+ " starts_at > ?",	Long.class, Timestamp.from(Instant.now()));
-		long pageCount = rows / MAX_ROWS;
+	public int countFutureEventPages() {
+		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events WHERE "
+				+ " starts_at > ?",	Integer.class, Timestamp.from(Instant.now()));
+		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
 		return pageCount;
