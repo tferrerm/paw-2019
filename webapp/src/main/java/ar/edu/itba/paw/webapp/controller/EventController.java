@@ -93,7 +93,7 @@ public class EventController extends BaseController {
     	if(errors.hasErrors()) {
     		return newEvent(form);
     	}
-    	Event e = es.create(form.getName(), form.getLocation(), form.getDescription(),
+    	Event e = es.create(form.getName(), loggedUser(), form.getLocation(), form.getDescription(),
     			from, from.plus(duration, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     	

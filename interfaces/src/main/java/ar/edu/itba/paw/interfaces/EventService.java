@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.User;
 
 public interface EventService {
 	
@@ -18,7 +19,7 @@ public interface EventService {
 	
 	public int countFutureEventPages();
 	
-	public Event create(final String name, final String location, final String description,
+	public Event create(final String name, final User owner, final String location, final String description,
 			final Instant startsAt, final Instant endsAt);
 
 }

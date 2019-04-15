@@ -60,7 +60,7 @@
                     <div class="custom-row">
                         <div>${event.location}</div>
                         <div>Hardcoded</div>
-                        <div>${event.description}</div>
+                        <div>${event.owner.firstname} ${event.owner.lastname}</div>
                         <div>${event.startsAt}</div>
                         <div>${event.endsAt}</div>
                         <div>

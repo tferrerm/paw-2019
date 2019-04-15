@@ -6,6 +6,7 @@ import java.time.Instant;
 public class Event {
 	private long eventId;
 	private String name;
+	private User owner;
 	private String location;
 	private String description;
 	private Instant startsAt;
@@ -13,28 +14,30 @@ public class Event {
 	private Instant createdAt;
 	private Instant deletedAt;
 	
-	public Event(long eventId, String name, String location, String description, Instant startsAt,
+	public Event(long eventId, String name, User owner, String location, String description, Instant startsAt,
 			Instant endsAt) {
 		this.eventId = eventId;
 		this.name = name;
+		this.owner = owner;
 		this.location = location;
 		this.description = description;
 		this.startsAt = startsAt;
 		this.endsAt = endsAt;
 	}
 	
-	public Event(long eventId, String name, String location, String description, Instant startsAt,
+	public Event(long eventId, String name, User owner, String location, String description, Instant startsAt,
 			Instant endsAt, Instant createdAt, Instant deletedAt) {
-		this(eventId, name, location, description, startsAt,
+		this(eventId, name, owner, location, description, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
 		this.deletedAt = deletedAt;
 	}
 	
-	public Event(long eventId, String name, String location, String description, Timestamp startsAt,
+	public Event(long eventId, String name, User owner, String location, String description, Timestamp startsAt,
 			Timestamp endsAt, Timestamp createdAt, Timestamp deletedAt) {
 		this.eventId = eventId;
 		this.name = name;
+		this.owner = owner;
 		this.location = location;
 		this.description = description;
 		this.startsAt = startsAt.toInstant();
@@ -58,6 +61,14 @@ public class Event {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public User getOwner() {
+		return owner;
+	}
+	
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 	public String getLocation() {

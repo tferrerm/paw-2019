@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -45,8 +46,8 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional
 	@Override
-	public Event create(String name, String location, String description, Instant startsAt, Instant endsAt) {
-		return ed.create(name, location, description, startsAt, endsAt);
+	public Event create(String name, User owner, String location, String description, Instant startsAt, Instant endsAt) {
+		return ed.create(name, owner, location, description, startsAt, endsAt);
 	}
 
 }
