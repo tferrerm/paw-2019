@@ -21,173 +21,53 @@
 			<h2><spring:message code="allEvents" /></h2>
 			<div class="tbl">
 				<div class="table-header">
-                        <c:url value='/events/filter' var="postPath"/>
-                        <form:form id="searchfilters" class="searchfilters" modelAttribute="filtersForm"
-                                   action="${postPath}">
-                            <div class="table-titles">
-                                <div>
-                                    <form:label path="establishment"><spring:message code="establishment" /></form:label>
-                                    <form:input class="form-control" type="text" path="establishment"/>
-                                    <form:errors path="establishment" cssClass="formError" element="p"/>
-                                </div>
-                                <div>
-                                    <form:label path="sport"><spring:message code="sport" /></form:label>
-                                    <form:input class="form-control" type="text" path="sport"/>
-                                    <form:errors path="sport" cssClass="form-error" element="p"/>
-                                </div>
-                                <div>
-                                    <form:label path="organizer"><spring:message code="organizer" /></form:label>
-                                    <form:input class="form-control" type="text" path="organizer"/>
-                                    <form:errors path="organizer" cssClass="form-error" element="p"/>
-                                </div>
-                                <div>
-                                    <form:label path="vacancies"><spring:message code="vacancies" /></form:label>
-                                    <form:input class="form-control" type="text" path="vacancies"/>
-                                    <form:errors path="vacancies" cssClass="form-error" element="p"/>
-                                </div>
-                                <div>
-                                    <form:label path="date"><spring:message code="date" /></form:label>
-                                    <form:input class="form-control" type="text" path="date"/>
-                                    <form:errors path="date" cssClass="form-error" element="p"/>
-                                </div>
-                                <div>
-                                    <button class="btn btn-primary" type="submit"><spring:message code="filter" /></button>
-                                </div>
+                    <c:url value='/events/filter' var="postPath"/>
+                    <form:form id="searchfilters" class="searchfilters" modelAttribute="filtersForm" action="${postPath}">
+                        <div class="table-titles">
+                            <div>
+                                <form:label path="establishment"><spring:message code="establishment" /></form:label>
+                                <form:input class="form-control" type="text" path="establishment"/>
+                                <form:errors path="establishment" cssClass="formError" element="p"/>
                             </div>
-                        </form:form>
+                            <div>
+                                <form:label path="sport"><spring:message code="sport" /></form:label>
+                                <form:input class="form-control" type="text" path="sport"/>
+                                <form:errors path="sport" cssClass="form-error" element="p"/>
+                            </div>
+                            <div>
+                                <form:label path="organizer"><spring:message code="organizer" /></form:label>
+                                <form:input class="form-control" type="text" path="organizer"/>
+                                <form:errors path="organizer" cssClass="form-error" element="p"/>
+                            </div>
+                            <div>
+                                <form:label path="vacancies"><spring:message code="vacancies" /></form:label>
+                                <form:input class="form-control" type="text" path="vacancies"/>
+                                <form:errors path="vacancies" cssClass="form-error" element="p"/>
+                            </div>
+                            <div>
+                                <form:label path="date"><spring:message code="date" /></form:label>
+                                <form:input class="form-control" type="text" path="date"/>
+                                <form:errors path="date" cssClass="form-error" element="p"/>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="submit"><spring:message code="filter" /></button>
+                            </div>
+                        </div>
+                    </form:form>
 
-                    </div>
-				<div class="custom-row">
-					<div>These</div>
-					<div>Values</div>
-					<div>Are</div>
-					<div>Now</div>
-					<div>Hardcoded</div>
-                    <div>
-                        <a href="<c:url value="/event/1"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
-                    </div>
-
                 </div>
-				<div class="custom-row">
-					<div>These</div>
-					<div>Values</div>
-					<div>Are</div>
-					<div>Now</div>
-					<div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
+                <c:forEach var="event" items="${events}">
+                    <div class="custom-row">
+                        <div>${event.location}</div>
+                        <div>Hardcoded</div>
+                        <div>${event.description}</div>
+                        <div>${event.startsAt}</div>
+                        <div>${event.endsAt}</div>
+                        <div>
+                            <a href="<c:url value="/event/${event.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                        </div>
                     </div>
-				</div>
-				<div class="custom-row">
-					<div>These</div>
-					<div>Values</div>
-					<div>Are</div>
-					<div>Now</div>
-					<div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-				</div>
-				<div class="custom-row">
-					<div>These</div>
-					<div>Values</div>
-					<div>Are</div>
-					<div>Now</div>
-					<div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-				</div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
-                <div class="custom-row">
-                    <div>These</div>
-                    <div>Values</div>
-                    <div>Are</div>
-                    <div>Now</div>
-                    <div>Hardcoded</div>
-                    <div>
-                        <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button>
-                    </div>
-                </div>
+                </c:forEach>
 			</div>
 			<div class="table-navigator">
 				<div>

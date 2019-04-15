@@ -33,7 +33,7 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
-	private static final String TIME_ZONE = "America/Toronto";
+	private static final String TIME_ZONE = "America/Toronto"; // CAMBIAR
 	private static final String START_DATE = "startsAt";
 	private static final String DURATION = "endsAt";
 	
@@ -64,9 +64,9 @@ public class EventController extends BaseController {
         return mav;
     }
 
-    @RequestMapping(value = "/events/{page}")
+    @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents( @ModelAttribute("filtersForm") final FiltersForm form,
-                                         @PathVariable("page") final long page,
+                                         @PathVariable("pageNum") final int pageNum,
                                          @RequestParam(value = "est" ,required = false) String establishment,
                                          @RequestParam(value = "sport", required = false) String sport,
                                          @RequestParam(value = "org", required = false) String organizer,
@@ -74,10 +74,12 @@ public class EventController extends BaseController {
                                          @RequestParam(value = "date", required = false) String date) {
         String queryString = buildQueryString(establishment,sport,organizer,vacancies,date);
         ModelAndView mav = new ModelAndView("list");
-        mav.addObject("page", page);
+        mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("filtersForm",form);
-        mav.addObject("lastPageNum", 10);
+        mav.addObject("lastPageNum", es.countFutureEventPages());
+        mav.addObject("events", es.findFutureEvents(pageNum));
+        LOGGER.error("Events: {}", es.findFutureEvents(pageNum));
         return mav;
     }
     

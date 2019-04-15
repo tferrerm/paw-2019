@@ -12,7 +12,7 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h2>Event name</h2>
+			<h2>${event.name}</h2>
 			<div class="detail-container">
 				<div class="status">
 					<h3><spring:message code="status"/> Uncompleted</h3>
@@ -33,7 +33,7 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="establishment"/></span>
-							<span>Club Atletico San Lorenzo de Almagro</span>
+							<span>${event.location}</span>
 						</div>
 						<div class="double-box">
 							<div class="description-item">
