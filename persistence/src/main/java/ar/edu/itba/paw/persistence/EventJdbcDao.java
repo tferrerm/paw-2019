@@ -15,7 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
@@ -123,10 +122,7 @@ public class EventJdbcDao implements EventDao {
 
 	@Override // BOOLEANNNNNNNNNNNNNNNNNNNN
 	public boolean joinEvent(final User user, final Event event)
-			throws UserAlreadyJoinedException, EventFullException {
-		if(countParticipants(event.getEventId()) > event.getMaxParticipants()) {
-			throw new EventFullException();
-		}
+			throws UserAlreadyJoinedException {
 		final Map<String, Object> args = new HashMap<>();
 		args.put("userid", user.getUserid());
 		args.put("eventid", event.getEventId());
