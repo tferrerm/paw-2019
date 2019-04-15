@@ -29,5 +29,7 @@ public interface EventDao {
 	
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException;
+	
+	public void leaveEvent(final User user, final Event event);
 
 }

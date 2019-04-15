@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewEventForm;
 
@@ -64,9 +66,11 @@ public class EventController extends BaseController {
     	throws EventNotFoundException {
 	    ModelAndView mav = new ModelAndView("event");
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+	    List<User> participants = es.findEventUsers(event.getEventId(), 1);
         mav.addObject("event", event);
         mav.addObject("participant_count", es.countParticipants(event.getEventId()));
-        mav.addObject("participants", es.findEventUsers(event.getEventId(), 1));
+        mav.addObject("participants", participants);
+        mav.addObject("is_participant", participants.contains(loggedUser()));
         return mav;
     }
     
@@ -81,6 +85,14 @@ public class EventController extends BaseController {
 	    } catch(UserAlreadyJoinedException e) {
 	    	return new ModelAndView("redirect:/event/" + id + "?error=already-joined");
 	    }
+        return new ModelAndView("redirect:/event/" + id);
+    }
+    
+    @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
+    public ModelAndView leaveEvent(@PathVariable long id)
+    	throws EventNotFoundException {
+	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+	    es.leaveEvent(loggedUser(), event);
         return new ModelAndView("redirect:/event/" + id);
     }
 

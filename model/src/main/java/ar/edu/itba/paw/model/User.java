@@ -43,6 +43,21 @@ public class User {
 	public String toString() {
 		return "Userid: " + userid + " Username: " + username;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof User))
+			return false;
+		User other = (User) o;
+		return this.getUsername().equals(other.getUsername());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getUsername().hashCode() * 83;
+	}
 
 	public long getUserid() {
 		return userid;

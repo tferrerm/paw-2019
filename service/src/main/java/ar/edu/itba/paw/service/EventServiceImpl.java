@@ -63,6 +63,12 @@ public class EventServiceImpl implements EventService {
 		return ed.joinEvent(user, event);
 	}
 	
+	@Transactional
+	@Override
+	public void leaveEvent(final User user, final Event event) {
+		ed.leaveEvent(user, event);
+	}
+	
 	@Override
 	public int countParticipants(final long eventid) {
 		return ed.countParticipants(eventid);

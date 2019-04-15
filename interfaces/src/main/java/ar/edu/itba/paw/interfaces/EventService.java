@@ -30,5 +30,7 @@ public interface EventService {
 	
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException;
+	
+	public void leaveEvent(final User user, final Event event);
 
 }
