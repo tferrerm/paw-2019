@@ -38,7 +38,7 @@
 						<div class="double-box">
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="date"/></span>
-								<span>April 29, 2019 8:00 pm</span>
+								<span>${event.startsAt}</span>
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="vacancies"/></span>
