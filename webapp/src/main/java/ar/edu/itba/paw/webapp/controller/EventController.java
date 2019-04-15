@@ -35,9 +35,10 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
-	private static final String TIME_ZONE = "America/Toronto"; // CAMBIAR
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final String START_DATE = "startsAt";
 	private static final String DURATION = "endsAt";
+	private static final String MAX_PARTICIPANTS = "maxParticipants";
 	
 	@Autowired
 	private EventService es;
@@ -97,7 +98,6 @@ public class EventController extends BaseController {
         mav.addObject("filtersForm",form);
         mav.addObject("lastPageNum", es.countFutureEventPages());
         mav.addObject("events", es.findFutureEvents(pageNum));
-        LOGGER.error("Events: {}", es.findFutureEvents(pageNum));
         return mav;
     }
     
@@ -123,15 +123,14 @@ public class EventController extends BaseController {
 	}
 
     @RequestMapping(value = "/events/filter")
-    public ModelAndView applyFilter( @ModelAttribute("filtersForm") final FiltersForm form) {
+    public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
         String establishment = form.getEstablishment();
         String sport = form.getSport();
         String organizer = form.getOrganizer();
         String vacancies = form.getVacancies();
         String date = form.getDate();
         String queryString = buildQueryString(establishment, sport, organizer, vacancies, date);
-        return new ModelAndView("redirect:/events/1"+queryString);
-
+        return new ModelAndView("redirect:/events/1" + queryString);
     }
 
     private String buildQueryString(final String establishment, final String sport,
@@ -185,11 +184,11 @@ public class EventController extends BaseController {
     	try {
     		maxParticipants = Integer.parseInt(form.getMaxParticipants());
     	} catch(NumberFormatException e) {
-    		errors.rejectValue("maxParticipants", "wrong_int_format");
+    		errors.rejectValue(MAX_PARTICIPANTS, "wrong_int_format");
     		return null;
     	}
     	if(maxParticipants <= 0) {
-    		errors.rejectValue("maxParticipants", "gt_zero");
+    		errors.rejectValue(MAX_PARTICIPANTS, "gt_zero");
     		return null;
     	}
     	return maxParticipants;

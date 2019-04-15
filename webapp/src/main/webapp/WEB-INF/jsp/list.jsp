@@ -61,8 +61,8 @@
                         <div>${event.location}</div>
                         <div>Hardcoded</div>
                         <div>${event.owner.firstname} ${event.owner.lastname}</div>
+                        <div>${event.maxParticipants}</div>
                         <div>${event.startsAt}</div>
-                        <div>${event.endsAt}</div>
                         <div>
                             <a href="<c:url value="/event/${event.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
                         </div>
