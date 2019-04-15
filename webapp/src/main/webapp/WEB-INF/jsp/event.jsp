@@ -57,7 +57,9 @@
 					</div>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-success join-button" href="<c:url value="/event/${event.eventId}/join"/>"><spring:message code="join"/></button>
+			<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
+				<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
+			</form>
 		</div>
 	</div>
 
