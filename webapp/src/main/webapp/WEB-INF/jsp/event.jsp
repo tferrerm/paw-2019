@@ -17,7 +17,7 @@
 				<div class="status">
 					<h3><spring:message code="status"/> Uncompleted</h3>
 					<div class="progress">
-						<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
+						<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 					</div>
 					<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 				</div>
