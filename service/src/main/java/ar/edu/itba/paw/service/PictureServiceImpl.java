@@ -30,21 +30,26 @@ public class PictureServiceImpl implements PictureService {
 
 	@Override
 	public byte[] convert(byte[] picture, int maxWidth, int maxHeight) throws IOException {
+		
 		if(picture.length == 0 || picture == null)
 			return picture;
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(picture));
+		
 		if(img.getType() == BufferedImage.TYPE_CUSTOM) {
 			img.flush();
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Unsupported picture format");
 		}
+		
 		int[] dimensions = processImageSize(img.getWidth(), img.getHeight(), maxWidth, maxHeight);
 		BufferedImage newImg = Scalr.resize(
 				img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, dimensions[WIDTH],
 				dimensions[HEIGHT], Scalr.OP_ANTIALIAS);
+		
 		ByteArrayOutputStream convertedImage = new ByteArrayOutputStream();
 		ImageIO.write(newImg, FORMAT, convertedImage);
 		img.flush();
 		newImg.flush();
+
 		return convertedImage.toByteArray();
 	}
 	

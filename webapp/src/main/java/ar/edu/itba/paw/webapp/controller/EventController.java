@@ -78,12 +78,19 @@ public class EventController extends BaseController {
     public ModelAndView joinEvent(@PathVariable long id)
     	throws EventNotFoundException {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+	    
 	    try {
 	    	es.joinEvent(loggedUser(), event);
+	    	
 	    } catch(EventFullException e) {
-	    	return new ModelAndView("redirect:/event/" + id + "?error=event-full");
+	    	ModelAndView mav = new ModelAndView("redirect:/event/" + id);
+	    	mav.addObject("eventFullError", true);
+	    	return mav;
 	    } catch(UserAlreadyJoinedException e) {
-	    	return new ModelAndView("redirect:/event/" + id + "?error=already-joined");
+	    	LOGGER.debug("User {} tried to join event {}, but had already joined", loggedUser(), event);
+	    	ModelAndView mav = new ModelAndView("redirect:/event/" + id);
+	    	mav.addObject("alreadyJoinedError", true);
+	    	return mav;
 	    }
         return new ModelAndView("redirect:/event/" + id);
     }

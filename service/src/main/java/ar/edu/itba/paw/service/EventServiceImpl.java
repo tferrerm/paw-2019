@@ -57,9 +57,12 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException {
+		
+		// si no tiro excepcion y hago metodo separado, no obligo a validar esto
 		if(countParticipants(event.getEventId()) > event.getMaxParticipants()) {
-			throw new EventFullException();
+			throw new EventFullException(); 
 		}
+		
 		return ed.joinEvent(user, event);
 	}
 	

@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.paw.exception.FileProcessingException;
+import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
@@ -97,31 +97,38 @@ public class UserController extends BaseController {
 	public ModelAndView create(
 			@Valid @ModelAttribute("signupForm") final NewUserForm form,
 			final BindingResult errors,
-			HttpServletRequest request
-	) {
+			HttpServletRequest request) {
+		
 		if(!form.repeatPasswordMatching())
 		 	errors.rejectValue("repeatPassword", "different_passwords");
 		if(errors.hasErrors()) {
 			return index(form);
 		}
+		
 		User u;
 		final MultipartFile profilePicture = form.getProfilePicture();
 		final String encodedPassword = passwordEncoder.encode(form.getPassword());
+		
 		try {
 			byte[] picture = profilePicture.getBytes();
 			u = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
 					encodedPassword, Role.ROLE_USER, picture);
-		} catch(IllegalArgumentException | FileProcessingException | IOException e) {
+
+		} catch(ProfilePictureProcessingException | IOException e) {
+			
 			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
 			ModelAndView mav = index(form);
 			mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
 			return mav;
+
 		} catch(UserAlreadyExistsException e) {
+
 			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
 			ModelAndView mav = index(form);
 			mav.addObject("emailError", form.getUsername());
 			return mav;
 		}
+		
 		authenticate(u.getUsername(), u.getPassword(), request);
 		return new ModelAndView("redirect:/user/" + u.getUserid());
 	}
