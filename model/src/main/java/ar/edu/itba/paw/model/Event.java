@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 
 public class Event {
@@ -13,7 +12,6 @@ public class Event {
 	private Instant startsAt;
 	private Instant endsAt;
 	private Instant createdAt;
-	private Instant deletedAt;
 	
 	public Event(long eventId, String name, User owner, String location, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
@@ -28,27 +26,10 @@ public class Event {
 	}
 	
 	public Event(long eventId, String name, User owner, String location, String description, 
-			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt,
-			Instant deletedAt) {
+			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
 		this(eventId, name, owner, location, description, maxParticipants, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
-		this.deletedAt = deletedAt;
-	}
-	
-	public Event(long eventId, String name, User owner, String location, String description, 
-			int maxParticipants, Timestamp startsAt, Timestamp endsAt, Timestamp createdAt, Timestamp deletedAt) {
-		this.eventId = eventId;
-		this.name = name;
-		this.owner = owner;
-		this.location = location;
-		this.description = description;
-		this.maxParticipants = maxParticipants;
-		this.startsAt = startsAt.toInstant();
-		this.endsAt = endsAt.toInstant();
-		this.createdAt = createdAt.toInstant();
-		if(deletedAt != null)
-			this.deletedAt = deletedAt.toInstant();
 	}
 	
 	@Override
@@ -126,14 +107,6 @@ public class Event {
 
 	public void setCreatedAt(Instant createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public Instant getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(Instant deletedAt) {
-		this.deletedAt = deletedAt;
 	}
 
 }

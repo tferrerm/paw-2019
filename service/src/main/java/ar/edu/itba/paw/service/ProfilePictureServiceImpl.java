@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
 import ar.edu.itba.paw.interfaces.PictureService;
@@ -29,6 +30,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 		return ppd.findByUserId(userid);
 	}
 
+	@Transactional
 	@Override
 	public void create(long userid, byte[] data) 
 		throws ProfilePictureProcessingException {

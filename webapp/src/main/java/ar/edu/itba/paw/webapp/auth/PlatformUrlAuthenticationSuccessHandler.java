@@ -21,7 +21,10 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 
 public class PlatformUrlAuthenticationSuccessHandler 
 	extends SimpleUrlAuthenticationSuccessHandler
-	implements AuthenticationSuccessHandler{
+	implements AuthenticationSuccessHandler {
+	
+	private static final String DEFAULT_LOGIN_SUCCESS_URL = "/home";
+	private static final String DEFAULT_ADMIN_SUCCESS_URL = "/admin/";
 	
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 	private RequestCache requestCache = new HttpSessionRequestCache();
@@ -38,16 +41,16 @@ public class PlatformUrlAuthenticationSuccessHandler
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		for(GrantedAuthority authority : authorities) {
 			if(authority.getAuthority().equals("ROLE_ADMIN"))
-				redirectUrl = "/admin/"; // An ADMIN will be redirected here
+				redirectUrl = DEFAULT_ADMIN_SUCCESS_URL; // An ADMIN will be redirected here
 			else if(authority.getAuthority().equals("ROLE_USER")) {
 				SavedRequest savedRequest = requestCache.getRequest(request, response);
 				if(savedRequest == null) {
-					redirectUrl = "/";
+					redirectUrl = DEFAULT_LOGIN_SUCCESS_URL;
 				}
 				else {
 					String targetUrl = savedRequest.getRedirectUrl();
 					if(targetUrl == null || targetUrl.equals("/")) {
-						redirectUrl = "/";
+						redirectUrl = DEFAULT_LOGIN_SUCCESS_URL;
 					}
 					else {
 						clearAuthenticationAttributes(request);

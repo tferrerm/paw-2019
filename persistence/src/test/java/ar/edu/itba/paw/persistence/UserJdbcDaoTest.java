@@ -55,7 +55,6 @@ public class UserJdbcDaoTest {
 		Assert.assertEquals(PASSWORD, user.getPassword());
 		Assert.assertEquals(Role.ROLE_USER, user.getRole());
 		Assert.assertNotNull(user.getCreatedAt());
-		Assert.assertNull(user.getDeletedAt());
 		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
 	}
 

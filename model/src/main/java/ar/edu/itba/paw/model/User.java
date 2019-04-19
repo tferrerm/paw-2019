@@ -12,13 +12,11 @@ public class User {
 	private String password;
 	private Role role;
 	private Instant createdAt;
-	private Instant deletedAt;
 	
 	public User(long userid, String username, String firstname, String lastname, 
-			String password, Role role, Instant createdAt, Instant deletedAt) {
+			String password, Role role, Instant createdAt) {
 		this(userid, username, firstname, lastname, password, role);
 		this.createdAt = createdAt;
-		this.deletedAt = deletedAt;
 	}
 	
 	public User(long userid, String username, String firstname, String lastname, 
@@ -29,14 +27,6 @@ public class User {
 		this.lastname = lastname;
 		this.password = password;
 		this.role = role;
-	}
-	
-	public User(long userid, String username, String firstname, String lastname, 
-			String password, Role role, Timestamp createdAt, Timestamp deletedAt) {
-		this(userid, username, firstname, lastname, password, role);
-		this.createdAt = createdAt.toInstant();
-		if(deletedAt != null)
-			this.deletedAt = deletedAt.toInstant();
 	}
 	
 	@Override
@@ -85,10 +75,6 @@ public class User {
 	
 	public Instant getCreatedAt() {
 		return createdAt;
-	}
-	
-	public Instant getDeletedAt() {
-		return deletedAt;
 	}
 
 }

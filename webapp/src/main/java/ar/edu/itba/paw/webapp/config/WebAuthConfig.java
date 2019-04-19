@@ -80,14 +80,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/*").access("hasRole('ROLE_USER')")
                 .antMatchers("/login").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/","/index")
-                .permitAll()
+                .antMatchers("/event/**", "/events/**").access("hasRole('ROLE_USER')")
+                .antMatchers("/","/index").permitAll()
                 .and().formLogin()
                 .usernameParameter("login_username")
                 .passwordParameter("login_password")
                 .successHandler(platformAuthenticationSuccessHandler())
                 .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/home")
                 .loginPage("/login")
                 .and().rememberMe()
                 .rememberMeParameter("login_remember_me")
@@ -105,7 +104,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/css/**", "/js/**", "/img/**",
-                        "/favicon.ico", "/403", "/404", "/oops", "/");
+                        "/favicon.ico", "/403", "/404", "/oops");
     }
     
     @Bean

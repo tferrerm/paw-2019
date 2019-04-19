@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +18,7 @@ import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
 @Repository
 public class UserJdbcDao implements UserDao {
@@ -27,10 +27,13 @@ public class UserJdbcDao implements UserDao {
 	private final SimpleJdbcInsert jdbcInsert;
 	private static final int MAX_ROWS = 10;
 	
-	private static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-	new User(rs.getLong("userId"), rs.getString("username"), rs.getString("firstname"),
-			 rs.getString("lastname"), rs.getString("password"), Role.valueOf(rs.getString("role")),
-			 rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
+	@Autowired
+	private UserRowMapper urm;
+	
+//	private static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
+//	new User(rs.getLong("userId"), rs.getString("username"), rs.getString("firstname"),
+//			 rs.getString("lastname"), rs.getString("password"), Role.valueOf(rs.getString("role")),
+//			 rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
 	
 	@Autowired
 	public UserJdbcDao(final DataSource ds) {
@@ -43,14 +46,14 @@ public class UserJdbcDao implements UserDao {
 
 	@Override
 	public Optional<User> findById(final long id) {
-		return jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", ROW_MAPPER, id)
+		return jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", urm, id)
 				.stream()
 				.findFirst();
 	}
 	
 	@Override
 	public Optional<User> findByUsername(final String username) {
-		return jdbcTemplate.query("SELECT * FROM users WHERE username = ?", ROW_MAPPER, username)
+		return jdbcTemplate.query("SELECT * FROM users WHERE username = ?", urm, username)
 				.stream().findFirst();
 	}
 	
@@ -69,7 +72,7 @@ public class UserJdbcDao implements UserDao {
 		try {
 			final Number userId = jdbcInsert.executeAndReturnKey(args);
 			return new User(userId.longValue(), username, firstname, lastname,
-					password, role, now, null);
+					password, role, now);
 		} catch(DuplicateKeyException e) {
 			throw new UserAlreadyExistsException("User with the username " +
 				username + " already exists");

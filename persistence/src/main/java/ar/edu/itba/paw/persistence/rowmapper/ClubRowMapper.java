@@ -7,27 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Club;
 
 @Component
-public class EventRowMapper implements RowMapper<Event> {
+public class ClubRowMapper implements RowMapper<Club> {
 	
 	@Autowired
 	private UserRowMapper urm;
 
 	@Override
-	public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
-		return new Event(
-				rs.getLong("eventid"),
-				rs.getString("name"),
+	public Club mapRow(ResultSet rs, int rowNum) throws SQLException {
+		return new Club(
+				rs.getLong("clubid"),
 				urm.mapRow(rs, rowNum),
+				rs.getString("name"),
 				rs.getString("location"),
-				rs.getString("description"),
-				rs.getInt("max_participants"),
-				rs.getTimestamp("starts_at").toInstant(),
-				rs.getTimestamp("ends_at").toInstant(),
 				rs.getTimestamp("created_at").toInstant()
-			);
+				);
 	}
 
 }
