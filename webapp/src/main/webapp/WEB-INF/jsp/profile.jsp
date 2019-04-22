@@ -12,7 +12,14 @@
 <div class="main-container">
 	<%@include file="sidebar.jsp" %>
 	<div class="content-container">
-		<h2>${user.username}</h2>
+		<c:choose>
+   			<c:when test="${user.userid == loggedUser.userid}">
+				<h2><spring:message code="user.greeting" arguments="${user.firstname} ${user.lastname}"/></h2>
+			</c:when>
+			<c:otherwise>
+				<h2>${user.firstname} ${user.lastname}</h2>
+			</c:otherwise>
+		</c:choose>
 		<div class="tbl profile-cont">
 			<div class="profile-top">
 				<div class="profile-pic-container">

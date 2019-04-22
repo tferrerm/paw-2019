@@ -25,7 +25,7 @@
 					<div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="organizer"/> </span>
-							<span>Jorgito</span>
+							<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="sport"/></span>
@@ -42,7 +42,7 @@
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="vacancies"/></span>
-								<span>9</span>
+								<span>${event.maxParticipants - participant_count}</span>
 							</div>
 
 						</div>

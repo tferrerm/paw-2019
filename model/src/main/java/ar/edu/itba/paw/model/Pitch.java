@@ -7,10 +7,10 @@ public class Pitch {
 	private long pitchid;
 	private Club club;
 	private String name;
-	private String sport;
+	private Sport sport;
 	private Instant createdAt;
 	
-	public Pitch(long pitchid, Club club, String name, String sport, Instant createdAt) {
+	public Pitch(long pitchid, Club club, String name, Sport sport, Instant createdAt) {
 		this.pitchid = pitchid;
 		this.club = club;
 		this.name = name;
@@ -35,7 +35,7 @@ public class Pitch {
 		return name;
 	}
 
-	public String getSport() {
+	public Sport getSport() {
 		return sport;
 	}
 
