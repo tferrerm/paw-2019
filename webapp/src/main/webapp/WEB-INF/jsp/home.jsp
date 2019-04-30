@@ -13,7 +13,12 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="home"/></h2>
-
+			<ul class="home-event">
+			  <li class="flex-2"><spring:message code="event_name"/></li>
+			  <li class="flex-2"><spring:message code="event_location"/></li>
+			  <li class="flex-1"><spring:message code="sport"/></li>
+			  <li class="flex-1"><spring:message code="vacancy"/></li>
+			</ul>
 		</div>
 	</div>
 

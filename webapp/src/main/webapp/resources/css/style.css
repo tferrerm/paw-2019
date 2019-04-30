@@ -122,8 +122,16 @@ a.link-text{
     color: white;
 }
 
-.flex{
+.flex {
     display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-2 {
+  flex: 2;
 }
 
 .flex-column{
@@ -190,6 +198,18 @@ a.link-text{
 
 .header div:last-child {
     margin-right: 15px;
+}
+
+.home-event {
+  background-color: dodgerblue;
+  width: 80%;
+  height: 70px;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row wrap;
+  list-style: none;
+  align-items: center;
 }
 
 .join-button {
