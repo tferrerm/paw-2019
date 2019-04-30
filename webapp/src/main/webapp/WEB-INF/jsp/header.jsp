@@ -9,7 +9,16 @@
 </head>
 <body>
     <div class="header">
-        <h1 class="title"><spring:message code="sport_matcher"/></h1>
+    	<h1 class="title">
+		    <c:choose>
+		        <c:when test = "${loggedUser != null}">
+					<a class="logo" href="<c:url value='/home' />"><spring:message code="sport_matcher"/></a>
+		        </c:when>
+		        <c:otherwise>
+		            <spring:message code="sport_matcher"/>
+		        </c:otherwise>
+		    </c:choose>
+        </h1>
         <div>
             <c:choose>
                 <c:when test = "${loggedUser != null}">
