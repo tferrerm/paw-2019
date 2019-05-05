@@ -5,7 +5,8 @@ import java.util.Locale;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -23,12 +24,13 @@ public class EmailServiceImpl implements EmailService {
 	private JavaMailSender mailSender;
 
 	@Autowired
-	private ApplicationContext applicationContext;
-
-	@Autowired
 	private TemplateEngine htmlTemplateEngine;
+	
+	@Qualifier("emailMessageSource")
+	@Autowired
+	private MessageSource ems;
 
-	private static final String EVENT_JOINED_TEMPLATE = "templates/joinedEventMailTemplate.html";
+	private static final String EVENT_JOINED_TEMPLATE = "joinedEventMailTemplate";
 
 	@Override
 	public void joinEventEmail(String email, String eventOwnerName, String eventName,
@@ -40,12 +42,12 @@ public class EmailServiceImpl implements EmailService {
 		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
 		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
 		try {
-			message.setSubject(applicationContext.getMessage("mailTitle", null, locale));
+			message.setSubject(ems.getMessage("mailTitle", null, locale));
 			message.setFrom("nosotros");
 			message.setTo(email);
 
 			final String htmlContent = this.htmlTemplateEngine.process(EVENT_JOINED_TEMPLATE, ctx);
-			message.setText(htmlContent, true );
+			message.setText(htmlContent, true);
 		} catch (Exception e) {
 			//LOGGER.error("Message sending exception", e);
 		}
