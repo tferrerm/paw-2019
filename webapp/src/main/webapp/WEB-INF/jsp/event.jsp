@@ -51,7 +51,7 @@
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
 						    <c:forEach var="user" items="${participants}">
-				              <a href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}<br /></a>
+				              <a href="<c:url value="/user/${user.userid}" /> "><p class="event-participants">${user.firstname} ${user.lastname}</p></a>
 				            </c:forEach>
 			          	</ul>
 					</div>

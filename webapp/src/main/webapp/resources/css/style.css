@@ -109,6 +109,10 @@ a.link-text{
     font-weight: bold;
 }
 
+.event-participants {
+  margin-bottom: 0;
+}
+
 .events-column {
 
 }
