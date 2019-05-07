@@ -205,11 +205,16 @@ a.link-text{
   width: 80%;
   height: 70px;
   margin: 0;
+  padding: 0;
   display: flex;
   justify-content: space-around;
   flex-flow: row wrap;
   list-style: none;
   align-items: center;
+}
+
+.home-header {
+  text-align: center;
 }
 
 .join-button {
