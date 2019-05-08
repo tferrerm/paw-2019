@@ -67,6 +67,7 @@ a.link-text{
 }
 
 .bottom-home-item button {
+  margin-top: 30px;
   width: 50%;
   height: 50px;
   border-radius: 5px;
@@ -80,6 +81,8 @@ a.link-text{
 .bottom-home-item button:hover {
   background-color: white;
   color:  dodgerblue;
+  border-color: dodgerblue;
+  border-width: 1px;
 }
 
 .content-container {
