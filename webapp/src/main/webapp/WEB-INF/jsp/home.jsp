@@ -22,11 +22,11 @@
 			<div class="bottom-home-container">
 				<div class="bottom-home-item">
 					<h3><spring:message code="introAllEvents"/></h3>
-					<a href="<c:url value='/events/1' />"><spring:message code="allEvents"/></a>
+					<button><a href="<c:url value='/events/1' />"><spring:message code="allEvents"/></a></button>
 				</div>
 				<div class="bottom-home-item">
 					<h3><spring:message code="introCreateEvent"/></h3>
-					<a href="<c:url value='/event/new' />"><spring:message code="create_event"/></a>
+					<button><a href="<c:url value='/event/new' />"><spring:message code="create_event"/></a></button>
 				</div>
 			</div>
 		</div>
