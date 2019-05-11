@@ -3,9 +3,9 @@ package ar.edu.itba.paw.persistence;
 public class Filter {
 	
 	private final String name;
-	private final String value;
+	private final Object value;
 	
-	public Filter(final String name, final String value) {
+	public Filter(final String name, final Object value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -22,7 +22,7 @@ public class Filter {
 		return name;
 	}
 	
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 

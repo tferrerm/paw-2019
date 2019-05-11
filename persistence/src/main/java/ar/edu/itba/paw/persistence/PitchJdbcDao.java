@@ -63,7 +63,7 @@ public class PitchJdbcDao implements PitchDao {
 		};
 		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches ");
 		for(Filter param : params) {
-			if(!param.getValue().isEmpty()) {
+			if(!((String)param.getValue()).isEmpty()) {
 				queryString.append(buildPrefix(presentFields));
 				queryString.append(param.queryAsString());
 				list.add(param.getValue());
