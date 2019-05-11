@@ -47,13 +47,16 @@ public class PitchJdbcDao implements PitchDao {
 	}
 
 	@Override
-	public List<Pitch> findByClubId(long clubid) {
-		return jdbcTemplate.query("SELECT * FROM pitches WHERE clubid = ?", prm, clubid);
+	public List<Pitch> findByClubId(long clubid, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		return jdbcTemplate.query("SELECT * FROM pitches WHERE clubid = ? OFFSET ?",
+				prm, clubid, offset);
 	}
 	
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
-			Optional<String> location) {
+			Optional<String> location, int page) {
+		int offset = (page - 1) * MAX_ROWS;
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
@@ -70,7 +73,9 @@ public class PitchJdbcDao implements PitchDao {
 				presentFields++;
 			}
 		}
-		return jdbcTemplate.query(queryString.append(';').toString(), prm, list.toArray());
+		queryString.append(" OFFSET ? ;");
+		list.add(offset);
+		return jdbcTemplate.query(queryString.toString(), prm, list.toArray());
 	}
 	
 	private String buildPrefix(int currentFilter) {
