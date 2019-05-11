@@ -13,6 +13,9 @@ public interface PitchService {
 	
 	public List<Pitch> findByClubId(long clubid);
 	
+	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
+			Optional<String> location);
+	
 	public Pitch create(Club club, String name, Sport sport);
 
 }

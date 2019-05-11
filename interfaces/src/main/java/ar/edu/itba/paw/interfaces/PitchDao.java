@@ -13,6 +13,9 @@ public interface PitchDao {
 	
 	public List<Pitch> findByClubId(long clubid);
 	
+	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
+			Optional<String> location);
+	
 	public Pitch create(Club club, String name, Sport sport);
 
 }

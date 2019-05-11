@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,34 @@ public class PitchJdbcDao implements PitchDao {
 	@Override
 	public List<Pitch> findByClubId(long clubid) {
 		return jdbcTemplate.query("SELECT * FROM pitches WHERE clubid = ?", prm, clubid);
+	}
+	
+	@Override
+	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
+			Optional<String> location) {
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("name", name.orElse("")),
+				new Filter("sport", sport.orElse("")),
+				new Filter("location", location.orElse(""))
+		};
+		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches ");
+		for(Filter param : params) {
+			if(!param.getValue().isEmpty()) {
+				queryString.append(buildPrefix(presentFields));
+				queryString.append(param.queryAsString());
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		return jdbcTemplate.query(queryString.append(';').toString(), prm, list.toArray());
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 	@Override
