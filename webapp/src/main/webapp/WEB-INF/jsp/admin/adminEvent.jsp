@@ -57,18 +57,9 @@
 					</div>
 				</div>
 			</div>
-			<c:choose>
-				<c:when test="${is_participant}">
-					<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
-						<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
-					</form>
-				</c:when>
-				<c:otherwise>
-					<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
-						<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
-					</form>
-				</c:otherwise>
-			</c:choose>
+			<form method="GET" action="<c:url value="/admin/event/${event.eventId}/delete"/>">
+				<button type="submit" class="btn btn-danger join-button"><spring:message code="remove_event"/></button>
+			</form>
 		</div>
 	</div>
 

@@ -223,6 +223,17 @@ a.link-text{
     padding-left: 30px;
 }
 
+.header-admin {
+    align-items: center;
+    background-color: lightgrey;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display: flex;
+    font-weight: 500;
+    justify-content: space-between;
+    min-height: 100px;
+    padding-left: 30px;
+}
+
 .header a {
     background-color: white;
     border: none;
@@ -233,7 +244,22 @@ a.link-text{
     padding: 5px 12px;
 }
 
+.header-admin a {
+    background-color: white;
+    color: dodgerblue;
+    border: none;
+    border-radius: 7px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    margin: 5px;
+    padding: 5px 12px;
+}
+
 .header div:last-child {
+    margin-right: 15px;
+}
+
+.header-admin div:last-child {
     margin-right: 15px;
 }
 
@@ -277,8 +303,15 @@ a.logo {
     padding: 0;
 }
 
+a.logo-admin {
+    background-color: lightgrey;
+    margin: 0;
+    padding: 0;
+}
+
 .main-container {
     display: flex;
+    height: 100%;
 }
 
 .my-events-tbl-sub {
@@ -330,7 +363,8 @@ a.logo {
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-width: 300px;
+    max-width: 200px;
+    min-width: 200px;
 }
 
 .sidebar li a {
