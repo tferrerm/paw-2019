@@ -42,14 +42,14 @@ public class PitchJdbcDao implements PitchDao {
 
 	@Override
 	public Optional<Pitch> findById(long pitchid) {
-		return jdbcTemplate.query("SELECT * FROM pitches WHERE pitchid = ?", prm, pitchid)
+		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", prm, pitchid)
 				.stream().findAny();
 	}
 
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
 		int offset = (page - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM pitches WHERE clubid = ? OFFSET ?",
+		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs WHERE clubid = ? OFFSET ?",
 				prm, clubid, offset);
 	}
 	
@@ -64,7 +64,7 @@ public class PitchJdbcDao implements PitchDao {
 				new Filter("sport", sport.orElse("")),
 				new Filter("location", location.orElse(""))
 		};
-		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches ");
+		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {
 			if(!((String)param.getValue()).isEmpty()) {
 				queryString.append(buildPrefix(presentFields));
