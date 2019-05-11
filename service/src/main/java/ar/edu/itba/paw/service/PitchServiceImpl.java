@@ -24,18 +24,18 @@ public class PitchServiceImpl implements PitchService {
 	}
 
 	@Override
-	public List<Pitch> findByClubId(long clubid) {
-		return pd.findByClubId(clubid);
+	public List<Pitch> findByClubId(long clubid, int page) {
+		return pd.findByClubId(clubid, page);
 	}
 	
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
-			Optional<String> location) {
+			Optional<String> location, int page) {
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
-		return pd.findBy(name, Optional.ofNullable(sportString), location);
+		return pd.findBy(name, Optional.ofNullable(sportString), location, page);
 	}
 
 	@Override
