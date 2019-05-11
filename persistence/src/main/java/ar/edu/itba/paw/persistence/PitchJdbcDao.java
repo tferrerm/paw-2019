@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +42,46 @@ public class PitchJdbcDao implements PitchDao {
 
 	@Override
 	public Optional<Pitch> findById(long pitchid) {
-		return jdbcTemplate.query("SELECT * FROM pitches WHERE pitchid = ?", prm, pitchid)
+		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", prm, pitchid)
 				.stream().findAny();
 	}
 
 	@Override
-	public List<Pitch> findByClubId(long clubid) {
-		return jdbcTemplate.query("SELECT * FROM pitches WHERE clubid = ?", prm, clubid);
+	public List<Pitch> findByClubId(long clubid, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs WHERE clubid = ? OFFSET ?",
+				prm, clubid, offset);
+	}
+	
+	@Override
+	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
+			Optional<String> location, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("name", name.orElse("")),
+				new Filter("sport", sport.orElse("")),
+				new Filter("location", location.orElse(""))
+		};
+		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches NATURAL JOIN clubs ");
+		for(Filter param : params) {
+			if(!((String)param.getValue()).isEmpty()) {
+				queryString.append(buildPrefix(presentFields));
+				queryString.append(param.queryAsString());
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		queryString.append(" OFFSET ? ;");
+		list.add(offset);
+		return jdbcTemplate.query(queryString.toString(), prm, list.toArray());
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 	@Override

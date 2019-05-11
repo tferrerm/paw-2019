@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 
 public class User {
