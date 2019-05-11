@@ -107,7 +107,7 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,
-                                         @RequestParam(value = "est" ,required = false) String establishment,
+                                         @RequestParam(value = "est", required = false) String establishment,
                                          @RequestParam(value = "sport", required = false) String sport,
                                          @RequestParam(value = "org", required = false) String organizer,
                                          @RequestParam(value = "vac", required = false) String vacancies,
