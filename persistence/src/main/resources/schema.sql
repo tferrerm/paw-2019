@@ -17,30 +17,30 @@ CREATE TABLE IF NOT EXISTS profile_pictures(
 
 CREATE TABLE IF NOT EXISTS clubs(
   clubid SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
+  clubname VARCHAR(100) NOT NULL,
   location VARCHAR(500) NOT NULL,
-  created_at TIMESTAMP NOT NULL
+  club_created_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pitches(
   pitchid SERIAL PRIMARY KEY,
   clubid INTEGER NOT NULL,
-  name VARCHAR(100) NOT NULL,
+  pitchname VARCHAR(100) NOT NULL,
   sport VARCHAR(100) NOT NULL,
-  created_at TIMESTAMP NOT NULL,
+  pitch_created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (clubid) REFERENCES clubs ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS events(
   eventid SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
+  eventname VARCHAR(100) NOT NULL,
   userid INTEGER NOT NULL,
   location VARCHAR(100),
   description VARCHAR(500),
   max_participants INTEGER NOT NULL,
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
-  created_at TIMESTAMP NOT NULL,
+  event_created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE
 );
 

@@ -15,9 +15,9 @@ public class ClubRowMapper implements RowMapper<Club> {
 	public Club mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return new Club(
 				rs.getLong("clubid"),
-				rs.getString("name"),
+				rs.getString("clubname"),
 				rs.getString("location"),
-				rs.getTimestamp("created_at").toInstant()
+				rs.getTimestamp("club_created_at").toInstant()
 				);
 	}
 

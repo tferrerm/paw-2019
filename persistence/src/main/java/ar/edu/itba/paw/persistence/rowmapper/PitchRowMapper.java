@@ -21,9 +21,9 @@ public class PitchRowMapper implements RowMapper<Pitch> {
 		return new Pitch(
 				rs.getLong("pitchid"),
 				crm.mapRow(rs, rowNum),
-				rs.getString("name"),
+				rs.getString("pitchname"),
 				Sport.valueOf(rs.getString("sport")),
-				rs.getTimestamp("created_at").toInstant()
+				rs.getTimestamp("pitch_created_at").toInstant()
 				);
 	}
 

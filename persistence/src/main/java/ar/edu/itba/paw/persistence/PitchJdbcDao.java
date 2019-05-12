@@ -42,14 +42,16 @@ public class PitchJdbcDao implements PitchDao {
 
 	@Override
 	public Optional<Pitch> findById(long pitchid) {
-		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", prm, pitchid)
+		return jdbcTemplate.query("SELECT * FROM pitches p NATURAL JOIN clubs c "
+				+ " WHERE p.pitchid = ?", prm, pitchid)
 				.stream().findAny();
 	}
 
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
 		int offset = (page - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs WHERE clubid = ? OFFSET ?",
+		return jdbcTemplate.query("SELECT * FROM pitches p NATURAL JOIN clubs c "
+				+ " WHERE p.clubid = ? OFFSET ?",
 				prm, clubid, offset);
 	}
 	
@@ -89,9 +91,9 @@ public class PitchJdbcDao implements PitchDao {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("clubid", club.getClubid());
-		args.put("name", name);
+		args.put("pitchname", name);
 		args.put("sport", sport.toString());
-		args.put("created_at", Timestamp.from(now));
+		args.put("pitch_created_at", Timestamp.from(now));
 		final Number pitchId = jdbcInsert.executeAndReturnKey(args);
 		return new Pitch(pitchId.longValue(), club, name, sport, now);
 	}

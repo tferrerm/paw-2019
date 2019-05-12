@@ -54,9 +54,9 @@ public class ClubJdbcDao implements ClubDao {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("userid",userId);
-		args.put("name", name);
+		args.put("clubname", name);
 		args.put("location", location);
-		args.put("created_at", Timestamp.from(now));
+		args.put("club_created_at", Timestamp.from(now));
 		final Number clubId = jdbcInsert.executeAndReturnKey(args);
 		return new Club(clubId.longValue(), name, location, now);
 	}

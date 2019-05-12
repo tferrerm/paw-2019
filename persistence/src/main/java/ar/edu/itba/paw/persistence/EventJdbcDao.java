@@ -100,15 +100,14 @@ public class EventJdbcDao implements EventDao {
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
-		args.put("name", name);
+		args.put("eventname", name);
 		args.put("userid", owner.getUserid());
 		args.put("location", location);
 		args.put("description", description);
 		args.put("max_participants", maxParticipants);
 		args.put("starts_at", Timestamp.from(startsAt));
 		args.put("ends_at", Timestamp.from(endsAt));
-		args.put("created_at", Timestamp.from(now));
-		args.put("deleted_at", null);
+		args.put("event_created_at", Timestamp.from(now));
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
 		return new Event(eventId.longValue(), name, owner, location, description, 
 				maxParticipants, startsAt, endsAt);

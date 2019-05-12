@@ -19,14 +19,14 @@ public class EventRowMapper implements RowMapper<Event> {
 	public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return new Event(
 				rs.getLong("eventid"),
-				rs.getString("name"),
+				rs.getString("eventname"),
 				urm.mapRow(rs, rowNum),
 				rs.getString("location"),
 				rs.getString("description"),
 				rs.getInt("max_participants"),
 				rs.getTimestamp("starts_at").toInstant(),
 				rs.getTimestamp("ends_at").toInstant(),
-				rs.getTimestamp("created_at").toInstant()
+				rs.getTimestamp("event_created_at").toInstant()
 			);
 	}
 
