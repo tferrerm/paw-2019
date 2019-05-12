@@ -1,14 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.webapp.form.NewPitchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.ClubService;
+import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.controller.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewClubForm;
+import ar.edu.itba.paw.webapp.form.NewPitchForm;
 
 @RequestMapping("/admin")
 @Controller
@@ -44,11 +43,11 @@ public class ClubController extends BaseController {
 			throws ClubNotFoundException {
 
 		List<Pitch> pitches = ps.findByClubId(clubid, 1);
-		Sport [] sports = Sport.values();
+		Sport[] sports = Sport.values();
 		ModelAndView mav = new ModelAndView("admin/club");
-		mav.addObject("newPitchForm",form);
-		mav.addObject("sports",sports);
-		mav.addObject("pitches",pitches);
+		mav.addObject("newPitchForm", form);
+		mav.addObject("sports", sports);
+		mav.addObject("pitches", pitches);
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		mav.addObject("club", club);
 		return mav;
@@ -71,7 +70,7 @@ public class ClubController extends BaseController {
 	public ModelAndView createClub(@Valid @ModelAttribute("newClubForm") final NewClubForm form, final BindingResult errors) {
 		Club c = cs.create(loggedUser().getUserid(),form.getName(), form.getLocation());
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
-		return new ModelAndView("redirect:/admin/clubs");
+		return new ModelAndView("redirect:/admin/clubs/1");
 	}
 
 	@RequestMapping(value = "/club/{clubId}/pitch/create", method = { RequestMethod.POST })
@@ -80,13 +79,17 @@ public class ClubController extends BaseController {
 			throws ClubNotFoundException {
 
 		Club c = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
+		Sport sport;
 		try {
-			ps.create(c,form.getName(),Sport.valueOf(form.getSport()));
-		} catch(Exception e) {
-			LOGGER.debug("Unable to create pitch");
+			sport = Sport.valueOf(form.getSport());
+		} catch(IllegalArgumentException e) {
+			LOGGER.warn("Unable to convert sport to enum");
+			errors.rejectValue("sport", "sport_not_in_list");
+			return showClub(clubId, form);
 		}
+		ps.create(c, form.getName(), sport);
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
-		return new ModelAndView("redirect:/admin/club/"+clubId);
+		return new ModelAndView("redirect:/admin/club/" + clubId);
 	}
 	
 	@ExceptionHandler({ ClubNotFoundException.class })
