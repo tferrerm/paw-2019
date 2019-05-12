@@ -56,7 +56,7 @@ public class ClubController extends BaseController {
 
 	@RequestMapping(value = "/club/create", method = { RequestMethod.POST })
 	public ModelAndView createClub(@Valid @ModelAttribute("newClubForm") final NewClubForm form, final BindingResult errors) {
-		Club c = cs.create(loggedUser(), form.getName(), form.getLocation());
+		Club c = cs.create(form.getName(), form.getLocation());
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 		return new ModelAndView("redirect:/admin/clubs");
 	}

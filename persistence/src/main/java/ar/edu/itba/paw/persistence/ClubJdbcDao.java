@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.rowmapper.ClubRowMapper;
 
 @Repository
@@ -43,11 +42,6 @@ public class ClubJdbcDao implements ClubDao {
 		return jdbcTemplate.query("SELECT * FROM clubs WHERE clubid = ?", crm, clubid)
 				.stream().findAny();
 	}
-
-	@Override
-	public List<Club> findByOwnerId(long ownerid) {
-		return jdbcTemplate.query("SELECT * FROM clubs WHERE userid = ?", crm, ownerid);
-	}
 	
 	@Override
 	public List<Club> findAll(int page) {
@@ -56,15 +50,14 @@ public class ClubJdbcDao implements ClubDao {
 	}
 
 	@Override
-	public Club create(User owner, String name, String location) {
+	public Club create(String name, String location) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
-		args.put("userid", owner.getUserid());
 		args.put("name", name);
 		args.put("location", location);
 		args.put("created_at", Timestamp.from(now));
 		final Number clubId = jdbcInsert.executeAndReturnKey(args);
-		return new Club(clubId.longValue(), owner, name, location, now);
+		return new Club(clubId.longValue(), name, location, now);
 	}
 
 }
