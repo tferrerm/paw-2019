@@ -74,8 +74,8 @@ a.link-text{
   border-width: 0;
   background-color: dodgerblue;
   color: white;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
+  -webkit-transition-duration: 0.2s; /* Safari */
+  transition-duration: 0.2s;
 }
 
 .bottom-home-item button:hover {
