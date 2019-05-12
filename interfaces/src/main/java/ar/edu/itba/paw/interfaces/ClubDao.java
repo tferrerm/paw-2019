@@ -11,6 +11,6 @@ public interface ClubDao {
 	
 	public List<Club> findAll(int page);
 	
-	public Club create(String name, String location);
+	public Club create(long userId, String name, String location);
 
 }

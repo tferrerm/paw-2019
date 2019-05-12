@@ -20,14 +20,12 @@
 	<div class="content-container">
 		<h2><spring:message code="all_clubs" /></h2>
 		<div class="tbl">
-			</div>
 			<c:forEach var="club" items="${clubs}">
 				<div class="custom-row">
 					<div>${club.name}</div>
-					<div>Hardcoded</div>
 					<div>${club.location}</div>
 					<div>
-						<a href="<c:url value="/admin/club/${club.clubId}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
+						<a href="<c:url value="/admin/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
 					</div>
 				</div>
 			</c:forEach>
@@ -40,7 +38,8 @@
 			<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
 			<div>
 				<a href="<c:url value='/admin/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
-				<a href="<c:url value='/admin/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></div>
+				<a href="<c:url value='/admin/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
+			</div>
 		</div>
 	</div>
 

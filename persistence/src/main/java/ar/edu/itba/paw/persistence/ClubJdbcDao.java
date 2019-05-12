@@ -50,9 +50,10 @@ public class ClubJdbcDao implements ClubDao {
 	}
 
 	@Override
-	public Club create(String name, String location) {
+	public Club create(long userId, String name, String location) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
+		args.put("userid",userId);
 		args.put("name", name);
 		args.put("location", location);
 		args.put("created_at", Timestamp.from(now));

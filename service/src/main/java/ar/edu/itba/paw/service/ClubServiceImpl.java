@@ -27,8 +27,8 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public Club create(String name, String location) {
-		return cd.create(name, location);
+	public Club create(long userId, String name, String location) {
+		return cd.create(userId, name, location);
 	}
 
 }
