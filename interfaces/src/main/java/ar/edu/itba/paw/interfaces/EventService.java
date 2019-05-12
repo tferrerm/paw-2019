@@ -32,5 +32,7 @@ public interface EventService {
 			throws UserAlreadyJoinedException, EventFullException;
 	
 	public void leaveEvent(final User user, final Event event);
+	
+	public void deleteEvent(long eventid);
 
 }

@@ -11,7 +11,10 @@ public interface PitchService {
 	
 	public Optional<Pitch> findById(long pitchid);
 	
-	public List<Pitch> findByClubId(long clubid);
+	public List<Pitch> findByClubId(long clubid, int page);
+	
+	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
+			Optional<String> location, int page);
 	
 	public Pitch create(Club club, String name, Sport sport);
 

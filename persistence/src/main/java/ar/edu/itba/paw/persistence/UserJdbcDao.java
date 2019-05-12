@@ -68,7 +68,6 @@ public class UserJdbcDao implements UserDao {
 		args.put("password", password);
 		args.put("role", role);
 		args.put("created_at", Timestamp.from(now));
-		args.put("deleted_at", null);
 		try {
 			final Number userId = jdbcInsert.executeAndReturnKey(args);
 			return new User(userId.longValue(), username, firstname, lastname,

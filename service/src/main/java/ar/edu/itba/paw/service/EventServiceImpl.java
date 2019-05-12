@@ -81,5 +81,10 @@ public class EventServiceImpl implements EventService {
 	public List<User> findEventUsers(final long eventid, final int pageNum) {
 		return ed.findEventUsers(eventid, pageNum);
 	}
+	
+	@Override
+	public void deleteEvent(long eventid) {
+		ed.deleteEvent(eventid);
+	}
 
 }
