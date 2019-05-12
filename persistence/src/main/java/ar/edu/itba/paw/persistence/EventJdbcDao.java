@@ -147,5 +147,11 @@ public class EventJdbcDao implements EventDao {
 		return jdbcTemplate.query("SELECT * FROM events_users NATURAL JOIN users "
 				+ " WHERE eventid = ? OFFSET ?", urm, eventid, offset);
 	}
+	
+	@Override
+	public void deleteEvent(long eventid) {
+		jdbcTemplate.update("DELETE FROM events_users WHERE eventid = ?", eventid);
+		jdbcTemplate.update("DELETE FROM events WHERE eventid = ?", eventid);
+	}
 
 }

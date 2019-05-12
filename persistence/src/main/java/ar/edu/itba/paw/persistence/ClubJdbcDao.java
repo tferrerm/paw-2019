@@ -48,6 +48,12 @@ public class ClubJdbcDao implements ClubDao {
 	public List<Club> findByOwnerId(long ownerid) {
 		return jdbcTemplate.query("SELECT * FROM clubs WHERE userid = ?", crm, ownerid);
 	}
+	
+	@Override
+	public List<Club> findAll(int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		return jdbcTemplate.query("SELECT * FROM clubs OFFSET ?", crm, offset);
+	}
 
 	@Override
 	public Club create(User owner, String name, String location) {

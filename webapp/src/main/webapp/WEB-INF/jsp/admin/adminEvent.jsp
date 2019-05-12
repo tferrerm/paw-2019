@@ -57,7 +57,7 @@
 					</div>
 				</div>
 			</div>
-			<form method="GET" action="<c:url value="/admin/event/${event.eventId}/delete"/>">
+			<form method="POST" action="<c:url value="/admin/event/${event.eventId}/delete"/>">
 				<button type="submit" class="btn btn-danger join-button"><spring:message code="remove_event"/></button>
 			</form>
 		</div>

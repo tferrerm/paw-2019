@@ -31,5 +31,7 @@ public interface EventDao {
 			throws UserAlreadyJoinedException;
 	
 	public void leaveEvent(final User user, final Event event);
+	
+	public void deleteEvent(long eventid);
 
 }

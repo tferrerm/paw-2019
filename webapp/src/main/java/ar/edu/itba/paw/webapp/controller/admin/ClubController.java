@@ -1,23 +1,26 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
-import ar.edu.itba.paw.webapp.form.NewClubForm;
-import ar.edu.itba.paw.webapp.form.NewEventForm;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.controller.ClubNotFoundException;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import ar.edu.itba.paw.webapp.form.NewClubForm;
 
 @RequestMapping("/admin")
 @Controller
@@ -39,10 +42,10 @@ public class ClubController extends BaseController {
 	}
 
 	@RequestMapping("/clubs/{pageNum}")
-	public ModelAndView clubs(@PathVariable("pageNum") long pageNum) {
+	public ModelAndView clubs(@PathVariable("pageNum") int pageNum) {
 		ModelAndView mav = new ModelAndView("admin/clubList");
-		List<Club> clubs = new ArrayList<>(); //Cambiar por query de clubes
-		mav.addObject("clubs",clubs);
+		List<Club> clubs = cs.findAll(pageNum); //Cambiar por query de clubes
+		mav.addObject("clubs", clubs);
 		return mav;
 	}
 	

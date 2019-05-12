@@ -26,6 +26,11 @@ public class ClubServiceImpl implements ClubService {
 	public List<Club> findByOwnerId(long ownerid) {
 		return cd.findByOwnerId(ownerid);
 	}
+	
+	@Override
+	public List<Club> findAll(int page) {
+		return cd.findAll(page);
+	}
 
 	@Override
 	public Club create(User owner, String name, String location) {

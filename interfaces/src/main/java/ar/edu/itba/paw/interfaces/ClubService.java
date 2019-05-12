@@ -12,6 +12,8 @@ public interface ClubService {
 	
 	public List<Club> findByOwnerId(long ownerid);
 	
+	public List<Club> findAll(int page);
+	
 	public Club create(User owner, String name, String location);
 
 }
