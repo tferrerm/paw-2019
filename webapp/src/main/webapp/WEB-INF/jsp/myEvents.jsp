@@ -24,46 +24,18 @@
 				</div>
 				<div class="flex-grow w-100">
 					<div class="events-column flex-grow flex-column right-border w-50">
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
+					    <c:forEach var="counter" begin="1" end="10">
+					        <div>Event</div>
+					    </c:forEach>
 					</div>
 					<div class="events-column flex-grow flex-column w-50">
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
+					    <c:forEach var="counter" begin="1" end="10">
+					        <a href="<c:url value="/event/1" /> "><div>Event</div></a>
+					    </c:forEach>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 	</body>
 </html>

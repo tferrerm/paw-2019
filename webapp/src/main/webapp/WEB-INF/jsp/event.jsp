@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
@@ -38,7 +39,10 @@
 						<div class="double-box">
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="date"/></span>
-								<span>${event.startsAt}</span>
+								<span>
+									<fmt:parseDate value="${event.startsAt}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+									<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" />
+								</span>
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="vacancies"/></span>
@@ -50,10 +54,10 @@
 					<div class="participants-list">
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
-						    <c:forEach var="user" items="${participants}">
-				              <a href="<c:url value="/user/${user.userid}" /> "><p class="event-participants">${user.firstname} ${user.lastname}</p></a>
-				            </c:forEach>
-			          	</ul>
+					    <c:forEach var="user" items="${participants}">
+	              <a href="<c:url value="/user/${user.userid}" /> "><p class="event-participants">${user.firstname} ${user.lastname}</p></a>
+	            </c:forEach>
+          	</ul>
 					</div>
 				</div>
 			</div>
