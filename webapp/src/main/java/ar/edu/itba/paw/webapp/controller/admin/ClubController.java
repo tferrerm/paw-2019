@@ -44,10 +44,9 @@ public class ClubController extends BaseController {
 			throws ClubNotFoundException {
 
 		List<Pitch> pitches = ps.findByClubId(clubid, 1);
-		Sport[] sports = Sport.values();
 		ModelAndView mav = new ModelAndView("admin/club");
 		mav.addObject("newPitchForm", form);
-		mav.addObject("sports", sports);
+		mav.addObject("sports", Sport.values());
 		mav.addObject("pitches", pitches);
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		mav.addObject("club", club);

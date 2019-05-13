@@ -62,7 +62,7 @@ public class PitchJdbcDao implements PitchDao {
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("name", name.orElse("")),
+				new Filter("pitchname", name.orElse("")),
 				new Filter("sport", sport.orElse("")),
 				new Filter("location", location.orElse(""))
 		};
