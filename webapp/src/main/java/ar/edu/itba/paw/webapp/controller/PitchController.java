@@ -26,6 +26,10 @@ public class PitchController extends BaseController {
 	public ModelAndView seePitch(@PathVariable("pitchId") long id) throws PitchNotFoundException {
 		ModelAndView mav = new ModelAndView("pitch");
 		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
+		// Armar matriz calendario con los datos extraidos de la DB para ese pitch
+		boolean[][] calendar = new boolean[14][7];
+		calendar[0][1] = true;
+		mav.addObject("calendar", calendar);
 		return mav;
 	}
 	
