@@ -107,8 +107,10 @@ public class EventJdbcDao implements EventDao {
 		// In seven days at 23:00
 		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
 		return jdbcTemplate.query("SELECT * FROM events "
-				+ " WHERE starts_at > ? "
-				+ " AND starts_at < ?", erm, Timestamp.from(today), Timestamp.from(inAWeek));
+				+ " WHERE pitchid = ? "
+				+ " AND starts_at > ? "
+				+ " AND starts_at < ? ", erm, pitchid,
+					Timestamp.from(today), Timestamp.from(inAWeek));
 	}
 
 	@Override
