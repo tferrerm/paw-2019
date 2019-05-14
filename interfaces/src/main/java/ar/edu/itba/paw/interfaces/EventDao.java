@@ -18,6 +18,13 @@ public interface EventDao {
 	
 	public List<User> findEventUsers(final long eventid, final int pageNum);
 	
+	/**
+	 * Finds events in a pitch. Only seven days of events will be returned.
+	 * @param pitchid The id of the pitch
+	 * @return a list of events (with a maximum size of 24 * 7)
+	 */
+	public List<Event> findCurrentEventsInPitch(final long pitchid);
+	
 	public int countUserEventPages(final long userid);
 	
 	public int countFutureEventPages();

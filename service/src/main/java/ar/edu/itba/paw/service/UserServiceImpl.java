@@ -22,9 +22,14 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private ProfilePictureService pps;
+	
+	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 
 	@Override
 	public Optional<User> findById(final long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		return ud.findById(userid);
 	}
 

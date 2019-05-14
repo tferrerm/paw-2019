@@ -2,6 +2,9 @@ package ar.edu.itba.paw.persistence;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class EventJdbcDao implements EventDao {
 	private final SimpleJdbcInsert jdbcInsert;
 	private final SimpleJdbcInsert jdbcInscriptionInsert; // PREGUNTARRRRRRRRRRRRRRRRRRRRRRRRRR
 	private static final int MAX_ROWS = 10;
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	/*private static final RowMapper<Event> ROW_MAPPER = (rs, rowNum) ->
 		new Event(rs.getLong("eventid"), rs.getString("name"), rs.getString("location"),
@@ -93,6 +97,18 @@ public class EventJdbcDao implements EventDao {
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
 		return pageCount;
+	}
+	
+	@Override
+	public List<Event> findCurrentEventsInPitch(final long pitchid) {
+		LocalDate ld = LocalDate.now();
+		// Today at 00:00
+		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
+		// In seven days at 23:00
+		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+		return jdbcTemplate.query("SELECT * FROM events "
+				+ " WHERE starts_at > ? "
+				+ " AND starts_at < ?", erm, Timestamp.from(today), Timestamp.from(inAWeek));
 	}
 
 	@Override

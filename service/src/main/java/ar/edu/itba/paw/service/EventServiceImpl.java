@@ -20,24 +20,47 @@ public class EventServiceImpl implements EventService {
 	
 	@Autowired
 	private EventDao ed;
+	
+	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
+	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		return ed.findByEventId(eventid);
 	}
 
 	@Override
 	public List<Event> findByUsername(String username, int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
 		return ed.findByUsername(username, pageNum);
 	}
 	
 	@Override
+	public List<Event> findCurrentEventsInPitch(final long pitchid) {
+		if(pitchid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return ed.findCurrentEventsInPitch(pitchid);
+	}
+	
+	@Override
 	public int countUserEventPages(long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		return ed.countUserEventPages(userid);
 	}
 	
 	@Override
 	public List<Event> findFutureEvents(int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
 		return ed.findFutureEvents(pageNum);
 	}
 	
@@ -74,16 +97,25 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public int countParticipants(final long eventid) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		return ed.countParticipants(eventid);
 	}
 
 	@Override
 	public List<User> findEventUsers(final long eventid, final int pageNum) {
+		if(eventid <= 0 || pageNum <= 0) {
+			throw new IllegalArgumentException("Parameters must be greater than zero.");
+		}
 		return ed.findEventUsers(eventid, pageNum);
 	}
 	
 	@Override
 	public void deleteEvent(long eventid) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		ed.deleteEvent(eventid);
 	}
 

@@ -27,6 +27,9 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 
 	@Override
 	public Optional<ProfilePicture> findByUserId(long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException("Id must be greater than zero.");
+		}
 		return ppd.findByUserId(userid);
 	}
 

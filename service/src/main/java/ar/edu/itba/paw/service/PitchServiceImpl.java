@@ -18,19 +18,31 @@ public class PitchServiceImpl implements PitchService {
 	@Autowired
 	private PitchDao pd;
 	
+	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
+	private static final String NEGATIVE_PAGE_ERROR = "Page must be greater than zero.";
+	
 	@Override
 	public Optional<Pitch> findById(long pitchid) {
+		if(pitchid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		return pd.findById(pitchid);
 	}
 
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
+		if(clubid <= 0 || page <= 0) {
+			throw new IllegalArgumentException("Parameters must be greater than zero.");
+		}
 		return pd.findByClubId(clubid, page);
 	}
 	
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
 			Optional<String> location, int page) {
+		if(page <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
