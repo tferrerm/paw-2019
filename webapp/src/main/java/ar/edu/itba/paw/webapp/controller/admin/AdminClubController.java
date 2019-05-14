@@ -29,9 +29,9 @@ import ar.edu.itba.paw.webapp.form.NewPitchForm;
 
 @RequestMapping("/admin")
 @Controller
-public class ClubController extends BaseController {
+public class AdminClubController extends BaseController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClubController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdminClubController.class);
 	
 	@Autowired
 	private ClubService cs;
@@ -97,6 +97,14 @@ public class ClubController extends BaseController {
 		ps.create(c, form.getName(), sport);
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 		return new ModelAndView("redirect:/admin/club/" + clubId);
+	}
+	
+	@RequestMapping(value = "/club/{clubId}/delete", method = { RequestMethod.POST })
+	public ModelAndView deleteClub(@PathVariable("clubId") final long clubid) 
+		throws ClubNotFoundException {
+		cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
+		cs.deleteClub(clubid);
+		return new ModelAndView("redirect:/admin/clubs/1");
 	}
 	
 	@ExceptionHandler({ ClubNotFoundException.class })

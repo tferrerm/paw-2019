@@ -39,5 +39,10 @@ public class ClubServiceImpl implements ClubService {
 	public Club create(long userId, String name, String location) {
 		return cd.create(userId, name, location);
 	}
+	
+	@Override
+	public void deleteClub(final long clubid) {
+		cd.deleteClub(clubid);
+	}
 
 }

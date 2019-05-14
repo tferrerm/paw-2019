@@ -82,8 +82,9 @@ public class AdminController extends BaseController {
 	}
 
 	@RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
-	public ModelAndView deleteEvent(@PathVariable long id)
+	public ModelAndView deleteEvent(@PathVariable final long id)
 			throws EventNotFoundException {
+		es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		es.deleteEvent(id);
 		return new ModelAndView("redirect:/admin/events/1");
 	}

@@ -54,5 +54,10 @@ public class PitchServiceImpl implements PitchService {
 	public Pitch create(Club club, String name, Sport sport) {
 		return pd.create(club, name, sport);
 	}
+	
+	@Override
+	public void deletePitch(long pitchid) {
+		pd.deletePitch(pitchid);
+	}
 
 }
