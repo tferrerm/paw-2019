@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
 @Controller
