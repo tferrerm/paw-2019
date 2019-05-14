@@ -41,6 +41,14 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
+	public List<Event> findCurrentEventsInPitch(final long pitchid) {
+		if(pitchid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return ed.findCurrentEventsInPitch(pitchid);
+	}
+	
+	@Override
 	public int countUserEventPages(long userid) {
 		if(userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
