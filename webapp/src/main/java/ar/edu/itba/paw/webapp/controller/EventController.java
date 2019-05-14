@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
@@ -40,9 +41,12 @@ public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final String START_DATE = "startsAtHour";
+	private static final String START_DATE = "date";
 	private static final String END_DATE = "endsAtHour";
 	private static final String MAX_PARTICIPANTS = "maxParticipants";
+	private static final int MIN_HOUR = 9;
+	private static final int MAX_HOUR = 23;
+	private static final int DAY_LIMIT = 7;
 	
 	@Autowired
 	private EventService es;
@@ -125,6 +129,20 @@ public class EventController extends BaseController {
         mav.addObject("events", es.findFutureEvents(pageNum));
         return mav;
     }
+	
+	@RequestMapping("/pitch/{pitchId}")
+	public ModelAndView seePitch(
+			@PathVariable("pitchId") long id,
+			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
+		ModelAndView mav = new ModelAndView("pitch");
+		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
+		// Armar matriz calendario con los datos extraidos de la DB para ese pitch
+		List<Event> pitchEvents = es.findCurrentEventsInPitch(id);
+		boolean[][] schedule = es.convertEventListToSchedule(pitchEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
+		mav.addObject("minHour", MIN_HOUR);
+		mav.addObject("schedule", schedule);
+		return mav;
+	}
     
     @RequestMapping(value = "/pitch/{pitchId}/event/create", method = { RequestMethod.POST })
     public ModelAndView createEvent(
@@ -137,7 +155,7 @@ public class EventController extends BaseController {
     	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
     	Instant date = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
-    		return newEvent(form);
+    		return seePitch(pitchId, form);
     	}
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
     	Event e = es.create(form.getName(), loggedUser(), p, form.getDescription(),
@@ -145,11 +163,6 @@ public class EventController extends BaseController {
     			date.plus(endsAt, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     }
-    
-	@RequestMapping("/event/new")
-	public ModelAndView newEvent(@ModelAttribute("newEventForm") final NewEventForm form) {
-		return new ModelAndView("newEvent");
-	}
 
     @RequestMapping(value = "/events/filter")
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
@@ -181,16 +194,20 @@ public class EventController extends BaseController {
     	if(date.isEmpty())
     		return null;
     	try {
-    		inst = LocalDateTime.parse(date).atZone(ZoneId.of(TIME_ZONE)).toInstant();
+    		inst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
        	} catch(DateTimeParseException e) {
     		errors.rejectValue(START_DATE, "wrong_date_format");
     		return null;
     	}
-    	if(inst.isBefore(Instant.now())) {
+    	if(inst.isBefore(today())) {
     		errors.rejectValue(START_DATE, "future_date_required");
     		return null;
     	}
     	return inst;
+    }
+    
+    private Instant today() {
+    	return LocalDate.now().atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
     }
     
     private Integer performHourValidations(NewEventForm form, BindingResult errors) {

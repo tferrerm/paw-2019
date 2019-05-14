@@ -32,25 +32,6 @@ public class PitchController extends BaseController {
 	@Autowired
 	private EventService es;
 	
-	private static final int MIN_HOUR = 9;
-	private static final int MAX_HOUR = 23;
-	private static final int DAY_LIMIT = 7;
-	
-	
-	@RequestMapping("/pitch/{pitchId}")
-	public ModelAndView seePitch(
-			@PathVariable("pitchId") long id,
-			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
-		ModelAndView mav = new ModelAndView("pitch");
-		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
-		// Armar matriz calendario con los datos extraidos de la DB para ese pitch
-		List<Event> pitchEvents = es.findCurrentEventsInPitch(id);
-		boolean[][] schedule = es.convertEventListToSchedule(pitchEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
-		mav.addObject("minHour", MIN_HOUR);
-		mav.addObject("schedule", schedule);
-		return mav;
-	}
-	
 	@RequestMapping("/pitches/{pageNum}")
 	public ModelAndView listPitches(
 			@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form,
