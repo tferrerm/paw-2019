@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,25 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return ed.findCurrentEventsInPitch(pitchid);
+	}
+	
+	@Override
+	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour, 
+			int maxHour, int dayAmount) {
+		if(maxHour - minHour <= 0)
+			return null;
+		boolean[][] schedule = new boolean[maxHour - minHour][dayAmount];
+		for(Event event : events) {
+			Instant startsAt = event.getStartsAt();
+			Instant endsAt = event.getEndsAt();
+			int dayIndex = (startsAt.get(ChronoField.DAY_OF_WEEK) 
+					- Instant.now().get(ChronoField.DAY_OF_WEEK)) % 7; // Should change if dayAmount != 7
+			int hourIndex = startsAt.get(ChronoField.HOUR_OF_DAY) - minHour;
+			for(int i = hourIndex; i < endsAt.get(ChronoField.HOUR_OF_DAY); i++) {
+				schedule[i][dayIndex] = true;
+			}
+		}
+		return schedule;
 	}
 	
 	@Override

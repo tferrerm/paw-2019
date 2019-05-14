@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
@@ -21,14 +24,23 @@ public class PitchController extends BaseController {
 	@Autowired
 	private PitchService ps;
 	
+	@Autowired
+	private EventService es;
+	
+	private static final int MIN_HOUR = 9;
+	private static final int MAX_HOUR = 23;
+	private static final int DAY_LIMIT = 7;
+	
+	
 	@RequestMapping("/pitch/{pitchId}")
 	public ModelAndView seePitch(@PathVariable("pitchId") long id) throws PitchNotFoundException {
 		ModelAndView mav = new ModelAndView("pitch");
 		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
 		// Armar matriz calendario con los datos extraidos de la DB para ese pitch
-		boolean[][] calendar = new boolean[14][7];
-		calendar[0][1] = true;
-		mav.addObject("calendar", calendar);
+		List<Event> pitchEvents = es.findCurrentEventsInPitch(id);
+		boolean[][] schedule = es.convertEventListToSchedule(pitchEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
+		mav.addObject("minHour", MIN_HOUR);
+		mav.addObject("schedule", schedule);
 		return mav;
 	}
 	

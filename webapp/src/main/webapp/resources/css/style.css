@@ -535,7 +535,7 @@ a.logo-admin {
     width: 100%;
 }
 
-.calendar-table {
+.schedule-table {
     table-layout: fixed;
     text-align: center;
     font-size: 20px;
@@ -550,7 +550,7 @@ a.logo-admin {
     width: 35px;
 }
 
-.calendar-hours {
+.schedule-hours {
     width: 35px;
 }
 

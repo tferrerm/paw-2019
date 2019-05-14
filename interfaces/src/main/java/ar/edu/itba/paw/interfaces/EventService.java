@@ -26,6 +26,9 @@ public interface EventService {
 	 */
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
 	
+	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour, 
+			int maxHour, int dayAmount);
+	
 	public int countUserEventPages(final long userid);
 	
 	public int countFutureEventPages();

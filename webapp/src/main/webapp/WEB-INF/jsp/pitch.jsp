@@ -29,9 +29,9 @@
                     </div>
                 </div>
                 <div class="tbl profile-cont profile-second">
-                    <table class="calendar-table">
+                    <table class="schedule-table">
                         <tr>
-                            <th class="cell-size calendar-hours"></th>
+                            <th class="cell-size schedule-hours"></th>
                             <th class="cell-size">Mon</th>
                             <th class="cell-size">Tue</th>
                             <th class="cell-size">Wed</th>
@@ -40,17 +40,17 @@
                             <th class="cell-size">Sat</th>
                             <th class="cell-size">Sun</th>
                         </tr>
-                        <c:set var="hours" value="${9}"/>
-                        <c:forEach var="row" items="${calendar}">
+                        <c:set var="hours" value="${minHour}"/>
+                        <c:forEach var="row" items="${schedule}">
                             <tr>
                                 <td class="hours-size"><c:out value="${hours}"/>:00</td>
                                 <c:forEach var="column" items="${row}">
                                     <c:choose>
                                         <c:when test="${column == true}">
-                                            <td class="calendar-table pitch-available cell-size"/>
+                                            <td class="schedule-table pitch-available cell-size"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <td class="calendar-table pitch-occupied cell-size"/>
+                                            <td class="schedule-table pitch-occupied cell-size"/>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
