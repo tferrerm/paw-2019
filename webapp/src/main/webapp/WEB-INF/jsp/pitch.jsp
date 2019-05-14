@@ -58,6 +58,45 @@
                             <c:set var="hours" value="${hours + 1}"/>
                         </c:forEach>
                     </table>
+                    <h2><spring:message code="create_event"/></h2>
+                    <div class="form-container">
+                        <c:url value="/pitch/${pitch.pitchid}/event/create" var="postPath"/>
+                        <form:form modelAttribute="newEventForm" action="${postPath}" method="post" enctype="multipart/form-data">
+                            <div>
+                                <form:label path="name"><spring:message code="event_name"/> * </form:label>
+                                <form:input  cssClass="form-control" type="text" path="name"/>
+                                <form:errors path="name" cssClass="form-error" element="span"/>
+                            </div>
+                            <div>
+                                <form:label path="description"><spring:message code="event_description"/></form:label>
+                                <form:input  cssClass="form-control" type="text" path="description"/>
+                                <form:errors path="description" cssClass="form-error" element="span"/>
+                            </div>
+                            <div>
+                                <form:label path="maxParticipants"><spring:message code="event_max_participants"/></form:label>
+                                <form:input  cssClass="form-control" type="number" path="maxParticipants"/>
+                                <form:errors path="maxParticipants" cssClass="form-error" element="span"/>
+                            </div>
+                            <div>
+                                <form:label path="date"><spring:message code="new_event_date"/> *</form:label>
+                                <form:input cssClass="form-control" type="date" path="date"/>
+                                <form:errors path="date" cssClass="form-error" element="span"/>
+                            </div>
+                            <div>
+                                <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
+                                <form:input cssClass="form-control" type="number" min="0" max="23" path="startsAtHour"/>
+                                <form:errors path="startsAtHour" cssClass="form-error" element="span"/>
+                            </div>
+                            <div>
+                                <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
+                                <form:input cssClass="form-control" type="number" min="0" max="23" path="endsAtHour"/>
+                                <form:errors path="endsAtHour" cssClass="form-error" element="span"/>
+                            </div>
+                            <div class="submit-container">
+                                <button type="submit" class="btn btn-primary submit-btn"><spring:message code="create"/></button>
+                            </div>
+                        </form:form>
+                    </div>
                 </div>
             </div>
         </div>

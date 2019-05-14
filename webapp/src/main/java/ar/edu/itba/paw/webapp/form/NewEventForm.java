@@ -41,7 +41,7 @@ public class NewEventForm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getMaxParticipants() {
 		return maxParticipants;
 	}
@@ -49,11 +49,11 @@ public class NewEventForm {
 	public void setMaxParticipants(String maxParticipants) {
 		this.maxParticipants = maxParticipants;
 	}
-	
+
 	public String getDate() {
 		return date;
 	}
-	
+
 	public void setDate(String date) {
 		this.date = date;
 	}

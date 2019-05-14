@@ -3,8 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +20,7 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.webapp.form.NewEventForm;
 import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
 @Controller
@@ -33,7 +38,9 @@ public class PitchController extends BaseController {
 	
 	
 	@RequestMapping("/pitch/{pitchId}")
-	public ModelAndView seePitch(@PathVariable("pitchId") long id) throws PitchNotFoundException {
+	public ModelAndView seePitch(
+			@PathVariable("pitchId") long id,
+			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
 		ModelAndView mav = new ModelAndView("pitch");
 		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
 		// Armar matriz calendario con los datos extraidos de la DB para ese pitch

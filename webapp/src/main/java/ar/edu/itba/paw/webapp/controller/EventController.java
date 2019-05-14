@@ -40,8 +40,8 @@ public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final String START_DATE = "startsAt";
-	private static final String DURATION = "endsAt";
+	private static final String START_DATE = "startsAtHour";
+	private static final String END_DATE = "endsAtHour";
 	private static final String MAX_PARTICIPANTS = "maxParticipants";
 	
 	@Autowired
@@ -132,15 +132,17 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) throws PitchNotFoundException {
-    	Integer duration = performDurationValidations(form, errors);
+    	Integer startsAt = performHourValidations(form, errors);
+    	Integer endsAt = performHourValidations(form, errors);
     	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
-    	Instant from = performDateValidations(form, errors);
+    	Instant date = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
     		return newEvent(form);
     	}
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
     	Event e = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-    			maxParticipants, from, from.plus(duration, ChronoUnit.HOURS));
+    			maxParticipants, date.plus(startsAt, ChronoUnit.HOURS),
+    			date.plus(endsAt, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     }
     
@@ -191,16 +193,19 @@ public class EventController extends BaseController {
     	return inst;
     }
     
-    private Integer performDurationValidations(NewEventForm form, BindingResult errors) {
+    private Integer performHourValidations(NewEventForm form, BindingResult errors) {
     	Integer duration = null;
     	try {
     		duration = Integer.parseInt(form.getEndsAtHour());
     	} catch(NumberFormatException e) {
-    		errors.rejectValue(DURATION, "wrong_int_format");
+    		errors.rejectValue(END_DATE, "wrong_int_format");
     		return null;
     	}
     	if(duration <= 0) {
-    		errors.rejectValue(DURATION, "gt_zero");
+    		errors.rejectValue(END_DATE, "gt_zero");
+    		return null;
+    	} else if(duration > 23) {
+    		errors.rejectValue(END_DATE, "lt_23");
     		return null;
     	}
     	return duration;

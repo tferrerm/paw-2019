@@ -56,7 +56,7 @@ public class EventServiceImpl implements EventService {
 		if(maxHour - minHour <= 0)
 			return null;
 		boolean[][] schedule = new boolean[maxHour - minHour][dayAmount];
-		for(Event event : events) {
+		for(Event event : events) {/*
 			Instant startsAt = event.getStartsAt();
 			Instant endsAt = event.getEndsAt();
 			int dayIndex = (startsAt.get(ChronoField.DAY_OF_WEEK) 
@@ -64,7 +64,7 @@ public class EventServiceImpl implements EventService {
 			int hourIndex = startsAt.get(ChronoField.HOUR_OF_DAY) - minHour;
 			for(int i = hourIndex; i < endsAt.get(ChronoField.HOUR_OF_DAY); i++) {
 				schedule[i][dayIndex] = true;
-			}
+			}*/
 		}
 		return schedule;
 	}
