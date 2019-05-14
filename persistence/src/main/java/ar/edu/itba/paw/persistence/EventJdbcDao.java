@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
@@ -58,7 +59,7 @@ public class EventJdbcDao implements EventDao {
 	
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
-		return jdbcTemplate.query("SELECT * FROM events JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches JOIN users ON events.userid = users.userid"
 				+ " WHERE eventid = ?", erm, eventid)
 				.stream().findAny();
 	}
@@ -66,7 +67,7 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public List<Event> findByUsername(String username, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN events_users JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN events_users JOIN users ON events.userid = users.userid"
 				+ " WHERE username = ?"
 				+ " OFFSET ?", erm, username, offset);
 	}
@@ -84,7 +85,7 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public List<Event> findFutureEvents(int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches JOIN users ON events.userid = users.userid"
 				+ " WHERE starts_at > ?"
 				+ " OFFSET ?", erm, Timestamp.from(Instant.now()), offset);
 	}
@@ -106,7 +107,7 @@ public class EventJdbcDao implements EventDao {
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
 		// In seven days at 23:00
 		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
-		return jdbcTemplate.query("SELECT * FROM events "
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users "
 				+ " WHERE pitchid = ? "
 				+ " AND starts_at > ? "
 				+ " AND starts_at < ? ", erm, pitchid,
@@ -114,20 +115,20 @@ public class EventJdbcDao implements EventDao {
 	}
 
 	@Override
-	public Event create(String name, User owner, String location, String description, 
+	public Event create(String name, User owner, Pitch pitch, String description, 
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("eventname", name);
 		args.put("userid", owner.getUserid());
-		args.put("location", location);
+		args.put("pitchid", pitch.getPitchid());
 		args.put("description", description);
 		args.put("max_participants", maxParticipants);
 		args.put("starts_at", Timestamp.from(startsAt));
 		args.put("ends_at", Timestamp.from(endsAt));
 		args.put("event_created_at", Timestamp.from(now));
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
-		return new Event(eventId.longValue(), name, owner, location, description, 
+		return new Event(eventId.longValue(), name, owner, pitch, description, 
 				maxParticipants, startsAt, endsAt);
 	}
 	

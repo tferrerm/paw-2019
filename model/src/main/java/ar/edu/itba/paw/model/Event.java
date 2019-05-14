@@ -3,31 +3,32 @@ package ar.edu.itba.paw.model;
 import java.time.Instant;
 
 public class Event {
+
 	private long eventId;
 	private String name;
 	private User owner;
-	private String location;
+	private Pitch pitch;
 	private String description;
 	private int maxParticipants;
 	private Instant startsAt;
 	private Instant endsAt;
 	private Instant createdAt;
 	
-	public Event(long eventId, String name, User owner, String location, String description,
+	public Event(long eventId, String name, User owner, Pitch pitch, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		this.eventId = eventId;
 		this.name = name;
 		this.owner = owner;
-		this.location = location;
+		this.pitch = pitch;
 		this.description = description;
 		this.maxParticipants = maxParticipants;
 		this.startsAt = startsAt;
 		this.endsAt = endsAt;
 	}
 	
-	public Event(long eventId, String name, User owner, String location, String description, 
+	public Event(long eventId, String name, User owner, Pitch pitch, String description, 
 			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
-		this(eventId, name, owner, location, description, maxParticipants, startsAt,
+		this(eventId, name, owner, pitch, description, maxParticipants, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
 	}
@@ -60,13 +61,13 @@ public class Event {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-
-	public String getLocation() {
-		return location;
+	
+	public Pitch getPitch() {
+		return pitch;
 	}
-
-	public void setLocation(String location) {
-		this.location = location;
+	
+	public void setPitch(Pitch pitch) {
+		this.pitch = pitch;
 	}
 	
 	public String getDescription() {

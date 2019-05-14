@@ -11,8 +11,12 @@ public class Pitch {
 	private Instant createdAt;
 	
 	public Pitch(long pitchid, Club club, String name, Sport sport, Instant createdAt) {
-		this.pitchid = pitchid;
+		this(pitchid, name, sport, createdAt);
 		this.club = club;
+	}
+	
+	public Pitch(long pitchid, String name, Sport sport, Instant createdAt) {
+		this.pitchid = pitchid;
 		this.name = name;
 		this.sport = sport;
 		this.createdAt = createdAt;

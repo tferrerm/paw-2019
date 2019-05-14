@@ -58,7 +58,7 @@
                 </div>
                 <c:forEach var="event" items="${events}">
                     <div class="custom-row">
-                        <div>${event.location}</div>
+                        <div>Hardcoded</div>
                         <div>Hardcoded</div>
                         <div>${event.owner.firstname} ${event.owner.lastname}</div>
                         <div>${event.maxParticipants}</div>

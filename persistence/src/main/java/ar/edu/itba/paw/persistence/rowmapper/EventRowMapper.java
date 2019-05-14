@@ -14,6 +14,9 @@ public class EventRowMapper implements RowMapper<Event> {
 	
 	@Autowired
 	private UserRowMapper urm;
+	
+	@Autowired
+	private SimplePitchRowMapper prm;
 
 	@Override
 	public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -21,7 +24,7 @@ public class EventRowMapper implements RowMapper<Event> {
 				rs.getLong("eventid"),
 				rs.getString("eventname"),
 				urm.mapRow(rs, rowNum),
-				rs.getString("location"),
+				prm.mapRow(rs, rowNum),
 				rs.getString("description"),
 				rs.getInt("max_participants"),
 				rs.getTimestamp("starts_at").toInstant(),
