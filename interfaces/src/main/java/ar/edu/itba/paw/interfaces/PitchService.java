@@ -17,5 +17,6 @@ public interface PitchService {
 			Optional<String> location, int page);
 	
 	public Pitch create(Club club, String name, Sport sport);
-
+	
+	public void deletePitch(long pitchid);
 }

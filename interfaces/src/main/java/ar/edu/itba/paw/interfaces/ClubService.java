@@ -12,5 +12,7 @@ public interface ClubService {
 	public List<Club> findAll(int page);
 	
 	public Club create(long userId, String name, String location);
+	
+	public void deleteClub(long clubid);
 
 }

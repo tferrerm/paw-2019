@@ -97,5 +97,13 @@ public class PitchJdbcDao implements PitchDao {
 		final Number pitchId = jdbcInsert.executeAndReturnKey(args);
 		return new Pitch(pitchId.longValue(), club, name, sport, now);
 	}
+	
+	@Override
+	public void deletePitch(final long pitchid) {
+		jdbcTemplate.update("DELETE FROM events_users WHERE eventid IN "
+				+ " (SELECT eventid FROM events WHERE pitchid = ?)", pitchid);
+		jdbcTemplate.update("DELETE FROM events WHERE pitchid = ?", pitchid);
+		jdbcTemplate.update("DELETE FROM pitches WHERE pitchid = ?", pitchid);
+	}
 
 }

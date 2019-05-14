@@ -60,5 +60,16 @@ public class ClubJdbcDao implements ClubDao {
 		final Number clubId = jdbcInsert.executeAndReturnKey(args);
 		return new Club(clubId.longValue(), name, location, now);
 	}
+	
+	@Override
+	public void deleteClub(final long clubid) {
+		jdbcTemplate.update("DELETE FROM events_users WHERE eventid IN "
+				+ " (SELECT eventid FROM events WHERE pitchid IN "
+				+ " (SELECT pitchid FROM pitches WHERE clubid = ? ))", clubid);
+		jdbcTemplate.update("DELETE FROM events WHERE pitchid IN "
+				+ " (SELECT pitchid FROM pitches WHERE clubid = ?)", clubid);
+		jdbcTemplate.update("DELETE FROM pitches WHERE clubid = ?", clubid);
+		jdbcTemplate.update("DELETE FROM clubs WHERE clubid = ?", clubid);
+	}
 
 }
