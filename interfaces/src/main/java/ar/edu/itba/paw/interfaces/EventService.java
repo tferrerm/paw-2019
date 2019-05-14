@@ -46,4 +46,6 @@ public interface EventService {
 	
 	public void deleteEvent(long eventid);
 
+	public String[] getScheduleDaysHeader();
+
 }

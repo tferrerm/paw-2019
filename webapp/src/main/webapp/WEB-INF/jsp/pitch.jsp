@@ -23,7 +23,7 @@
                                 <h4><spring:message code="pitch_location" /><span>${pitch.club.location}</span></h4>
                             </div>
                             <div style="padding: 5px 0">
-                                <h4><spring:message code="sport" /><span>${pitch.sport}</span></h4>
+                                <h4><spring:message code="sport"/><span>${pitch.sport}</span></h4>
                             </div>
                         </div>
                     </div>
@@ -32,13 +32,9 @@
                     <table class="schedule-table">
                         <tr>
                             <th class="cell-size schedule-hours"></th>
-                            <th class="cell-size">Mon</th>
-                            <th class="cell-size">Tue</th>
-                            <th class="cell-size">Wed</th>
-                            <th class="cell-size">Thu</th>
-                            <th class="cell-size">Fri</th>
-                            <th class="cell-size">Sat</th>
-                            <th class="cell-size">Sun</th>
+                            <c:forEach var="dayMessage" items="${scheduleHeaders}">
+                                <th class="cell-size"><spring:message code="${dayMessage}"/></th>
+                            </c:forEach>
                         </tr>
                         <c:set var="hours" value="${minHour}"/>
                         <c:forEach var="row" items="${schedule}">
@@ -47,10 +43,10 @@
                                 <c:forEach var="column" items="${row}">
                                     <c:choose>
                                         <c:when test="${column == true}">
-                                            <td class="schedule-table pitch-available cell-size"/>
+                                            <td class="schedule-table pitch-occupied cell-size"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <td class="schedule-table pitch-occupied cell-size"/>
+                                            <td class="schedule-table pitch-available cell-size"/>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>

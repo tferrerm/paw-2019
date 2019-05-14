@@ -136,9 +136,10 @@ public class EventController extends BaseController {
 			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
 		ModelAndView mav = new ModelAndView("pitch");
 		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
-		// Armar matriz calendario con los datos extraidos de la DB para ese pitch
 		List<Event> pitchEvents = es.findCurrentEventsInPitch(id);
 		boolean[][] schedule = es.convertEventListToSchedule(pitchEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
+		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
+		mav.addObject("scheduleHeaders", scheduleDaysHeader);
 		mav.addObject("minHour", MIN_HOUR);
 		mav.addObject("schedule", schedule);
 		return mav;
@@ -150,8 +151,9 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) throws PitchNotFoundException {
-    	Integer startsAt = performHourValidations(form, errors);
-    	Integer endsAt = performHourValidations(form, errors);
+    	Integer startsAt = Integer.valueOf(form.getStartsAtHour());
+    	Integer endsAt = Integer.valueOf(form.getEndsAtHour());
+    	// VALIDAR ESAS HORAS!!!!!!!!!!!!!
     	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
     	Instant date = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
