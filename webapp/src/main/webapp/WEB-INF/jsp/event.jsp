@@ -29,7 +29,7 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="sport"/></span>
-							<span>Hardcoded</span>
+							<span>${event.pitch.sport}</span>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="establishment"/></span>
