@@ -14,6 +14,7 @@ import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -91,9 +92,9 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional
 	@Override
-	public Event create(String name, User owner, String location, String description,
+	public Event create(String name, User owner, Pitch pitch, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
-		return ed.create(name, owner, location, description, maxParticipants, startsAt, endsAt);
+		return ed.create(name, owner, pitch, description, maxParticipants, startsAt, endsAt);
 	}
 
 	@Transactional

@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +27,9 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewEventForm;
@@ -48,6 +49,9 @@ public class EventController extends BaseController {
 
     @Autowired
     private EmailService ems;
+    
+    @Autowired
+    private PitchService ps;
 	
 	@RequestMapping("/home")
 	public ModelAndView home()	{
@@ -122,18 +126,20 @@ public class EventController extends BaseController {
         return mav;
     }
     
-    @RequestMapping(value = "/event/create", method = { RequestMethod.POST })
+    @RequestMapping(value = "/pitch/{pitchId}/event/create", method = { RequestMethod.POST })
     public ModelAndView createEvent(
+    		@PathVariable("pitchId") long pitchId,
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws PitchNotFoundException {
     	Integer duration = performDurationValidations(form, errors);
     	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
     	Instant from = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
     		return newEvent(form);
     	}
-    	Event e = es.create(form.getName(), loggedUser(), form.getLocation(), form.getDescription(),
+    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
+    	Event e = es.create(form.getName(), loggedUser(), p, form.getDescription(),
     			maxParticipants, from, from.plus(duration, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     }
@@ -169,7 +175,7 @@ public class EventController extends BaseController {
     
     private Instant performDateValidations(NewEventForm form, BindingResult errors) {
     	Instant inst = null;
-    	String date = form.getStartsAt();
+    	String date = form.getDate();
     	if(date.isEmpty())
     		return null;
     	try {
@@ -188,7 +194,7 @@ public class EventController extends BaseController {
     private Integer performDurationValidations(NewEventForm form, BindingResult errors) {
     	Integer duration = null;
     	try {
-    		duration = Integer.parseInt(form.getEndsAt());
+    		duration = Integer.parseInt(form.getEndsAtHour());
     	} catch(NumberFormatException e) {
     		errors.rejectValue(DURATION, "wrong_int_format");
     		return null;
@@ -217,6 +223,11 @@ public class EventController extends BaseController {
 
 	@ExceptionHandler({EventNotFoundException.class})
 	private ModelAndView eventNotFound() {
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler({PitchNotFoundException.class})
+	private ModelAndView pitchNotFound() {
 		return new ModelAndView("404");
 	}
 
