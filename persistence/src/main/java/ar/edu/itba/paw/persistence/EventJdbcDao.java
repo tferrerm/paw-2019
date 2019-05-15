@@ -126,18 +126,18 @@ public class EventJdbcDao implements EventDao {
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("e.eventname", name.orElse(null)),
-				new Filter("c.clubname", name.orElse(null)),
-				new Filter("p.sport", sport.orElse(null)),
+				new Filter("eventname", name.orElse(null)),
+				new Filter("clubname", establishment.orElse(null)),
+				new Filter("sport", sport.orElse(null)),
 				new Filter("customVacanciesFilter", vacancies.orElse(null))
 		};
-		StringBuilder queryString = new StringBuilder("SELECT * FROM events AS e NATURAL JOIN pitches AS p NATURAL JOIN clubs AS c ");
+		StringBuilder queryString = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs AS t ");
 		for(Filter param : params) {
 			if(!isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
 				case "customVacanciesFilter":
-					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = e.eventid) ");
+					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
 					break;
 				default:
 					queryString.append(param.queryAsString());

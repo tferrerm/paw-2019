@@ -39,7 +39,7 @@ public class PitchController extends BaseController {
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "sport", required = false) Sport sport,
 			@RequestParam(value = "location", required = false) String location,
-			@RequestParam(value = "clubName", required = false) String clubName) {
+			@RequestParam(value = "clubname", required = false) String clubName) {
 		String sportString = null;
 		if(sport != null)
 			sportString = sport.toString();
@@ -59,7 +59,7 @@ public class PitchController extends BaseController {
 	
 	@RequestMapping(value = "/pitches/filter")
     public ModelAndView applyFilter(@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form) {
-        String name = form.getName();
+		String name = form.getName();
         String sport = form.getSport();
         String location = form.getLocation();
         String clubName = form.getClubName();
@@ -67,7 +67,7 @@ public class PitchController extends BaseController {
         return new ModelAndView("redirect:/pitches/1" + queryString);
     }
 	
-	private String buildQueryString(final String name, final String sport, final String location, String clubName) {
+	private String buildQueryString(final String name, final String sport, final String location, final String clubName) {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("?");
 		if(name != null && !name.isEmpty()) {
@@ -77,7 +77,7 @@ public class PitchController extends BaseController {
 			strBuilder.append("sport=").append(sport).append("&");
 		}
 		if(location != null && !location.isEmpty()) {
-			strBuilder.append("location=").append(location);
+			strBuilder.append("location=").append(location).append("&");
 		}
 		if(clubName != null && !clubName.isEmpty()) {
 			strBuilder.append("clubname=").append(clubName);
