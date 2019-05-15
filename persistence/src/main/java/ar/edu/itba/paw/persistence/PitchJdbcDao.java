@@ -57,14 +57,15 @@ public class PitchJdbcDao implements PitchDao {
 	
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
-			Optional<String> location, int page) {
+			Optional<String> location, Optional<String> clubName, int page) {
 		int offset = (page - 1) * MAX_ROWS;
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
 				new Filter("pitchname", name.orElse("")),
 				new Filter("sport", sport.orElse("")),
-				new Filter("location", location.orElse(""))
+				new Filter("location", location.orElse("")),
+				new Filter("clubname", clubName.orElse(""))
 		};
 		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {

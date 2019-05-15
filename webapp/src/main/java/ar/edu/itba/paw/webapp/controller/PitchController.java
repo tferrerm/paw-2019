@@ -38,11 +38,12 @@ public class PitchController extends BaseController {
 			@PathVariable("pageNum") int pageNum,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "sport", required = false) Sport sport,
-			@RequestParam(value = "location", required = false) String location) {
+			@RequestParam(value = "location", required = false) String location,
+			@RequestParam(value = "clubName", required = false) String clubName) {
 		String sportString = null;
 		if(sport != null)
 			sportString = sport.toString();
-		String queryString = buildQueryString(name, sportString, location);
+		String queryString = buildQueryString(name, sportString, location, clubName);
 		ModelAndView mav = new ModelAndView("pitchesList");
 		mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
@@ -51,6 +52,7 @@ public class PitchController extends BaseController {
 				Optional.ofNullable(name),
 				Optional.ofNullable(sport),
 				Optional.ofNullable(location),
+				Optional.ofNullable(clubName),
 				pageNum));
 		return mav;
 	}
@@ -60,11 +62,12 @@ public class PitchController extends BaseController {
         String name = form.getName();
         String sport = form.getSport();
         String location = form.getLocation();
-        String queryString = buildQueryString(name, sport, location);
+        String clubName = form.getClubName();
+        String queryString = buildQueryString(name, sport, location, clubName);
         return new ModelAndView("redirect:/pitches/1" + queryString);
     }
 	
-	private String buildQueryString(final String name, final String sport, final String location) {
+	private String buildQueryString(final String name, final String sport, final String location, String clubName) {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("?");
 		if(name != null && !name.isEmpty()) {
@@ -75,7 +78,10 @@ public class PitchController extends BaseController {
 		}
 		if(location != null && !location.isEmpty()) {
 			strBuilder.append("location=").append(location);
-		}else {
+		}
+		if(clubName != null && !clubName.isEmpty()) {
+			strBuilder.append("clubname=").append(clubName);
+		} else {
 			strBuilder.deleteCharAt(strBuilder.length()-1);
 		}
 		return strBuilder.toString();

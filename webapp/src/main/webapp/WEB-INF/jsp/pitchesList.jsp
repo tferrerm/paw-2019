@@ -44,6 +44,11 @@
                                 <form:errors path="location" cssClass="form-error" element="p"/>
                             </div>
                             <div>
+                                <form:label path="clubName"><spring:message code="pitch_club" /></form:label>
+                                <form:input class="form-control" type="text" path="clubName"/>
+                                <form:errors path="clubName" cssClass="form-error" element="p"/>
+                            </div>
+                            <div>
                                 <button class="btn btn-primary" type="submit"><spring:message code="filter" /></button>
                             </div>
                         </div>
@@ -55,6 +60,7 @@
                         <div>${pitch.name}</div>
                         <div><spring:message code="${pitch.sport}"/></div>
                         <div>${pitch.club.location}</div>
+                        <div>${pitch.club.name}</div>
                         <div>
                             <a href="<c:url value="/pitch/${pitch.pitchid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_pitch"/></button></a>
                         </div>

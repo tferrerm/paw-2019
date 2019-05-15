@@ -12,6 +12,9 @@ public class PitchesFiltersForm {
 	
 	@Size(max=64)
 	private String location;
+	
+	@Size(max=64)
+	private String clubName;
 
 	public String getName() {
 		return name;
@@ -35,5 +38,13 @@ public class PitchesFiltersForm {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getClubName() {
+		return clubName;
+	}
+
+	public void setClubName(String clubName) {
+		this.clubName = clubName;
 	}
 }

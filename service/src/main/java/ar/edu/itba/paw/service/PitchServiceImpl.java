@@ -39,7 +39,7 @@ public class PitchServiceImpl implements PitchService {
 	
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
-			Optional<String> location, int page) {
+			Optional<String> location, Optional<String> clubName, int page) {
 		if(page <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
@@ -47,7 +47,7 @@ public class PitchServiceImpl implements PitchService {
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
-		return pd.findBy(name, Optional.ofNullable(sportString), location, page);
+		return pd.findBy(name, Optional.ofNullable(sportString), location, clubName, page);
 	}
 
 	@Override

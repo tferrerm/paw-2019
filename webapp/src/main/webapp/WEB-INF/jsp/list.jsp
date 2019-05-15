@@ -37,6 +37,7 @@
                             <div>
                                 <form:label path="sport"><spring:message code="sport" /></form:label>
                                 <form:select path="sport" cssClass="form-control">
+                                    <form:option  value=""></form:option>
                                     <c:forEach var="sport" items="${sports}">
                                         <form:option value="${sport}"><spring:message code="${sport}"/></form:option>
                                     </c:forEach>
