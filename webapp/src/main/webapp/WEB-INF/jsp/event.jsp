@@ -40,8 +40,10 @@
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="date"/></span>
 								<span>
-									<fmt:parseDate value="${event.startsAt}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-									<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" />
+									<fmt:timeZone value="AR">
+										<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+										<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+									</fmt:timeZone>
 								</span>
 							</div>
 							<div class="description-item">
