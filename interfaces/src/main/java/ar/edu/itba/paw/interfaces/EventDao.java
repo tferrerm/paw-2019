@@ -43,6 +43,8 @@ public interface EventDao {
 	
 	public void leaveEvent(final User user, final Event event);
 	
+	public int kickFromEvent(final long kickedUserId, final long eventId);
+	
 	public void deleteEvent(long eventid);
 
 }

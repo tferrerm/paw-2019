@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -47,6 +48,9 @@ public interface EventService {
 			throws UserAlreadyJoinedException, EventFullException;
 	
 	public void leaveEvent(final User user, final Event event);
+	
+	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
+			throws UserNotAuthorizedException;
 	
 	public void deleteEvent(long eventid);
 

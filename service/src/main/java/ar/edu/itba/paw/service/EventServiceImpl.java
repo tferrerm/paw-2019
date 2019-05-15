@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
@@ -168,6 +169,15 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public void leaveEvent(final User user, final Event event) {
 		ed.leaveEvent(user, event);
+	}
+	
+	@Transactional
+	@Override
+	public void kickFromEvent(final User owner, final long kickedUserId, final Event event) 
+		throws UserNotAuthorizedException {
+		if(owner.getUserid() != event.getOwner().getUserid())
+			throw new UserNotAuthorizedException("User is not the owner of the event.");
+		ed.kickFromEvent(kickedUserId, event.getEventId());
 	}
 	
 	@Override
