@@ -23,7 +23,7 @@
                                 <h4><spring:message code="pitch_location" /><span>${pitch.club.location}</span></h4>
                             </div>
                             <div style="padding: 5px 0">
-                                <h4><spring:message code="sport"/><span>${pitch.sport}</span></h4>
+                                <h4><spring:message code="sport"/><span> <spring:message code="${pitch.sport}" /></span></h4>
                             </div>
                         </div>
                     </div>
