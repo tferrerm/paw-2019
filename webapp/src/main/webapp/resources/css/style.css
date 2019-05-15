@@ -293,6 +293,13 @@ a.link-text{
     justify-content: center;
 }
 
+.kick-user-btn {
+  background-color: #fff2e6;
+  color: red;
+  border-width: 0;
+  margin-left: 5px;
+}
+
 .login-error {
     text-align: center;
 }
