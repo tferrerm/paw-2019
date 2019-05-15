@@ -131,7 +131,7 @@ public class EventJdbcDao implements EventDao {
 				new Filter("sport", sport.orElse(null)),
 				new Filter("customVacanciesFilter", vacancies.orElse(null))
 		};
-		StringBuilder queryString = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs AS t ");
+		StringBuilder queryString = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
 		for(Filter param : params) {
 			if(!isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
