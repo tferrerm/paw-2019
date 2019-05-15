@@ -26,6 +26,9 @@ public interface EventDao {
 	 */
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
 	
+	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page);
+	
 	public int countUserEventPages(final long userid);
 	
 	public int countFutureEventPages();

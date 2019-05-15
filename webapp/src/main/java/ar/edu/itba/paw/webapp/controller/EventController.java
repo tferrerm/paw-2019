@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,6 +32,7 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewEventForm;
@@ -115,18 +117,30 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,
+                                         @RequestParam(value = "name", required = false) String name,
                                          @RequestParam(value = "est", required = false) String establishment,
-                                         @RequestParam(value = "sport", required = false) String sport,
-                                         @RequestParam(value = "org", required = false) String organizer,
+                                         @RequestParam(value = "sport", required = false) Sport sport,
                                          @RequestParam(value = "vac", required = false) String vacancies,
                                          @RequestParam(value = "date", required = false) String date) {
-        String queryString = buildQueryString(establishment,sport,organizer,vacancies,date);
+    	String sportName = "";
+    	if(sport != null)
+    		sportName = sport.toString();
+        String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
-        mav.addObject("filtersForm",form);
+        mav.addObject("sports", Sport.values());
         mav.addObject("lastPageNum", es.countFutureEventPages());
-        mav.addObject("events", es.findFutureEvents(pageNum));
+        Integer vacanciesNum = null;
+        if(vacancies != null)
+        	vacanciesNum = Integer.valueOf(vacancies);
+        mav.addObject("events", es.findBy(
+        		true, 
+        		Optional.ofNullable(name), 
+        		Optional.ofNullable(establishment), 
+        		Optional.ofNullable(sport), 
+        		Optional.ofNullable(vacanciesNum), 
+        		pageNum));
         return mav;
     }
 	
@@ -168,25 +182,36 @@ public class EventController extends BaseController {
 
     @RequestMapping(value = "/events/filter")
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
+    	String name = form.getName();
         String establishment = form.getEstablishment();
         String sport = form.getSport();
-        String organizer = form.getOrganizer();
         String vacancies = form.getVacancies();
         String date = form.getDate();
-        String queryString = buildQueryString(establishment, sport, organizer, vacancies, date);
+        String queryString = buildQueryString(name, establishment, sport, vacancies, date);
         return new ModelAndView("redirect:/events/1" + queryString);
     }
 
-    private String buildQueryString(final String establishment, final String sport,
-                                    final String organizer, final String vacancies, final String date){
+    private String buildQueryString(final String name, final String establishment, final String sport,
+                                    final String vacancies, final String date){
 	    StringBuilder strBuilder = new StringBuilder();
 	    strBuilder.append("?");
-        if(establishment != null && !establishment.isEmpty()) { strBuilder.append("est=").append(establishment).append("&"); }
-        if(sport != null && !sport.isEmpty()) { strBuilder.append("sport=").append(sport).append("&"); }
-        if(organizer != null && !organizer.isEmpty()) { strBuilder.append("org=").append(organizer).append("&"); }
-        if(vacancies != null && !vacancies.isEmpty()) { strBuilder.append("vac=").append(vacancies).append("&"); }
-        if(date != null && !date.isEmpty()) { strBuilder.append("date=").append(date); }
-        else {strBuilder.deleteCharAt(strBuilder.length()-1);}
+	    if(name != null && !name.isEmpty()) {
+        	strBuilder.append("name=").append(name).append("&");
+        }
+        if(establishment != null && !establishment.isEmpty()) {
+        	strBuilder.append("est=").append(establishment).append("&");
+        }
+        if(sport != null && !sport.isEmpty()) {
+        	strBuilder.append("sport=").append(sport).append("&");
+        }
+        if(vacancies != null && !vacancies.isEmpty()) {
+        	strBuilder.append("vac=").append(vacancies).append("&");
+        }
+        if(date != null && !date.isEmpty()) {
+        	strBuilder.append("date=").append(date);
+        } else {
+        	strBuilder.deleteCharAt(strBuilder.length()-1);
+        }
         return strBuilder.toString();
     }
     

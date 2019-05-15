@@ -33,7 +33,7 @@
                                 <form:label path="sport"><spring:message code="sport" /></form:label>
                                 <form:select path="sport" cssClass="form-control">
                                     <c:forEach var="sport" items="${sports}">
-                                        <form:option value="${sport}"/>
+                                        <form:option value="${sport}"><spring:message code="${sport}"/></form:option>
                                     </c:forEach>
                                 </form:select>
                                 <form:errors path="sport" cssClass="form-error" element="p"/>
@@ -53,8 +53,8 @@
                 <c:forEach var="pitch" items="${pitches}">
                     <div class="custom-row">
                         <div>${pitch.name}</div>
-                        <div>${pitch.sport}</div>
-                        <div>Hardcoded</div>
+                        <div><spring:message code="${pitch.sport}"/></div>
+                        <div>${pitch.club.location}</div>
                         <div>
                             <a href="<c:url value="/pitch/${pitch.pitchid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_pitch"/></button></a>
                         </div>

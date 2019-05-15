@@ -565,3 +565,10 @@ a.logo-admin {
 .pitch-available {
     background: green;
 }
+
+.create-event {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}

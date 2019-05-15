@@ -14,11 +14,10 @@ public class Event {
 	private Instant endsAt;
 	private Instant createdAt;
 	
-	public Event(long eventId, String name, User owner, Pitch pitch, String description,
+	public Event(long eventId, String name, Pitch pitch, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		this.eventId = eventId;
 		this.name = name;
-		this.owner = owner;
 		this.pitch = pitch;
 		this.description = description;
 		this.maxParticipants = maxParticipants;
@@ -26,9 +25,23 @@ public class Event {
 		this.endsAt = endsAt;
 	}
 	
+	public Event(long eventId, String name, User owner, Pitch pitch, String description,
+	int maxParticipants, Instant startsAt, Instant endsAt) {
+		this(eventId, name, pitch, description,
+			maxParticipants, startsAt, endsAt);
+		this.owner = owner;
+	}
+	
 	public Event(long eventId, String name, User owner, Pitch pitch, String description, 
 			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
 		this(eventId, name, owner, pitch, description, maxParticipants, startsAt,
+			endsAt);
+		this.createdAt = createdAt;
+	}
+	
+	public Event(long eventId, String name, Pitch pitch, String description, 
+			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
+		this(eventId, name, pitch, description, maxParticipants, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
 	}

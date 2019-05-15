@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
@@ -45,6 +47,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private UserRowMapper urm;
+	
+	@Autowired
+	private EventListRowMapper elrm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -112,6 +117,49 @@ public class EventJdbcDao implements EventDao {
 				+ " AND starts_at > ? "
 				+ " AND starts_at < ? ", erm, pitchid,
 					Timestamp.from(today), Timestamp.from(inAWeek));
+	}
+	
+	@Override
+	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("e.eventname", name.orElse(null)),
+				new Filter("c.clubname", name.orElse(null)),
+				new Filter("p.sport", sport.orElse(null)),
+				new Filter("customVacanciesFilter", vacancies.orElse(null))
+		};
+		StringBuilder queryString = new StringBuilder("SELECT * FROM events AS e NATURAL JOIN pitches AS p NATURAL JOIN clubs AS c ");
+		for(Filter param : params) {
+			if(!isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(presentFields));
+				switch(param.getName()) {
+				case "customVacanciesFilter":
+					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = e.eventid) ");
+					break;
+				default:
+					queryString.append(param.queryAsString());
+					break;
+				}
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		queryString.append(" OFFSET ? ;");
+		list.add(offset);
+		return jdbcTemplate.query(queryString.toString(), elrm, list.toArray());
+	}
+	
+	private boolean isEmpty(Object value) {
+		return value == null;
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 	@Override

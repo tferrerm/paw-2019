@@ -28,8 +28,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="tbl profile-cont profile-second">
-                    <table class="schedule-table">
+                <div class="tbl profile-cont profile-second create-event">
+                    <table class="schedule-table flex">
                         <tr>
                             <th class="cell-size schedule-hours"></th>
                             <c:forEach var="dayMessage" items="${scheduleHeaders}">
@@ -54,9 +54,9 @@
                             <c:set var="hours" value="${hours + 1}"/>
                         </c:forEach>
                     </table>
-                    <h2><spring:message code="create_event"/></h2>
-                    <div class="form-container">
+                    <div class="form-container flex">
                         <c:url value="/pitch/${pitch.pitchid}/event/create" var="postPath"/>
+                        <h2><spring:message code="create_event"/></h2>
                         <form:form modelAttribute="newEventForm" action="${postPath}" method="post" enctype="multipart/form-data">
                             <div>
                                 <form:label path="name"><spring:message code="event_name"/> * </form:label>

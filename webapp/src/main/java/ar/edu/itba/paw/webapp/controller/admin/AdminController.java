@@ -61,11 +61,11 @@ public class AdminController extends BaseController {
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
         String establishment = form.getEstablishment();
         String sport = form.getSport();
-        String organizer = form.getOrganizer();
+        //String organizer = form.getOrganizer();
         String vacancies = form.getVacancies();
         String date = form.getDate();
-        String queryString = buildAdminQueryString(establishment, sport, organizer, vacancies, date);
-        return new ModelAndView("redirect:/admin/events/1" + queryString);
+        //String queryString = buildAdminQueryString(establishment, sport, organizer, vacancies, date);
+        return new ModelAndView("redirect:/admin/events/1" /*+ queryString*/);
     }
 
 	@RequestMapping(value = "/event/{id}")

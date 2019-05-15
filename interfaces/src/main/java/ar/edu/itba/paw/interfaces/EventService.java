@@ -8,6 +8,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 public interface EventService {
@@ -26,6 +27,9 @@ public interface EventService {
 	 * @return a list of events (with a maximum size of 24 * 7)
 	 */
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
+	
+	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<Sport> sport, Optional<Integer> vacancies, int page);
 	
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour, 
 			int maxHour, int dayAmount);

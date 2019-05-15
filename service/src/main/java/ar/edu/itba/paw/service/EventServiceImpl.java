@@ -4,14 +4,11 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.ChronoField;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +19,7 @@ import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -109,6 +107,20 @@ public class EventServiceImpl implements EventService {
 			}
 		}
 		return nextSevenDays;
+	}
+	
+	@Override
+	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
+		if(page <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+				vacancies, page);
 	}
 	
 	@Override
