@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -13,7 +15,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +29,10 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewEventForm;
@@ -39,15 +43,21 @@ public class EventController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final String START_DATE = "startsAt";
-	private static final String DURATION = "endsAt";
+	private static final String START_DATE = "date";
+	private static final String END_DATE = "endsAtHour";
 	private static final String MAX_PARTICIPANTS = "maxParticipants";
+	private static final int MIN_HOUR = 9;
+	private static final int MAX_HOUR = 23;
+	private static final int DAY_LIMIT = 7;
 	
 	@Autowired
 	private EventService es;
 
     @Autowired
     private EmailService ems;
+    
+    @Autowired
+    private PitchService ps;
 	
 	@RequestMapping("/home")
 	public ModelAndView home()	{
@@ -107,94 +117,139 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,
+                                         @RequestParam(value = "name", required = false) String name,
                                          @RequestParam(value = "est", required = false) String establishment,
-                                         @RequestParam(value = "sport", required = false) String sport,
-                                         @RequestParam(value = "org", required = false) String organizer,
+                                         @RequestParam(value = "sport", required = false) Sport sport,
                                          @RequestParam(value = "vac", required = false) String vacancies,
                                          @RequestParam(value = "date", required = false) String date) {
-        String queryString = buildQueryString(establishment,sport,organizer,vacancies,date);
+    	String sportName = "";
+    	if(sport != null)
+    		sportName = sport.toString();
+        String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
-        mav.addObject("filtersForm",form);
+        mav.addObject("sports", Sport.values());
         mav.addObject("lastPageNum", es.countFutureEventPages());
-        mav.addObject("events", es.findFutureEvents(pageNum));
+        Integer vacanciesNum = null;
+        if(vacancies != null)
+        	vacanciesNum = Integer.valueOf(vacancies);
+        mav.addObject("events", es.findBy(
+        		true, 
+        		Optional.ofNullable(name), 
+        		Optional.ofNullable(establishment), 
+        		Optional.ofNullable(sport), 
+        		Optional.ofNullable(vacanciesNum), 
+        		pageNum));
         return mav;
     }
+	
+	@RequestMapping("/pitch/{pitchId}")
+	public ModelAndView seePitch(
+			@PathVariable("pitchId") long id,
+			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
+		ModelAndView mav = new ModelAndView("pitch");
+		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
+		List<Event> pitchEvents = es.findCurrentEventsInPitch(id);
+		boolean[][] schedule = es.convertEventListToSchedule(pitchEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
+		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
+		mav.addObject("scheduleHeaders", scheduleDaysHeader);
+		mav.addObject("minHour", MIN_HOUR);
+		mav.addObject("schedule", schedule);
+		return mav;
+	}
     
-    @RequestMapping(value = "/event/create", method = { RequestMethod.POST })
+    @RequestMapping(value = "/pitch/{pitchId}/event/create", method = { RequestMethod.POST })
     public ModelAndView createEvent(
+    		@PathVariable("pitchId") long pitchId,
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
-			HttpServletRequest request) {
-    	Integer duration = performDurationValidations(form, errors);
+			HttpServletRequest request) throws PitchNotFoundException {
+    	Integer startsAt = Integer.valueOf(form.getStartsAtHour());
+    	Integer endsAt = Integer.valueOf(form.getEndsAtHour());
+    	// VALIDAR ESAS HORAS!!!!!!!!!!!!!
     	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
-    	Instant from = performDateValidations(form, errors);
+    	Instant date = performDateValidations(form, errors);
     	if(errors.hasErrors()) {
-    		return newEvent(form);
+    		return seePitch(pitchId, form);
     	}
-    	Event e = es.create(form.getName(), loggedUser(), form.getLocation(), form.getDescription(),
-    			maxParticipants, from, from.plus(duration, ChronoUnit.HOURS));
+    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
+    	Event e = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+    			maxParticipants, date.plus(startsAt, ChronoUnit.HOURS),
+    			date.plus(endsAt, ChronoUnit.HOURS));
     	return new ModelAndView("redirect:/event/" + e.getEventId());
     }
-    
-	@RequestMapping("/event/new")
-	public ModelAndView newEvent(@ModelAttribute("newEventForm") final NewEventForm form) {
-		return new ModelAndView("newEvent");
-	}
 
     @RequestMapping(value = "/events/filter")
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
+    	String name = form.getName();
         String establishment = form.getEstablishment();
         String sport = form.getSport();
-        String organizer = form.getOrganizer();
         String vacancies = form.getVacancies();
         String date = form.getDate();
-        String queryString = buildQueryString(establishment, sport, organizer, vacancies, date);
+        String queryString = buildQueryString(name, establishment, sport, vacancies, date);
         return new ModelAndView("redirect:/events/1" + queryString);
     }
 
-    private String buildQueryString(final String establishment, final String sport,
-                                    final String organizer, final String vacancies, final String date){
+    private String buildQueryString(final String name, final String establishment, final String sport,
+                                    final String vacancies, final String date){
 	    StringBuilder strBuilder = new StringBuilder();
 	    strBuilder.append("?");
-        if(establishment != null && !establishment.isEmpty()) { strBuilder.append("est=").append(establishment).append("&"); }
-        if(sport != null && !sport.isEmpty()) { strBuilder.append("sport=").append(sport).append("&"); }
-        if(organizer != null && !organizer.isEmpty()) { strBuilder.append("org=").append(organizer).append("&"); }
-        if(vacancies != null && !vacancies.isEmpty()) { strBuilder.append("vac=").append(vacancies).append("&"); }
-        if(date != null && !date.isEmpty()) { strBuilder.append("date=").append(date); }
-        else {strBuilder.deleteCharAt(strBuilder.length()-1);}
+	    if(name != null && !name.isEmpty()) {
+        	strBuilder.append("name=").append(name).append("&");
+        }
+        if(establishment != null && !establishment.isEmpty()) {
+        	strBuilder.append("est=").append(establishment).append("&");
+        }
+        if(sport != null && !sport.isEmpty()) {
+        	strBuilder.append("sport=").append(sport).append("&");
+        }
+        if(vacancies != null && !vacancies.isEmpty()) {
+        	strBuilder.append("vac=").append(vacancies).append("&");
+        }
+        if(date != null && !date.isEmpty()) {
+        	strBuilder.append("date=").append(date);
+        } else {
+        	strBuilder.deleteCharAt(strBuilder.length()-1);
+        }
         return strBuilder.toString();
     }
     
     private Instant performDateValidations(NewEventForm form, BindingResult errors) {
     	Instant inst = null;
-    	String date = form.getStartsAt();
+    	String date = form.getDate();
     	if(date.isEmpty())
     		return null;
     	try {
-    		inst = LocalDateTime.parse(date).atZone(ZoneId.of(TIME_ZONE)).toInstant();
+    		inst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
        	} catch(DateTimeParseException e) {
     		errors.rejectValue(START_DATE, "wrong_date_format");
     		return null;
     	}
-    	if(inst.isBefore(Instant.now())) {
+    	if(inst.isBefore(today())) {
     		errors.rejectValue(START_DATE, "future_date_required");
     		return null;
     	}
     	return inst;
     }
     
-    private Integer performDurationValidations(NewEventForm form, BindingResult errors) {
+    private Instant today() {
+    	return LocalDate.now().atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
+    }
+    
+    private Integer performHourValidations(NewEventForm form, BindingResult errors) {
     	Integer duration = null;
     	try {
-    		duration = Integer.parseInt(form.getEndsAt());
+    		duration = Integer.parseInt(form.getEndsAtHour());
     	} catch(NumberFormatException e) {
-    		errors.rejectValue(DURATION, "wrong_int_format");
+    		errors.rejectValue(END_DATE, "wrong_int_format");
     		return null;
     	}
     	if(duration <= 0) {
-    		errors.rejectValue(DURATION, "gt_zero");
+    		errors.rejectValue(END_DATE, "gt_zero");
+    		return null;
+    	} else if(duration > 23) {
+    		errors.rejectValue(END_DATE, "lt_23");
     		return null;
     	}
     	return duration;
@@ -217,6 +272,11 @@ public class EventController extends BaseController {
 
 	@ExceptionHandler({EventNotFoundException.class})
 	private ModelAndView eventNotFound() {
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler({PitchNotFoundException.class})
+	private ModelAndView pitchNotFound() {
 		return new ModelAndView("404");
 	}
 

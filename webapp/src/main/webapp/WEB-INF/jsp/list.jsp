@@ -25,19 +25,24 @@
                     <form:form id="searchfilters" class="searchfilters" modelAttribute="filtersForm" action="${postPath}">
                         <div class="table-titles">
                             <div>
+                                <form:label path="name"><spring:message code="event_name" /></form:label>
+                                <form:input class="form-control" type="text" path="name"/>
+                                <form:errors path="name" cssClass="form-error" element="p"/>
+                            </div>
+                            <div>
                                 <form:label path="establishment"><spring:message code="establishment" /></form:label>
                                 <form:input class="form-control" type="text" path="establishment"/>
                                 <form:errors path="establishment" cssClass="formError" element="p"/>
                             </div>
                             <div>
                                 <form:label path="sport"><spring:message code="sport" /></form:label>
-                                <form:input class="form-control" type="text" path="sport"/>
+                                <form:select path="sport" cssClass="form-control">
+                                    <form:option  value=""></form:option>
+                                    <c:forEach var="sport" items="${sports}">
+                                        <form:option value="${sport}"><spring:message code="${sport}"/></form:option>
+                                    </c:forEach>
+                                </form:select>
                                 <form:errors path="sport" cssClass="form-error" element="p"/>
-                            </div>
-                            <div>
-                                <form:label path="organizer"><spring:message code="organizer" /></form:label>
-                                <form:input class="form-control" type="text" path="organizer"/>
-                                <form:errors path="organizer" cssClass="form-error" element="p"/>
                             </div>
                             <div>
                                 <form:label path="vacancies"><spring:message code="vacancies" /></form:label>
@@ -58,9 +63,9 @@
                 </div>
                 <c:forEach var="event" items="${events}">
                     <div class="custom-row">
-                        <div>${event.location}</div>
-                        <div>Hardcoded</div>
-                        <div>${event.owner.firstname} ${event.owner.lastname}</div>
+                        <div>${event.name}</div>
+                        <div>${event.pitch.club.name}</div>
+                        <div><spring:message code="${event.pitch.sport}"/></div>
                         <div>${event.maxParticipants}</div>
                         <div>${event.startsAt}</div>
                         <div>

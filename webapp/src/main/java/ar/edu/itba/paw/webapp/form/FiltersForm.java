@@ -3,6 +3,10 @@ package ar.edu.itba.paw.webapp.form;
 import javax.validation.constraints.Size;
 
 public class FiltersForm {
+
+	@Size(max=64)
+	private String name;
+	
 	@Size(max=64)
 	private String establishment;
 
@@ -10,13 +14,18 @@ public class FiltersForm {
 	private String sport;
 
 	@Size(max=64)
-	private String organizer;
-
-	@Size(max=64)
 	private String vacancies;
 
 	@Size(max=64)
 	private String date;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getEstablishment() {
 		return establishment;
@@ -32,14 +41,6 @@ public class FiltersForm {
 
 	public void setSport(String sport) {
 		this.sport = sport;
-	}
-
-	public String getOrganizer() {
-		return organizer;
-	}
-
-	public void setOrganizer(String organizer) {
-		this.organizer = organizer;
 	}
 
 	public String getVacancies() {

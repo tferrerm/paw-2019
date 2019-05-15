@@ -33,15 +33,16 @@ CREATE TABLE IF NOT EXISTS pitches(
 
 CREATE TABLE IF NOT EXISTS events(
   eventid SERIAL PRIMARY KEY,
-  eventname VARCHAR(100) NOT NULL,
   userid INTEGER NOT NULL,
-  location VARCHAR(100),
+  pitchid INTEGER NOT NULL,
+  eventname VARCHAR(100) NOT NULL,
   description VARCHAR(500),
   max_participants INTEGER NOT NULL,
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
   event_created_at TIMESTAMP NOT NULL,
-  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE
+  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
+  FOREIGN KEY (pitchid) REFERENCES pitches ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS events_users(

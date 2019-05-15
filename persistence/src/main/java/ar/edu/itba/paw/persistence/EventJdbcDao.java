@@ -2,6 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +22,9 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
@@ -29,6 +35,7 @@ public class EventJdbcDao implements EventDao {
 	private final SimpleJdbcInsert jdbcInsert;
 	private final SimpleJdbcInsert jdbcInscriptionInsert; // PREGUNTARRRRRRRRRRRRRRRRRRRRRRRRRR
 	private static final int MAX_ROWS = 10;
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	/*private static final RowMapper<Event> ROW_MAPPER = (rs, rowNum) ->
 		new Event(rs.getLong("eventid"), rs.getString("name"), rs.getString("location"),
@@ -40,6 +47,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private UserRowMapper urm;
+	
+	@Autowired
+	private EventListRowMapper elrm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -54,7 +64,7 @@ public class EventJdbcDao implements EventDao {
 	
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
-		return jdbcTemplate.query("SELECT * FROM events JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches JOIN users ON events.userid = users.userid"
 				+ " WHERE eventid = ?", erm, eventid)
 				.stream().findAny();
 	}
@@ -62,7 +72,7 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public List<Event> findByUsername(String username, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN events_users JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN events_users JOIN users ON events.userid = users.userid"
 				+ " WHERE username = ?"
 				+ " OFFSET ?", erm, username, offset);
 	}
@@ -80,7 +90,7 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public List<Event> findFutureEvents(int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches JOIN users ON events.userid = users.userid"
 				+ " WHERE starts_at > ?"
 				+ " OFFSET ?", erm, Timestamp.from(Instant.now()), offset);
 	}
@@ -94,22 +104,79 @@ public class EventJdbcDao implements EventDao {
 			pageCount += 1;
 		return pageCount;
 	}
+	
+	@Override
+	public List<Event> findCurrentEventsInPitch(final long pitchid) {
+		LocalDate ld = LocalDate.now();
+		// Today at 00:00
+		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
+		// In seven days at 23:00
+		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users "
+				+ " WHERE pitchid = ? "
+				+ " AND starts_at > ? "
+				+ " AND starts_at < ? ", erm, pitchid,
+					Timestamp.from(today), Timestamp.from(inAWeek));
+	}
+	
+	@Override
+	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("eventname", name.orElse(null)),
+				new Filter("clubname", establishment.orElse(null)),
+				new Filter("sport", sport.orElse(null)),
+				new Filter("customVacanciesFilter", vacancies.orElse(null))
+		};
+		StringBuilder queryString = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
+		for(Filter param : params) {
+			if(!isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(presentFields));
+				switch(param.getName()) {
+				case "customVacanciesFilter":
+					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
+					break;
+				default:
+					queryString.append(param.queryAsString());
+					break;
+				}
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		queryString.append(" OFFSET ? ;");
+		list.add(offset);
+		return jdbcTemplate.query(queryString.toString(), elrm, list.toArray());
+	}
+	
+	private boolean isEmpty(Object value) {
+		return value == null;
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
+	}
 
 	@Override
-	public Event create(String name, User owner, String location, String description, 
+	public Event create(String name, User owner, Pitch pitch, String description, 
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("eventname", name);
 		args.put("userid", owner.getUserid());
-		args.put("location", location);
+		args.put("pitchid", pitch.getPitchid());
 		args.put("description", description);
 		args.put("max_participants", maxParticipants);
 		args.put("starts_at", Timestamp.from(startsAt));
 		args.put("ends_at", Timestamp.from(endsAt));
 		args.put("event_created_at", Timestamp.from(now));
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
-		return new Event(eventId.longValue(), name, owner, location, description, 
+		return new Event(eventId.longValue(), name, owner, pitch, description, 
 				maxParticipants, startsAt, endsAt);
 	}
 	

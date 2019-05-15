@@ -534,3 +534,41 @@ a.logo-admin {
 .w-100 {
     width: 100%;
 }
+
+.schedule-table {
+    table-layout: fixed;
+    text-align: center;
+    font-size: 20px;
+    border-collapse: collapse;
+    border: 2px solid;
+    border-color: white;
+    border-radius: 5px;
+}
+
+.cell-size {
+    height: 25px;
+    width: 35px;
+}
+
+.schedule-hours {
+    width: 35px;
+}
+
+.hours-size {
+    font-size: 17px;
+}
+
+.pitch-occupied {
+    background: red;
+}
+
+.pitch-available {
+    background: green;
+}
+
+.create-event {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}

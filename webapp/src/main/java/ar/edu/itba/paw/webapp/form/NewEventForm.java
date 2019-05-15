@@ -9,9 +9,6 @@ public class NewEventForm {
 	@NotBlank
 	private String name;
 	
-	@NotBlank
-	private String location;
-	
 	private String description;
 	
 	@NotBlank
@@ -19,12 +16,15 @@ public class NewEventForm {
 	private String maxParticipants;
 	
 	@NotBlank
-	private String startsAt;
+	private String date;
 	
 	@NotBlank
-	@Pattern(regexp = "[0-9]*")
-	private String endsAt;
-
+	@Pattern(regexp = "[0-9][0-9]")
+	private String startsAtHour;
+	
+	@NotBlank
+	@Pattern(regexp = "[0-9][0-9]")
+	private String endsAtHour;
 
 	public String getName() {
 		return name;
@@ -34,14 +34,6 @@ public class NewEventForm {
 		this.name = name;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -49,7 +41,7 @@ public class NewEventForm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getMaxParticipants() {
 		return maxParticipants;
 	}
@@ -58,20 +50,28 @@ public class NewEventForm {
 		this.maxParticipants = maxParticipants;
 	}
 
-	public String getStartsAt() {
-		return startsAt;
+	public String getDate() {
+		return date;
 	}
 
-	public void setStartsAt(String startsAt) {
-		this.startsAt = startsAt;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
-	public String getEndsAt() {
-		return endsAt;
+	public String getStartsAtHour() {
+		return startsAtHour;
 	}
 
-	public void setEndsAt(String endsAt) {
-		this.endsAt = endsAt;
+	public void setStartsAtHour(String startsAtHour) {
+		this.startsAtHour = startsAtHour;
+	}
+
+	public String getEndsAtHour() {
+		return endsAtHour;
+	}
+
+	public void setEndsAtHour(String endsAtHour) {
+		this.endsAtHour = endsAtHour;
 	}
 	
 }

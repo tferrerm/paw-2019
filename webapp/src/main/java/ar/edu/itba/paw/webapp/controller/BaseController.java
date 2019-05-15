@@ -44,6 +44,11 @@ public class BaseController {
 		return user.get();
 	}
 	
+	@ExceptionHandler({ IllegalArgumentException.class })
+	private ModelAndView illegalIdOrPageNumber() {
+		return new ModelAndView("404");
+	}
+	
 //    @ExceptionHandler({ Exception.class })
 //	private ModelAndView generalExceptionHandler() {
 //		return new ModelAndView("oops");

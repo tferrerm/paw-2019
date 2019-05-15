@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class NewPitchForm {
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z0-9]+")
+	@Pattern(regexp = "[a-zA-Z0-9 ]+")
 	private String name;
 	
 	@NotBlank
