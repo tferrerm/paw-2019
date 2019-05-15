@@ -26,7 +26,7 @@
 				</div>
 				<div class="bottom-home-item">
 					<h3><spring:message code="introCreateEvent"/></h3>
-					<button><a href="<c:url value='/event/new' />"><spring:message code="create_event"/></a></button>
+					<button><a href="<c:url value='/pitches/1' />"><spring:message code="create_event"/></a></button>
 				</div>
 			</div>
 		</div>

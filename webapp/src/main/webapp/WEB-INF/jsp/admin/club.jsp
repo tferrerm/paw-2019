@@ -21,7 +21,7 @@
 							<c:forEach var="pitch" items="${pitches}">
 								<div class="custom-row">
 									<div>${pitch.name}</div>
-									<div>${pitch.sport}</div>
+									<div><spring:message code="${pitch.sport}"/></div>
 									<div>
 										<a href="<c:url value="/admin/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
 									</div>
@@ -48,7 +48,7 @@
 								<form:label path="sport"><spring:message code="sport"/> * </form:label>
 								<form:select path="sport" cssClass="form-control">
 									<c:forEach var="sport" items="${sports}">
-										<form:option value="${sport}"/>
+										<form:option value="${sport}"><spring:message code="${sport}"/></form:option>
 									</c:forEach>
 								</form:select>
 								<form:errors path="sport" cssClass="form-error" element="span"/>
