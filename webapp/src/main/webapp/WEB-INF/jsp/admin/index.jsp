@@ -35,11 +35,6 @@
 							<form:errors path="sport" cssClass="form-error" element="p"/>
 						</div>
 						<div>
-							<form:label path="organizer"><spring:message code="organizer" /></form:label>
-							<form:input class="form-control" type="text" path="organizer"/>
-							<form:errors path="organizer" cssClass="form-error" element="p"/>
-						</div>
-						<div>
 							<form:label path="vacancies"><spring:message code="vacancies" /></form:label>
 							<form:input class="form-control" type="text" path="vacancies"/>
 							<form:errors path="vacancies" cssClass="form-error" element="p"/>

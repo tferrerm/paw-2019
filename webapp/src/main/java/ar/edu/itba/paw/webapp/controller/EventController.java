@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
@@ -69,7 +70,8 @@ public class EventController extends BaseController {
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
-		mav.addObject("events", es.findByUsername(loggedUser().getUsername(), pageNum));
+		mav.addObject("future_events", es.findByUsername(true, loggedUser().getUsername(), pageNum));
+		mav.addObject("past_events", es.findByUsername(false, loggedUser().getUsername(), pageNum));
 	    return mav;
 	}
 
@@ -114,7 +116,17 @@ public class EventController extends BaseController {
 	    es.leaveEvent(loggedUser(), event);
         return new ModelAndView("redirect:/event/" + id);
     }
-
+    
+    @RequestMapping(value = "/event/{eventId}/kick-user/{userId}", method = { RequestMethod.POST })
+    public ModelAndView kickUserFromEvent(
+    		@PathVariable("eventId") long eventid,
+    		@PathVariable("userId") long kickedUserId)
+    				throws UserNotAuthorizedException, EventNotFoundException {
+    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	es.kickFromEvent(loggedUser(), kickedUserId, event);
+    	return new ModelAndView("redirect:/event/" + eventid);
+    }
+    
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,

@@ -24,46 +24,18 @@
 				</div>
 				<div class="flex-grow w-100">
 					<div class="events-column flex-grow flex-column right-border w-50">
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
+					    <c:forEach var="event" items="${past_events}">
+								<a href="<c:url value="/event/${event.eventId}" /> "><div>${event.name}</div></a>
+					    </c:forEach>
 					</div>
 					<div class="events-column flex-grow flex-column w-50">
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
-						<div>Event</div>
+					    <c:forEach var="event" items="${future_events}">
+					        <a href="<c:url value="/event/${event.eventId}" /> "><div>${event.name}</div></a>
+					    </c:forEach>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 	</body>
 </html>

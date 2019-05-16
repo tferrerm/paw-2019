@@ -302,6 +302,13 @@ a.link-text{
     justify-content: center;
 }
 
+.kick-user-btn {
+  background-color: #fff2e6;
+  color: red;
+  border-width: 0;
+  margin-left: 5px;
+}
+
 .login-error {
     text-align: center;
 }
@@ -325,6 +332,13 @@ a.logo-admin {
 
 .my-events-tbl-sub {
     padding-top: 10px;
+}
+
+.participant-item {
+  display:flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0;
 }
 
 .participants-list{

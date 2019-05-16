@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -16,7 +17,14 @@ public interface EventService {
 	
 	public Optional<Event> findByEventId(final long eventid);
 	
-	public List<Event> findByUsername(final String username, int pageNum);
+	/**
+	 * Finds events owned by the user
+	 * @param futureEvents Finds only future events (true) or only past events (false)
+	 * @param username Owner of events
+	 * @param pageNum Page number
+	 * @return List of Events
+	 */
+	public List<Event> findByUsername(boolean futureEvents, final String username, int pageNum);
 	
 	public List<Event> findFutureEvents(int pageNum);
 	
@@ -48,6 +56,9 @@ public interface EventService {
 			throws UserAlreadyJoinedException, EventFullException;
 	
 	public void leaveEvent(final User user, final Event event);
+	
+	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
+			throws UserNotAuthorizedException;
 	
 	public void deleteEvent(long eventid);
 

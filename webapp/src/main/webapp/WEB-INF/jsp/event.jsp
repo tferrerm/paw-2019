@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
@@ -29,7 +30,7 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="sport"/></span>
-							<span>${event.pitch.sport}</span>
+							<span><spring:message code="${event.pitch.sport}"/></span>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="establishment"/></span>
@@ -38,7 +39,12 @@
 						<div class="double-box">
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="date"/></span>
-								<span>${event.startsAt}</span>
+								<span>
+									<fmt:timeZone value="AR">
+										<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+										<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+									</fmt:timeZone>
+								</span>
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="vacancies"/></span>
@@ -51,7 +57,10 @@
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
 						    <c:forEach var="user" items="${participants}">
-				              <a href="<c:url value="/user/${user.userid}" /> "><p class="event-participants">${user.firstname} ${user.lastname}</p></a>
+					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
+						              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
+						              <button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+					              </form>
 				            </c:forEach>
 			          	</ul>
 					</div>
