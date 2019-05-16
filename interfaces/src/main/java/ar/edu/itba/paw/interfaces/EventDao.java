@@ -16,11 +16,11 @@ public interface EventDao {
 	public Optional<Event> findByEventId(final long eventid);
 	
 	/**
-	 * Finds events owned by the user
-	 * @param futureEvents Finds only future events (true) or only past events (false)
-	 * @param username Owner of events
-	 * @param pageNum Page number
-	 * @return List of Events
+	 * Gets Events owned by a User.
+	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
+	 * @param username 		Owner of Events.
+	 * @param pageNum 		Page number.
+	 * @return 				List of Events.
 	 */
 	public List<Event> findByUsername(boolean futureEvents, final String username, final int pageNum);
 	
@@ -29,9 +29,9 @@ public interface EventDao {
 	public List<User> findEventUsers(final long eventid, final int pageNum);
 	
 	/**
-	 * Finds events in a pitch. Only seven days of events will be returned.
-	 * @param pitchid The id of the pitch
-	 * @return a list of events (with a maximum size of 24 * 7)
+	 * Finds Events in a Pitch. Only seven days of events will be returned.
+	 * @param pitchid The id of the Pitch.
+	 * @return a list of Events (with a maximum size of 24 * 7).
 	 */
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
 	
@@ -42,7 +42,12 @@ public interface EventDao {
 	
 	public int countFutureEventPages();
 	
-	public int countParticipants(long eventid);
+	/**
+	 * Gets the amount of Users currently participating in an Event.
+	 * @param	eventid		The Event's id
+	 * @return the amount of Users currently participating in the Event.
+	 */
+	public int countParticipants(final long eventid);
 	
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
 			final int maxParticipants, final Instant startsAt, final Instant endsAt);
@@ -54,14 +59,39 @@ public interface EventDao {
 	
 	public int kickFromEvent(final long kickedUserId, final long eventId);
 	
+	/**
+	 * Gets the amount of current or past Events a User has participated in.
+	 * @param	isCurrentEventsQuery	Search for current Events only (true) or past Events only (false).
+	 * @param	userid 					The User's id.
+	 * @return							The amount of current Events owned by the User.
+	 */
 	public int countUserEvents(boolean isCurrentEventsQuery, final long userid);
 	
+	/**
+	 * Gets the amount of current (not finished) Events owned by a User.
+	 * @param	userid 	The User's id.
+	 * @return the amount of current Events owned by the User.
+	 */
 	public int countUserOwnedCurrEvents(final long userid);
 	
+	/**
+	 * Returns a User's favorite Sport(s) based on Events joined.
+	 * @param 	userid 	The User's id.
+	 * @return the User's favorite Sports.
+	 */
 	public List<Sport> getFavoriteSport(final long userid);
 	
+	/**
+	 * Gets a User's favorite Club(s) based on Events joined.
+	 * @param 	userid 	The User's id.
+	 * @return the User's favorite Clubs.
+	 */
 	public List<Club> getFavoriteClub(final long userid);
 	
-	public void deleteEvent(long eventid);
+	/**
+	 * Deletes an Event from database along with all User related participations.
+	 * @param	eventid		The Event's id.
+	 */
+	public void deleteEvent(final long eventid);
 
 }

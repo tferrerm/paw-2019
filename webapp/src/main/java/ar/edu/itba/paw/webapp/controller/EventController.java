@@ -5,9 +5,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +27,11 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
+import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -60,6 +60,9 @@ public class EventController extends BaseController {
     
     @Autowired
     private PitchService ps;
+    
+    @Autowired
+    private ClubService cs;
 	
 	@RequestMapping("/home")
 	public ModelAndView home()	{
@@ -77,7 +80,7 @@ public class EventController extends BaseController {
 
     @RequestMapping(value = "/event/{id}")
     public ModelAndView retrieveElement(@PathVariable long id)
-    	throws EventNotFoundException {
+    	throws EventNotFoundException, ClubNotFoundException {
 	    ModelAndView mav = new ModelAndView("event");
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 	    List<User> participants = es.findEventUsers(event.getEventId(), 1);
@@ -85,6 +88,11 @@ public class EventController extends BaseController {
         mav.addObject("participant_count", es.countParticipants(event.getEventId()));
         mav.addObject("participants", participants);
         mav.addObject("is_participant", participants.contains(loggedUser()));
+        
+        Long pitchId = event.getPitch().getPitchid();
+        Club club = cs.getPitchClub(pitchId).orElseThrow(ClubNotFoundException::new);
+        mav.addObject("club", club);
+        
         return mav;
     }
     

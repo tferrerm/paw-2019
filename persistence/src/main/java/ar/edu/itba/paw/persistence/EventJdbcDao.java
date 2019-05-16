@@ -186,7 +186,7 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public int countParticipants(long eventid) {
+	public int countParticipants(final long eventid) {
 		return jdbcTemplate.queryForObject("SELECT count(*) FROM events_users WHERE "
 				+ " eventid = ?", Integer.class, eventid);
 	}
@@ -225,23 +225,17 @@ public class EventJdbcDao implements EventDao {
 				+ " WHERE eventid = ? OFFSET ?", urm, eventid, offset);
 	}
 	
-	/**
-	 * Returns the amount of current or past events a User has joined.
-	 */
 	@Override
 	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
 		Integer userEvents = 0;
 		StringBuilder query = new StringBuilder("SELECT count(*) FROM events_users NATURAL JOIN events "
 				+ " WHERE userid = ? AND ends_at ");
-		query.append((isCurrentEventsQuery) ? " > ? " : " < ? ");
+		query.append((isCurrentEventsQuery) ? " > ? " : " <= ? ");
 		userEvents = jdbcTemplate.queryForObject(query.toString(), Integer.class,
 					userid, Timestamp.from(Instant.now()));
 		return userEvents;
 	}
 	
-	/**
-	 * Returns the amount of current events owned by a User.
-	 */
 	@Override
 	public int countUserOwnedCurrEvents(final long userid) {
 		Integer userOwnerEvents = jdbcTemplate.queryForObject(
@@ -250,9 +244,6 @@ public class EventJdbcDao implements EventDao {
 		return userOwnerEvents;
 	}
 	
-	/**
-	 * Returns a User's favorite sport(s) based on events joined.
-	 */
 	@Override
 	public List<Sport> getFavoriteSport(final long userid) {
 		/*String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
@@ -262,9 +253,6 @@ public class EventJdbcDao implements EventDao {
 		return null;
 	}
 	
-	/**
-	 * Returns a User's favorite club(s) based on events joined.
-	 */
 	@Override
 	public List<Club> getFavoriteClub(final long userid) {
 		/*String queryString = "SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
@@ -275,7 +263,7 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public void deleteEvent(long eventid) {
+	public void deleteEvent(final long eventid) {
 		jdbcTemplate.update("DELETE FROM events_users WHERE eventid = ?", eventid);
 		jdbcTemplate.update("DELETE FROM events WHERE eventid = ?", eventid);
 	}

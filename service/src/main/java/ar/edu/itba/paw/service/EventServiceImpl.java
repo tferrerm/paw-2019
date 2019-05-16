@@ -126,8 +126,16 @@ public class EventServiceImpl implements EventService {
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
-		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+		
+		List<Event> eventsList = ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
 				vacancies, page);
+		/*
+		Map<Event, Integer> eventsWithVacancies = new HashMap<>();
+		for(Event event : eventsList) {
+			eventsWithVacancies.put(event, countParticipants(event.getEventId()));
+		}
+		return eventsWithVacancies;*/
+		return eventsList;
 	}
 	
 	@Override
@@ -164,7 +172,7 @@ public class EventServiceImpl implements EventService {
 			throws UserAlreadyJoinedException, EventFullException {
 		
 		// si no tiro excepcion y hago metodo separado, no obligo a validar esto
-		if(countParticipants(event.getEventId()) > event.getMaxParticipants()) {
+		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
 			throw new EventFullException(); 
 		}
 		
@@ -203,14 +211,6 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public void deleteEvent(long eventid) {
-		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		}
-		ed.deleteEvent(eventid);
-	}
-	
-	@Override
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
 		Map<Integer, String> availableHoursMap = new HashMap<>();
 		for(int i = minHour; i < maxHour; i++) {
@@ -237,6 +237,14 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Club> getFavoriteClub(final long userid) {
 		return ed.getFavoriteClub(userid);
+	}
+	
+	@Override
+	public void deleteEvent(long eventid) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		ed.deleteEvent(eventid);
 	}
 
 }
