@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
@@ -53,7 +54,7 @@ public interface EventDao {
 			final int maxParticipants, final Instant startsAt, final Instant endsAt);
 	
 	public boolean joinEvent(final User user, final Event event)
-			throws UserAlreadyJoinedException;
+			throws UserAlreadyJoinedException, UserBusyException;
 	
 	public void leaveEvent(final User user, final Event event);
 	

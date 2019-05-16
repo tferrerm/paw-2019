@@ -20,6 +20,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
@@ -66,7 +67,8 @@ public class EventJdbcDao implements EventDao {
 	
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches JOIN users ON events.userid = users.userid"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " JOIN users ON events.userid = users.userid "
 				+ " WHERE eventid = ?", erm, eventid)
 				.stream().findAny();
 	}
@@ -75,8 +77,8 @@ public class EventJdbcDao implements EventDao {
 	public List<Event> findByUsername(boolean futureEvents, String username, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
-		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users "
-				+ " WHERE username = ? AND starts_at ");
+		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches "
+				+ " NATURAL JOIN clubs NATURAL JOIN users WHERE username = ? AND starts_at ");
 		query.append((futureEvents) ? " > ? " : " < ? ");
 		query.append(" OFFSET ?");
 		return jdbcTemplate.query(query.toString(), erm, username, Timestamp.from(now), offset);
@@ -95,8 +97,8 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public List<Event> findFutureEvents(int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches JOIN users ON events.userid = users.userid"
-				+ " WHERE starts_at > ?"
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " JOIN users ON events.userid = users.userid WHERE starts_at > ?"
 				+ " OFFSET ?", erm, Timestamp.from(Instant.now()), offset);
 	}
 	
@@ -117,8 +119,8 @@ public class EventJdbcDao implements EventDao {
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
 		// In seven days at 23:00
 		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users "
-				+ " WHERE pitchid = ? "
+		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " NATURAL JOIN users WHERE pitchid = ? "
 				+ " AND starts_at > ? "
 				+ " AND starts_at < ? ", erm, pitchid,
 					Timestamp.from(today), Timestamp.from(inAWeek));
@@ -134,7 +136,8 @@ public class EventJdbcDao implements EventDao {
 				new Filter("eventname", name.orElse(null)),
 				new Filter("clubname", establishment.orElse(null)),
 				new Filter("sport", sport.orElse(null)),
-				new Filter("customVacanciesFilter", vacancies.orElse(null))
+				new Filter("customVacanciesFilter", vacancies.orElse(null)),
+				new Filter("starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
 		};
 		StringBuilder queryString = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
 		for(Filter param : params) {
@@ -143,6 +146,9 @@ public class EventJdbcDao implements EventDao {
 				switch(param.getName()) {
 				case "customVacanciesFilter":
 					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
+					break;
+				case "starts_at":
+					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
 					queryString.append(param.queryAsString());
@@ -193,16 +199,29 @@ public class EventJdbcDao implements EventDao {
 
 	@Override // BOOLEANNNNNNNNNNNNNNNNNNNN
 	public boolean joinEvent(final User user, final Event event)
-			throws UserAlreadyJoinedException {
+			throws UserAlreadyJoinedException, UserBusyException {
+		String userBusyQueryString = "SELECT count(*) FROM events_users AS eu "
+				+ " INNER JOIN events AS e ON eu.eventid = e.eventid WHERE eu.userid = ? AND "
+				+ " ((starts_at < ? AND ends_at > ?) OR (starts_at < ? AND ends_at > ?))";
+		int userBusyQueryResult = jdbcTemplate.queryForObject(userBusyQueryString, Integer.class,
+				user.getUserid(), Timestamp.from(event.getStartsAt()),
+				Timestamp.from(event.getStartsAt()), Timestamp.from(event.getEndsAt()),
+						Timestamp.from(event.getEndsAt()));
+		if(userBusyQueryResult > 0)
+			throw new UserBusyException("User " + user.getUserid() + " already joined "
+					+ "an event in that period");
+		
 		final Map<String, Object> args = new HashMap<>();
 		args.put("userid", user.getUserid());
 		args.put("eventid", event.getEventId());
+		
 		try {
 			jdbcInscriptionInsert.execute(args);
 		} catch(DuplicateKeyException e) {
 			throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
 					+ event.getEventId());
 		}
+		
 		return true;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
@@ -59,7 +60,7 @@ public interface EventService {
 			final int maxParticipants, final Instant startsAt, final Instant endsAt);
 	
 	public boolean joinEvent(final User user, final Event event)
-			throws UserAlreadyJoinedException, EventFullException;
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
 	
 	public void leaveEvent(final User user, final Event event);
 	

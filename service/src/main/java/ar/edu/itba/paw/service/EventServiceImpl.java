@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
@@ -169,7 +170,7 @@ public class EventServiceImpl implements EventService {
 	@Transactional
 	@Override
 	public boolean joinEvent(final User user, final Event event)
-			throws UserAlreadyJoinedException, EventFullException {
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException {
 		
 		// si no tiro excepcion y hago metodo separado, no obligo a validar esto
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {

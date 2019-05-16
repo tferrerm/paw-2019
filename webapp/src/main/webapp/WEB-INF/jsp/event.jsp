@@ -41,7 +41,7 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="club"/> </span>
-							<a href="<c:url value="/club/${club.clubid}" /> ">${club.name}</a>
+							<a href="<c:url value="/club/${club.clubid}" /> ">${event.pitch.club.name}</a>
 							<span> - ${event.pitch.name}</span>
 						</div>
 						<div class="double-box">
@@ -74,6 +74,21 @@
 					</div>
 				</div>
 			</div>
+			<c:if test="${eventFullError == true}">
+				<span class="form-error notice">
+					<spring:message code="event_full_error"/>
+				</span>
+			</c:if>
+			<c:if test="${alreadyJoinedError == true}">
+				<span class="form-error notice">
+					<spring:message code="already_joined_error"/>
+				</span>
+			</c:if>
+			<c:if test="${userBusyError == true}">
+				<span class="form-error notice">
+					<spring:message code="user_busy_error"/>
+				</span>
+			</c:if>
 			<c:choose>
 				<c:when test="${is_participant}">
 					<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
@@ -81,7 +96,7 @@
 					</form>
 				</c:when>
 				<c:otherwise>
-					<c:if test="${participant_count} < ${event.maxParticipants}">
+					<c:if test="${participant_count < event.maxParticipants}">
 						<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
 							<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
 						</form>

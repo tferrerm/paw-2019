@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
@@ -60,9 +61,6 @@ public class EventController extends BaseController {
     
     @Autowired
     private PitchService ps;
-    
-    @Autowired
-    private ClubService cs;
 	
 	@RequestMapping("/home")
 	public ModelAndView home()	{
@@ -79,7 +77,10 @@ public class EventController extends BaseController {
 	}
 
     @RequestMapping(value = "/event/{id}")
-    public ModelAndView retrieveElement(@PathVariable long id)
+    public ModelAndView retrieveElement(@PathVariable long id,
+    		@RequestParam(value = "eventFullError", required = false) boolean eventFullError,
+    		@RequestParam(value = "alreadyJoinedError", required = false) boolean alreadyJoinedError,
+    		@RequestParam(value = "userBusyError", required = false) boolean userBusyError)
     	throws EventNotFoundException, ClubNotFoundException {
 	    ModelAndView mav = new ModelAndView("event");
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
@@ -89,9 +90,9 @@ public class EventController extends BaseController {
         mav.addObject("participants", participants);
         mav.addObject("is_participant", participants.contains(loggedUser()));
         
-        Long pitchId = event.getPitch().getPitchid();
-        Club club = cs.getPitchClub(pitchId).orElseThrow(ClubNotFoundException::new);
-        mav.addObject("club", club);
+        mav.addObject("eventFullError", eventFullError);
+        mav.addObject("alreadyJoinedError", alreadyJoinedError);
+        mav.addObject("userBusyError", userBusyError);
         
         return mav;
     }
@@ -100,21 +101,22 @@ public class EventController extends BaseController {
     public ModelAndView joinEvent(@PathVariable long id)
     	throws EventNotFoundException {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    
+	    ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    try {
 	    	es.joinEvent(loggedUser(), event);
 	    	
 	    } catch(EventFullException e) {
-	    	ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    	mav.addObject("eventFullError", true);
 	    	return mav;
 	    } catch(UserAlreadyJoinedException e) {
 	    	LOGGER.debug("User {} tried to join event {}, but had already joined", loggedUser(), event);
-	    	ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    	mav.addObject("alreadyJoinedError", true);
 	    	return mav;
+	    } catch(UserBusyException e) {
+	    	mav.addObject("userBusyError", true);
+	    	return mav;
 	    }
-        return new ModelAndView("redirect:/event/" + id);
+        return mav;
     }
     
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
