@@ -57,10 +57,10 @@
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
 						    <c:forEach var="user" items="${participants}">
-				              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
-				              <form method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
-				              	<button type="submit" class="kick-user-btn">Kick</button><br />
-				              </form
+					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
+						              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
+						              <button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+					              </form>
 				            </c:forEach>
 			          	</ul>
 					</div>

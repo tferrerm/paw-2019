@@ -325,6 +325,13 @@ a.logo-admin {
     padding-top: 10px;
 }
 
+.participant-item {
+  display:flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0;
+}
+
 .participants-list{
     background-color: #fff2e6;
     border-radius: 5px;
