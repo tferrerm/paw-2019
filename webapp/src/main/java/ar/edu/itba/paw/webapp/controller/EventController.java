@@ -2,11 +2,12 @@ package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -167,6 +168,7 @@ public class EventController extends BaseController {
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
 		mav.addObject("scheduleHeaders", scheduleDaysHeader);
 		mav.addObject("minHour", MIN_HOUR);
+		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
 		mav.addObject("schedule", schedule);
 		return mav;
 	}

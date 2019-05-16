@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.EventFullException;
@@ -62,5 +63,7 @@ public interface EventService {
 	public void deleteEvent(long eventid);
 
 	public String[] getScheduleDaysHeader();
+	
+	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour);
 
 }

@@ -66,12 +66,17 @@ public class EventServiceImpl implements EventService {
 		if(maxHour - minHour <= 0)
 			return null;
 		boolean[][] schedule = new boolean[maxHour - minHour][dayAmount];
+		
 		for(Event event : events) {
 			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
 					.toLocalDate().getDayOfWeek();
 			DayOfWeek currentDayOfWeek = LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek();
+			
 			Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
+			
 			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7; // Should change if dayAmount != 7
+			if(dayIndex < 0)
+				dayIndex += 7;
 			
 			int initialHourIndex = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
 					.toLocalDateTime().getHour() - minHour;
@@ -202,6 +207,15 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		ed.deleteEvent(eventid);
+	}
+	
+	@Override
+	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
+		Map<Integer, String> availableHoursMap = new HashMap<>();
+		for(int i = minHour; i < maxHour; i++) {
+			availableHoursMap.put(i, i + ":00");
+		}
+		return availableHoursMap;
 	}
 
 }
