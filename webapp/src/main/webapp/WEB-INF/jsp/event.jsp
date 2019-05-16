@@ -58,7 +58,9 @@
 						<ul>
 						    <c:forEach var="user" items="${participants}">
 				              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
-				              <button type="submit" class="kick-user-btn">Kick</button><br />
+				              <form method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
+				              	<button type="submit" class="kick-user-btn">Kick</button><br />
+				              </form
 				            </c:forEach>
 			          	</ul>
 					</div>
