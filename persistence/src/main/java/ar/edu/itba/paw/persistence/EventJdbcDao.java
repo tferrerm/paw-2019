@@ -209,7 +209,7 @@ public class EventJdbcDao implements EventDao {
 	
 	@Override
 	public int kickFromEvent(final long kickedUserId, final long eventId) {
-		return jdbcTemplate.update("DELETE FROM events_users ",
+		return jdbcTemplate.update("DELETE FROM events_users " +
 				" WHERE eventid = ? AND userid = ?", eventId, kickedUserId);
 	}
 
