@@ -21,8 +21,10 @@ import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.interfaces.EventDao;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
@@ -221,6 +223,55 @@ public class EventJdbcDao implements EventDao {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		return jdbcTemplate.query("SELECT * FROM events_users NATURAL JOIN users "
 				+ " WHERE eventid = ? OFFSET ?", urm, eventid, offset);
+	}
+	
+	/**
+	 * Returns the amount of current or past events a User has joined.
+	 */
+	@Override
+	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
+		Integer userEvents = 0;
+		StringBuilder query = new StringBuilder("SELECT count(*) FROM events_users NATURAL JOIN events "
+				+ " WHERE userid = ? AND ends_at ");
+		query.append((isCurrentEventsQuery) ? " > ? " : " < ? ");
+		userEvents = jdbcTemplate.queryForObject(query.toString(), Integer.class,
+					userid, Timestamp.from(Instant.now()));
+		return userEvents;
+	}
+	
+	/**
+	 * Returns the amount of current events owned by a User.
+	 */
+	@Override
+	public int countUserOwnedCurrEvents(final long userid) {
+		Integer userOwnerEvents = jdbcTemplate.queryForObject(
+				"SELECT count(*) FROM events WHERE userid = ? AND ends_at > ?",
+				Integer.class, userid, Timestamp.from(Instant.now()));
+		return userOwnerEvents;
+	}
+	
+	/**
+	 * Returns a User's favorite sport(s) based on events joined.
+	 */
+	@Override
+	public List<Sport> getFavoriteSport(final long userid) {
+		/*String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
+				+ "WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*)"
+				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport))";
+		return jdbcTemplate.query(queryString, rm, userid, userid);*/
+		return null;
+	}
+	
+	/**
+	 * Returns a User's favorite club(s) based on events joined.
+	 */
+	@Override
+	public List<Club> getFavoriteClub(final long userid) {
+		/*String queryString = "SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
+				+ "WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*)"
+				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid))";
+		return jdbcTemplate.query(queryString, rm, userid, userid);*/
+		return null;
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import java.util.Optional;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -65,5 +66,13 @@ public interface EventService {
 	public String[] getScheduleDaysHeader();
 	
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour);
+
+	public int countUserEvents(boolean isCurrentEventsQuery, final long userid);
+	
+	public int countUserOwnedCurrEvents(final long userid);
+	
+	public List<Sport> getFavoriteSport(final long userid);
+	
+	public List<Club> getFavoriteClub(final long userid);
 
 }

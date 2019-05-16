@@ -18,6 +18,7 @@ import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -216,6 +217,26 @@ public class EventServiceImpl implements EventService {
 			availableHoursMap.put(i, i + ":00");
 		}
 		return availableHoursMap;
+	}
+	
+	@Override
+	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
+		return ed.countUserEvents(isCurrentEventsQuery, userid);
+	}
+	
+	@Override
+	public int countUserOwnedCurrEvents(final long userid) {
+		return ed.countUserOwnedCurrEvents(userid);
+	}
+	
+	@Override
+	public List<Sport> getFavoriteSport(final long userid) {
+		return ed.getFavoriteSport(userid);
+	}
+	
+	@Override
+	public List<Club> getFavoriteClub(final long userid) {
+		return ed.getFavoriteClub(userid);
 	}
 
 }

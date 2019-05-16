@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 public interface EventDao {
@@ -51,6 +53,14 @@ public interface EventDao {
 	public void leaveEvent(final User user, final Event event);
 	
 	public int kickFromEvent(final long kickedUserId, final long eventId);
+	
+	public int countUserEvents(boolean isCurrentEventsQuery, final long userid);
+	
+	public int countUserOwnedCurrEvents(final long userid);
+	
+	public List<Sport> getFavoriteSport(final long userid);
+	
+	public List<Club> getFavoriteClub(final long userid);
 	
 	public void deleteEvent(long eventid);
 
