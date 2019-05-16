@@ -180,6 +180,11 @@ a.link-text{
     flex-grow: 1;
 }
 
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
 .form-container {
     align-self: center;
     background-color: white;
@@ -210,6 +215,10 @@ a.link-text{
 .form-error {
     color: red;
     font-size: 16px;
+}
+
+.form-field {
+    padding-top: 10px;
 }
 
 .header {
@@ -350,6 +359,7 @@ a.logo-admin {
 
 .profile-second {
     margin-top:  30px;
+    margin-bottom: 15px;
 }
 
 .profile-top {
@@ -571,4 +581,26 @@ a.logo-admin {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+}
+
+.create-event-form {
+    width: 350px;
+    height: 400px;
+}
+
+.create-event-title {
+    padding: 0px;
+    font-size: 27px;
+}
+
+.numeric-input {
+    width: 65px;
+}
+
+.date-input {
+    width: 150px;
+}
+
+.description-input {
+    height: 75px;
 }
