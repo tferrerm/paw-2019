@@ -368,6 +368,11 @@ a.logo-admin {
     padding-top: 10px;
 }
 
+.notice {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 25px;
+}
+
 .participant-item {
   display:flex;
   justify-content: space-between;
