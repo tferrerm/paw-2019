@@ -70,11 +70,14 @@ public class EventJdbcDao implements EventDao {
 	}
 
 	@Override
-	public List<Event> findByUsername(String username, int pageNum) {
+	public List<Event> findByUsername(boolean futureEvents, String username, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN events_users JOIN users ON events.userid = users.userid"
-				+ " WHERE username = ?"
-				+ " OFFSET ?", erm, username, offset);
+		Instant now = Instant.now();
+		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users "
+				+ " WHERE username = ? AND starts_at ");
+		query.append((futureEvents) ? " > ? " : " < ? ");
+		query.append(" OFFSET ?");
+		return jdbcTemplate.query(query.toString(), erm, username, Timestamp.from(now), offset);
 	}
 	
 	@Override

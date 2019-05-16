@@ -45,11 +45,11 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> findByUsername(String username, int pageNum) {
+	public List<Event> findByUsername(boolean futureEvents, String username, int pageNum) {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return ed.findByUsername(username, pageNum);
+		return ed.findByUsername(futureEvents, username, pageNum);
 	}
 	
 	@Override

@@ -69,7 +69,8 @@ public class EventController extends BaseController {
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
-		mav.addObject("events", es.findByUsername(loggedUser().getUsername(), pageNum));
+		mav.addObject("future_events", es.findByUsername(true, loggedUser().getUsername(), pageNum));
+		mav.addObject("past_events", es.findByUsername(false, loggedUser().getUsername(), pageNum));
 	    return mav;
 	}
 

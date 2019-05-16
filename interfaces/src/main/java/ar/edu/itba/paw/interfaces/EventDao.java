@@ -13,7 +13,14 @@ public interface EventDao {
 	
 	public Optional<Event> findByEventId(final long eventid);
 	
-	public List<Event> findByUsername(final String username, final int pageNum);
+	/**
+	 * Finds events owned by the user
+	 * @param futureEvents Finds only future events (true) or only past events (false)
+	 * @param username Owner of events
+	 * @param pageNum Page number
+	 * @return List of Events
+	 */
+	public List<Event> findByUsername(boolean futureEvents, final String username, final int pageNum);
 	
 	public List<Event> findFutureEvents(final int pageNum);
 	
