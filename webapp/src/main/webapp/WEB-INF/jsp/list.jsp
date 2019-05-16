@@ -30,7 +30,7 @@
                                 <form:errors path="name" cssClass="form-error" element="p"/>
                             </div>
                             <div>
-                                <form:label path="establishment"><spring:message code="establishment" /></form:label>
+                                <form:label path="establishment"><spring:message code="club" /></form:label>
                                 <form:input class="form-control" type="text" path="establishment"/>
                                 <form:errors path="establishment" cssClass="formError" element="p"/>
                             </div>

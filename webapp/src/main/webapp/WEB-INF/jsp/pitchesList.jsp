@@ -25,7 +25,7 @@
                     <form:form id="searchfilters" class="searchfilters" modelAttribute="pitchesFiltersForm" action="${postPath}">
                         <div class="table-titles">
                             <div>
-                                <form:label path="name"><spring:message code="pitch_name" /></form:label>
+                                <form:label path="name"><spring:message code="name" /></form:label>
                                 <form:input class="form-control" type="text" path="name"/>
                                 <form:errors path="name" cssClass="formError" element="p"/>
                             </div>
@@ -40,12 +40,12 @@
                                 <form:errors path="sport" cssClass="form-error" element="p"/>
                             </div>
                             <div>
-                                <form:label path="location"><spring:message code="pitch_location" /></form:label>
+                                <form:label path="location"><spring:message code="location" /></form:label>
                                 <form:input class="form-control" type="text" path="location"/>
                                 <form:errors path="location" cssClass="form-error" element="p"/>
                             </div>
                             <div>
-                                <form:label path="clubName"><spring:message code="pitch_club" /></form:label>
+                                <form:label path="clubName"><spring:message code="club" /></form:label>
                                 <form:input class="form-control" type="text" path="clubName"/>
                                 <form:errors path="clubName" cssClass="form-error" element="p"/>
                             </div>
