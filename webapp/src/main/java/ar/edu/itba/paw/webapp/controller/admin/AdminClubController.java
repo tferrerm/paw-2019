@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.ClubService;
+import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
@@ -71,8 +75,10 @@ public class AdminClubController extends BaseController {
 			@Valid @ModelAttribute("newClubForm") final NewClubForm form,
 			final BindingResult errors,
 			HttpServletRequest request) {
+		
 		Club c = cs.create(loggedUser().getUserid(),form.getName(), form.getLocation());
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
+		
 		return new ModelAndView("redirect:/admin/clubs/1");
 	}
 
@@ -81,7 +87,8 @@ public class AdminClubController extends BaseController {
 			@Valid @ModelAttribute("newPitchForm") final NewPitchForm form,
 			final BindingResult errors,
 			HttpServletRequest request,
-			@PathVariable("clubId") final long clubId) throws ClubNotFoundException {
+			@PathVariable("clubId") final long clubId) 
+					throws ClubNotFoundException {
 		
 		Sport sport = null;
 		try {
@@ -90,12 +97,25 @@ public class AdminClubController extends BaseController {
 			LOGGER.warn("Unable to convert sport to enum");
 			errors.rejectValue("sport", "sport_not_in_list");
 		}
+		
 		if(errors.hasErrors()) {
 			return showClub(clubId, form);
 		}
+		
+		final MultipartFile pitchPicture = form.getPitchPicture();
 		Club c = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
-		ps.create(c, form.getName(), sport);
-		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
+		
+		try {
+			byte[] picture = pitchPicture.getBytes();
+			ps.create(c, form.getName(), sport, picture);
+			LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
+		} catch(PictureProcessingException | IOException e) {
+			LOGGER.error("Error reading pitch picture {}", pitchPicture.getOriginalFilename());
+			ModelAndView mav = showClub(c.getClubid(), form);
+			mav.addObject("fileErrorMessage", pitchPicture.getOriginalFilename());
+			return mav;
+		}
+		
 		return new ModelAndView("redirect:/admin/club/" + clubId);
 	}
 	

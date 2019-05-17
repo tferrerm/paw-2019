@@ -1,14 +1,17 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,20 +20,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.webapp.form.NewEventForm;
 import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
 @Controller
 public class PitchController extends BaseController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(PitchController.class);
+	private static final String DEFAULT_PITCH_PICTURE = "pitch_default.png";
 	
 	@Autowired
 	private PitchService ps;
 	
 	@Autowired
 	private EventService es;
+	
+	@Autowired
+	private PitchPictureService pps;
 	
 	@RequestMapping("/pitches/{pageNum}")
 	public ModelAndView listPitches(
@@ -85,6 +94,25 @@ public class PitchController extends BaseController {
 			strBuilder.deleteCharAt(strBuilder.length()-1);
 		}
 		return strBuilder.toString();
+	}
+	
+	@RequestMapping("/pitch/{pitchId}/picture")
+	public void getPitchPicture(@PathVariable("pitchId") long pitchid,
+			HttpServletResponse response) {
+		Optional<PitchPicture> picOptional = pps.findByPitchId(pitchid);
+		response.setContentType(MediaType.IMAGE_PNG_VALUE);
+		try {
+			if(picOptional.isPresent()) {
+				response.getOutputStream().write(picOptional.get().getData());
+			}
+			else {
+				LOGGER.debug("Returning default pitch picture");
+				IOUtils.copy(new ClassPathResource(DEFAULT_PITCH_PICTURE).getInputStream(), response.getOutputStream());
+			}
+		}
+		catch(IOException e) {
+			LOGGER.error("Reading of pitch #{}'s picture failed.", pitchid);
+		}
 	}
 	
 	@ExceptionHandler({ PitchNotFoundException.class })

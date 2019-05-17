@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserDao;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User create(String username, String firstname, String lastname, 
 			String password, Role role, byte[] picture)
-			throws UserAlreadyExistsException, ProfilePictureProcessingException {
+			throws UserAlreadyExistsException, PictureProcessingException {
 		User user = ud.create(username.toLowerCase(), firstname, lastname, password, role);
 		if(picture != null) {
 			pps.create(user.getUserid(), picture);

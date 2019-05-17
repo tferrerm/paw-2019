@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
@@ -124,7 +124,7 @@ public class UserController extends BaseController {
 			u = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
 					encodedPassword, Role.ROLE_USER, picture);
 
-		} catch(ProfilePictureProcessingException | IOException e) {
+		} catch(PictureProcessingException | IOException e) {
 			
 			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
 			ModelAndView mav = index(form);

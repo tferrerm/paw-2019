@@ -2,7 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import java.util.Optional;
 
-import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
@@ -26,6 +26,6 @@ public interface UserService {
 	 */
 	public User create(String username, String firstname, String lastname, 
 			String password, Role role, byte[] picture)
-			throws UserAlreadyExistsException, ProfilePictureProcessingException;
+			throws UserAlreadyExistsException, PictureProcessingException;
 
 }

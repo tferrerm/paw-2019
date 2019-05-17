@@ -53,6 +53,11 @@
 								</form:select>
 								<form:errors path="sport" cssClass="form-error" element="span"/>
 							</div>
+							<div>
+								<form:input type="file" accept="image/*" path="pitchPicture" style="display: none" id="pitchPictureButton"/>
+								<button type="button" class="btn btn-secondary"  onclick="document.getElementById('pitchPictureButton').click()"><spring:message code="choose_file"/></button>
+								<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
+							</div>
 							<div class="submit-container">
 								<button type="submit" class="btn btn-primary submit-btn"><spring:message code="create"/></button>
 							</div>

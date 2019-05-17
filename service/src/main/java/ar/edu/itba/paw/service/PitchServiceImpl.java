@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PitchDao;
+import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
@@ -17,6 +19,9 @@ public class PitchServiceImpl implements PitchService {
 	
 	@Autowired
 	private PitchDao pd;
+	
+	@Autowired
+	private PitchPictureService pps;
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page must be greater than zero.";
@@ -51,8 +56,13 @@ public class PitchServiceImpl implements PitchService {
 	}
 
 	@Override
-	public Pitch create(Club club, String name, Sport sport) {
-		return pd.create(club, name, sport);
+	public Pitch create(Club club, String name, Sport sport, byte[] picture) 
+			throws PictureProcessingException {
+		Pitch pitch = pd.create(club, name, sport);
+		if(picture != null) {
+			pps.create(pitch.getPitchid(), picture);
+		}
+		return pitch;
 	}
 	
 	@Override
