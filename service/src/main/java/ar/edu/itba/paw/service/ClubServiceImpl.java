@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -35,6 +36,7 @@ public class ClubServiceImpl implements ClubService {
 		return cd.findAll(page);
 	}
 
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public Club create(long userId, String name, String location) {
 		return cd.create(userId, name, location);

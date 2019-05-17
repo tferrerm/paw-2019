@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PitchDao;
@@ -55,6 +56,7 @@ public class PitchServiceImpl implements PitchService {
 		return pd.findBy(name, Optional.ofNullable(sportString), location, clubName, page);
 	}
 
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public Pitch create(Club club, String name, Sport sport, byte[] picture) 
 			throws PictureProcessingException {
