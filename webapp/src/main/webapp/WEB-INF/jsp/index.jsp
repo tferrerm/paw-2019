@@ -24,6 +24,13 @@
 						<form:label path="username"><spring:message code="username"/> * </form:label>
 						<form:input  cssClass="form-control" type="text" path="username"/>
 						<form:errors path="username" cssClass="form-error" element="span"/>
+						<c:if test="${duplicateUsername != null}">
+						<div class="formError">
+							<spring:message code="username" />
+							<c:out value="${duplicateUsername}" />
+							<spring:message code="already_exists" />
+						</div>
+					</c:if>
 					</div>
 					<div>
 						<form:label path="firstName"><spring:message code="first_name"/> * </form:label>
@@ -56,7 +63,7 @@
 					<c:if test="${fileErrorMessage != null}">
 						<div class="formError">
 							<c:out value="${fileErrorMessage}" />
-							<spring:message code="fileerror" />
+							<spring:message code="file_error" />
 						</div>
 					</c:if>
 					<div class="submit-container">

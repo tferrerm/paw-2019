@@ -135,7 +135,7 @@ public class UserController extends BaseController {
 
 			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
 			ModelAndView mav = index(form);
-			mav.addObject("emailError", form.getUsername());
+			mav.addObject("duplicateUsername", form.getUsername());
 			return mav;
 		}
 		

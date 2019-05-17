@@ -35,8 +35,7 @@ public class PictureServiceImpl implements PictureService {
 			return picture;
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(picture));
 		
-		if(img.getType() == BufferedImage.TYPE_CUSTOM) {
-			img.flush();
+		if(img == null || img.getType() == BufferedImage.TYPE_CUSTOM) {
 			throw new IllegalArgumentException("Unsupported picture format");
 		}
 		
