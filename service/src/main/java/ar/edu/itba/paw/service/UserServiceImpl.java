@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 		return ud.findByUsername(username);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public User create(String username, String firstname, String lastname, 
 			String password, Role role, byte[] picture)

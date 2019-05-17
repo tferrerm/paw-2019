@@ -197,14 +197,14 @@ public class EventServiceImpl implements EventService {
 		return ed.countFutureEventPages();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public Event create(String name, User owner, Pitch pitch, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		return ed.create(name, owner, pitch, description, maxParticipants, startsAt, endsAt);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException {
@@ -217,13 +217,13 @@ public class EventServiceImpl implements EventService {
 		return ed.joinEvent(user, event);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void leaveEvent(final User user, final Event event) {
 		ed.leaveEvent(user, event);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
 		throws UserNotAuthorizedException {
