@@ -36,9 +36,6 @@ public class PitchController extends BaseController {
 	private PitchService ps;
 	
 	@Autowired
-	private EventService es;
-	
-	@Autowired
 	private PitchPictureService pps;
 	
 	@RequestMapping("/pitches/{pageNum}")

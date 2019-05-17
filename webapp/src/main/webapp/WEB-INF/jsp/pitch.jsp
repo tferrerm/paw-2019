@@ -89,7 +89,6 @@
                                     <div>
                                         <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
                                         <form:select path="startsAtHour" cssClass="form-control">
-                                            <form:option  value=""></form:option>
                                             <c:forEach var="hourEntry" items="${availableHours}">
                                                 <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
                                             </c:forEach>
@@ -99,7 +98,6 @@
                                     <div>
                                         <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
                                         <form:select path="endsAtHour" cssClass="form-control">
-                                            <form:option  value=""></form:option>
                                             <c:forEach var="hourEntry" items="${availableHours}">
                                                 <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
                                             </c:forEach>

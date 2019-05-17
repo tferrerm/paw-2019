@@ -21,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.ClubService;
-import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
