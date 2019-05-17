@@ -261,7 +261,7 @@ public class EventJdbcDao implements EventDao {
 		
 		String userBusyQueryString = "SELECT count(*) FROM events_users AS eu "
 				+ " INNER JOIN events AS e ON eu.eventid = e.eventid WHERE eu.userid = ? AND "
-				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at > ?))";
+				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at < ?))";
 		
 		int userBusyQueryResult = jdbcTemplate.queryForObject(userBusyQueryString, Integer.class,
 				user.getUserid(), eventStartsAt, eventStartsAt, eventStartsAt, eventEndsAt);
