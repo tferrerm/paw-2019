@@ -71,5 +71,12 @@ public class ClubJdbcDao implements ClubDao {
 		jdbcTemplate.update("DELETE FROM pitches WHERE clubid = ?", clubid);
 		jdbcTemplate.update("DELETE FROM clubs WHERE clubid = ?", clubid);
 	}
+	
+	@Override
+	public Optional<Club> getPitchClub(final long pitchid) {
+		return jdbcTemplate.query("SELECT clubid, clubname, location, club_created_at"
+				+ " FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", crm, pitchid)
+		.stream().findAny();
+	}
 
 }

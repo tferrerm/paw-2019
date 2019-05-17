@@ -34,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ProfilePicture;
@@ -59,6 +60,10 @@ public class UserController extends BaseController {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Qualifier("eventServiceImpl")
+	@Autowired
+	private EventService es;
 
 	@RequestMapping(value = "/login", method = {RequestMethod.GET})
 	public ModelAndView login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
@@ -85,6 +90,11 @@ public class UserController extends BaseController {
 		final ModelAndView mav = new ModelAndView("profile");
 		mav.addObject("user", us.findById(userid)
 				.orElseThrow(UserNotFoundException::new));
+		mav.addObject("currEventsParticipant", es.countUserEvents(true, userid));
+		mav.addObject("currEventsOwned", es.countUserOwnedCurrEvents(userid));
+		mav.addObject("pastEventsParticipant", es.countUserEvents(false, userid));
+		mav.addObject("favoriteSport", es.getFavoriteSport(userid));
+		mav.addObject("mainClub", es.getFavoriteClub(userid));
 		return mav;
 	}
 	

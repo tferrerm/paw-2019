@@ -52,6 +52,14 @@ a.link-text{
     text-decoration: underline;
 }
 
+.background-red {
+    background: red;
+}
+
+.background-green {
+    background: green;
+}
+
 .bottom-home-container {
   display: flex;
   width: 80%;
@@ -93,6 +101,24 @@ a.link-text{
     width: 100%;
 }
 
+.create-event {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    align-self: center;
+}
+
+.create-event-form {
+    width: 350px;
+    height: 400px;
+}
+
+.create-event-title {
+    padding: 0px;
+    font-size: 27px;
+}
+
 .custom-row {
     border-bottom: 1px lightgrey solid;
     height: 50px;
@@ -104,6 +130,10 @@ a.link-text{
 
 .custom-row:last-child {
     border-bottom: none;
+}
+
+.date-input {
+    width: 150px;
 }
 
 .description-body {
@@ -289,6 +319,10 @@ a.link-text{
   text-align: center;
 }
 
+.input-number {
+    width: 65px;
+}
+
 .join-button {
     align-self: center;
     font-size: 20px;
@@ -340,6 +374,11 @@ a.logo-admin {
   align-items: center;
 }
 
+.notice {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 25px;
+}
+
 .participant-item {
   display:flex;
   justify-content: space-between;
@@ -373,6 +412,19 @@ a.logo-admin {
     width: 100%;
 }
 
+.pitch-info-label {
+    font-weight: bold;
+}
+
+.pitch-pic-container {
+    margin-right: 30px;
+}
+
+.pitch-pic {
+    min-width: 150px;
+    min-height: 150px;
+}
+
 .profile-cont {
     padding: 30px;
 }
@@ -397,6 +449,26 @@ a.logo-admin {
 
 .right-border {
     border-right: solid 1px;
+}
+
+.schedule-table {
+    table-layout: fixed;
+    text-align: center;
+    font-size: 20px;
+    border-collapse: collapse;
+    border: 2px solid;
+    border-color: white;
+    border-radius: 5px;
+}
+
+.schedule-table-cell-size {
+    height: 25px;
+    width: 35px;
+}
+
+.schedule-table-hours {
+    width: 35px;
+    font-size: 18px;
 }
 
 .sidebar {
@@ -544,10 +616,16 @@ a.logo-admin {
     display:flex;
     flex-direction: column;
     justify-content: center;
-
 }
 
 .tbl {
+    min-width: 1000px;
+}
+
+.tbl-no-flex {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     min-width: 1000px;
 }
 
@@ -563,64 +641,4 @@ a.logo-admin {
 
 .w-100 {
     width: 100%;
-}
-
-.schedule-table {
-    table-layout: fixed;
-    text-align: center;
-    font-size: 20px;
-    border-collapse: collapse;
-    border: 2px solid;
-    border-color: white;
-    border-radius: 5px;
-}
-
-.cell-size {
-    height: 25px;
-    width: 35px;
-}
-
-.schedule-hours {
-    width: 35px;
-}
-
-.hours-size {
-    font-size: 17px;
-}
-
-.pitch-occupied {
-    background: red;
-}
-
-.pitch-available {
-    background: green;
-}
-
-.create-event {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.create-event-form {
-    width: 350px;
-    height: 400px;
-}
-
-.create-event-title {
-    padding: 0px;
-    font-size: 27px;
-}
-
-.numeric-input {
-    width: 65px;
-}
-
-.date-input {
-    width: 150px;
-}
-
-.description-input {
-    height: 75px;
 }

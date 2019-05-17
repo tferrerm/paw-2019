@@ -25,7 +25,7 @@
 				<form:form id="searchfilters" class="searchfilters" modelAttribute="filtersForm" action="${postPath}">
 					<div class="table-titles">
 						<div>
-							<form:label path="establishment"><spring:message code="establishment" /></form:label>
+							<form:label path="establishment"><spring:message code="club" /></form:label>
 							<form:input class="form-control" type="text" path="establishment"/>
 							<form:errors path="establishment" cssClass="formError" element="p"/>
 						</div>
@@ -53,7 +53,7 @@
 			</div>
 			<c:forEach var="event" items="${events}">
 				<div class="custom-row">
-					<div>${event.pitch.name}</div>
+					<div>${event.pitch.club.name}</div>
 					<div>${event.pitch.sport}</div>
 					<div>${event.owner.firstname} ${event.owner.lastname}</div>
 					<div>${event.maxParticipants}</div>

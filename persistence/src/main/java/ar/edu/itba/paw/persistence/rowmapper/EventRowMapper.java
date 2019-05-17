@@ -16,7 +16,7 @@ public class EventRowMapper implements RowMapper<Event> {
 	private UserRowMapper urm;
 	
 	@Autowired
-	private SimplePitchRowMapper prm;
+	private PitchRowMapper prm;
 
 	@Override
 	public Event mapRow(ResultSet rs, int rowNum) throws SQLException {

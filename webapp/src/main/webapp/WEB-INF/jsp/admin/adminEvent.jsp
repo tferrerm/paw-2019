@@ -32,7 +32,7 @@
 							<span>${event.pitch.sport}</span>
 						</div>
 						<div class="description-item">
-							<span class="event-info-label"><spring:message code="establishment"/></span>
+							<span class="event-info-label"><spring:message code="club"/></span>
 							<span>${event.pitch.name}</span>
 						</div>
 						<div class="double-box">

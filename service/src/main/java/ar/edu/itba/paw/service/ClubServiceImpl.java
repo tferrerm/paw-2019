@@ -44,5 +44,10 @@ public class ClubServiceImpl implements ClubService {
 	public void deleteClub(final long clubid) {
 		cd.deleteClub(clubid);
 	}
+	
+	@Override
+	public Optional<Club> getPitchClub(final long pitchid) {
+		return cd.getPitchClub(pitchid);
+	}
 
 }

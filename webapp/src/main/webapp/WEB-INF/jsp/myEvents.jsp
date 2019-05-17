@@ -14,46 +14,55 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="myEvents" /></h2>
-			<div class="tbl">
-				<div class="table-header">
-					<div class="flex-grow justify-center my-events-tbl-sub">
-						<spring:message code="pastEvents" />
+			<c:choose>
+				<c:when test="${empty pastEvents && empty future_events}">
+					<div class="notice">
+						<spring:message code="no_past_or_future_events"/>
 					</div>
-					<div class="flex-grow justify-center my-events-tbl-sub">
-						<spring:message code="upcomingEvents" />
+				</c:when>
+				<c:otherwise>
+					<div class="tbl">
+						<div class="table-header">
+							<div class="flex-grow justify-center my-events-tbl-sub">
+								<spring:message code="pastEvents" />
+							</div>
+							<div class="flex-grow justify-center my-events-tbl-sub">
+								<spring:message code="upcomingEvents" />
+							</div>
+						</div>
+						<div class="flex-grow w-100">
+							<div class="events-column flex-grow flex-column right-border w-50">
+							    <c:forEach var="event" items="${past_events}">
+										<a href="<c:url value="/event/${event.eventId}" /> ">
+											<div class="my-event-item">
+												<span>${event.name}</span>
+												<span><spring:message code="${event.pitch.sport}"/></span>
+												<fmt:timeZone value="AR">
+													<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+													<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+												</fmt:timeZone>
+											</div>
+						        </a>
+							    </c:forEach>
+							</div>
+							<div class="events-column flex-grow flex-column w-50">
+							    <c:forEach var="event" items="${future_events}">
+										<a href="<c:url value="/event/${event.eventId}" /> ">
+											<div class="my-event-item">
+												<span>${event.name}</span>
+												<span><spring:message code="${event.pitch.sport}"/></span>
+												<fmt:timeZone value="AR">
+													<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+													<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+												</fmt:timeZone>
+											</div>
+						        </a>
+							    </c:forEach>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="flex-grow w-100">
-					<div class="events-column flex-grow flex-column right-border w-50">
-					    <c:forEach var="event" items="${past_events}">
-								<a href="<c:url value="/event/${event.eventId}" /> ">
-									<div class="my-event-item">
-										<span>${event.name}</span>
-										<span><spring:message code="${event.pitch.sport}"/></span>
-										<fmt:timeZone value="AR">
-											<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-											<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-										</fmt:timeZone>
-									</div>
-								</a>
-					    </c:forEach>
-					</div>
-					<div class="events-column flex-grow flex-column w-50">
-					    <c:forEach var="event" items="${future_events}">
-					        <a href="<c:url value="/event/${event.eventId}" /> ">
-								<div class="my-event-item">
-									<span>${event.name}</span>
-									<span><spring:message code="${event.pitch.sport}"/></span>
-									<fmt:timeZone value="AR">
-										<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-										<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-									</fmt:timeZone>
-								</div>
-					        </a>
-					    </c:forEach>
-					</div>
-				</div>
-			</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	</body>

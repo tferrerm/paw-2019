@@ -16,7 +16,14 @@
 			<h2>${event.name}</h2>
 			<div class="detail-container">
 				<div class="status">
-					<h3><spring:message code="status"/> Uncompleted</h3>
+					<c:choose>
+						<c:when test="${participant_count < event.maxParticipants}">
+							<h3><spring:message code="status"/> <spring:message code="uncompleted"/></h3>
+						</c:when>
+						<c:otherwise>
+							<h3><spring:message code="status"/> <spring:message code="completed"/></h3>
+						</c:otherwise>
+					</c:choose>
 					<div class="progress">
 						<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 					</div>
@@ -33,8 +40,9 @@
 							<span><spring:message code="${event.pitch.sport}"/></span>
 						</div>
 						<div class="description-item">
-							<span class="event-info-label"><spring:message code="establishment"/></span>
-							<span>${event.pitch.name}</span>
+							<span class="event-info-label"><spring:message code="club"/> </span>
+							<a href="<c:url value="/club/${event.pitch.club.clubid}" /> ">${event.pitch.club.name}</a>
+							<span> - </span><a href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">${event.pitch.name}</a>
 						</div>
 						<div class="double-box">
 							<div class="description-item">
@@ -66,6 +74,21 @@
 					</div>
 				</div>
 			</div>
+			<c:if test="${eventFullError == true}">
+				<span class="form-error notice">
+					<spring:message code="event_full_error"/>
+				</span>
+			</c:if>
+			<c:if test="${alreadyJoinedError == true}">
+				<span class="form-error notice">
+					<spring:message code="already_joined_error"/>
+				</span>
+			</c:if>
+			<c:if test="${userBusyError == true}">
+				<span class="form-error notice">
+					<spring:message code="user_busy_error"/>
+				</span>
+			</c:if>
 			<c:choose>
 				<c:when test="${is_participant}">
 					<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
@@ -73,9 +96,11 @@
 					</form>
 				</c:when>
 				<c:otherwise>
-					<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
-						<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
-					</form>
+					<c:if test="${participant_count < event.maxParticipants}">
+						<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
+							<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
+						</form>
+					</c:if>
 				</c:otherwise>
 			</c:choose>
 		</div>

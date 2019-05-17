@@ -19,11 +19,11 @@ public class NewEventForm {
 	private String date;
 	
 	@NotBlank
-	@Pattern(regexp = "[0-9][0-9]")
+	@Pattern(regexp = "[0-9]?[0-9]")
 	private String startsAtHour;
 	
 	@NotBlank
-	@Pattern(regexp = "[0-9][0-9]")
+	@Pattern(regexp = "[0-9]?[0-9]")
 	private String endsAtHour;
 
 	public String getName() {

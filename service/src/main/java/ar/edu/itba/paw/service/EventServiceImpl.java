@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -33,6 +36,8 @@ public class EventServiceImpl implements EventService {
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
 	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
 			"day_fri", "day_sat", "day_sun"};
+	private static final int EVENT_ID_INDEX = 0;
+	private static final int EVENT_INSCRIPTIONS_INDEX = 1;
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 
@@ -124,6 +129,25 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
+		List<Event> events = findBy(onlyFuture, name, establishment, sport, vacancies, page);
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, name, establishment,
+				Optional.ofNullable(sportString), vacancies, page);
+		events.sort(Comparator.comparing(Event::getEventId));
+		eventInscriptions.sort(Comparator.comparing(arr -> arr[EVENT_ID_INDEX]));
+		Map<Event, Long> eventWithInscriptions = new HashMap<>();
+		for(int i = 0; i < events.size(); i++) {
+			eventWithInscriptions.put(events.get(i), eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
+		}
+		return eventWithInscriptions;
+	}
+
+	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
 		if(page <= 0) {
@@ -133,9 +157,24 @@ public class EventServiceImpl implements EventService {
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
+
 		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
 				vacancies, page);
 	}
+
+	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page) {
+		if(page <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+
+		return ed.countBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+				vacancies, page);
+	}*/
 
 	@Override
 	public int countUserEventPages(long userid) {
@@ -168,10 +207,10 @@ public class EventServiceImpl implements EventService {
 	@Transactional
 	@Override
 	public boolean joinEvent(final User user, final Event event)
-			throws UserAlreadyJoinedException, EventFullException {
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException {
 
 		// si no tiro excepcion y hago metodo separado, no obligo a validar esto
-		if(countParticipants(event.getEventId()) > event.getMaxParticipants()) {
+		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
 			throw new EventFullException();
 		}
 
@@ -210,20 +249,40 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void deleteEvent(long eventid) {
-		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		}
-		ed.deleteEvent(eventid);
-	}
-
-	@Override
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
 		Map<Integer, String> availableHoursMap = new HashMap<>();
 		for(int i = minHour; i < maxHour; i++) {
 			availableHoursMap.put(i, i + ":00");
 		}
 		return availableHoursMap;
+	}
+
+	@Override
+	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
+		return ed.countUserEvents(isCurrentEventsQuery, userid);
+	}
+
+	@Override
+	public int countUserOwnedCurrEvents(final long userid) {
+		return ed.countUserOwnedCurrEvents(userid);
+	}
+
+	@Override
+	public List<Sport> getFavoriteSport(final long userid) {
+		return ed.getFavoriteSport(userid);
+	}
+
+	@Override
+	public List<Club> getFavoriteClub(final long userid) {
+		return ed.getFavoriteClub(userid);
+	}
+
+	@Override
+	public void deleteEvent(long eventid) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		ed.deleteEvent(eventid);
 	}
 
 }

@@ -26,17 +26,28 @@
 					<img src="<c:url value='/user/${user.userid}/picture'/>"/>
 				</div>
 				<div class="stats">
-					<div style="padding: 5px 0">
-						<h4><spring:message code="events_owned" /><span> 23</span></h4>
+					<div class="notice" style="padding: 5px 0">
+						<spring:message code="curr_event_participant"/>
+						<span class="notice"> ${currEventsParticipant} </span>
+						<spring:message code="event_s"/>
 					</div>
-					<div style="padding: 5px 0">
-						<h4><spring:message code="total_events" /><span> 23</span></h4>
+					<div class="notice" style="padding: 5px 0">
+						<spring:message code="curr_events_owned"/>
+						<span class="notice"> ${currEventsOwned} </span>
+						<spring:message code="event_s"/>
 					</div>
-					<div style="padding: 5px 0">
-						<h4><spring:message code="favourite_sport" /><span> Soccer (12)</span></h4>
+					<div class="notice" style="padding: 5px 0">
+						<spring:message code="past_events_participant"/>
+						<span class="notice"> ${pastEventsParticipant} </span>
+						<spring:message code="event_s"/>
 					</div>
-					<div style="padding: 5px 0">
-						<h4><spring:message code="main_establishment" /><span> San Lorenzo (9)</span></h4>
+					<div class="notice" style="padding: 5px 0">
+						<spring:message code="favorite_sport" />
+						<span class="notice"> ${favoriteSport}</span>
+					</div>
+					<div class="notice" style="padding: 5px 0">
+						<spring:message code="main_club" />
+						<span class="notice"> ${mainClub}</span>
 					</div>
 				</div>
 			</div>
