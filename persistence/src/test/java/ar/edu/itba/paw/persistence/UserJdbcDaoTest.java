@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,10 +27,10 @@ import ar.edu.itba.paw.model.User;
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
 public class UserJdbcDaoTest {
-	
+
 	@Autowired
 	private DataSource ds;
-	
+
 	@Autowired
 	private UserJdbcDao userDao;
 
@@ -37,7 +40,8 @@ public class UserJdbcDaoTest {
 	public void setUp() {
 		jdbcTemplate = new JdbcTemplate(ds);
 	}
-	
+
+	private final long userid = 1;
 	private static final String USERNAME = "test_username";
 	private static final String FIRSTNAME = "firstname";
 	private static final String LASTNAME = "lastname";
@@ -56,6 +60,27 @@ public class UserJdbcDaoTest {
 		Assert.assertEquals(Role.ROLE_USER, user.getRole());
 		Assert.assertNotNull(user.getCreatedAt());
 		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+	}
+
+	@Test
+	public void testFindById() {
+		final Optional<User> user = userDao.findById(userid);
+		Assert.assertTrue(user.isPresent());
+		Assert.assertEquals(userid, user.get().getUserid());
+		Assert.assertEquals(USERNAME, user.get().getUsername());
+		Assert.assertEquals(FIRSTNAME, user.get().getFirstname());
+		Assert.assertEquals(LASTNAME, user.get().getLastname());
+		Assert.assertEquals(PASSWORD, user.get().getPassword());
+	}
+
+	@Test
+	public void testFindByUsername() {
+		final Optional<User> user = userDao.findByUsername(USERNAME);
+		Assert.assertTrue(user.isPresent());
+		Assert.assertEquals(USERNAME, user.get().getUsername());
+		Assert.assertEquals(FIRSTNAME, user.get().getFirstname());
+		Assert.assertEquals(LASTNAME, user.get().getLastname());
+		Assert.assertEquals(PASSWORD, user.get().getPassword());
 	}
 
 }
