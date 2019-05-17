@@ -19,7 +19,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
-import ar.edu.itba.paw.webapp.controller.EventNotFoundException;
+import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 
 @RequestMapping("/admin")

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.webapp.controller.BaseController;
-import ar.edu.itba.paw.webapp.controller.PitchNotFoundException;
+import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 
 @Controller
 public class AdminPitchController extends BaseController {

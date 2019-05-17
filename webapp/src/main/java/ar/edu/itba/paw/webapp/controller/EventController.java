@@ -24,7 +24,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -37,6 +41,9 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
+import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
+import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewEventForm;
 
@@ -197,19 +204,34 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) throws PitchNotFoundException {
-    	Integer startsAt = Integer.valueOf(form.getStartsAtHour());
-    	Integer endsAt = Integer.valueOf(form.getEndsAtHour());
-    	// VALIDAR ESAS HORAS!!!!!!!!!!!!!
-    	Integer maxParticipants = performMaxParticipantsValidations(form, errors);
-    	Instant date = performDateValidations(form, errors);
+    	
     	if(errors.hasErrors()) {
     		return seePitch(pitchId, form);
     	}
+    	
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
-    	Event e = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-    			maxParticipants, date.plus(startsAt, ChronoUnit.HOURS),
-    			date.plus(endsAt, ChronoUnit.HOURS));
-    	return new ModelAndView("redirect:/event/" + e.getEventId());
+    	Event ev = null;
+    	try {
+	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+	    			form.getMaxParticipants(), form.getDate(), form.getStartsAtHour(),
+	    			form.getEndsAtHour());
+    	} catch(InvalidDateFormatException e) {
+    		return eventCreationError("invalid_date_format", pitchId, form);
+    	} catch(EndsBeforeStartsException e) {
+    		return eventCreationError("ends_before_starts", pitchId, form);
+    	} catch(EventInPastException e) {
+    		return eventCreationError("event_in_past", pitchId, form);
+    	} catch(MaximumDateExceededException e) {
+    		return eventCreationError("date_exceeded", pitchId, form);
+    	}
+    	return new ModelAndView("redirect:/event/" + ev.getEventId());
+    }
+    
+    private ModelAndView eventCreationError(String error, long pitchId, NewEventForm form) 
+    	throws PitchNotFoundException {
+    	ModelAndView mav = seePitch(pitchId, form);
+		mav.addObject(error, true);
+		return mav;
     }
 
     @RequestMapping(value = "/events/filter")
@@ -246,68 +268,13 @@ public class EventController extends BaseController {
         }
         return strBuilder.toString();
     }
-    
-    private Instant performDateValidations(NewEventForm form, BindingResult errors) {
-    	Instant inst = null;
-    	String date = form.getDate();
-    	if(date.isEmpty())
-    		return null;
-    	try {
-    		inst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-       	} catch(DateTimeParseException e) {
-    		errors.rejectValue(START_DATE, "wrong_date_format");
-    		return null;
-    	}
-    	if(inst.isBefore(today())) {
-    		errors.rejectValue(START_DATE, "future_date_required");
-    		return null;
-    	}
-    	return inst;
-    }
-    
-    private Instant today() {
-    	return LocalDate.now().atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-    }
-    
-    private Integer performHourValidations(NewEventForm form, BindingResult errors) {
-    	Integer duration = null;
-    	try {
-    		duration = Integer.parseInt(form.getEndsAtHour());
-    	} catch(NumberFormatException e) {
-    		errors.rejectValue(END_DATE, "wrong_int_format");
-    		return null;
-    	}
-    	if(duration <= 0) {
-    		errors.rejectValue(END_DATE, "gt_zero");
-    		return null;
-    	} else if(duration > 23) {
-    		errors.rejectValue(END_DATE, "lt_23");
-    		return null;
-    	}
-    	return duration;
-    }
-    
-    private Integer performMaxParticipantsValidations(NewEventForm form, BindingResult errors) {
-    	Integer maxParticipants = null;
-    	try {
-    		maxParticipants = Integer.parseInt(form.getMaxParticipants());
-    	} catch(NumberFormatException e) {
-    		errors.rejectValue(MAX_PARTICIPANTS, "wrong_int_format");
-    		return null;
-    	}
-    	if(maxParticipants <= 0) {
-    		errors.rejectValue(MAX_PARTICIPANTS, "gt_zero");
-    		return null;
-    	}
-    	return maxParticipants;
-    }
 
-	@ExceptionHandler({EventNotFoundException.class})
+	@ExceptionHandler({ EventNotFoundException.class })
 	private ModelAndView eventNotFound() {
 		return new ModelAndView("404");
 	}
 	
-	@ExceptionHandler({PitchNotFoundException.class})
+	@ExceptionHandler({ PitchNotFoundException.class })
 	private ModelAndView pitchNotFound() {
 		return new ModelAndView("404");
 	}

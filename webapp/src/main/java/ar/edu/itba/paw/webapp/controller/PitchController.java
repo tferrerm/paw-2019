@@ -24,6 +24,7 @@ import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
 @Controller
