@@ -70,8 +70,16 @@ public class EventController extends BaseController {
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
-		mav.addObject("future_events", es.findByUsername(true, loggedUser().getUsername(), pageNum));
-		mav.addObject("past_events", es.findByUsername(false, loggedUser().getUsername(), pageNum));
+		mav.addObject("future_events", es.findByOwner(true, loggedUser().getUsername(), pageNum));
+		mav.addObject("past_events", es.findByOwner(false, loggedUser().getUsername(), pageNum));
+	    return mav;
+	}
+	
+	@RequestMapping("/history/{page}")
+	public ModelAndView historyList(@PathVariable("page") final int pageNum)	{
+		ModelAndView mav = new ModelAndView("history");
+		mav.addObject("future_participations", es.findByUsername(true, loggedUser().getUsername(), pageNum));
+		mav.addObject("past_participations", es.findByUsername(false, loggedUser().getUsername(), pageNum));
 	    return mav;
 	}
 

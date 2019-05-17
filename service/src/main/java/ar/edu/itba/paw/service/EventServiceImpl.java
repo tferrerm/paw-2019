@@ -25,13 +25,13 @@ import ar.edu.itba.paw.model.User;
 
 @Service
 public class EventServiceImpl implements EventService {
-	
+
 	@Autowired
 	private EventDao ed;
-	
+
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
-	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu", 
+	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
 			"day_fri", "day_sat", "day_sun"};
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
@@ -51,7 +51,15 @@ public class EventServiceImpl implements EventService {
 		}
 		return ed.findByUsername(futureEvents, username, pageNum);
 	}
-	
+
+	@Override
+	public List<Event> findByOwner(boolean futureEvents, String username, int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return ed.findByOwner(futureEvents, username, pageNum);
+	}
+
 	@Override
 	public List<Event> findCurrentEventsInPitch(final long pitchid) {
 		if(pitchid <= 0) {
@@ -59,37 +67,37 @@ public class EventServiceImpl implements EventService {
 		}
 		return ed.findCurrentEventsInPitch(pitchid);
 	}
-	
+
 	@Override
-	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour, 
+	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
 			int maxHour, int dayAmount) {
 		if(maxHour - minHour <= 0)
 			return null;
 		boolean[][] schedule = new boolean[maxHour - minHour][dayAmount];
-		
+
 		for(Event event : events) {
 			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
 					.toLocalDate().getDayOfWeek();
 			DayOfWeek currentDayOfWeek = LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek();
-			
+
 			Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
-			
+
 			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7; // Should change if dayAmount != 7
 			if(dayIndex < 0)
 				dayIndex += 7;
-			
+
 			int initialHourIndex = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
 					.toLocalDateTime().getHour() - minHour;
 			int finalHourIndex = event.getEndsAt().atZone(ZoneId.of(TIME_ZONE))
 					.toLocalDateTime().getHour() - minHour;
-			
+
 			for(int i = initialHourIndex; i < finalHourIndex; i++) {
 				schedule[i][dayIndex] = true;
 			}
 		}
 		return schedule;
 	}
-	
+
 	private Map<DayOfWeek, Integer> getDaysOfWeek() {
 		if(DAYS_OF_WEEK_NUM.isEmpty()) {
 			int i = 0;
@@ -100,7 +108,7 @@ public class EventServiceImpl implements EventService {
 		}
 		return DAYS_OF_WEEK_NUM;
 	}
-	
+
 	public String[] getScheduleDaysHeader() {
 		Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
 		int currDayOfWeek = daysOfWeek.get(LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek());
@@ -114,7 +122,7 @@ public class EventServiceImpl implements EventService {
 		}
 		return nextSevenDays;
 	}
-	
+
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
@@ -128,7 +136,7 @@ public class EventServiceImpl implements EventService {
 		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
 				vacancies, page);
 	}
-	
+
 	@Override
 	public int countUserEventPages(long userid) {
 		if(userid <= 0) {
@@ -136,7 +144,7 @@ public class EventServiceImpl implements EventService {
 		}
 		return ed.countUserEventPages(userid);
 	}
-	
+
 	@Override
 	public List<Event> findFutureEvents(int pageNum) {
 		if(pageNum <= 0) {
@@ -144,7 +152,7 @@ public class EventServiceImpl implements EventService {
 		}
 		return ed.findFutureEvents(pageNum);
 	}
-	
+
 	@Override
 	public int countFutureEventPages() {
 		return ed.countFutureEventPages();
@@ -161,30 +169,30 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException {
-		
+
 		// si no tiro excepcion y hago metodo separado, no obligo a validar esto
 		if(countParticipants(event.getEventId()) > event.getMaxParticipants()) {
-			throw new EventFullException(); 
+			throw new EventFullException();
 		}
-		
+
 		return ed.joinEvent(user, event);
 	}
-	
+
 	@Transactional
 	@Override
 	public void leaveEvent(final User user, final Event event) {
 		ed.leaveEvent(user, event);
 	}
-	
+
 	@Transactional
 	@Override
-	public void kickFromEvent(final User owner, final long kickedUserId, final Event event) 
+	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
 		throws UserNotAuthorizedException {
 		if(owner.getUserid() != event.getOwner().getUserid())
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		ed.kickFromEvent(kickedUserId, event.getEventId());
 	}
-	
+
 	@Override
 	public int countParticipants(final long eventid) {
 		if(eventid <= 0) {
@@ -200,7 +208,7 @@ public class EventServiceImpl implements EventService {
 		}
 		return ed.findEventUsers(eventid, pageNum);
 	}
-	
+
 	@Override
 	public void deleteEvent(long eventid) {
 		if(eventid <= 0) {
@@ -208,7 +216,7 @@ public class EventServiceImpl implements EventService {
 		}
 		ed.deleteEvent(eventid);
 	}
-	
+
 	@Override
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
 		Map<Integer, String> availableHoursMap = new HashMap<>();

@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
@@ -25,12 +26,30 @@
 				<div class="flex-grow w-100">
 					<div class="events-column flex-grow flex-column right-border w-50">
 					    <c:forEach var="event" items="${past_events}">
-								<a href="<c:url value="/event/${event.eventId}" /> "><div>${event.name}</div></a>
+								<a href="<c:url value="/event/${event.eventId}" /> ">
+									<div class="my-event-item">
+										<span>${event.name}</span>
+										<span><spring:message code="${event.pitch.sport}"/></span>
+										<fmt:timeZone value="AR">
+											<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+											<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+										</fmt:timeZone>
+									</div>
+								</a>
 					    </c:forEach>
 					</div>
 					<div class="events-column flex-grow flex-column w-50">
 					    <c:forEach var="event" items="${future_events}">
-					        <a href="<c:url value="/event/${event.eventId}" /> "><div>${event.name}</div></a>
+					        <a href="<c:url value="/event/${event.eventId}" /> ">
+								<div class="my-event-item">
+									<span>${event.name}</span>
+									<span><spring:message code="${event.pitch.sport}"/></span>
+									<fmt:timeZone value="AR">
+										<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+										<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+									</fmt:timeZone>
+								</div>
+					        </a>
 					    </c:forEach>
 					</div>
 				</div>

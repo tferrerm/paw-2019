@@ -334,6 +334,12 @@ a.logo-admin {
     padding-top: 10px;
 }
 
+.my-event-item {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .participant-item {
   display:flex;
   justify-content: space-between;
