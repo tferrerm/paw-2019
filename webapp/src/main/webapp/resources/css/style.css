@@ -149,7 +149,7 @@ a.link-text{
     background-color: #fff2e6;
     border-radius: 5px;
     flex-grow: 1;
-    margin: 10px 10px 10px 0;
+    margin: 10px 10px 10px 10px;
     padding: 10px;
     width: 100%;
 }
@@ -163,7 +163,6 @@ a.link-text{
 
 .double-box {
     display: flex;
-    margin: -10px -10px 0 0;
     padding: 0;
 }
 
@@ -208,6 +207,11 @@ a.link-text{
 .flex-grow {
     display: flex;
     flex-grow: 1;
+}
+
+.flex-space-around {
+    display: flex;
+    justify-content: space-around;
 }
 
 .flex-space-between {
@@ -364,6 +368,10 @@ a.logo-admin {
     height: 100%;
 }
 
+.margin-right {
+    margin-right: 10px;
+}
+
 .my-events-tbl-sub {
     padding-top: 10px;
 }
@@ -386,11 +394,11 @@ a.logo-admin {
   margin-bottom: 0;
 }
 
-.participants-list{
+.participants-list {
     background-color: #fff2e6;
     border-radius: 5px;
     flex-grow: 1;
-    margin: 10px 0 10px 10px;
+    margin: 10px 10px 10px 10px;
     padding: 10px;
     width: 100%;
 }
@@ -641,4 +649,28 @@ a.logo-admin {
 
 .w-100 {
     width: 100%;
+}
+
+.club-table-size {
+    min-width: 75%;
+}
+
+.club-pitches-list {
+    width: 550px;
+}
+
+.club-detail-container {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    align-items: flex-start;
+    align-self: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    justify-content: center;
+}
+
+.club-detail-container .description-item {
+    width: 650px;
 }

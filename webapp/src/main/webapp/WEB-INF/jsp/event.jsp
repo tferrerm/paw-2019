@@ -30,7 +30,7 @@
 					<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 				</div>
 				<div class="description-body">
-					<div>
+					<div class="margin-right">
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="organizer"/> </span>
 							<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>

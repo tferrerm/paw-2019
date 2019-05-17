@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,48 @@ public class ClubJdbcDao implements ClubDao {
 		return jdbcTemplate.query("SELECT clubid, clubname, location, club_created_at"
 				+ " FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", crm, pitchid)
 		.stream().findAny();
+	}
+
+	@Override
+	public int countClubPages() {
+		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM clubs", Integer.class);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
+	}
+
+	@Override
+	public List<Club> findBy(Optional<String> name, Optional<String> location, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("clubname", name.orElse(null)),
+				new Filter("location", location.orElse(null))
+		};
+		StringBuilder queryString = new StringBuilder("SELECT * FROM clubs ");
+		for(Filter param : params) {
+			if(!isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(presentFields));
+				queryString.append(param.queryAsString());
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		queryString.append(" OFFSET ? ;");
+		list.add(offset);
+		return jdbcTemplate.query(queryString.toString(), crm, list.toArray());
+	}
+	
+	private boolean isEmpty(Object value) {
+		return value == null;
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 }

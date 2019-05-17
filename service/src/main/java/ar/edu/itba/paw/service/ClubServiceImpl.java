@@ -50,4 +50,17 @@ public class ClubServiceImpl implements ClubService {
 		return cd.getPitchClub(pitchid);
 	}
 
+	@Override
+	public int countClubPages() {
+		return cd.countClubPages();
+	}
+
+	@Override
+	public List<Club> findBy(Optional<String> name, Optional<String> location, int page) {
+		if(page <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return cd.findBy(name, location, page);
+	}
+
 }

@@ -19,9 +19,9 @@
 	<%@include file="sidebar.jsp" %>
 	<div class="content-container">
 		<h2><spring:message code="all_clubs" /></h2>
-		<div class="tbl">
+		<div class="tbl club-table-size">
 			<c:forEach var="club" items="${clubs}">
-				<div class="custom-row">
+				<div class="custom-row flex-space-around">
 					<div>${club.name}</div>
 					<div>${club.location}</div>
 					<div>

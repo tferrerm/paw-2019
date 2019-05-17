@@ -92,7 +92,7 @@ public class EventJdbcDao implements EventDao {
 	public List<Event> findByOwner(boolean futureEvents, String username, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
-		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users "
+		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users NATURAL JOIN clubs "
 				+ " WHERE username = ? AND starts_at ");
 		query.append((futureEvents) ? " > ? " : " < ? ");
 		query.append(" OFFSET ?");
