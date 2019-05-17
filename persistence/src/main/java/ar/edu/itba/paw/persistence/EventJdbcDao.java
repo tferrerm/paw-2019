@@ -255,13 +255,17 @@ public class EventJdbcDao implements EventDao {
 	@Override // BOOLEANNNNNNNNNNNNNNNNNNNN
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, UserBusyException {
+		
+		Timestamp eventStartsAt = Timestamp.from(event.getStartsAt());
+		Timestamp eventEndsAt = Timestamp.from(event.getEndsAt());
+		
 		String userBusyQueryString = "SELECT count(*) FROM events_users AS eu "
 				+ " INNER JOIN events AS e ON eu.eventid = e.eventid WHERE eu.userid = ? AND "
-				+ " ((starts_at < ? AND ends_at > ?) OR (starts_at < ? AND ends_at > ?))";
+				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at > ?))";
+		
 		int userBusyQueryResult = jdbcTemplate.queryForObject(userBusyQueryString, Integer.class,
-				user.getUserid(), Timestamp.from(event.getStartsAt()),
-				Timestamp.from(event.getStartsAt()), Timestamp.from(event.getEndsAt()),
-						Timestamp.from(event.getEndsAt()));
+				user.getUserid(), eventStartsAt, eventStartsAt, eventStartsAt, eventEndsAt);
+		
 		if(userBusyQueryResult > 0)
 			throw new UserBusyException("User " + user.getUserid() + " already joined "
 					+ "an event in that period");
