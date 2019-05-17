@@ -30,6 +30,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
+import ar.edu.itba.paw.persistence.rowmapper.InscriptionsRowMapper;
 
 @Repository
 public class EventJdbcDao implements EventDao {
@@ -53,6 +54,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private EventListRowMapper elrm;
+	
+	@Autowired
+	private InscriptionsRowMapper irm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -161,6 +165,46 @@ public class EventJdbcDao implements EventDao {
 		queryString.append(" OFFSET ? ;");
 		list.add(offset);
 		return jdbcTemplate.query(queryString.toString(), elrm, list.toArray());
+	}
+	
+	@Override
+	public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page) {
+		int offset = (page - 1) * MAX_ROWS;
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("e.eventname", name.orElse(null)),
+				new Filter("clubname", establishment.orElse(null)),
+				new Filter("sport", sport.orElse(null)),
+				new Filter("customVacanciesFilter", vacancies.orElse(null)),
+				new Filter("e.starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
+		};
+		StringBuilder queryString = new StringBuilder("SELECT e.eventid, count(evu.eventid) FROM "
+				+ " events AS e NATURAL JOIN pitches NATURAL JOIN clubs LEFT OUTER JOIN events_users AS evu "
+				+ " ON e.eventid = evu.eventid ");
+		for(Filter param : params) {
+			if(!isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(presentFields));
+				switch(param.getName()) {
+				case "customVacanciesFilter":
+					queryString.append(" ? <= max_participants - (SELECT count(*) "
+							+ " FROM events_users AS eu WHERE eu.eventid = e.eventid) ");
+					break;
+				case "e.starts_at":
+					queryString.append(param.queryAsGreaterInteger(true));
+					break;
+				default:
+					queryString.append(param.queryAsString());
+					break;
+				}
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		queryString.append(" GROUP BY e.eventid OFFSET ? ;");
+		list.add(offset);
+		return jdbcTemplate.query(queryString.toString(), irm, list.toArray());
 	}
 	
 	private boolean isEmpty(Object value) {

@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class EventServiceImpl implements EventService {
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
 	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu", 
 			"day_fri", "day_sat", "day_sun"};
+	private static final int EVENT_ID_INDEX = 0;
+	private static final int EVENT_INSCRIPTIONS_INDEX = 1;
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 
@@ -118,6 +121,25 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
+	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
+		List<Event> events = findBy(onlyFuture, name, establishment, sport, vacancies, page);
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, name, establishment,
+				Optional.ofNullable(sportString), vacancies, page);
+		events.sort(Comparator.comparing(Event::getEventId));
+		eventInscriptions.sort(Comparator.comparing(arr -> arr[EVENT_ID_INDEX]));
+		Map<Event, Long> eventWithInscriptions = new HashMap<>();
+		for(int i = 0; i < events.size(); i++) {
+			eventWithInscriptions.put(events.get(i), eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
+		}
+		return eventWithInscriptions;
+	}
+	
+	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
 		if(page <= 0) {
@@ -128,16 +150,23 @@ public class EventServiceImpl implements EventService {
 			sportString = sport.get().toString();
 		}
 		
-		List<Event> eventsList = ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
 				vacancies, page);
-		/*
-		Map<Event, Integer> eventsWithVacancies = new HashMap<>();
-		for(Event event : eventsList) {
-			eventsWithVacancies.put(event, countParticipants(event.getEventId()));
-		}
-		return eventsWithVacancies;*/
-		return eventsList;
 	}
+	
+	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page) {
+		if(page <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		
+		return ed.countBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+				vacancies, page);
+	}*/
 	
 	@Override
 	public int countUserEventPages(long userid) {

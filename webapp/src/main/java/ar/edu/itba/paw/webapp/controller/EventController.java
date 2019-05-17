@@ -157,7 +157,7 @@ public class EventController extends BaseController {
         Integer vacanciesNum = null;
         if(vacancies != null)
         	vacanciesNum = Integer.valueOf(vacancies);
-        mav.addObject("events", es.findBy(
+        mav.addObject("events", es.findByWithInscriptions(
         		true, 
         		Optional.ofNullable(name), 
         		Optional.ofNullable(establishment), 

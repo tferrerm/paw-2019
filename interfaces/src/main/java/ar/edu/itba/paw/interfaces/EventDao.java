@@ -31,12 +31,35 @@ public interface EventDao {
 	
 	/**
 	 * Finds Events in a Pitch. Only seven days of events will be returned.
-	 * @param pitchid The id of the Pitch.
+	 * @param pitchid 	The id of the Pitch.
 	 * @return a list of Events (with a maximum size of 24 * 7).
 	 */
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
 	
+	/**
+	 * Returns a list of Events matching present filters.
+	 * @param onlyFuture		Search only future Events (true) or any Events (false).
+	 * @param name				String to match an Event's name with.
+	 * @param establishment		String to match an Event's club name with.
+	 * @param sport				String to match an Event's Sport with.
+	 * @param vacancies			Minimum vacancies for an Event.
+	 * @param page				Page number.
+	 * @return
+	 */
 	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page);
+	
+	/**
+	 * Returns a combination of eventid and vacancies for that Event.
+	 * @param onlyFuture		Search only future Events (true) or any Events (false).
+	 * @param name				String to match an Event's name with.
+	 * @param establishment		String to match an Event's club name with.
+	 * @param sport				String to match an Event's Sport with.
+	 * @param vacancies			Minimum vacancies for an Event.
+	 * @param page				Page number.
+	 * @return
+	 */
+	public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<String> sport, Optional<Integer> vacancies, int page);
 	
 	public int countUserEventPages(final long userid);

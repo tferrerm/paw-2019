@@ -69,20 +69,20 @@
                                 </form:form>
 
                             </div>
-                            <c:forEach var="event" items="${events}">
+                            <c:forEach var="eventEntry" items="${events}">
                                 <div class="custom-row">
-                                    <div>${event.name}</div>
-                                    <div>${event.pitch.club.name}</div>
-                                    <div><spring:message code="${event.pitch.sport}"/></div>
-                                    <div>${event.maxParticipants}</div>
+                                    <div>${eventEntry.key.name}</div>
+                                    <div>${eventEntry.key.pitch.club.name}</div>
+                                    <div><spring:message code="${eventEntry.key.pitch.sport}"/></div>
+                                    <div>${eventEntry.key.maxParticipants - eventEntry.value}</div>
                                     <div>
             							<fmt:timeZone value="AR">
-            								<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+            								<fmt:parseDate value="${eventEntry.key.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
             								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
             							</fmt:timeZone>
                                     </div>
                                     <div>
-                                        <a href="<c:url value="/event/${event.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                                        <a href="<c:url value="/event/${eventEntry.key.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
                                     </div>
                                 </div>
                             </c:forEach>

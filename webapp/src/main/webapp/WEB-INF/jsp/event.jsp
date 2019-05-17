@@ -41,8 +41,8 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="club"/> </span>
-							<a href="<c:url value="/club/${club.clubid}" /> ">${event.pitch.club.name}</a>
-							<span> - ${event.pitch.name}</span>
+							<a href="<c:url value="/club/${event.pitch.club.clubid}" /> ">${event.pitch.club.name}</a>
+							<span> - </span><a href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">${event.pitch.name}</a>
 						</div>
 						<div class="double-box">
 							<div class="description-item">

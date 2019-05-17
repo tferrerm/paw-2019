@@ -39,8 +39,44 @@ public interface EventService {
 	 */
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
 	
+	/**
+	 * Returns a Map of Events matching present filters. Also returns the Event's inscriptions.
+	 * @param onlyFuture		Search only future Events (true) or any Events (false).
+	 * @param name				String to match an Event's name with.
+	 * @param establishment		String to match an Event's club name with.
+	 * @param sport				String to match an Event's Sport with.
+	 * @param vacancies			Minimum vacancies for an Event.
+	 * @param page				Page number.
+	 * @return
+	 */
+	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<Sport> sport, Optional<Integer> vacancies, int page);
+	
+	/**
+	 * Returns a list of Events matching present filters.
+	 * @param onlyFuture		Search only future Events (true) or any Events (false).
+	 * @param name				String to match an Event's name with.
+	 * @param establishment		String to match an Event's club name with.
+	 * @param sport				String to match an Event's Sport with.
+	 * @param vacancies			Minimum vacancies for an Event.
+	 * @param page				Page number.
+	 * @return
+	 */
 	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page);
+	
+	/**
+	 * Returns a combination of eventid and vacancies for that Event.
+	 * @param onlyFuture		Search only future Events (true) or any Events (false).
+	 * @param name				String to match an Event's name with.
+	 * @param establishment		String to match an Event's club name with.
+	 * @param sport				String to match an Event's Sport with.
+	 * @param vacancies			Minimum vacancies for an Event.
+	 * @param page				Page number.
+	 * @return
+	 */
+	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+			Optional<String> sport, Optional<Integer> vacancies, int page);*/
 	
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour, 
 			int maxHour, int dayAmount);
