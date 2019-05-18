@@ -1,32 +1,24 @@
-<%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
-<%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@	taglib prefix="c"uri="http://java.sun.com/jstl/core_rt" %>
+<%@	taglib prefix="form" uri="http://www.springframework.org/tags/form"	%>
 <html>
-<head>
-	<script
+	<head>
+		<script
 			src="http://code.jquery.com/jquery-3.3.1.min.js"
 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			crossorigin="anonymous"></script>
-	<script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
-	<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
-	<title>Sport Matcher - Clubs</title>
-</head>
-
-<body>
-<%@include file="header.jsp" %>
-<div class="main-container">
-	<%@include file="sidebar.jsp" %>
-	<div class="content-container">
-		<h2><spring:message code="all_clubs" /></h2>
-		<c:choose>
-            <c:when test="${!clubsExist}">
-                <div class="notice">
-                    <spring:message code="no_clubs"/>
-                </div>
-            </c:when>
-            <c:otherwise>
+		<script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
+		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+		<title>Sport Matcher - Clubs</title>
+	</head>
+	<body>
+		<%@include file="header.jsp" %>
+		<div class="main-container">
+			<%@include file="sidebar.jsp" %>
+			<div class="content-container">
+				<h2><spring:message code="all_clubs" /></h2>
 				<div class="tbl club-table-size">
 					<div class="table-header">
 		                <c:url value='/clubs/filter' var="postPath"/>
@@ -66,15 +58,15 @@
 						</div>
 					</c:if>
 					<c:choose>
-                            <c:when test="${clubQty > 0}">
-                                <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="notice">
-                                    <spring:message code="no_results"/>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+		                    <c:when test="${clubQty > 0}">
+		                        <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
+		                    </c:when>
+		                    <c:otherwise>
+		                        <div class="notice">
+		                            <spring:message code="no_results"/>
+		                        </div>
+		                    </c:otherwise>
+		                </c:choose>
 					<c:if test="${pageNum != lastPageNum}">
 						<div>
 							<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
@@ -82,12 +74,7 @@
 						</div>
 					</c:if>
 				</div>
-			</c:otherwise>
-		</c:choose>
-	</div>
-
-</div>
-
-
-</body>
+			</div>
+		</div>
+	</body>
 </html>
