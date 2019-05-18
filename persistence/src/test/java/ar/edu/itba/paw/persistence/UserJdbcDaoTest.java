@@ -42,15 +42,15 @@ public class UserJdbcDaoTest {
 	}
 
 	private final long userid = 1;
-	private static final String USERNAME = "test_username";
-	private static final String FIRSTNAME = "firstname";
-	private static final String LASTNAME = "lastname";
-	private static final String PASSWORD = "test_password";
+	private static final String USERNAME = "user@name.com";
+	private static final String FIRSTNAME = "first";
+	private static final String LASTNAME = "last";
+	private static final String PASSWORD = "12345678";
 
 	@Rollback
 	@Test
 	public void testCreate() throws UserAlreadyExistsException {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate,"users");
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
 		final User user = userDao.create(USERNAME, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER);
 		Assert.assertNotNull(user);
 		Assert.assertEquals(USERNAME, user.getUsername());
