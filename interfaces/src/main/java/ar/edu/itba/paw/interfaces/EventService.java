@@ -62,14 +62,14 @@ public interface EventService {
 	/**
 	 * Returns a list of Events matching present filters.
 	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param name				String to match an Event's name with.
-	 * @param establishment		String to match an Event's club name with.
+	 * @param eventName			String to match an Event's name with.
+	 * @param clubName			String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
 	 * @param vacancies			Minimum vacancies for an Event.
 	 * @param page				Page number.
 	 * @return
 	 */
-	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page);
 	
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 

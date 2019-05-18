@@ -155,7 +155,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
 		if(page <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
@@ -165,7 +165,7 @@ public class EventServiceImpl implements EventService {
 			sportString = sport.get().toString();
 		}
 
-		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString),
 				vacancies, page);
 	}
 	
