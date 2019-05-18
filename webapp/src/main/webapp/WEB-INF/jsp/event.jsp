@@ -37,6 +37,10 @@
 							<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
 						</div>
 						<div class="description-item">
+							<span class="event-info-label"><spring:message code="event_description"/></span>
+							<span>${event.description}</span>
+						</div>
+						<div class="description-item">
 							<span class="event-info-label"><spring:message code="sport"/></span>
 							<span><spring:message code="${event.pitch.sport}"/></span>
 						</div>
