@@ -17,19 +17,17 @@
 				<div class="description-body">
 					<div class="description-item">
 						<span class="event-info-label"><spring:message code="pitches"/></span>
-						<ul>
+						<ul class="pitch-item">
 							<c:forEach var="pitch" items="${pitches}">
-								<div class="custom-row">
-									<div>${pitch.name}</div>
-									<div><spring:message code="${pitch.sport}"/></div>
-									<div>
-										<a href="<c:url value="/admin/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
-									</div>
+								<div class="custom-row flex-space-between pitch-item">
+									<a href="<c:url value="/pitch/${pitch.pitchid}" /> " class="flex-1">${pitch.name}</a>
+									<div class="flex-1"><spring:message code="${pitch.sport}"/></div>
+									<a href="<c:url value="/club/${club.clubid}"/>" class="flex-1"> <button type="button" class="btn btn-primary"><spring:message code="view_club"/></button></a>
 								</div>
 							</c:forEach>
 						</ul>
 					</div>
-					<div class="participants-list">
+					<div class="club-address">
 						<span class="event-info-label"><spring:message code="address"/></span>
 						<p>${club.location}</p>
 					</div>
