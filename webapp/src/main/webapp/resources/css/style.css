@@ -197,6 +197,11 @@ a.link-text{
     color: white;
 }
 
+.event-link {
+  color: dodgerblue;
+  text-decoration: underline;
+}
+
 .flex {
     display: flex;
 }
@@ -328,10 +333,40 @@ a.link-text{
   align-items: center;
 }
 
+.home-all-events {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  width: 80%;
+  list-style: none;
+  background-color: white;
+}
+
+.home-ev-column {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid dodgerblue;
+}
+
 .home-ev-title {
   justify-content: center;
   border: 1px solid dodgerblue;
   background-color: white;
+}
+
+.home-evs-container {
+  width: 80%;
+  background-color: white;
+}
+
+.home-evs-group {
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .home-header {
@@ -340,13 +375,6 @@ a.link-text{
 
 .home-title {
   margin: 20px 0 10px;
-}
-
-.home-title-group {
-  width: 80%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .input-number {

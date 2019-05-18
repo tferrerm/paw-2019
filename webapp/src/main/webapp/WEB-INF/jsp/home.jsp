@@ -14,11 +14,22 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h3 class="home-title"><spring:message code="upcomingParticipations"/></h3>
-    	    <div class="home-title-group flex">
-	            <c:forEach var="dayMessage" items="${scheduleHeaders}">
-	                <span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
-	            </c:forEach>
+			<div class="home-evs-container">
+	    	    <div class="home-evs-group flex">
+		            <c:forEach var="dayMessage" items="${scheduleHeaders}">
+		                <span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
+		            </c:forEach>
+		    	</div>
             </div>
+            <div class="home-all-events">
+	            <c:forEach var="row" items="${myEvents}">
+	            	<div class="home-ev-column">
+			            <c:forEach var="event" items="${row}">
+			                <a href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
+			            </c:forEach>
+		            </div>
+	            </c:forEach>
+	        </div>
 			<div class="bottom-home-container">
 				<div class="bottom-home-item">
 					<h3><spring:message code="introAllEvents"/></h3>
