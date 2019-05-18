@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.interfaces;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -95,7 +98,9 @@ public interface EventService {
 	public int countParticipants(long eventid);
 
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
-			final int maxParticipants, final Instant startsAt, final Instant endsAt);
+			final String maxParticipants, final String date, final String startsAtHour,
+			final String endsAtHour) throws InvalidDateFormatException, EndsBeforeStartsException,
+											EventInPastException, MaximumDateExceededException;
 
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;

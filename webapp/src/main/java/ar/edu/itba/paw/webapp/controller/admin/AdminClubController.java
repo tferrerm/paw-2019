@@ -26,7 +26,7 @@ import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.controller.BaseController;
-import ar.edu.itba.paw.webapp.controller.ClubNotFoundException;
+import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewClubForm;
 import ar.edu.itba.paw.webapp.form.NewPitchForm;
 

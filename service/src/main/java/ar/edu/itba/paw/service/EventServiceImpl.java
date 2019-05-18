@@ -4,6 +4,8 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
+import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -199,9 +205,36 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public Event create(String name, User owner, Pitch pitch, String description,
-			int maxParticipants, Instant startsAt, Instant endsAt) {
-		return ed.create(name, owner, pitch, description, maxParticipants, startsAt, endsAt);
+	public Event create(final String name, final User owner, final Pitch pitch,
+			final String description, final String maxParticipants, final String date, 
+			final String startsAtHour, final String endsAtHour) 
+			throws InvalidDateFormatException, EndsBeforeStartsException, EventInPastException,
+				   MaximumDateExceededException {
+		int mp = Integer.parseInt(maxParticipants);
+		int startsAt = Integer.parseInt(startsAtHour);
+    	int endsAt = Integer.parseInt(endsAtHour);
+    	Instant dateInstant = null;
+    	try {
+    		dateInstant = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
+    	} catch(DateTimeParseException e) {
+    		throw new InvalidDateFormatException();
+    	}
+    	if(endsAt <= startsAt)
+    		throw new EndsBeforeStartsException();
+    	if(dateInstant.isBefore(today()))
+    		throw new EventInPastException();
+    	if(dateInstant.compareTo(aWeeksTime()) > 0)
+    		throw new MaximumDateExceededException();
+		return ed.create(name, owner, pitch, description, mp, 
+				dateInstant.plus(startsAt, ChronoUnit.HOURS), dateInstant.plus(endsAt, ChronoUnit.HOURS));
+	}
+	
+	private Instant today() {
+    	return LocalDate.now().atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
+    }
+	
+	private Instant aWeeksTime() {
+		return today().plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })

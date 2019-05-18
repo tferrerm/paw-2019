@@ -40,6 +40,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
 
 @Controller
