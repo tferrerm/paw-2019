@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,9 +156,10 @@ public class EventServiceImpl implements EventService {
 		}
 		return nextSevenDays;
 	}
-
+	
+	@Transactional
 	@Override
-	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
 		List<Event> events = findBy(onlyFuture, name, establishment, sport, vacancies, page);
 		String sportString = null;
@@ -168,13 +168,11 @@ public class EventServiceImpl implements EventService {
 		}
 		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, name, establishment,
 				Optional.ofNullable(sportString), vacancies, page);
-		events.sort(Comparator.comparing(Event::getEventId));
-		eventInscriptions.sort(Comparator.comparing(arr -> arr[EVENT_ID_INDEX]));
-		Map<Event, Long> eventWithInscriptions = new HashMap<>();
+		
 		for(int i = 0; i < events.size(); i++) {
-			eventWithInscriptions.put(events.get(i), eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
+			events.get(i).setInscriptions(eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
 		}
-		return eventWithInscriptions;
+		return events;
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public interface EventService {
 	public List<Event> findCurrentEventsInPitch(final long pitchid);
 
 	/**
-	 * Returns a Map of Events matching present filters. Also returns the Event's inscriptions.
+	 * Returns a list of Events matching present filters and sets the inscriptions field.
 	 * @param onlyFuture		Search only future Events (true) or any Events (false).
 	 * @param name				String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
@@ -55,7 +55,7 @@ public interface EventService {
 	 * @param page				Page number.
 	 * @return
 	 */
-	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, 
+	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> name, 
 			Optional<String> establishment, Optional<Sport> sport, 
 			Optional<Integer> vacancies, int page);
 

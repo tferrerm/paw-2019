@@ -149,6 +149,8 @@ public class EventJdbcDao implements EventDao {
 		StringBuilder queryString = new StringBuilder("SELECT * ");
 		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, clubName, sport, vacancies));
 		
+		queryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
+		
 		int offset = (page - 1) * MAX_ROWS;
 		queryString.append(" OFFSET ? ;");
 		paramValues.add(offset);
@@ -236,7 +238,7 @@ public class EventJdbcDao implements EventDao {
 				presentFields++;
 			}
 		}
-		queryString.append(" GROUP BY e.eventid OFFSET ? ;");
+		queryString.append(" GROUP BY e.eventid, e.starts_at ORDER BY e.starts_at ASC, e.eventid ASC OFFSET ? ;");
 		list.add(offset);
 		return jdbcTemplate.query(queryString.toString(), irm, list.toArray());
 	}

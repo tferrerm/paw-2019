@@ -10,6 +10,7 @@ public class Event {
 	private Pitch pitch;
 	private String description;
 	private int maxParticipants;
+	private Long inscriptions;
 	private Instant startsAt;
 	private Instant endsAt;
 	private Instant createdAt;
@@ -73,6 +74,17 @@ public class Event {
 	
 	public int getMaxParticipants() {
 		return maxParticipants;
+	}
+	
+	/**
+	 * Returns null unless setter is called.
+	 */
+	public Long getInscriptions() {
+		return inscriptions;
+	}
+
+	public void setInscriptions(Long inscriptions) {
+		this.inscriptions = inscriptions;
 	}
 
 	public Instant getStartsAt() {

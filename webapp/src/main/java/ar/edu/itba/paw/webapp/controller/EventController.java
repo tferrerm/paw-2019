@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -174,9 +173,10 @@ public class EventController extends BaseController {
         if(vacancies != null)
         	vacanciesNum = Integer.valueOf(vacancies);
         
-        Map<Event, Long> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
+        List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
         		Optional.ofNullable(establishment), Optional.ofNullable(sport), 
         		Optional.ofNullable(vacanciesNum), pageNum);
+
         mav.addObject("events", events);
         mav.addObject("eventQty", events.size());
         
