@@ -28,10 +28,10 @@
 								<ul>
 									<c:forEach var="pitch" items="${pitches}">
 										<div class="custom-row flex-space-around club-pitches-list">
-											<a href="<c:url value="/pitch/${pitch.pitchid}" /> ">${pitch.name}</a>
+											<div>${pitch.name}</div>
 											<div><spring:message code="${pitch.sport}"/></div>
 											<div>
-												<a href="<c:url value="/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
+												<a href="<c:url value="/pitch/${pitch.pitchid}" /> "> <button type="button" class="btn btn-primary view-club"><spring:message code="view_pitch"/></button></a>
 											</div>
 										</div>
 									</c:forEach>
