@@ -2,8 +2,6 @@ package ar.edu.itba.paw.webapp.form;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
-
 public class NewClubForm {
 	
 	@NotBlank

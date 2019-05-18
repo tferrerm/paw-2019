@@ -18,11 +18,8 @@ import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
-import ar.edu.itba.paw.webapp.form.NewPitchForm;
 
 @Controller
 public class ClubController extends BaseController {

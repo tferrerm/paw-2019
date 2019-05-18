@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -208,23 +209,27 @@ public class EventServiceImpl implements EventService {
 	public Event create(final String name, final User owner, final Pitch pitch,
 			final String description, final String maxParticipants, final String date, 
 			final String startsAtHour, final String endsAtHour) 
-			throws InvalidDateFormatException, EndsBeforeStartsException, EventInPastException,
-				   MaximumDateExceededException {
+					throws 	InvalidDateFormatException, EventInPastException,
+							MaximumDateExceededException, EndsBeforeStartsException, 
+							EventOverlapException {
+		
 		int mp = Integer.parseInt(maxParticipants);
 		int startsAt = Integer.parseInt(startsAtHour);
     	int endsAt = Integer.parseInt(endsAtHour);
+    	
     	Instant dateInstant = null;
     	try {
     		dateInstant = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
     	} catch(DateTimeParseException e) {
     		throw new InvalidDateFormatException();
     	}
-    	if(endsAt <= startsAt)
-    		throw new EndsBeforeStartsException();
     	if(dateInstant.isBefore(today()))
     		throw new EventInPastException();
     	if(dateInstant.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
+    	if(endsAt <= startsAt)
+    		throw new EndsBeforeStartsException();
+
 		return ed.create(name, owner, pitch, description, mp, 
 				dateInstant.plus(startsAt, ChronoUnit.HOURS), dateInstant.plus(endsAt, ChronoUnit.HOURS));
 	}
@@ -301,12 +306,12 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Sport> getFavoriteSport(final long userid) {
+	public Optional<Sport> getFavoriteSport(final long userid) {
 		return ed.getFavoriteSport(userid);
 	}
 
 	@Override
-	public List<Club> getFavoriteClub(final long userid) {
+	public Optional<Club> getFavoriteClub(final long userid) {
 		return ed.getFavoriteClub(userid);
 	}
 

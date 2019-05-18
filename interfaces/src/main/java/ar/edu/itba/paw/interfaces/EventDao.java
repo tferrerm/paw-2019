@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.model.Club;
@@ -76,7 +77,8 @@ public interface EventDao {
 	public int countParticipants(final long eventid);
 
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
-			final int maxParticipants, final Instant startsAt, final Instant endsAt);
+			final int maxParticipants, final Instant startsAt, final Instant endsAt)
+					throws EventOverlapException;
 
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, UserBusyException;
@@ -105,14 +107,14 @@ public interface EventDao {
 	 * @param 	userid 	The User's id.
 	 * @return the User's favorite Sports.
 	 */
-	public List<Sport> getFavoriteSport(final long userid);
+	public Optional<Sport> getFavoriteSport(final long userid);
 
 	/**
 	 * Gets a User's favorite Club(s) based on Events joined.
 	 * @param 	userid 	The User's id.
 	 * @return the User's favorite Clubs.
 	 */
-	public List<Club> getFavoriteClub(final long userid);
+	public Optional<Club> getFavoriteClub(final long userid);
 
 	/**
 	 * Deletes an Event from database along with all User related participations.

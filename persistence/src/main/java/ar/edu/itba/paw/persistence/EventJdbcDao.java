@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.EventDao;
@@ -27,10 +28,11 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.rowmapper.ClubRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
-import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.InscriptionsRowMapper;
+import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
 @Repository
 public class EventJdbcDao implements EventDao {
@@ -57,6 +59,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private InscriptionsRowMapper irm;
+	
+	@Autowired
+	private ClubRowMapper crm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -229,8 +234,24 @@ public class EventJdbcDao implements EventDao {
 	}
 
 	@Override
-	public Event create(String name, User owner, Pitch pitch, String description, 
-			int maxParticipants, Instant startsAt, Instant endsAt) {
+	public Event create(final String name, final User owner, final Pitch pitch, 
+			final String description, final int maxParticipants, 
+			final Instant startsAt, final Instant endsAt) 
+				throws EventOverlapException {
+		
+		Timestamp eventStartsAt = Timestamp.from(startsAt);
+		Timestamp eventEndsAt = Timestamp.from(endsAt);
+		
+		String eventOverlapQueryString = "SELECT count(*) FROM events WHERE pitchid = ? AND "
+				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at < ?))";
+		
+		int eventOverlapQueryResult = jdbcTemplate.queryForObject(eventOverlapQueryString, 
+				Integer.class, pitch.getPitchid(), eventStartsAt, eventStartsAt, eventStartsAt, 
+				eventEndsAt);
+		
+		if(eventOverlapQueryResult > 0)
+			throw new EventOverlapException("Pitch is already taken in the chosen time period");
+		
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("eventname", name);
@@ -242,6 +263,7 @@ public class EventJdbcDao implements EventDao {
 		args.put("ends_at", Timestamp.from(endsAt));
 		args.put("event_created_at", Timestamp.from(now));
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
+		
 		return new Event(eventId.longValue(), name, owner, pitch, description, 
 				maxParticipants, startsAt, endsAt);
 	}
@@ -323,21 +345,23 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Sport> getFavoriteSport(final long userid) {
-		/*String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
-				+ "WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*)"
-				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport))";
-		return jdbcTemplate.query(queryString, rm, userid, userid);*/
-		return null;
+	public Optional<Sport> getFavoriteSport(final long userid) {
+		String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
+				+ " WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport) "
+				+ " ORDER BY sport ASC)";
+		Sport ret =  jdbcTemplate.queryForObject(queryString, Sport.class, userid, userid);
+		return Optional.ofNullable(ret);
 	}
 	
 	@Override
-	public List<Club> getFavoriteClub(final long userid) {
-		/*String queryString = "SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
-				+ "WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*)"
-				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid))";
-		return jdbcTemplate.query(queryString, rm, userid, userid);*/
-		return null;
+	public Optional<Club> getFavoriteClub(final long userid) {
+		String queryString = " SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
+				+ " WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid)"
+				+ " ORDER BY clubid ASC) ";
+		Club ret =  jdbcTemplate.queryForObject(queryString, crm, userid, userid);
+		return Optional.ofNullable(ret);
 	}
 	
 	@Override
