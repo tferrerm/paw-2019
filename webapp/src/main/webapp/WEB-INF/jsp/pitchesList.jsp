@@ -13,6 +13,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
 		<title>Sport Matcher - Pitches</title>
 	</head>
+
 	<body>
 	<%@include file="header.jsp" %>
 	<div class="main-container">
@@ -85,7 +86,6 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
-				
                 <c:if test="${pageNum != lastPageNum}">
     				<div>
                         <a href="<c:url value='/pitches/${page+1}${queryString}' />">
