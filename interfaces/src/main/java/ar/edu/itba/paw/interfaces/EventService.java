@@ -136,14 +136,14 @@ public interface EventService {
 	 * @param 	userid 	The User's id.
 	 * @return the User's favorite Sports.
 	 */
-	public List<Sport> getFavoriteSport(final long userid);
+	public Optional<Sport> getFavoriteSport(final long userid);
 
 	/**
 	 * Gets a User's favorite Club(s) based on Events joined.
 	 * @param 	userid 	The User's id.
 	 * @return the User's favorite Clubs.
 	 */
-	public List<Club> getFavoriteClub(final long userid);
+	public Optional<Club> getFavoriteClub(final long userid);
 
 	/**
 	 * Deletes an Event from database along with all User related participations.

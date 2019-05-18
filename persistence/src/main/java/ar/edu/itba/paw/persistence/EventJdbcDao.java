@@ -345,21 +345,23 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public Sport getFavoriteSport(final long userid) {
+	public Optional<Sport> getFavoriteSport(final long userid) {
 		String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
 				+ " WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
 				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport) "
 				+ " ORDER BY sport ASC)";
-		return jdbcTemplate.queryForObject(queryString, Sport.class, userid, userid);
+		Sport ret =  jdbcTemplate.queryForObject(queryString, Sport.class, userid, userid);
+		return Optional.ofNullable(ret);
 	}
 	
 	@Override
-	public Club getFavoriteClub(final long userid) {
+	public Optional<Club> getFavoriteClub(final long userid) {
 		String queryString = " SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
 				+ " WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*) "
 				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid)"
 				+ " ORDER BY clubid ASC) ";
-		return jdbcTemplate.queryForObject(queryString, crm, userid, userid);
+		Club ret =  jdbcTemplate.queryForObject(queryString, crm, userid, userid);
+		return Optional.ofNullable(ret);
 	}
 	
 	@Override
