@@ -50,7 +50,7 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 
 @Controller
 public class EventController extends BaseController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final String START_DATE = "date";
@@ -59,20 +59,24 @@ public class EventController extends BaseController {
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
-	
+
 	@Autowired
 	private EventService es;
 
     @Autowired
     private EmailService ems;
-    
+
     @Autowired
     private PitchService ps;
-	
+
 	@RequestMapping("/home")
 	public ModelAndView home()	{
 //		ems.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", LocaleContextHolder.getLocale());
-	    return new ModelAndView("home");
+		ModelAndView mav = new ModelAndView("home");
+		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
+		mav.addObject("upcomingEvents", es.findByUsername(true, loggedUser().getUsername(), 1));
+		mav.addObject("scheduleHeaders", scheduleDaysHeader);
+	    return mav;
 	}
 
 	@RequestMapping("/my-events/{page}")
@@ -82,7 +86,7 @@ public class EventController extends BaseController {
 		mav.addObject("past_events", es.findByOwner(false, loggedUser().getUsername(), pageNum));
 	    return mav;
 	}
-	
+
 	@RequestMapping("/history/{page}")
 	public ModelAndView historyList(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("history");
@@ -104,14 +108,14 @@ public class EventController extends BaseController {
         mav.addObject("participant_count", es.countParticipants(event.getEventId()));
         mav.addObject("participants", participants);
         mav.addObject("is_participant", participants.contains(loggedUser()));
-        
+
         mav.addObject("eventFullError", eventFullError);
         mav.addObject("alreadyJoinedError", alreadyJoinedError);
         mav.addObject("userBusyError", userBusyError);
-        
+
         return mav;
     }
-    
+
     @RequestMapping(value = "/event/{id}/join", method = { RequestMethod.POST })
     public ModelAndView joinEvent(@PathVariable long id)
     	throws EventNotFoundException {
@@ -119,7 +123,7 @@ public class EventController extends BaseController {
 	    ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    try {
 	    	es.joinEvent(loggedUser(), event);
-	    	
+
 	    } catch(EventFullException e) {
 	    	mav.addObject("eventFullError", true);
 	    	return mav;
@@ -133,7 +137,7 @@ public class EventController extends BaseController {
 	    }
         return mav;
     }
-    
+
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveEvent(@PathVariable long id)
     	throws EventNotFoundException {
@@ -141,7 +145,7 @@ public class EventController extends BaseController {
 	    es.leaveEvent(loggedUser(), event);
         return new ModelAndView("redirect:/event/" + id);
     }
-    
+
     @RequestMapping(value = "/event/{eventId}/kick-user/{userId}", method = { RequestMethod.POST })
     public ModelAndView kickUserFromEvent(
     		@PathVariable("eventId") long eventid,
@@ -151,7 +155,7 @@ public class EventController extends BaseController {
     	es.kickFromEvent(loggedUser(), kickedUserId, event);
     	return new ModelAndView("redirect:/event/" + eventid);
     }
-    
+
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,
@@ -173,15 +177,15 @@ public class EventController extends BaseController {
         if(vacancies != null)
         	vacanciesNum = Integer.valueOf(vacancies);
         mav.addObject("events", es.findByWithInscriptions(
-        		true, 
-        		Optional.ofNullable(name), 
-        		Optional.ofNullable(establishment), 
-        		Optional.ofNullable(sport), 
-        		Optional.ofNullable(vacanciesNum), 
+        		true,
+        		Optional.ofNullable(name),
+        		Optional.ofNullable(establishment),
+        		Optional.ofNullable(sport),
+        		Optional.ofNullable(vacanciesNum),
         		pageNum));
         return mav;
     }
-	
+
 	@RequestMapping("/pitch/{pitchId}")
 	public ModelAndView seePitch(
 			@PathVariable("pitchId") long id,
@@ -197,18 +201,18 @@ public class EventController extends BaseController {
 		mav.addObject("schedule", schedule);
 		return mav;
 	}
-    
+
     @RequestMapping(value = "/pitch/{pitchId}/event/create", method = { RequestMethod.POST })
     public ModelAndView createEvent(
     		@PathVariable("pitchId") long pitchId,
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) throws PitchNotFoundException {
-    	
+
     	if(errors.hasErrors()) {
     		return seePitch(pitchId, form);
     	}
-    	
+
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
     	Event ev = null;
     	try {
@@ -226,8 +230,8 @@ public class EventController extends BaseController {
     	}
     	return new ModelAndView("redirect:/event/" + ev.getEventId());
     }
-    
-    private ModelAndView eventCreationError(String error, long pitchId, NewEventForm form) 
+
+    private ModelAndView eventCreationError(String error, long pitchId, NewEventForm form)
     	throws PitchNotFoundException {
     	ModelAndView mav = seePitch(pitchId, form);
 		mav.addObject(error, true);
@@ -273,7 +277,7 @@ public class EventController extends BaseController {
 	private ModelAndView eventNotFound() {
 		return new ModelAndView("404");
 	}
-	
+
 	@ExceptionHandler({ PitchNotFoundException.class })
 	private ModelAndView pitchNotFound() {
 		return new ModelAndView("404");
