@@ -93,4 +93,10 @@ public class PitchServiceImpl implements PitchService {
 		pd.deletePitch(pitchid);
 	}
 
+	@Override
+	public boolean pitchesExist() {
+		return countFilteredPitches(Optional.empty(), Optional.empty(), 
+				Optional.empty(), Optional.empty()) > 0;
+	}
+
 }

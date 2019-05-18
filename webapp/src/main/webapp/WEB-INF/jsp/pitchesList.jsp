@@ -20,7 +20,7 @@
 		<div class="content-container">
 			<h2><spring:message code="choosePitch" /></h2>
             <c:choose>
-                <c:when test="${empty pitches}">
+                <c:when test="${!pitchesExist}">
                     <div class="notice">
                         <spring:message code="no_pitches"/>
                     </div>
@@ -82,7 +82,17 @@
                                 <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
                             </div>
                         </c:if>
-        				<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchQty}</span>
+                        <c:choose>
+                            <c:when test="${pitchQty > 0}">
+                                <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchQty}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="notice">
+                                    <spring:message code="no_results"/>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+        				
                         <c:if test="${pageNum != lastPageNum}">
             				<div>
                                 <a href="<c:url value='/pitches/${page+1}${queryString}' />">

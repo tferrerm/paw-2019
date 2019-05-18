@@ -74,5 +74,10 @@ public class ClubServiceImpl implements ClubService {
 	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
 		return cd.countFilteredClubs(clubName, location);
 	}
+	
+	@Override
+	public boolean clubsExist() {
+		return countFilteredClubs(Optional.empty(), Optional.empty()) > 0;
+	}
 
 }

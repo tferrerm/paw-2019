@@ -35,4 +35,6 @@ public interface ClubService {
 	
 	public int countClubPages();
 
+	public boolean clubsExist();
+
 }

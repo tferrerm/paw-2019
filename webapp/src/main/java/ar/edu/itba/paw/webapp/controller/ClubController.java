@@ -54,23 +54,27 @@ public class ClubController extends BaseController {
 		
 		ModelAndView mav = new ModelAndView("clubList");
 		
-		mav.addObject("pageNum", pageNum);
-        mav.addObject("queryString", queryString);
-        mav.addObject("lastPageNum", cs.countClubPages());
-        
-        List<Club> clubs = cs.findBy(
-				Optional.ofNullable(clubName), 
-        		Optional.ofNullable(location), 
-        		pageNum);
-        mav.addObject("clubs", clubs);
-        mav.addObject("clubQty", clubs.size());
-        
-        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
-        		Optional.ofNullable(location));
-        mav.addObject("totalClubQty", totalClubQty);
-        
-        mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
-        
+		boolean clubsExist = cs.clubsExist();
+		mav.addObject("clubsExist", clubsExist);
+		
+		if(clubsExist) {
+			mav.addObject("pageNum", pageNum);
+	        mav.addObject("queryString", queryString);
+	        mav.addObject("lastPageNum", cs.countClubPages());
+	        mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
+	        
+	        List<Club> clubs = cs.findBy(
+					Optional.ofNullable(clubName), 
+	        		Optional.ofNullable(location), 
+	        		pageNum);
+	        mav.addObject("clubs", clubs);
+	        mav.addObject("clubQty", clubs.size());
+	        
+	        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
+	        		Optional.ofNullable(location));
+	        mav.addObject("totalClubQty", totalClubQty);
+		}
+
 		return mav;
 	}
 	
