@@ -50,8 +50,8 @@ public class PitchJdbcDao implements PitchDao {
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
 		int offset = (page - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM pitches p NATURAL JOIN clubs c "
-				+ " WHERE p.clubid = ? OFFSET ?",
+		return jdbcTemplate.query("SELECT * FROM pitches NATURAL JOIN clubs "
+				+ " WHERE clubid = ? OFFSET ?",
 				prm, clubid, offset);
 	}
 	

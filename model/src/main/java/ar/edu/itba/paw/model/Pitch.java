@@ -26,6 +26,17 @@ public class Pitch {
 	public String toString() {
 		return "Pitch: " + name + "; id: " + pitchid;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof Pitch))
+			return false;
+		Pitch other = (Pitch) o;
+		return pitchid == other.getPitchid() && club.equals(other.getClub()) && name.equals(other.getName())
+				&& sport.equals(other.sport);
+	}
 
 	public long getPitchid() {
 		return pitchid;

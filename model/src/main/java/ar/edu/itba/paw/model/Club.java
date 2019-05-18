@@ -20,6 +20,17 @@ public class Club {
 	public String toString() {
 		return "Club: " + name + "; id: " + clubid;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof Club))
+			return false;
+		Club other = (Club) o;
+		return clubid == other.getClubid() && name.equals(other.getName()) 
+				&& location.equals(other.getLocation());
+	}
 
 	public long getClubid() {
 		return clubid;

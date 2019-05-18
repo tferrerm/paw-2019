@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +18,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 
@@ -32,7 +32,7 @@ public class UserJdbcDaoTest {
 	private DataSource ds;
 
 	@Autowired
-	private UserJdbcDao userDao;
+	private UserDao userDao;
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -41,7 +41,7 @@ public class UserJdbcDaoTest {
 		jdbcTemplate = new JdbcTemplate(ds);
 	}
 
-	private final long userid = 1;
+	private static final long USERID = 1;
 	private static final String USERNAME = "user@name.com";
 	private static final String FIRSTNAME = "first";
 	private static final String LASTNAME = "last";
@@ -64,9 +64,9 @@ public class UserJdbcDaoTest {
 
 	@Test
 	public void testFindById() {
-		final Optional<User> user = userDao.findById(userid);
+		final Optional<User> user = userDao.findById(USERID);
 		Assert.assertTrue(user.isPresent());
-		Assert.assertEquals(userid, user.get().getUserid());
+		Assert.assertEquals(USERID, user.get().getUserid());
 		Assert.assertEquals(USERNAME, user.get().getUsername());
 		Assert.assertEquals(FIRSTNAME, user.get().getFirstname());
 		Assert.assertEquals(LASTNAME, user.get().getLastname());

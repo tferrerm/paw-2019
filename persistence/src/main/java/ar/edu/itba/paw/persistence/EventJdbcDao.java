@@ -243,7 +243,7 @@ public class EventJdbcDao implements EventDao {
 		args.put("event_created_at", Timestamp.from(now));
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
 		return new Event(eventId.longValue(), name, owner, pitch, description, 
-				maxParticipants, startsAt, endsAt);
+				maxParticipants, startsAt, endsAt, now);
 	}
 	
 	@Override
