@@ -21,11 +21,15 @@
 		            </c:forEach>
 		    	</div>
             </div>
-            <c:forEach var="row" items="${myEvents}">
-	            <c:forEach var="event" items="${row}">
-	                <span>${event.name}</span>
+            <div class="home-all-events">
+	            <c:forEach var="row" items="${myEvents}">
+	            	<div class="home-ev-column">
+			            <c:forEach var="event" items="${row}">
+			                <a href="<c:url value='/event/${event.eventId}' />"><span>${event.name}</span></a>
+			            </c:forEach>
+		            </div>
 	            </c:forEach>
-            </c:forEach>
+	        </div>
 			<div class="bottom-home-container">
 				<div class="bottom-home-item">
 					<h3><spring:message code="introAllEvents"/></h3>

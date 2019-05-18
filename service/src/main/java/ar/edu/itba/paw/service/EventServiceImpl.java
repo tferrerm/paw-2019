@@ -112,7 +112,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents) {
-		Event[][] schedule = new Event[maxAmountOfEvents][dayAmount];
+		Event[][] schedule = new Event[dayAmount][maxAmountOfEvents];
 		int[] indexes = new int [dayAmount];
 		int i = 0;
 		for(Event event : events) {
@@ -127,7 +127,7 @@ public class EventServiceImpl implements EventService {
 				dayIndex += 7;
 			
 			i = indexes[dayIndex];
-			schedule[i][dayIndex] = event;
+			schedule[dayIndex][i] = event;
 			indexes[dayIndex]++;
 		}
 		return schedule;
