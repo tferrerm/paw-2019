@@ -34,6 +34,5 @@ public interface PitchService {
 	public int getPageInitialPitchIndex(final int pageNum);
 	
 	public void deletePitch(long pitchid);
-
-	public boolean pitchesExist();
+	
 }
