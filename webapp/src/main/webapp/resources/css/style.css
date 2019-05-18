@@ -197,6 +197,11 @@ a.link-text{
     color: white;
 }
 
+.event-link {
+  color: dodgerblue;
+  text-decoration: underline;
+}
+
 .flex {
     display: flex;
 }
