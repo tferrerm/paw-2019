@@ -110,6 +110,29 @@ public class EventServiceImpl implements EventService {
 		return schedule;
 	}
 
+	@Override
+	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents) {
+		Event[][] schedule = new Event[maxAmountOfEvents][dayAmount];
+		int[] indexes = new int [dayAmount];
+		int i = 0;
+		for(Event event : events) {
+			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
+					.toLocalDate().getDayOfWeek();
+			DayOfWeek currentDayOfWeek = LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek();
+
+			Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
+
+			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7; // Should change if dayAmount != 7
+			if(dayIndex < 0)
+				dayIndex += 7;
+			
+			i = indexes[dayIndex];
+			schedule[i][dayIndex] = event;
+			indexes[dayIndex]++;
+		}
+		return schedule;
+	}	
+	
 	private Map<DayOfWeek, Integer> getDaysOfWeek() {
 		if(DAYS_OF_WEEK_NUM.isEmpty()) {
 			int i = 0;

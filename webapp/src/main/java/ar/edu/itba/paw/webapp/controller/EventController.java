@@ -53,7 +53,8 @@ public class EventController extends BaseController {
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
-
+	private static final int MAX_EVENTS_PER_DAY = 14;
+	
 	@Autowired
 	private EventService es;
 
@@ -68,7 +69,9 @@ public class EventController extends BaseController {
 //		ems.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", LocaleContextHolder.getLocale());
 		ModelAndView mav = new ModelAndView("home");
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		mav.addObject("upcomingEvents", es.findByUsername(true, loggedUser().getUsername(), 1));
+		List<Event> upcomingEvents = es.findFutureEvents(1);
+		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
+		mav.addObject("myEvents", myEvents);
 		mav.addObject("scheduleHeaders", scheduleDaysHeader);
 	    return mav;
 	}

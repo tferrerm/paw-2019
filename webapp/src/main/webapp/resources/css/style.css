@@ -334,19 +334,24 @@ a.link-text{
   background-color: white;
 }
 
+.home-evs-container {
+  width: 80%;
+  background-color: white;
+}
+
+.home-evs-group {
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .home-header {
   text-align: center;
 }
 
 .home-title {
   margin: 20px 0 10px;
-}
-
-.home-title-group {
-  width: 80%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .input-number {

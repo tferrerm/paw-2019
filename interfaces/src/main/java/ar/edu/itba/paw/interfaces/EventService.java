@@ -86,6 +86,8 @@ public interface EventService {
 
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
 			int maxHour, int dayAmount);
+	
+	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents);
 
 	public int countUserEventPages(final long userid);
 
