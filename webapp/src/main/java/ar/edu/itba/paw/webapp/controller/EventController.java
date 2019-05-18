@@ -1,10 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,16 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
-import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -223,6 +217,8 @@ public class EventController extends BaseController {
     		return eventCreationError("event_in_past", pitchId, form);
     	} catch(MaximumDateExceededException e) {
     		return eventCreationError("date_exceeded", pitchId, form);
+    	} catch(EventOverlapException e) {
+    		return eventCreationError("event_overlap", pitchId, form);
     	}
     	return new ModelAndView("redirect:/event/" + ev.getEventId());
     }

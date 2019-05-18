@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Sport;
 
 public interface ClubService {
 	

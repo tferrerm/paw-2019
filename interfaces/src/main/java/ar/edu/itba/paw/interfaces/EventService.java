@@ -7,6 +7,7 @@ import java.util.Optional;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -99,8 +100,9 @@ public interface EventService {
 
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
 			final String maxParticipants, final String date, final String startsAtHour,
-			final String endsAtHour) throws InvalidDateFormatException, EndsBeforeStartsException,
-											EventInPastException, MaximumDateExceededException;
+			final String endsAtHour) throws InvalidDateFormatException, EventInPastException, 
+											MaximumDateExceededException, EndsBeforeStartsException, 
+											EventOverlapException;
 
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
