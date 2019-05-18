@@ -301,7 +301,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
 		Map<Integer, String> availableHoursMap = new HashMap<>();
-		for(int i = minHour; i < maxHour; i++) {
+		for(int i = minHour; i <= maxHour; i++) {
 			availableHoursMap.put(i, i + ":00");
 		}
 		return availableHoursMap;
