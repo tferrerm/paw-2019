@@ -349,17 +349,18 @@ public class EventJdbcDao implements EventDao {
 		String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
 				+ " WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
 				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport) "
-				+ " ORDER BY sport ASC)";
-		Sport ret =  jdbcTemplate.queryForObject(queryString, Sport.class, userid, userid);
+				+ " ORDER BY sport ASC";
+		Sport ret =  Sport.valueOf(jdbcTemplate.queryForObject(queryString, String.class, userid, userid));
 		return Optional.ofNullable(ret);
 	}
 	
 	@Override
 	public Optional<Club> getFavoriteClub(final long userid) {
-		String queryString = " SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
-				+ " WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*) "
+		String queryString = " SELECT clubid, clubname, location, club_created_at FROM events_users "
+				+ " NATURAL JOIN events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " WHERE userid = ? GROUP BY clubid, clubname, location, club_created_at HAVING count(*) >= ANY (SELECT count(*) "
 				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid)"
-				+ " ORDER BY clubid ASC) ";
+				+ " ORDER BY clubid ASC ";
 		Club ret =  jdbcTemplate.queryForObject(queryString, crm, userid, userid);
 		return Optional.ofNullable(ret);
 	}
