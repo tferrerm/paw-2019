@@ -100,6 +100,7 @@ public class ClubJdbcDao implements ClubDao {
 		List<Object> paramValues = new ArrayList<>();
 		StringBuilder queryString = new StringBuilder("SELECT * ");
 		queryString.append(getFilterQueryEndString(paramValues, clubName, location));
+		queryString.append(" ORDER BY clubname ASC ");
 		
 		int offset = (page - 1) * MAX_ROWS;
 		queryString.append(" OFFSET ? ;");

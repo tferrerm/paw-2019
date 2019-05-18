@@ -63,6 +63,7 @@ public class PitchJdbcDao implements PitchDao {
 		StringBuilder queryString = new StringBuilder("SELECT * ");
 		queryString.append(getFilterQueryEndString(paramValues, name, 
 				sport, location, clubName));
+		queryString.append(" ORDER BY clubname ASC ");
 		
 		int offset = (page - 1) * MAX_ROWS;
 		queryString.append(" OFFSET ? ;");
@@ -102,6 +103,7 @@ public class PitchJdbcDao implements PitchDao {
 				presentFields++;
 			}
 		}
+		
 		return queryString.toString();
 	}
 	
