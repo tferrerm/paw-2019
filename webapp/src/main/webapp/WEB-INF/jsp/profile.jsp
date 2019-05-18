@@ -42,14 +42,18 @@
 						<span class="notice"> ${pastEventsParticipant} </span>
 						<spring:message code="event_s"/>
 					</div>
-					<div class="notice" style="padding: 5px 0">
-						<spring:message code="favorite_sport" />
-						<span class="notice"> ${favoriteSport}</span>
-					</div>
-					<div class="notice" style="padding: 5px 0">
-						<spring:message code="main_club" />
-						<span class="notice"> ${mainClub}</span>
-					</div>
+					<c:if test="${favoriteSport != null}">
+						<div class="notice" style="padding: 5px 0">
+							<spring:message code="favorite_sport" />
+							<span class="notice"><spring:message code="${favoriteSport}"/></span>
+						</div>
+					</c:if>
+					<c:if test="${mainClub != null}">
+						<div class="notice" style="padding: 5px 0">
+							<spring:message code="main_club" />
+							<span class="notice"> ${mainClub.name}</span>
+						</div>
+					</c:if>
 				</div>
 			</div>
 		</div>
