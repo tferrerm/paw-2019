@@ -350,8 +350,12 @@ public class EventJdbcDao implements EventDao {
 				+ " WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
 				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport) "
 				+ " ORDER BY sport ASC";
-		Sport ret =  Sport.valueOf(jdbcTemplate.queryForObject(queryString, String.class, userid, userid));
-		return Optional.ofNullable(ret);
+		Optional<String> sp = jdbcTemplate.query(queryString,
+				(rs, rowNum) -> new String(rs.getString("sport")), userid, userid)
+					.stream().findFirst();
+		if(!sp.isPresent())
+			return Optional.empty();
+		return Optional.of(Sport.valueOf(sp.get()));
 	}
 	
 	@Override
@@ -361,8 +365,7 @@ public class EventJdbcDao implements EventDao {
 				+ " WHERE userid = ? GROUP BY clubid, clubname, location, club_created_at HAVING count(*) >= ANY (SELECT count(*) "
 				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid)"
 				+ " ORDER BY clubid ASC ";
-		Club ret =  jdbcTemplate.queryForObject(queryString, crm, userid, userid);
-		return Optional.ofNullable(ret);
+		return jdbcTemplate.query(queryString, crm, userid, userid).stream().findFirst();
 	}
 	
 	@Override
