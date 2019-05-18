@@ -100,7 +100,7 @@
                                     </button>
                                 </a>
                             </div>
-            				<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
+            				<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventsQty}</span>
             				<div>
                                 <a href="<c:url value='/events/${page+1}${queryString}' />">
                                     <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>

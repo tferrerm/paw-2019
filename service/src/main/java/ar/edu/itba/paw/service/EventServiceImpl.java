@@ -168,6 +168,18 @@ public class EventServiceImpl implements EventService {
 		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
 				vacancies, page);
 	}
+	
+	@Override
+	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<Sport> sport, 
+			final Optional<Integer> vacancies) {
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
+				Optional.ofNullable(sportString), vacancies);
+	}
 
 	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
 			Optional<String> sport, Optional<Integer> vacancies, int page) {
@@ -314,7 +326,12 @@ public class EventServiceImpl implements EventService {
 	public List<Club> getFavoriteClub(final long userid) {
 		return ed.getFavoriteClub(userid);
 	}
-
+	
+	@Override
+	public int getPageInitialEventIndex(final int pageNum) {
+		return ed.getPageInitialEventIndex(pageNum);
+	}
+	
 	@Override
 	public void deleteEvent(long eventid) {
 		if(eventid <= 0) {

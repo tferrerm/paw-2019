@@ -42,11 +42,6 @@ public class EventJdbcDao implements EventDao {
 	private static final int MAX_ROWS = 10;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
-	/*private static final RowMapper<Event> ROW_MAPPER = (rs, rowNum) ->
-		new Event(rs.getLong("eventid"), rs.getString("name"), rs.getString("location"),
-				rs.getString("description"), rs.getTimestamp("starts_at"), rs.getTimestamp("ends_at"),
-				rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));*/
-	
 	@Autowired
 	private EventRowMapper erm;
 	
@@ -177,6 +172,41 @@ public class EventJdbcDao implements EventDao {
 		queryString.append(" OFFSET ? ;");
 		list.add(offset);
 		return jdbcTemplate.query(queryString.toString(), elrm, list.toArray());
+	}
+	
+	@Override
+	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<String> sport, 
+			final Optional<Integer> vacancies) {
+		int presentFields = 0;
+		List<Object> list = new ArrayList<>();
+		Filter[] params = { 
+				new Filter("eventname", eventName.orElse(null)),
+				new Filter("clubname", clubName.orElse(null)),
+				new Filter("sport", sport.orElse(null)),
+				new Filter("customVacanciesFilter", vacancies.orElse(null)),
+				new Filter("starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
+		};
+		StringBuilder queryString = new StringBuilder("SELECT count(*) FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
+		for(Filter param : params) {
+			if(!isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(presentFields));
+				switch(param.getName()) {
+				case "customVacanciesFilter":
+					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
+					break;
+				case "starts_at":
+					queryString.append(param.queryAsGreaterInteger(true));
+					break;
+				default:
+					queryString.append(param.queryAsString());
+					break;
+				}
+				list.add(param.getValue());
+				presentFields++;
+			}
+		}
+		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, list.toArray());
 	}
 	
 	@Override
@@ -356,6 +386,11 @@ public class EventJdbcDao implements EventDao {
 				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid))";
 		return jdbcTemplate.query(queryString, rm, userid, userid);*/
 		return null;
+	}
+	
+	@Override
+	public int getPageInitialEventIndex(final int pageNum) {
+		return (pageNum -1) * MAX_ROWS + 1;
 	}
 	
 	@Override
