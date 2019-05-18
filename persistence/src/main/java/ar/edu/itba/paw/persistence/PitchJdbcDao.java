@@ -58,33 +58,66 @@ public class PitchJdbcDao implements PitchDao {
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
 			Optional<String> location, Optional<String> clubName, int page) {
+		
+		List<Object> paramValues = new ArrayList<>();
+		StringBuilder queryString = new StringBuilder("SELECT * ");
+		queryString.append(getFilterQueryEndString(paramValues, name, 
+				sport, location, clubName));
+		
 		int offset = (page - 1) * MAX_ROWS;
+		queryString.append(" OFFSET ? ;");
+		paramValues.add(offset);
+		
+		return jdbcTemplate.query(queryString.toString(), prm, paramValues.toArray());
+	}
+	
+	@Override
+	public Integer countFilteredPitches(final Optional<String> pitchName, 
+			final Optional<String> sport, final Optional<String> location, 
+			final Optional<String> clubName) {
+		List<Object> paramValues = new ArrayList<>();
+		StringBuilder queryString = new StringBuilder("SELECT count(*) ");
+		queryString.append(getFilterQueryEndString(paramValues, pitchName, 
+				sport, location, clubName));
+		
+		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, paramValues.toArray());
+	}
+	
+	private String getFilterQueryEndString(List<Object> paramValues, final Optional<String> pitchName, 
+			final Optional<String> sport, final Optional<String> location, 
+			final Optional<String> clubName) {
 		int presentFields = 0;
-		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("pitchname", name.orElse("")),
+				new Filter("pitchname", pitchName.orElse("")),
 				new Filter("sport", sport.orElse("")),
 				new Filter("location", location.orElse("")),
 				new Filter("clubname", clubName.orElse(""))
 		};
-		StringBuilder queryString = new StringBuilder("SELECT * FROM pitches NATURAL JOIN clubs ");
+		StringBuilder queryString = new StringBuilder(" FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {
 			if(!((String)param.getValue()).isEmpty()) {
 				queryString.append(buildPrefix(presentFields));
 				queryString.append(param.queryAsString());
-				list.add(param.getValue());
+				paramValues.add(param.getValue());
 				presentFields++;
 			}
 		}
-		queryString.append(" OFFSET ? ;");
-		list.add(offset);
-		return jdbcTemplate.query(queryString.toString(), prm, list.toArray());
+		return queryString.toString();
 	}
 	
 	private String buildPrefix(int currentFilter) {
 		if(currentFilter == 0)
 			return " WHERE ";
 		return " AND ";
+	}
+	
+	@Override
+	public int countFuturePitchPages() {
+		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM pitches ",	Integer.class);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 	@Override
@@ -97,6 +130,11 @@ public class PitchJdbcDao implements PitchDao {
 		args.put("pitch_created_at", Timestamp.from(now));
 		final Number pitchId = jdbcInsert.executeAndReturnKey(args);
 		return new Pitch(pitchId.longValue(), club, name, sport, now);
+	}
+	
+	@Override
+	public int getPageInitialPitchIndex(final int pageNum) {
+		return (pageNum -1) * MAX_ROWS + 1;
 	}
 	
 	@Override

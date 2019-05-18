@@ -17,8 +17,21 @@ public interface PitchService {
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
 			Optional<String> location, Optional<String> clubName, int page);
 	
+	public Integer countFilteredPitches(final Optional<String> pitchName, 
+			final Optional<Sport> sport, final Optional<String> location, 
+			final Optional<String> clubName);
+	
+	public int countFuturePitchPages();
+	
 	public Pitch create(Club club, String name, Sport sport, byte[] picture) 
 			throws PictureProcessingException;
+	
+	/**
+	 * Gets the page's first Pitch's index in the overall filtered Pitches.
+	 * @param pageNum	The page's number.
+	 * @return the page's first Pitch's index.
+	 */
+	public int getPageInitialPitchIndex(final int pageNum);
 	
 	public void deletePitch(long pitchid);
 }

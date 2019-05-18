@@ -76,23 +76,27 @@
                         </c:forEach>
         			</div>
         			<div class="table-navigator">
-        				<div>
-                            <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-                            <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
-                        </div>
-        				<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
-        				<div>
-                            <a href="<c:url value='/pitches/${page+1}${queryString}' />">
-                                <button type="button" class="btn btn-secondary">
-                                    <spring:message code="next"/>
-                                </button>
-                            </a>
-                            <a href="<c:url value='/pitches/${lastPageNum}${queryString}' />">
-                                <button type="button" class="btn btn-secondary">
-                                    <spring:message code="last"/>
-                                </button>
-                            </a>
-                        </div>
+                        <c:if test="${page != 1}">
+            				<div>
+                                <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
+                                <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+                            </div>
+                        </c:if>
+        				<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchesQty}</span>
+                        <c:if test="${page != lastPageNum}">
+            				<div>
+                                <a href="<c:url value='/pitches/${page+1}${queryString}' />">
+                                    <button type="button" class="btn btn-secondary">
+                                        <spring:message code="next"/>
+                                    </button>
+                                </a>
+                                <a href="<c:url value='/pitches/${lastPageNum}${queryString}' />">
+                                    <button type="button" class="btn btn-secondary">
+                                        <spring:message code="last"/>
+                                    </button>
+                                </a>
+                            </div>
+                        </c:if>
         			 </div>
                 </c:otherwise>
             </c:choose>

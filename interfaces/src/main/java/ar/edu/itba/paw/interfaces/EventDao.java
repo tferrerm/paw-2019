@@ -131,7 +131,7 @@ public interface EventDao {
 	
 	/**
 	 * Gets the page's first Event's index in the overall filtered Events.
-	 * @param pageNum	The current page's number.
+	 * @param pageNum	The page's number.
 	 * @return the page's first Event's index.
 	 */
 	public int getPageInitialEventIndex(final int pageNum);

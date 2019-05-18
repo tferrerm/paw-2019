@@ -55,6 +55,22 @@ public class PitchServiceImpl implements PitchService {
 		}
 		return pd.findBy(name, Optional.ofNullable(sportString), location, clubName, page);
 	}
+	
+	@Override
+	public Integer countFilteredPitches(final Optional<String> pitchName, 
+			final Optional<Sport> sport, final Optional<String> location, 
+			final Optional<String> clubName) {
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		return pd.countFilteredPitches(pitchName, Optional.ofNullable(sportString), location, clubName);
+	}
+	
+	@Override
+	public int countFuturePitchPages() {
+		return pd.countFuturePitchPages();
+	}
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
@@ -65,6 +81,11 @@ public class PitchServiceImpl implements PitchService {
 			pps.create(pitch.getPitchid(), picture);
 		}
 		return pitch;
+	}
+	
+	@Override
+	public int getPageInitialPitchIndex(final int pageNum) {
+		return pd.getPageInitialPitchIndex(pageNum);
 	}
 	
 	@Override
