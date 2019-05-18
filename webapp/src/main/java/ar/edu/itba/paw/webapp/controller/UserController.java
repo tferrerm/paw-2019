@@ -60,9 +60,6 @@ public class UserController extends BaseController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
 	@Qualifier("eventServiceImpl")
 	@Autowired
 	private EventService es;
@@ -149,16 +146,8 @@ public class UserController extends BaseController {
 			return mav;
 		}
 		
-		authenticate(u.getUsername(), u.getPassword(), request);
+		cph.authenticate(u.getUsername(), u.getPassword(), request);
 		return new ModelAndView("redirect:/user/" + u.getUserid());
-	}
-	
-	private void authenticate(String username, String password, HttpServletRequest request) {
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				username, password);
-		authToken.setDetails(new WebAuthenticationDetails(request));
-		Authentication authentication = authenticationManager.authenticate(authToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 	
 	@RequestMapping("/user/{userId}/picture")
