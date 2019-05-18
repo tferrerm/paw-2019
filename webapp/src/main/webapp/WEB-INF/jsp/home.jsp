@@ -12,21 +12,12 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h3><spring:message code="upcomingParticipations"/></h3>
-			<ul class="home-event">
-			  <li class="flex-2 home-header"><spring:message code="event_name"/></li>
-			  <li class="flex-2 home-header"><spring:message code="event_location"/></li>
-			  <li class="flex-1 home-header"><spring:message code="sport"/></li>
-			  <li class="flex-1 home-header"><spring:message code="vacancy"/></li>
-			</ul>
-    	    <table class="schedule-table flex">
-                <tr>
-                    <th class="schedule-table-cell-size schedule-table-hours"></th>
-                    <c:forEach var="dayMessage" items="${scheduleHeaders}">
-                        <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
-                    </c:forEach>
-                </tr>
-            </table>
+			<h3 class="home-title"><spring:message code="upcomingParticipations"/></h3>
+    	    <div class="home-title-group flex">
+	            <c:forEach var="dayMessage" items="${scheduleHeaders}">
+	                <span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
+	            </c:forEach>
+            </div>
 			<div class="bottom-home-container">
 				<div class="bottom-home-item">
 					<h3><spring:message code="introAllEvents"/></h3>

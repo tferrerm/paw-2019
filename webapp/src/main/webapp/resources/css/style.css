@@ -328,8 +328,25 @@ a.link-text{
   align-items: center;
 }
 
+.home-ev-title {
+  justify-content: center;
+  border: 1px solid dodgerblue;
+  background-color: white;
+}
+
 .home-header {
   text-align: center;
+}
+
+.home-title {
+  margin: 20px 0 10px;
+}
+
+.home-title-group {
+  width: 80%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .input-number {
