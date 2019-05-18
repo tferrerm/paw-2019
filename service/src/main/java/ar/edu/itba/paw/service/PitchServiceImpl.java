@@ -68,8 +68,8 @@ public class PitchServiceImpl implements PitchService {
 	}
 	
 	@Override
-	public int countFuturePitchPages() {
-		return pd.countFuturePitchPages();
+	public int countPitchPages() {
+		return pd.countPitchPages();
 	}
 
 	@Transactional(rollbackFor = { Exception.class })

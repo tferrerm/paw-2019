@@ -112,7 +112,7 @@ public class PitchJdbcDao implements PitchDao {
 	}
 	
 	@Override
-	public int countFuturePitchPages() {
+	public int countPitchPages() {
 		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM pitches ",	Integer.class);
 		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)

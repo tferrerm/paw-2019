@@ -76,14 +76,14 @@
                         </c:forEach>
         			</div>
         			<div class="table-navigator">
-                        <c:if test="${page != 1}">
+                        <c:if test="${pageNum != 1}">
             				<div>
                                 <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
                                 <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
                             </div>
                         </c:if>
-        				<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchesQty}</span>
-                        <c:if test="${page != lastPageNum}">
+        				<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchQty}</span>
+                        <c:if test="${pageNum != lastPageNum}">
             				<div>
                                 <a href="<c:url value='/pitches/${page+1}${queryString}' />">
                                     <button type="button" class="btn btn-secondary">

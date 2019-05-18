@@ -51,15 +51,19 @@
 			</c:forEach>
 		</div>
 		<div class="table-navigator">
-			<div>
-				<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-				<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
-			</div>
-			<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
-			<div>
-				<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
-				<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
-			</div>
+			<c:if test="${pageNum != 1}">
+				<div>
+					<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
+					<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+				</div>
+			</c:if>
+			<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
+			<c:if test="${pageNum != lastPageNum}">
+				<div>
+					<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
+					<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
+				</div>
+			</c:if>
 		</div>
 	</div>
 

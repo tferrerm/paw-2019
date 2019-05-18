@@ -43,6 +43,11 @@ public class ClubServiceImpl implements ClubService {
 	}
 	
 	@Override
+	public int getPageInitialClubIndex(final int pageNum) {
+		return cd.getPageInitialClubIndex(pageNum);
+	}
+	
+	@Override
 	public void deleteClub(final long clubid) {
 		cd.deleteClub(clubid);
 	}
@@ -58,11 +63,16 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public List<Club> findBy(Optional<String> name, Optional<String> location, int page) {
+	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page) {
 		if(page <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return cd.findBy(name, location, page);
+		return cd.findBy(clubName, location, page);
+	}
+	
+	@Override
+	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
+		return cd.countFilteredClubs(clubName, location);
 	}
 
 }

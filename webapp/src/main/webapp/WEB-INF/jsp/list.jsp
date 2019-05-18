@@ -102,7 +102,7 @@
                                     </a>
                                 </div>
                             </c:if>
-            				<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventsQty}</span>
+            				<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
                             <c:if test="${page != lastPageNum}">
                 				<div>
                                     <a href="<c:url value='/events/${page+1}${queryString}' />">
