@@ -40,6 +40,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
 
@@ -59,12 +60,12 @@ public class UserController extends BaseController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
 	@Qualifier("eventServiceImpl")
 	@Autowired
 	private EventService es;
+	
+	@Autowired
+	private CustomPermissionsHandler cph;
 
 	@RequestMapping(value = "/login", method = {RequestMethod.GET})
 	public ModelAndView login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
@@ -101,6 +102,11 @@ public class UserController extends BaseController {
 	
 	@RequestMapping("/")
 	public ModelAndView index(@ModelAttribute("signupForm") final NewUserForm form) {
+		if(cph.isAuthenticated()) {
+			if(cph.isAdmin())
+				return new ModelAndView("redirect:/admin/");
+			return new ModelAndView("redirect:/home");
+		}
 		return new ModelAndView("index");
 	}
 	
@@ -140,16 +146,8 @@ public class UserController extends BaseController {
 			return mav;
 		}
 		
-		authenticate(u.getUsername(), u.getPassword(), request);
+		cph.authenticate(u.getUsername(), u.getPassword(), request);
 		return new ModelAndView("redirect:/user/" + u.getUserid());
-	}
-	
-	private void authenticate(String username, String password, HttpServletRequest request) {
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				username, password);
-		authToken.setDetails(new WebAuthenticationDetails(request));
-		Authentication authentication = authenticationManager.authenticate(authToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 	
 	@RequestMapping("/user/{userId}/picture")

@@ -55,21 +55,26 @@ public interface EventService {
 	 * @param page				Page number.
 	 * @return
 	 */
-	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<Sport> sport, Optional<Integer> vacancies, int page);
+	public Map<Event, Long> findByWithInscriptions(boolean onlyFuture, Optional<String> name, 
+			Optional<String> establishment, Optional<Sport> sport, 
+			Optional<Integer> vacancies, int page);
 
 	/**
 	 * Returns a list of Events matching present filters.
 	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param name				String to match an Event's name with.
-	 * @param establishment		String to match an Event's club name with.
+	 * @param eventName			String to match an Event's name with.
+	 * @param clubName			String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
 	 * @param vacancies			Minimum vacancies for an Event.
 	 * @param page				Page number.
 	 * @return
 	 */
-	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page);
+	
+	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<Sport> sport, 
+			final Optional<Integer> vacancies);
 
 	/**
 	 * Returns a combination of eventid and vacancies for that Event.
@@ -146,6 +151,13 @@ public interface EventService {
 	 * @return the User's favorite Clubs.
 	 */
 	public Optional<Club> getFavoriteClub(final long userid);
+	
+	/**
+	 * Gets the page's first Event's index in the overall filtered Events.
+	 * @param pageNum	The page's number.
+	 * @return the page's first Event's index.
+	 */
+	public int getPageInitialEventIndex(final int pageNum);
 
 	/**
 	 * Deletes an Event from database along with all User related participations.

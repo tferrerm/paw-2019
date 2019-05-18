@@ -4,9 +4,9 @@
 <html>
 	<head>
         <script
-                src="http://code.jquery.com/jquery-3.3.1.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                crossorigin="anonymous"></script>
+            src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -88,27 +88,31 @@
                             </c:forEach>
             			</div>
             			<div class="table-navigator">
-            				<div>
-                                <a href="<c:url value='/events/1${queryString}' />">
-                                    <button type="button" class="btn btn-secondary">
-                                        <spring:message code="first"/>
-                                    </button>
-                                </a>
-                                <a href="<c:url value='/events/${page-1}${queryString}' />">
-                                    <button type="button" class="btn btn-secondary">
-                                        <spring:message code="back"/>
-                                    </button>
-                                </a>
-                            </div>
-            				<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
-            				<div>
-                                <a href="<c:url value='/events/${page+1}${queryString}' />">
-                                    <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-                                </a>
-                                <a href="<c:url value='/events/${lastPageNum}${queryString}' />">
-                                    <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-                                </a>
-                            </div>
+                            <c:if test="${page != 1}">
+                				<div>
+                                    <a href="<c:url value='/events/1${queryString}' />">
+                                        <button type="button" class="btn btn-secondary">
+                                            <spring:message code="first"/>
+                                        </button>
+                                    </a>
+                                    <a href="<c:url value='/events/${page-1}${queryString}' />">
+                                        <button type="button" class="btn btn-secondary">
+                                            <spring:message code="back"/>
+                                        </button>
+                                    </a>
+                                </div>
+                            </c:if>
+            				<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+                            <c:if test="${page != lastPageNum}">
+                				<div>
+                                    <a href="<c:url value='/events/${page+1}${queryString}' />">
+                                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                                    </a>
+                                    <a href="<c:url value='/events/${lastPageNum}${queryString}' />">
+                                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                                    </a>
+                                </div>
+                            </c:if>
             			</div>
                     </c:otherwise>
                 </c:choose>

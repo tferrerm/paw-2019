@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
@@ -51,15 +53,27 @@ public class PitchController extends BaseController {
 			sportString = sport.toString();
 		String queryString = buildQueryString(name, sportString, location, clubName);
 		ModelAndView mav = new ModelAndView("pitchesList");
-		mav.addObject("page", pageNum);
+		
+		mav.addObject("pageNum", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());
-		mav.addObject("pitches", ps.findBy(
+        mav.addObject("lastPageNum", ps.countPitchPages());
+        mav.addObject("pageInitialIndex", ps.getPageInitialPitchIndex(pageNum));
+        
+        List<Pitch> pitches = ps.findBy(
 				Optional.ofNullable(name),
 				Optional.ofNullable(sport),
 				Optional.ofNullable(location),
 				Optional.ofNullable(clubName),
-				pageNum));
+				pageNum);
+		mav.addObject("pitches", pitches);
+		mav.addObject("pitchQty", pitches.size());
+		
+		Integer totalPitchQty = ps.countFilteredPitches(Optional.ofNullable(name), 
+        		Optional.ofNullable(sport), Optional.ofNullable(location), 
+        		Optional.ofNullable(clubName));
+        mav.addObject("totalPitchQty", totalPitchQty);
+        
 		return mav;
 	}
 	

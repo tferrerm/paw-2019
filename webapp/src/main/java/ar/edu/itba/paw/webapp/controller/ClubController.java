@@ -48,20 +48,28 @@ public class ClubController extends BaseController {
 	public ModelAndView clubs(
 			@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
 			@PathVariable("pageNum") int pageNum,
-			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "name", required = false) String clubName,
             @RequestParam(value = "location", required = false) String location) {
-		String queryString = buildQueryString(name, location);
+		String queryString = buildQueryString(clubName, location);
 		
 		ModelAndView mav = new ModelAndView("clubList");
 		
-		mav.addObject("page", pageNum);
+		mav.addObject("pageNum", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("lastPageNum", cs.countClubPages());
-        mav.addObject("clubs", cs.findBy(
-				Optional.ofNullable(name), 
-        		Optional.ofNullable(location), 
-        		pageNum));
+        mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
         
+        List<Club> clubs = cs.findBy(
+				Optional.ofNullable(clubName), 
+        		Optional.ofNullable(location), 
+        		pageNum);
+        mav.addObject("clubs", clubs);
+        mav.addObject("clubQty", clubs.size());
+        
+        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
+        		Optional.ofNullable(location));
+        mav.addObject("totalClubQty", totalClubQty);
+
 		return mav;
 	}
 	

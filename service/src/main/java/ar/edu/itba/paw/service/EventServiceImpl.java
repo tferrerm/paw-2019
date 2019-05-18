@@ -178,7 +178,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
 		if(page <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
@@ -188,8 +188,20 @@ public class EventServiceImpl implements EventService {
 			sportString = sport.get().toString();
 		}
 
-		return ed.findBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
+		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString),
 				vacancies, page);
+	}
+	
+	@Override
+	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<Sport> sport, 
+			final Optional<Integer> vacancies) {
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
+				Optional.ofNullable(sportString), vacancies);
 	}
 
 	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
@@ -312,7 +324,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
 		Map<Integer, String> availableHoursMap = new HashMap<>();
-		for(int i = minHour; i < maxHour; i++) {
+		for(int i = minHour; i <= maxHour; i++) {
 			availableHoursMap.put(i, i + ":00");
 		}
 		return availableHoursMap;
@@ -337,7 +349,12 @@ public class EventServiceImpl implements EventService {
 	public Optional<Club> getFavoriteClub(final long userid) {
 		return ed.getFavoriteClub(userid);
 	}
-
+	
+	@Override
+	public int getPageInitialEventIndex(final int pageNum) {
+		return ed.getPageInitialEventIndex(pageNum);
+	}
+	
 	@Override
 	public void deleteEvent(long eventid) {
 		if(eventid <= 0) {
