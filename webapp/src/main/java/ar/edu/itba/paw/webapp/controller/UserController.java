@@ -94,8 +94,8 @@ public class UserController extends BaseController {
 		mav.addObject("currEventsParticipant", es.countUserEvents(true, userid));
 		mav.addObject("currEventsOwned", es.countUserOwnedCurrEvents(userid));
 		mav.addObject("pastEventsParticipant", es.countUserEvents(false, userid));
-		mav.addObject("favoriteSport", es.getFavoriteSport(userid));
-		mav.addObject("mainClub", es.getFavoriteClub(userid));
+		mav.addObject("favoriteSport", es.getFavoriteSport(userid).orElse(null));
+		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		return mav;
 	}
 	

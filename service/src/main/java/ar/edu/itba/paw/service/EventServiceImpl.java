@@ -318,12 +318,12 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Sport> getFavoriteSport(final long userid) {
+	public Optional<Sport> getFavoriteSport(final long userid) {
 		return ed.getFavoriteSport(userid);
 	}
 
 	@Override
-	public List<Club> getFavoriteClub(final long userid) {
+	public Optional<Club> getFavoriteClub(final long userid) {
 		return ed.getFavoriteClub(userid);
 	}
 	

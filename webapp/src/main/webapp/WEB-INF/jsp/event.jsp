@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+		<title>Sport Matcher - Event</title>
 	</head>
 	<body>
 	<%@include file="header.jsp" %>
@@ -34,6 +35,10 @@
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="organizer"/> </span>
 							<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
+						</div>
+						<div class="description-item">
+							<span class="event-info-label"><spring:message code="event_description"/></span>
+							<span>${event.description}</span>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="sport"/></span>

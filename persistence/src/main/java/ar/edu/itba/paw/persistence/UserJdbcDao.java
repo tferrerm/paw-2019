@@ -30,11 +30,6 @@ public class UserJdbcDao implements UserDao {
 	@Autowired
 	private UserRowMapper urm;
 	
-//	private static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-//	new User(rs.getLong("userId"), rs.getString("username"), rs.getString("firstname"),
-//			 rs.getString("lastname"), rs.getString("password"), Role.valueOf(rs.getString("role")),
-//			 rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
-	
 	@Autowired
 	public UserJdbcDao(final DataSource ds) {
 		jdbcTemplate = new JdbcTemplate(ds);

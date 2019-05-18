@@ -28,6 +28,7 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.rowmapper.ClubRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.InscriptionsRowMapper;
@@ -53,6 +54,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private InscriptionsRowMapper irm;
+	
+	@Autowired
+	private ClubRowMapper crm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -359,21 +363,27 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Sport> getFavoriteSport(final long userid) {
-		/*String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
-				+ "WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*)"
-				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport))";
-		return jdbcTemplate.query(queryString, rm, userid, userid);*/
-		return null;
+	public Optional<Sport> getFavoriteSport(final long userid) {
+		String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
+				+ " WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport) "
+				+ " ORDER BY sport ASC";
+		Optional<String> sp = jdbcTemplate.query(queryString,
+				(rs, rowNum) -> new String(rs.getString("sport")), userid, userid)
+					.stream().findFirst();
+		if(!sp.isPresent())
+			return Optional.empty();
+		return Optional.of(Sport.valueOf(sp.get()));
 	}
 	
 	@Override
-	public List<Club> getFavoriteClub(final long userid) {
-		/*String queryString = "SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
-				+ "WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*)"
-				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid))";
-		return jdbcTemplate.query(queryString, rm, userid, userid);*/
-		return null;
+	public Optional<Club> getFavoriteClub(final long userid) {
+		String queryString = " SELECT clubid, clubname, location, club_created_at FROM events_users "
+				+ " NATURAL JOIN events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " WHERE userid = ? GROUP BY clubid, clubname, location, club_created_at HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid)"
+				+ " ORDER BY clubid ASC ";
+		return jdbcTemplate.query(queryString, crm, userid, userid).stream().findFirst();
 	}
 	
 	@Override
