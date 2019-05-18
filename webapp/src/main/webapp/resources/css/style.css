@@ -197,9 +197,15 @@ a.link-text{
     color: white;
 }
 
+
 .event-link {
+  text-align: center;
   color: dodgerblue;
   text-decoration: underline;
+}
+
+a.event-link {
+  margin: 10px 0;
 }
 
 .flex {

@@ -36,12 +36,14 @@
 							    <c:forEach var="event" items="${past_events}">
 										<a href="<c:url value="/event/${event.eventId}" /> ">
 											<div class="my-event-item">
-												<span>${event.name}</span>
-												<span><spring:message code="${event.pitch.sport}"/></span>
-												<fmt:timeZone value="AR">
-													<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-													<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-												</fmt:timeZone>
+												<span class="flex flex-1 justify-center home-header">${event.name}</span>
+												<span class="flex flex-1 justify-center home-header"><spring:message code="${event.pitch.sport}"/></span>
+												<div class="flex flex-1 justify-center home-header">
+													<fmt:timeZone value="AR">
+														<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+														<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+													</fmt:timeZone>
+												</div>
 											</div>
 						        </a>
 							    </c:forEach>
@@ -50,12 +52,14 @@
 							    <c:forEach var="event" items="${future_events}">
 										<a href="<c:url value="/event/${event.eventId}" /> ">
 											<div class="my-event-item">
-												<span>${event.name}</span>
-												<span><spring:message code="${event.pitch.sport}"/></span>
-												<fmt:timeZone value="AR">
-													<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-													<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-												</fmt:timeZone>
+												<span class="flex flex-1 justify-center home-header">${event.name}</span>
+												<span class="flex flex-1 justify-center home-header"><spring:message code="${event.pitch.sport}"/></span>
+												<div class="flex flex-1 justify-center home-header">
+													<fmt:timeZone value="AR">
+														<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+														<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+													</fmt:timeZone>
+												</div>
 											</div>
 						        </a>
 							    </c:forEach>

@@ -25,7 +25,11 @@
 	            <c:forEach var="row" items="${myEvents}">
 	            	<div class="home-ev-column">
 			            <c:forEach var="event" items="${row}">
-			                <a href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
+	            		    <c:choose>
+						        <c:when test = "${event.name != null}">
+									<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
+						        </c:when>
+						    </c:choose>
 			            </c:forEach>
 		            </div>
 	            </c:forEach>
