@@ -27,7 +27,7 @@
 							</c:otherwise>
 						</c:choose>
 						<div class="progress">
-							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
+							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 						</div>
 						<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 					</div>
@@ -74,7 +74,7 @@
 						    <c:forEach var="user" items="${participants}">
 					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
 						              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
-													<c:if test="${!has_ended}">
+													<c:if test="${!has_ended && isOwner}">
 						              	<button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
 													</c:if>
 					              </form>

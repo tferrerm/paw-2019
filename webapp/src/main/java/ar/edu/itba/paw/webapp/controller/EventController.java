@@ -119,6 +119,8 @@ public class EventController extends BaseController {
         mav.addObject("alreadyJoinedError", alreadyJoinedError);
         mav.addObject("userBusyError", userBusyError);
 
+        mav.addObject("isOwner", event.getOwner().getUserid() == loggedUser().getUserid());
+        
         return mav;
     }
 
