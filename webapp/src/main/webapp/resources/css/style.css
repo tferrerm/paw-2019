@@ -144,6 +144,10 @@ a.link-text{
     width: 150px;
 }
 
+.date-separator {
+margin: 0 10px;
+}
+
 .description-body {
     display: flex;
     flex-direction: row;
@@ -274,6 +278,11 @@ a.event-link {
 
 .form-field {
     padding-top: 10px;
+}
+
+.just-row {
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .header {

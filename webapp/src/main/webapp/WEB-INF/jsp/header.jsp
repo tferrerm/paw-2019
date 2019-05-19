@@ -12,7 +12,7 @@
     	<h1 class="title">
 		    <c:choose>
 		        <c:when test = "${loggedUser != null}">
-					<a class="logo" href="<c:url value='/home' />"><spring:message code="sport_matcher"/></a>
+					<a class="logo" href="<c:url value='/' />"><spring:message code="sport_matcher"/></a>
 		        </c:when>
 		        <c:otherwise>
 		            <spring:message code="sport_matcher"/>

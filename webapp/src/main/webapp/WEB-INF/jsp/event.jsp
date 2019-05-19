@@ -54,10 +54,15 @@
 						<div class="double-box">
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="date"/></span>
-								<span>
+								<span class="just-row">
 									<fmt:timeZone value="AR">
 										<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
 										<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+									</fmt:timeZone>
+									<span class="date-separator">-</span>
+									<fmt:timeZone value="AR">
+										<fmt:parseDate value="${event.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+										<fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
 									</fmt:timeZone>
 								</span>
 							</div>
