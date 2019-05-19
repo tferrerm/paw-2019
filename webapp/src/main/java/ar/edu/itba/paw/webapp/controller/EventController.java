@@ -72,6 +72,8 @@ public class EventController extends BaseController {
 		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
 		mav.addObject("myEvents", myEvents);
 		mav.addObject("scheduleHeaders", scheduleDaysHeader);
+		boolean noParticipations = upcomingEvents.isEmpty();
+		mav.addObject("noParticipations", noParticipations);
 	    return mav;
 	}
 

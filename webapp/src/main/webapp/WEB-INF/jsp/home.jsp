@@ -14,26 +14,33 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h3 class="home-title"><spring:message code="upcomingParticipations"/></h3>
-			<div class="home-evs-container">
-	    	    <div class="home-evs-group flex">
-		            <c:forEach var="dayMessage" items="${scheduleHeaders}">
-		                <span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
-		            </c:forEach>
-		    	</div>
-            </div>
-            <div class="home-all-events">
-	            <c:forEach var="row" items="${myEvents}">
-	            	<div class="home-ev-column">
-			            <c:forEach var="event" items="${row}">
-	            		    <c:choose>
-						        <c:when test = "${event.name != null}">
-									<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
-						        </c:when>
-						    </c:choose>
-			            </c:forEach>
-		            </div>
-	            </c:forEach>
-	        </div>
+			<c:choose>
+				<c:when test="${!noParticipations}">
+					<div class="home-evs-container">
+						<div class="home-evs-group flex">
+							<c:forEach var="dayMessage" items="${scheduleHeaders}">
+								<span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
+							</c:forEach>
+						</div>
+					</div>
+					<div class="home-all-events">
+						<c:forEach var="row" items="${myEvents}">
+							<div class="home-ev-column">
+								<c:forEach var="event" items="${row}">
+									<c:choose>
+										<c:when test = "${event.name != null}">
+											<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
+										</c:when>
+									</c:choose>
+								</c:forEach>
+							</div>
+						</c:forEach>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<h4><spring:message code="home_default"/></h4>
+				</c:otherwise>
+			</c:choose>
 			<div class="bottom-home-container">
 				<div class="bottom-home-item">
 					<h3><spring:message code="introAllEvents"/></h3>
