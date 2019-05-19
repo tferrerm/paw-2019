@@ -9,6 +9,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
+import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -104,7 +105,7 @@ public interface EventService {
 			final String maxParticipants, final String date, final String startsAtHour,
 			final String endsAtHour) throws InvalidDateFormatException, EventInPastException, 
 											MaximumDateExceededException, EndsBeforeStartsException, 
-											EventOverlapException;
+											EventOverlapException, HourOutOfRangeException;
 
 	public boolean joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
