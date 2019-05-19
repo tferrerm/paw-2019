@@ -33,7 +33,7 @@
 							<a href="<c:url value="/event/${event.eventId}" /> ">
 								<div class="my-event-item">
 									<span class="flex flex-1 justify-center home-header">${event.name}</span>
-									<span class="flex flex-1 justify-center home-header"><spring:message code="${event.pitch.sport}"/></span>
+									<span class="flex flex-1 justify-center home-header">${event.pitch.club.location}</span>
 									<div class="flex flex-1 justify-center home-header">
 										<fmt:timeZone value="AR">
 											<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />

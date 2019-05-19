@@ -16,50 +16,21 @@
 		<div class="content-container">
 			<h2>${event.name}</h2>
 			<div class="detail-container">
-				<div class="status">
-					<c:choose>
-						<c:when test="${participant_count < event.maxParticipants}">
-							<h3><spring:message code="status"/> <spring:message code="uncompleted"/></h3>
-						</c:when>
-						<c:otherwise>
-							<h3><spring:message code="status"/> <spring:message code="completed"/></h3>
-						</c:otherwise>
-					</c:choose>
-					<div class="progress">
-						<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
+				<c:if test="${!has_ended}">
+					<div class="status">
+						<c:choose>
+							<c:when test="${participant_count < event.maxParticipants}">
+								<h3><spring:message code="status"/> <spring:message code="uncompleted"/></h3>
+							</c:when>
+							<c:otherwise>
+								<h3><spring:message code="status"/> <spring:message code="completed"/></h3>
+							</c:otherwise>
+						</c:choose>
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
+						</div>
+						<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 					</div>
-					<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
-				</div>
-				<c:if test="${has_ended && is_participant}">
-					<c:choose>
-						<c:when test="${user_vote > 0}">
-							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
-								<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
-							</form>
-							<span>${vote_balance}</span>
-							<div>
-								<button type="submit" class="btn btn-success join-button" disabled="true"><spring:message code="upvoted"/></button>
-							</div>
-						</c:when>
-						<c:when test="${user_vote < 0}">
-							<div>
-								<button type="submit" class="btn btn-danger join-button" disabled="true"><spring:message code="downvoted"/></button>
-							</div>
-							<span>${vote_balance}</span>
-							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
-								<button type="submit" class="btn btn-success join-button"><spring:message code="upvote"/></button>
-							</form>
-						</c:when>
-						<c:otherwise>
-							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
-								<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
-							</form>
-							<span>${vote_balance}</span>
-							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
-								<button type="submit" class="btn btn-success join-button"><spring:message code="upvote"/></button>
-							</form>
-						</c:otherwise>
-					</c:choose>
 				</c:if>
 				<div class="description-body">
 					<div class="margin-right">
@@ -103,12 +74,48 @@
 						    <c:forEach var="user" items="${participants}">
 					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
 						              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
-						              <button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+													<c:if test="${!has_ended}">
+						              	<button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+													</c:if>
 					              </form>
 				            </c:forEach>
 			          	</ul>
 					</div>
 				</div>
+				<c:if test="${has_ended && is_participant}">
+					<div class="event-points">
+						<h4 class="pitch-info-label"><spring:message code="event_points"/></h4>
+						<h5 class="pitch-info-label vote-balance">${vote_balance}</h5>
+					</div>
+					<div class="voting-buttons">
+						<c:choose>
+							<c:when test="${user_vote > 0}">
+								<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+									<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
+								</form>
+								<div>
+									<button type="submit" class="btn btn-success join-button vote-balance" disabled="true"><spring:message code="upvoted"/></button>
+								</div>
+							</c:when>
+							<c:when test="${user_vote < 0}">
+								<div>
+									<button type="submit" class="btn btn-danger join-button" disabled="true"><spring:message code="downvoted"/></button>
+								</div>
+								<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+									<button type="submit" class="btn btn-success join-button vote-balance"><spring:message code="upvote"/></button>
+								</form>
+							</c:when>
+							<c:otherwise>
+								<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+									<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
+								</form>
+								<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+									<button type="submit" class="btn btn-success join-button vote-balance"><spring:message code="upvote"/></button>
+								</form>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</c:if>
 			</div>
 			<c:if test="${eventFullError == true}">
 				<span class="form-error notice">
