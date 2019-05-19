@@ -75,4 +75,9 @@ public class ClubServiceImpl implements ClubService {
 		return cd.countFilteredClubs(clubName, location);
 	}
 
+	@Override
+	public int countPastEvents(final long clubid) {
+		return cd.countPastEvents(clubid);
+	}
+
 }

@@ -34,5 +34,12 @@ public interface ClubDao {
 	public Optional<Club> getPitchClub(final long pitchid);
 
 	public int countClubPages();
+	
+	/**
+	 * Gets the amount of Events which took place in a Club.
+	 * @param clubid	The id of the Club.
+	 * @return the amount of past Events for that Club.
+	 */
+	public int countPastEvents(final long clubid);
 
 }

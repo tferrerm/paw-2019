@@ -15,9 +15,14 @@
 			<div class="content-container">
 				<h2>${club.name}</h2>
 				<div class="club-detail-container">
-					<div class="description-item">
-						<span class="event-info-label"><spring:message code="location"/></span>
-						<p>${club.location}</p>
+					<div class="description-body">
+						<div class="description-item">
+							<span class="event-info-label"><spring:message code="location"/></span>
+							<p>${club.location}</p>
+						</div>
+						<div class="description-item">
+							<p><spring:message code="hosted"/> ${past_events_count} <spring:message code="events_lw"/></p>
+						</div>
 					</div>
 					<div class="description-item">
 						<span class="event-info-label"><spring:message code="pitches"/></span>
