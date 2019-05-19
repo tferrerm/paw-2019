@@ -114,6 +114,13 @@ public class PitchJdbcDaoTest {
 				Optional.of(CLUBNAME),
 				1);
 		Assert.assertEquals(1, pitches2.size());
+		final List<Pitch> invalidPage = pd.findBy(
+				Optional.of(NAME), 
+				Optional.of(Sport.SOCCER.toString()),
+				Optional.of(LOCATION),
+				Optional.of(CLUBNAME),
+				2);
+		Assert.assertEquals(0, invalidPage.size());
 	}
 	
 	@Rollback
