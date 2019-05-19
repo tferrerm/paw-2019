@@ -2,9 +2,16 @@ package ar.edu.itba.paw.interfaces;
 
 import java.util.Locale;
 
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.User;
+
 public interface EmailService {
 	
-	public void joinEventEmail(String email, String eventOwnerName, String eventName,
-							   final Locale locale);
+	public void userRegistered(final User user, final Locale locale);
+	
+	public void someoneJoinedYourEvent(final User joinedUser, final Event event, final Locale locale);
+
+	public void youWereKicked(final User kickedUser, final Event event, final Locale locale);
+		
 
 }

@@ -12,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
@@ -63,6 +62,9 @@ public class UserController extends BaseController {
 	@Qualifier("eventServiceImpl")
 	@Autowired
 	private EventService es;
+	
+	@Autowired
+	private EmailService ems;
 	
 	@Autowired
 	private CustomPermissionsHandler cph;
@@ -146,6 +148,7 @@ public class UserController extends BaseController {
 			return mav;
 		}
 		
+		ems.userRegistered(u, LocaleContextHolder.getLocale());
 		cph.authenticate(u.getUsername(), u.getPassword(), request);
 		return new ModelAndView("redirect:/user/" + u.getUserid());
 	}

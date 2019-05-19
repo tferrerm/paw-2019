@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -140,6 +141,7 @@ public class EventController extends BaseController {
 	    	mav.addObject("userBusyError", true);
 	    	return mav;
 	    }
+	    ems.someoneJoinedYourEvent(loggedUser(), event, LocaleContextHolder.getLocale());
         return mav;
     }
 
@@ -158,6 +160,7 @@ public class EventController extends BaseController {
     				throws UserNotAuthorizedException, EventNotFoundException {
     	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	es.kickFromEvent(loggedUser(), kickedUserId, event);
+    	ems.youWereKicked(loggedUser(), event, LocaleContextHolder.getLocale());
     	return new ModelAndView("redirect:/event/" + eventid);
     }
 
