@@ -56,7 +56,7 @@ public class UserJdbcDao implements UserDao {
 	public Optional<Integer> countVotesReceived(final long userid) {
 		return jdbcTemplate.query("SELECT sum(vote) "
 				+ " FROM events_users WHERE eventid IN "
-				+ " (SELECT eventid FROM events WHERE userid = ?)", (rs, rowNum) -> rs.getInt("s"), userid)
+				+ " (SELECT eventid FROM events WHERE userid = ?)", (rs, rowNum) -> rs.getInt(1), userid)
 				.stream().findFirst();
 	}
 	
