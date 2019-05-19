@@ -28,7 +28,7 @@
 				</div>
 			</div>
 			<div class="flex-grow w-100">
-				<div class="events-column flex-grow flex-column right-border w-100">
+				<div class="events-column flex-grow flex-column w-100">
 				    <c:forEach var="event" items="${past_participations}">
 							<a href="<c:url value="/event/${event.eventId}" /> ">
 								<div class="my-event-item">

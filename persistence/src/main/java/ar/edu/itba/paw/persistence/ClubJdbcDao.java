@@ -147,4 +147,11 @@ public class ClubJdbcDao implements ClubDao {
 		return " AND ";
 	}
 
+	@Override
+	public int countPastEvents(final long clubid) {
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM events NATURAL JOIN pitches "
+				+ " WHERE clubid = ? AND ends_at < ?", Integer.class, clubid, 
+				Timestamp.from(Instant.now()));
+	}
+
 }

@@ -36,11 +36,17 @@ public class ClubController extends BaseController {
 	@RequestMapping("/club/{clubId}")
 	public ModelAndView showClub(@PathVariable("clubId") long clubid) 
 			throws ClubNotFoundException {
-		List<Pitch> pitches = ps.findByClubId(clubid, 1);
+		
 		ModelAndView mav = new ModelAndView("club");
-		mav.addObject("pitches", pitches);
+		
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		mav.addObject("club", club);
+		
+		List<Pitch> pitches = ps.findByClubId(clubid, 1);
+		mav.addObject("pitches", pitches);
+		
+		mav.addObject("past_events_count", cs.countPastEvents(clubid));
+		
 		return mav;
 	}
 
