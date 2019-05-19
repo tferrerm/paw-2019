@@ -151,7 +151,7 @@ public class UserController extends BaseController {
 		
 		ems.userRegistered(u, LocaleContextHolder.getLocale());
 		cph.authenticate(u.getUsername(), u.getPassword(), request);
-		return new ModelAndView("redirect:/user/" + u.getUserid());
+		return new ModelAndView("redirect:/home");
 	}
 	
 	@RequestMapping("/user/{userId}/picture")
