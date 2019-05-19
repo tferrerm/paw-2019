@@ -20,13 +20,20 @@ public interface EventDao {
 	/**
 	 * Gets Events owned by a User.
 	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
-	 * @param username 		Owner of Events.
+	 * @param userid 		Owner of Events.
 	 * @param pageNum 		Page number.
 	 * @return 				List of Events.
 	 */
-	public List<Event> findByUsername(boolean futureEvents, final String username, final int pageNum);
-
-	public List<Event> findByOwner(boolean futureEvents, final String username, final int pageNum);
+	public List<Event> findByOwner(boolean futureEvents, final long userid, final int pageNum);
+	
+	/**
+	 * Gets Events for which a User has an inscription.
+	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
+	 * @param userid 		Inscripted User.
+	 * @param pageNum 		Page number.
+	 * @return a list of Events.
+	 */
+	public List<Event> findByUserInscriptions(boolean futureEvents, final long userid, int pageNum);
 
 	public List<Event> findFutureEvents(final int pageNum);
 
@@ -141,5 +148,29 @@ public interface EventDao {
 	 * @param	eventid		The Event's id.
 	 */
 	public void deleteEvent(final long eventid);
+	
+	/**
+	 * Gets the sum of User votes for an Event, or empty Optional if no votes.
+	 * @param eventid	The Event's id.
+	 * @return the sum of all User votes for that Event.
+	 */
+	public Optional<Integer> getVoteBalance(final long eventid);
+	
+	/**
+	 * Gets the User's vote for that event.
+	 * @param eventid	The Event's id.
+	 * @param userid	The User's id.
+	 * @return -1 if downvote, 1 if upvote or empty Optional if such vote does not exist.
+	 */
+	public Optional<Integer> getUserVote(final long eventid, final long userid);
+	
+	/**
+	 * Sets a User's vote for an Event.
+	 * @param isUpvote	True for upvote, false for downvote.
+	 * @param eventid	The Event's id.
+	 * @param userid	The User's id.
+	 * @return 0 if the User doesn't have an inscription for that Event, 1 otherwise.
+	 */
+	public int vote(final boolean isUpvote, final long eventid, final long userid);
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
@@ -46,10 +48,6 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 public class EventController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
-	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final String START_DATE = "date";
-	private static final String END_DATE = "endsAtHour";
-	private static final String MAX_PARTICIPANTS = "maxParticipants";
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
@@ -69,7 +67,7 @@ public class EventController extends BaseController {
 //		ems.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", LocaleContextHolder.getLocale());
 		ModelAndView mav = new ModelAndView("home");
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		List<Event> upcomingEvents = es.findFutureEvents(1);
+		List<Event> upcomingEvents = es.findByUserInscriptions(true, loggedUser().getUserid(), 1);
 		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
 		mav.addObject("myEvents", myEvents);
 		mav.addObject("scheduleHeaders", scheduleDaysHeader);
@@ -79,15 +77,16 @@ public class EventController extends BaseController {
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
-		mav.addObject("future_events", es.findByOwner(true, loggedUser().getUsername(), pageNum));
-		mav.addObject("past_events", es.findByOwner(false, loggedUser().getUsername(), pageNum));
+		long userid = loggedUser().getUserid();
+		mav.addObject("future_events", es.findByOwner(true, userid, pageNum));
+		mav.addObject("past_events", es.findByOwner(false, userid, pageNum));
 	    return mav;
 	}
 
 	@RequestMapping("/history/{page}")
 	public ModelAndView historyList(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("history");
-		mav.addObject("past_participations", es.findByOwner(true, loggedUser().getUsername(), pageNum));
+		mav.addObject("past_participations", es.findByUserInscriptions(false, loggedUser().getUserid(), pageNum));
 	    return mav;
 	}
 
@@ -97,14 +96,24 @@ public class EventController extends BaseController {
     		@RequestParam(value = "alreadyJoinedError", required = false) boolean alreadyJoinedError,
     		@RequestParam(value = "userBusyError", required = false) boolean userBusyError)
     	throws EventNotFoundException, ClubNotFoundException {
-	    ModelAndView mav = new ModelAndView("event");
-	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+	    
+    	ModelAndView mav = new ModelAndView("event");
+	    
+    	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 	    List<User> participants = es.findEventUsers(event.getEventId(), 1);
+	    User current = loggedUser();
+	    
         mav.addObject("event", event);
+        
         mav.addObject("participant_count", es.countParticipants(event.getEventId()));
         mav.addObject("participants", participants);
-        mav.addObject("is_participant", participants.contains(loggedUser()));
-
+        mav.addObject("is_participant", participants.contains(current));
+        mav.addObject("has_started", Instant.now().isAfter(event.getStartsAt()));
+        mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
+        
+        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId()));
+        mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
+        
         mav.addObject("eventFullError", eventFullError);
         mav.addObject("alreadyJoinedError", alreadyJoinedError);
         mav.addObject("userBusyError", userBusyError);
@@ -254,6 +263,22 @@ public class EventController extends BaseController {
         String queryString = buildQueryString(name, establishment, sport, vacancies, date);
         return new ModelAndView("redirect:/events/1" + queryString);
     }
+    
+    @RequestMapping(value = "/event/{eventId}/upvote", method = { RequestMethod.POST })
+    public ModelAndView upvote(@PathVariable("eventId") final long eventid) 
+    	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
+    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	es.vote(true, ev, loggedUser().getUserid());
+    	return new ModelAndView("redirect:/event/" + eventid);
+    }
+    
+    @RequestMapping(value = "/event/{eventId}/downvote", method = { RequestMethod.POST })
+    public ModelAndView downvote(@PathVariable("eventId") final long eventid) 
+    	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
+    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	es.vote(false, ev, loggedUser().getUserid());
+    	return new ModelAndView("redirect:/event/" + eventid);
+    }
 
     private String buildQueryString(final String name, final String establishment, final String sport,
                                     final String vacancies, final String date){
@@ -286,6 +311,11 @@ public class EventController extends BaseController {
 
 	@ExceptionHandler({ PitchNotFoundException.class })
 	private ModelAndView pitchNotFound() {
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler({ EventNotFinishedException.class })
+	private ModelAndView eventNotFinished() {
 		return new ModelAndView("404");
 	}
 

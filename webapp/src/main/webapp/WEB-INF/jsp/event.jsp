@@ -30,6 +30,37 @@
 					</div>
 					<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 				</div>
+				<c:if test="${has_ended && is_participant}">
+					<c:choose>
+						<c:when test="${user_vote > 0}">
+							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+								<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
+							</form>
+							<span>${vote_balance}</span>
+							<div>
+								<button type="submit" class="btn btn-success join-button" disabled="true"><spring:message code="upvoted"/></button>
+							</div>
+						</c:when>
+						<c:when test="${user_vote < 0}">
+							<div>
+								<button type="submit" class="btn btn-danger join-button" disabled="true"><spring:message code="downvoted"/></button>
+							</div>
+							<span>${vote_balance}</span>
+							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+								<button type="submit" class="btn btn-success join-button"><spring:message code="upvote"/></button>
+							</form>
+						</c:when>
+						<c:otherwise>
+							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+								<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
+							</form>
+							<span>${vote_balance}</span>
+							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+								<button type="submit" class="btn btn-success join-button"><spring:message code="upvote"/></button>
+							</form>
+						</c:otherwise>
+					</c:choose>
+				</c:if>
 				<div class="description-body">
 					<div class="margin-right">
 						<div class="description-item">
@@ -94,20 +125,22 @@
 					<spring:message code="user_busy_error"/>
 				</span>
 			</c:if>
-			<c:choose>
-				<c:when test="${is_participant}">
-					<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
-						<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
-					</form>
-				</c:when>
-				<c:otherwise>
-					<c:if test="${participant_count < event.maxParticipants}">
-						<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
-							<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
+			<c:if test="${!has_started}">
+				<c:choose>
+					<c:when test="${is_participant}">
+						<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
+							<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
 						</form>
-					</c:if>
-				</c:otherwise>
-			</c:choose>
+					</c:when>
+					<c:otherwise>
+						<c:if test="${participant_count < event.maxParticipants}">
+							<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
+								<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
+							</form>
+						</c:if>
+					</c:otherwise>
+				</c:choose>
+			</c:if>
 		</div>
 	</div>
 

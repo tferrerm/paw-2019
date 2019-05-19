@@ -7,6 +7,7 @@ import java.util.Optional;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
@@ -26,13 +27,20 @@ public interface EventService {
 	/**
 	 * Gets Events owned by a User.
 	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
-	 * @param username 		Owner of Events.
+	 * @param userid 		Owner of Events.
 	 * @param pageNum 		Page number.
 	 * @return a list of Events.
 	 */
-	public List<Event> findByUsername(boolean futureEvents, final String username, int pageNum);
-
-	public List<Event> findByOwner(boolean futureEvents, final String username, int pageNum);
+	public List<Event> findByOwner(boolean futureEvents, final long userid, int pageNum);
+	
+	/**
+	 * Gets Events for which a User has an inscription.
+	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
+	 * @param userid 		Inscripted User.
+	 * @param pageNum 		Page number.
+	 * @return a list of Events.
+	 */
+	public List<Event> findByUserInscriptions(boolean futureEvents, final long userid, int pageNum);
 
 	public List<Event> findFutureEvents(int pageNum);
 
@@ -75,19 +83,6 @@ public interface EventService {
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, 
 			final Optional<Integer> vacancies);
-
-	/**
-	 * Returns a combination of eventid and vacancies for that Event.
-	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param name				String to match an Event's name with.
-	 * @param establishment		String to match an Event's club name with.
-	 * @param sport				String to match an Event's Sport with.
-	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param page				Page number.
-	 * @return
-	 */
-	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<String> sport, Optional<Integer> vacancies, int page);*/
 
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
 			int maxHour, int dayAmount);
@@ -164,5 +159,29 @@ public interface EventService {
 	 * @param	eventid		The Event's id.
 	 */
 	public void deleteEvent(long eventid);
+	
+	/**
+	 * Gets the sum of User votes for an Event.
+	 * @param eventid	The Event's id.
+	 * @return the sum of all User votes for that Event.
+	 */
+	public int getVoteBalance(final long eventid);
+	
+	/**
+	 * Gets the User's vote for that event.
+	 * @param eventid	The Event's id.
+	 * @param userid	The User's id.
+	 * @return -1 if downvote, 1 if upvote or 0 if such vote does not exist.
+	 */
+	public int getUserVote(final long eventid, final long userid);
+	
+	/**
+	 * Sets a User's vote for an Event.
+	 * @param isUpvote	True for upvote, false for downvote.
+	 * @param eventid	The Event's id.
+	 * @param userid	The User's id.
+	 */
+	public void vote(final boolean isUpvote, final Event event, final long userid)
+			throws UserNotAuthorizedException, EventNotFinishedException;
 
 }
