@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.EventDao;
@@ -27,10 +28,11 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.rowmapper.ClubRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
-import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.InscriptionsRowMapper;
+import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
 @Repository
 public class EventJdbcDao implements EventDao {
@@ -40,11 +42,6 @@ public class EventJdbcDao implements EventDao {
 	private final SimpleJdbcInsert jdbcInscriptionInsert; // PREGUNTARRRRRRRRRRRRRRRRRRRRRRRRRR
 	private static final int MAX_ROWS = 10;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	
-	/*private static final RowMapper<Event> ROW_MAPPER = (rs, rowNum) ->
-		new Event(rs.getLong("eventid"), rs.getString("name"), rs.getString("location"),
-				rs.getString("description"), rs.getTimestamp("starts_at"), rs.getTimestamp("ends_at"),
-				rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));*/
 	
 	@Autowired
 	private EventRowMapper erm;
@@ -57,6 +54,9 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private InscriptionsRowMapper irm;
+	
+	@Autowired
+	private ClubRowMapper crm;
 
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
@@ -76,27 +76,30 @@ public class EventJdbcDao implements EventDao {
 				+ " WHERE eventid = ?", erm, eventid)
 				.stream().findAny();
 	}
-
+	
 	@Override
-	public List<Event> findByUsername(boolean futureEvents, String username, int pageNum) {
+	public List<Event> findByOwner(boolean futureEvents, long userid, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
 		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches "
-				+ " NATURAL JOIN clubs NATURAL JOIN users WHERE username = ? AND starts_at ");
-		query.append((futureEvents) ? " > ? " : " < ? ");
+				+ " NATURAL JOIN users NATURAL JOIN clubs "
+				+ " WHERE userid = ? AND starts_at ");
+		query.append((futureEvents) ? " > ? ORDER BY starts_at ASC " : " < ? ORDER BY starts_at DESC ");
 		query.append(" OFFSET ?");
-		return jdbcTemplate.query(query.toString(), erm, username, Timestamp.from(now), offset);
+		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), offset);
 	}
 	
 	@Override
-	public List<Event> findByOwner(boolean futureEvents, String username, int pageNum) {
+	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
-		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN users NATURAL JOIN clubs "
-				+ " WHERE username = ? AND starts_at ");
-		query.append((futureEvents) ? " > ? " : " < ? ");
+		StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
+				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
+				+ " WHERE userid = ? AND EXISTS (SELECT eventid FROM events_users "
+				+ " WHERE eventid = t.eventid AND userid = ?) AND starts_at ");
+		query.append((futureEvents) ? " > ? ORDER BY t.starts_at ASC " : " < ? ORDER BY t.starts_at DESC ");
 		query.append(" OFFSET ?");
-		return jdbcTemplate.query(query.toString(), erm, username, Timestamp.from(now), offset);
+		return jdbcTemplate.query(query.toString(), erm, userid, userid, Timestamp.from(now), offset);
 	}
 	
 	@Override
@@ -142,19 +145,46 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<String> sport, Optional<Integer> vacancies, int page) {
+		
+		List<Object> paramValues = new ArrayList<>();
+		StringBuilder queryString = new StringBuilder("SELECT * ");
+		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, clubName, sport, vacancies));
+		
+		queryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
+		
 		int offset = (page - 1) * MAX_ROWS;
+		queryString.append(" OFFSET ? ;");
+		paramValues.add(offset);
+		
+		return jdbcTemplate.query(queryString.toString(), elrm, paramValues.toArray());
+	}
+	
+	@Override
+	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<String> sport, 
+			final Optional<Integer> vacancies) {
+		
+		List<Object> paramValues = new ArrayList<>();
+		StringBuilder queryString = new StringBuilder("SELECT count(*) ");
+		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, clubName, sport, vacancies));
+		
+		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, paramValues.toArray());
+	}
+	
+	private String getFilterQueryEndString(List<Object> paramValues, final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<String> sport, 
+			final Optional<Integer> vacancies) {
 		int presentFields = 0;
-		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("eventname", name.orElse(null)),
-				new Filter("clubname", establishment.orElse(null)),
+				new Filter("eventname", eventName.orElse(null)),
+				new Filter("clubname", clubName.orElse(null)),
 				new Filter("sport", sport.orElse(null)),
 				new Filter("customVacanciesFilter", vacancies.orElse(null)),
 				new Filter("starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
 		};
-		StringBuilder queryString = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
+		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
 		for(Filter param : params) {
 			if(!isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
@@ -169,13 +199,11 @@ public class EventJdbcDao implements EventDao {
 					queryString.append(param.queryAsString());
 					break;
 				}
-				list.add(param.getValue());
+				paramValues.add(param.getValue());
 				presentFields++;
 			}
 		}
-		queryString.append(" OFFSET ? ;");
-		list.add(offset);
-		return jdbcTemplate.query(queryString.toString(), elrm, list.toArray());
+		return queryString.toString();
 	}
 	
 	@Override
@@ -213,7 +241,7 @@ public class EventJdbcDao implements EventDao {
 				presentFields++;
 			}
 		}
-		queryString.append(" GROUP BY e.eventid OFFSET ? ;");
+		queryString.append(" GROUP BY e.eventid, e.starts_at ORDER BY e.starts_at ASC, e.eventid ASC OFFSET ? ;");
 		list.add(offset);
 		return jdbcTemplate.query(queryString.toString(), irm, list.toArray());
 	}
@@ -229,8 +257,24 @@ public class EventJdbcDao implements EventDao {
 	}
 
 	@Override
-	public Event create(String name, User owner, Pitch pitch, String description, 
-			int maxParticipants, Instant startsAt, Instant endsAt) {
+	public Event create(final String name, final User owner, final Pitch pitch, 
+			final String description, final int maxParticipants, 
+			final Instant startsAt, final Instant endsAt) 
+				throws EventOverlapException {
+		
+		Timestamp eventStartsAt = Timestamp.from(startsAt);
+		Timestamp eventEndsAt = Timestamp.from(endsAt);
+		
+		String eventOverlapQueryString = "SELECT count(*) FROM events WHERE pitchid = ? AND "
+				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at < ?))";
+		
+		int eventOverlapQueryResult = jdbcTemplate.queryForObject(eventOverlapQueryString, 
+				Integer.class, pitch.getPitchid(), eventStartsAt, eventStartsAt, eventStartsAt, 
+				eventEndsAt);
+		
+		if(eventOverlapQueryResult > 0)
+			throw new EventOverlapException("Pitch is already taken in the chosen time period");
+		
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
 		args.put("eventname", name);
@@ -242,6 +286,7 @@ public class EventJdbcDao implements EventDao {
 		args.put("ends_at", Timestamp.from(endsAt));
 		args.put("event_created_at", Timestamp.from(now));
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
+		
 		return new Event(eventId.longValue(), name, owner, pitch, description, 
 				maxParticipants, startsAt, endsAt, now);
 	}
@@ -261,7 +306,7 @@ public class EventJdbcDao implements EventDao {
 		
 		String userBusyQueryString = "SELECT count(*) FROM events_users AS eu "
 				+ " INNER JOIN events AS e ON eu.eventid = e.eventid WHERE eu.userid = ? AND "
-				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at > ?))";
+				+ " ((starts_at <= ? AND ends_at > ?) OR (starts_at > ? AND starts_at < ?))";
 		
 		int userBusyQueryResult = jdbcTemplate.queryForObject(userBusyQueryString, Integer.class,
 				user.getUserid(), eventStartsAt, eventStartsAt, eventStartsAt, eventEndsAt);
@@ -323,27 +368,59 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Sport> getFavoriteSport(final long userid) {
-		/*String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
-				+ "WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*)"
-				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport))";
-		return jdbcTemplate.query(queryString, rm, userid, userid);*/
-		return null;
+	public Optional<Sport> getFavoriteSport(final long userid) {
+		String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
+				+ " WHERE userid = ? GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY sport) "
+				+ " ORDER BY sport ASC";
+		Optional<String> sp = jdbcTemplate.query(queryString,
+				(rs, rowNum) -> rs.getString("sport"), userid, userid)
+					.stream().findFirst();
+		if(!sp.isPresent())
+			return Optional.empty();
+		return Optional.of(Sport.valueOf(sp.get()));
 	}
 	
 	@Override
-	public List<Club> getFavoriteClub(final long userid) {
-		/*String queryString = "SELECT clubid FROM events_users NATURAL JOIN events NATURAL JOIN pitches"
-				+ "WHERE userid = ? GROUP BY clubid HAVING count(*) >= ANY (SELECT count(*)"
-				+ "FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid))";
-		return jdbcTemplate.query(queryString, rm, userid, userid);*/
-		return null;
+	public Optional<Club> getFavoriteClub(final long userid) {
+		String queryString = " SELECT clubid, clubname, location, club_created_at FROM events_users "
+				+ " NATURAL JOIN events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " WHERE userid = ? GROUP BY clubid, clubname, location, club_created_at HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = ? GROUP BY clubid)"
+				+ " ORDER BY clubid ASC ";
+		return jdbcTemplate.query(queryString, crm, userid, userid).stream().findFirst();
+	}
+	
+	@Override
+	public int getPageInitialEventIndex(final int pageNum) {
+		return (pageNum - 1) * MAX_ROWS + 1;
 	}
 	
 	@Override
 	public void deleteEvent(final long eventid) {
 		jdbcTemplate.update("DELETE FROM events_users WHERE eventid = ?", eventid);
 		jdbcTemplate.update("DELETE FROM events WHERE eventid = ?", eventid);
+	}
+
+	@Override
+	public Optional<Integer> getVoteBalance(final long eventid) {
+		return jdbcTemplate.query("SELECT sum(vote) AS s FROM events_users "
+				+ " WHERE eventid = ? ", (rs, rowNum) -> rs.getInt("s"), eventid)
+					.stream().findFirst();
+	}
+
+	@Override
+	public Optional<Integer> getUserVote(final long eventid, final long userid) {
+		return jdbcTemplate.query("SELECT vote FROM events_users "
+				+ " WHERE eventid = ? AND userid = ? ", 
+				(rs, rowNum) -> rs.getInt("vote"), eventid, userid)
+					.stream().findFirst();
+	}
+
+	@Override
+	public int vote(final boolean isUpvote, final long eventid, final long userid) {
+		return jdbcTemplate.update("UPDATE events_users SET vote = ? WHERE eventid = ? AND userid = ? ",
+				(isUpvote)? 1 : -1, eventid, userid);
 	}
 
 }

@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+        <title>Sport Matcher - Pitch</title>
     </head>
     <body>
         <%@include file="header.jsp" %>
@@ -35,6 +36,11 @@
                     </div>
                 </div>
                 <div class="tbl-no-flex profile-cont profile-second">
+                    <c:if test="${event_overlap == true}">
+                        <span class="form-error notice">
+                            <spring:message code="event_overlap"/>
+                        </span>
+                    </c:if>
                     <div class="create-event">
                         <table class="schedule-table flex">
                             <tr>
@@ -76,7 +82,7 @@
                                     <form:errors path="description" cssClass="form-error" element="span"/>
                                 </div>
                                 <div class="form-field">
-                                    <form:label path="maxParticipants"><spring:message code="event_max_participants"/></form:label>
+                                    <form:label path="maxParticipants"><spring:message code="event_max_participants"/> *</form:label>
                                     <form:input  cssClass="form-control input-number" min="0" type="number" path="maxParticipants"/>
                                     <form:errors path="maxParticipants" cssClass="form-error" element="span"/>
                                 </div>
@@ -85,21 +91,39 @@
                                         <form:label path="date"><spring:message code="new_event_date"/> *</form:label>
                                         <form:input cssClass="form-control date-input" type="date" path="date"/>
                                         <form:errors path="date" cssClass="form-error" element="span"/>
+                                        <c:if test="${invalid_date_format == true}">
+                                            <span class="form-error">
+                                                <spring:message code="invalid_date_format"/>
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${event_in_past == true}">
+                                            <span class="form-error">
+                                                <spring:message code="event_in_past"/>
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${date_exceeded == true}">
+                                            <span class="form-error">
+                                                <spring:message code="date_exceeded"/>
+                                            </span>
+                                        </c:if>
                                     </div>
                                     <div>
                                         <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
                                         <form:select path="startsAtHour" cssClass="form-control">
-                                            <form:option  value=""></form:option>
                                             <c:forEach var="hourEntry" items="${availableHours}">
                                                 <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
                                             </c:forEach>
                                         </form:select>
                                         <form:errors path="startsAtHour" cssClass="form-error" element="span"/>
+                                        <c:if test="${ends_before_starts == true}">
+                                            <span class="form-error">
+                                                <spring:message code="ends_before_starts"/>
+                                            </span>
+                                        </c:if>
                                     </div>
                                     <div>
                                         <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
                                         <form:select path="endsAtHour" cssClass="form-control">
-                                            <form:option  value=""></form:option>
                                             <c:forEach var="hourEntry" items="${availableHours}">
                                                 <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
                                             </c:forEach>

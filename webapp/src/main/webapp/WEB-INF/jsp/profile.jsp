@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+	<title>Sport Matcher - Profile</title>
 </head>
 <body>
 <%@include file="header.jsp" %>
@@ -41,13 +42,21 @@
 						<span class="notice"> ${pastEventsParticipant} </span>
 						<spring:message code="event_s"/>
 					</div>
+					<c:if test="${favoriteSport != null}">
+						<div class="notice" style="padding: 5px 0">
+							<spring:message code="favorite_sport" />
+							<span class="notice"><spring:message code="${favoriteSport}"/></span>
+						</div>
+					</c:if>
+					<c:if test="${mainClub != null}">
+						<div class="notice" style="padding: 5px 0">
+							<spring:message code="main_club" />
+							<span class="notice"> ${mainClub.name}</span>
+						</div>
+					</c:if>
 					<div class="notice" style="padding: 5px 0">
-						<spring:message code="favorite_sport" />
-						<span class="notice"> ${favoriteSport}</span>
-					</div>
-					<div class="notice" style="padding: 5px 0">
-						<spring:message code="main_club" />
-						<span class="notice"> ${mainClub}</span>
+						<spring:message code="user_vote_balance"/>
+						<span class="notice"> ${votes_received} </span>
 					</div>
 				</div>
 			</div>

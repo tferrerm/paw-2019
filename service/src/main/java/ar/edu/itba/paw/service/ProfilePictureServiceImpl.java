@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PictureService;
 import ar.edu.itba.paw.interfaces.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
@@ -36,14 +36,14 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 	@Transactional
 	@Override
 	public void create(long userid, byte[] data) 
-		throws ProfilePictureProcessingException {
+		throws PictureProcessingException {
 		if(data.length == 0)
 			return;
 		try {
 			byte[] convertedPicture = ps.convert(data, MAX_WIDTH, MAX_HEIGHT);
 			ppd.create(userid, convertedPicture);
 		} catch(IllegalArgumentException | IOException e) {
-			throw new ProfilePictureProcessingException("The profile picture could not be processed. " + 
+			throw new PictureProcessingException("The profile picture could not be processed. " + 
 					e.getMessage());
 		}
 	}

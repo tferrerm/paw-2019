@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PitchDao;
+import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
@@ -17,6 +20,9 @@ public class PitchServiceImpl implements PitchService {
 	
 	@Autowired
 	private PitchDao pd;
+	
+	@Autowired
+	private PitchPictureService pps;
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page must be greater than zero.";
@@ -49,10 +55,37 @@ public class PitchServiceImpl implements PitchService {
 		}
 		return pd.findBy(name, Optional.ofNullable(sportString), location, clubName, page);
 	}
-
+	
 	@Override
-	public Pitch create(Club club, String name, Sport sport) {
-		return pd.create(club, name, sport);
+	public Integer countFilteredPitches(final Optional<String> pitchName, 
+			final Optional<Sport> sport, final Optional<String> location, 
+			final Optional<String> clubName) {
+		String sportString = null;
+		if(sport.isPresent()) {
+			sportString = sport.get().toString();
+		}
+		return pd.countFilteredPitches(pitchName, Optional.ofNullable(sportString), location, clubName);
+	}
+	
+	@Override
+	public int countPitchPages() {
+		return pd.countPitchPages();
+	}
+
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public Pitch create(Club club, String name, Sport sport, byte[] picture) 
+			throws PictureProcessingException {
+		Pitch pitch = pd.create(club, name, sport);
+		if(picture != null) {
+			pps.create(pitch.getPitchid(), picture);
+		}
+		return pitch;
+	}
+	
+	@Override
+	public int getPageInitialPitchIndex(final int pageNum) {
+		return pd.getPageInitialPitchIndex(pageNum);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -35,9 +36,15 @@ public class ClubServiceImpl implements ClubService {
 		return cd.findAll(page);
 	}
 
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public Club create(long userId, String name, String location) {
 		return cd.create(userId, name, location);
+	}
+	
+	@Override
+	public int getPageInitialClubIndex(final int pageNum) {
+		return cd.getPageInitialClubIndex(pageNum);
 	}
 	
 	@Override
@@ -56,11 +63,21 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public List<Club> findBy(Optional<String> name, Optional<String> location, int page) {
+	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page) {
 		if(page <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return cd.findBy(name, location, page);
+		return cd.findBy(clubName, location, page);
+	}
+	
+	@Override
+	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
+		return cd.countFilteredClubs(clubName, location);
+	}
+
+	@Override
+	public int countPastEvents(final long clubid) {
+		return cd.countPastEvents(clubid);
 	}
 
 }

@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+		<title>Sport Matcher - My Events</title>
 	</head>
 	<body>
 	<%@include file="header.jsp" %>
@@ -35,12 +36,14 @@
 							    <c:forEach var="event" items="${past_events}">
 										<a href="<c:url value="/event/${event.eventId}" /> ">
 											<div class="my-event-item">
-												<span>${event.name}</span>
-												<span><spring:message code="${event.pitch.sport}"/></span>
-												<fmt:timeZone value="AR">
-													<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-													<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-												</fmt:timeZone>
+												<span class="flex flex-1 justify-center home-header">${event.name}</span>
+												<span class="flex flex-1 justify-center home-header"><spring:message code="${event.pitch.sport}"/></span>
+												<div class="flex flex-1 justify-center home-header">
+													<fmt:timeZone value="AR">
+														<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+														<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+													</fmt:timeZone>
+												</div>
 											</div>
 						        </a>
 							    </c:forEach>
@@ -49,12 +52,14 @@
 							    <c:forEach var="event" items="${future_events}">
 										<a href="<c:url value="/event/${event.eventId}" /> ">
 											<div class="my-event-item">
-												<span>${event.name}</span>
-												<span><spring:message code="${event.pitch.sport}"/></span>
-												<fmt:timeZone value="AR">
-													<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-													<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-												</fmt:timeZone>
+												<span class="flex flex-1 justify-center home-header">${event.name}</span>
+												<span class="flex flex-1 justify-center home-header"><spring:message code="${event.pitch.sport}"/></span>
+												<div class="flex flex-1 justify-center home-header">
+													<fmt:timeZone value="AR">
+														<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+														<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+													</fmt:timeZone>
+												</div>
 											</div>
 						        </a>
 							    </c:forEach>

@@ -11,9 +11,18 @@ public interface ClubService {
 	
 	public List<Club> findAll(int page);
 	
-	public List<Club> findBy(Optional<String> name, Optional<String> location, int page);
+	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page);
+	
+	public int countFilteredClubs(Optional<String> clubName, Optional<String> location);
 	
 	public Club create(long userId, String name, String location);
+	
+	/**
+	 * Gets the page's first Club's index in the overall filtered Clubs.
+	 * @param pageNum	The page's number.
+	 * @return the page's first Club's index.
+	 */
+	public int getPageInitialClubIndex(final int pageNum);
 	
 	public void deleteClub(long clubid);
 	
@@ -25,5 +34,12 @@ public interface ClubService {
 	public Optional<Club> getPitchClub(final long pitchid);
 	
 	public int countClubPages();
+	
+	/**
+	 * Gets the amount of Events which took place in a Club.
+	 * @param clubid	The id of the Club.
+	 * @return the amount of past Events for that Club.
+	 */
+	public int countPastEvents(final long clubid);
 
 }

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
 public class NewPitchForm {
 	
@@ -12,6 +13,8 @@ public class NewPitchForm {
 	
 	@NotBlank
 	private String sport;
+	
+	private MultipartFile pitchPicture;
 
 	public String getName() {
 		return name;
@@ -27,6 +30,14 @@ public class NewPitchForm {
 
 	public void setSport(String sport) {
 		this.sport = sport;
+	}
+	
+	public MultipartFile getPitchPicture() {
+		return pitchPicture;
+	}
+
+	public void setPitchPicture(MultipartFile pitchPicture) {
+		this.pitchPicture = pitchPicture;
 	}
 	
 }

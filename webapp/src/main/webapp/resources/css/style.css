@@ -93,6 +93,14 @@ a.link-text{
   border-width: 1px;
 }
 
+.club-address {
+  width: 60%;
+  background-color: #fff2e6;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+}
+
 .content-container {
     align-items: center;
     display: flex;
@@ -136,8 +144,13 @@ a.link-text{
     width: 150px;
 }
 
+.date-separator {
+margin: 0 10px;
+}
+
 .description-body {
     display: flex;
+    flex-direction: row;
     width: 100%;
 }
 
@@ -175,8 +188,9 @@ a.link-text{
   margin-bottom: 0;
 }
 
-.events-column {
-
+.event-points {
+  margin-top: 20px;
+  margin-left: 100px;
 }
 
 .events-column div {
@@ -186,6 +200,17 @@ a.link-text{
 .events-column div:hover{
     background-color: grey;
     color: white;
+}
+
+
+.event-link {
+  text-align: center;
+  color: dodgerblue;
+  text-decoration: underline;
+}
+
+a.event-link {
+  margin: 10px 0;
 }
 
 .flex {
@@ -255,6 +280,11 @@ a.link-text{
     padding-top: 10px;
 }
 
+.just-row {
+  display: flex;
+  flex-flow: row wrap;
+}
+
 .header {
     align-items: center;
     background-color: dodgerblue;
@@ -319,8 +349,48 @@ a.link-text{
   align-items: center;
 }
 
+.home-all-events {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  width: 80%;
+  list-style: none;
+  background-color: white;
+}
+
+.home-ev-column {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid dodgerblue;
+}
+
+.home-ev-title {
+  justify-content: center;
+  border: 1px solid dodgerblue;
+  background-color: white;
+}
+
+.home-evs-container {
+  width: 80%;
+  background-color: white;
+}
+
+.home-evs-group {
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .home-header {
   text-align: center;
+}
+
+.home-title {
+  margin: 20px 0 10px;
 }
 
 .input-number {
@@ -398,7 +468,7 @@ a.logo-admin {
     background-color: #fff2e6;
     border-radius: 5px;
     flex-grow: 1;
-    margin: 10px 10px 10px 10px;
+    margin: 10px 10px;
     padding: 10px;
     width: 100%;
 }
@@ -424,13 +494,22 @@ a.logo-admin {
     font-weight: bold;
 }
 
+.pitch-item {
+  align-items: center;
+  padding: 10px;
+}
+
+ul.pitch-item {
+    padding-inline-start: 5px;
+}
+
 .pitch-pic-container {
     margin-right: 30px;
 }
 
 .pitch-pic {
-    min-width: 150px;
-    min-height: 150px;
+    width: 300px;
+    height: 150px;
 }
 
 .profile-cont {
@@ -641,6 +720,17 @@ a.logo-admin {
     height: 30px;
     font-size: 13px;
     text-align: center;
+}
+
+.vote-balance {
+  margin-left: 20px;
+}
+
+.voting-buttons {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .w-50 {

@@ -12,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -32,14 +30,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.paw.exception.ProfilePictureProcessingException;
+import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
+import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
 
 @Controller
@@ -58,12 +59,15 @@ public class UserController extends BaseController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
 	@Qualifier("eventServiceImpl")
 	@Autowired
 	private EventService es;
+	
+	@Autowired
+	private EmailService ems;
+	
+	@Autowired
+	private CustomPermissionsHandler cph;
 
 	@RequestMapping(value = "/login", method = {RequestMethod.GET})
 	public ModelAndView login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
@@ -93,13 +97,19 @@ public class UserController extends BaseController {
 		mav.addObject("currEventsParticipant", es.countUserEvents(true, userid));
 		mav.addObject("currEventsOwned", es.countUserOwnedCurrEvents(userid));
 		mav.addObject("pastEventsParticipant", es.countUserEvents(false, userid));
-		mav.addObject("favoriteSport", es.getFavoriteSport(userid));
-		mav.addObject("mainClub", es.getFavoriteClub(userid));
+		mav.addObject("favoriteSport", es.getFavoriteSport(userid).orElse(null));
+		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
+		mav.addObject("votes_received", us.countVotesReceived(userid));
 		return mav;
 	}
 	
 	@RequestMapping("/")
 	public ModelAndView index(@ModelAttribute("signupForm") final NewUserForm form) {
+		if(cph.isAuthenticated()) {
+			if(cph.isAdmin())
+				return new ModelAndView("redirect:/admin/");
+			return new ModelAndView("redirect:/home");
+		}
 		return new ModelAndView("index");
 	}
 	
@@ -124,7 +134,7 @@ public class UserController extends BaseController {
 			u = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
 					encodedPassword, Role.ROLE_USER, picture);
 
-		} catch(ProfilePictureProcessingException | IOException e) {
+		} catch(PictureProcessingException | IOException e) {
 			
 			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
 			ModelAndView mav = index(form);
@@ -139,16 +149,9 @@ public class UserController extends BaseController {
 			return mav;
 		}
 		
-		authenticate(u.getUsername(), u.getPassword(), request);
-		return new ModelAndView("redirect:/user/" + u.getUserid());
-	}
-	
-	private void authenticate(String username, String password, HttpServletRequest request) {
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				username, password);
-		authToken.setDetails(new WebAuthenticationDetails(request));
-		Authentication authentication = authenticationManager.authenticate(authToken);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		ems.userRegistered(u, LocaleContextHolder.getLocale());
+		cph.authenticate(u.getUsername(), u.getPassword(), request);
+		return new ModelAndView("redirect:/home");
 	}
 	
 	@RequestMapping("/user/{userId}/picture")

@@ -30,11 +30,6 @@ public class UserJdbcDao implements UserDao {
 	@Autowired
 	private UserRowMapper urm;
 	
-//	private static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-//	new User(rs.getLong("userId"), rs.getString("username"), rs.getString("firstname"),
-//			 rs.getString("lastname"), rs.getString("password"), Role.valueOf(rs.getString("role")),
-//			 rs.getTimestamp("created_at"), rs.getTimestamp("deleted_at"));
-	
 	@Autowired
 	public UserJdbcDao(final DataSource ds) {
 		jdbcTemplate = new JdbcTemplate(ds);
@@ -54,6 +49,14 @@ public class UserJdbcDao implements UserDao {
 	@Override
 	public Optional<User> findByUsername(final String username) {
 		return jdbcTemplate.query("SELECT * FROM users WHERE username = ?", urm, username)
+				.stream().findFirst();
+	}
+	
+	@Override
+	public Optional<Integer> countVotesReceived(final long userid) {
+		return jdbcTemplate.query("SELECT sum(vote) "
+				+ " FROM events_users WHERE eventid IN "
+				+ " (SELECT eventid FROM events WHERE userid = ?)", (rs, rowNum) -> rs.getInt(1), userid)
 				.stream().findFirst();
 	}
 	

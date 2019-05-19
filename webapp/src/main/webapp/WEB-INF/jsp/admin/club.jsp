@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+		<title>Sport Matcher - Club</title>
 	</head>
 	<body>
 	<%@include file="header.jsp" %>
@@ -17,19 +18,17 @@
 				<div class="description-body">
 					<div class="description-item">
 						<span class="event-info-label"><spring:message code="pitches"/></span>
-						<ul>
+						<ul class="pitch-item">
 							<c:forEach var="pitch" items="${pitches}">
-								<div class="custom-row">
-									<div>${pitch.name}</div>
-									<div><spring:message code="${pitch.sport}"/></div>
-									<div>
-										<a href="<c:url value="/admin/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
-									</div>
+								<div class="custom-row flex-space-between pitch-item">
+									<a href="<c:url value="/pitch/${pitch.pitchid}" /> " class="flex-1">${pitch.name}</a>
+									<div class="flex-1"><spring:message code="${pitch.sport}"/></div>
+									<a href="<c:url value="/club/${club.clubid}"/>" class="flex-1"> <button type="button" class="btn btn-primary"><spring:message code="view_club"/></button></a>
 								</div>
 							</c:forEach>
 						</ul>
 					</div>
-					<div class="participants-list">
+					<div class="club-address">
 						<span class="event-info-label"><spring:message code="address"/></span>
 						<p>${club.location}</p>
 					</div>
@@ -52,6 +51,11 @@
 									</c:forEach>
 								</form:select>
 								<form:errors path="sport" cssClass="form-error" element="span"/>
+							</div>
+							<div>
+								<form:input type="file" accept="image/*" path="pitchPicture" style="display: none" id="pitchPictureButton"/>
+								<button type="button" class="btn btn-secondary"  onclick="document.getElementById('pitchPictureButton').click()"><spring:message code="choose_file"/></button>
+								<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
 							</div>
 							<div class="submit-container">
 								<button type="submit" class="btn btn-primary submit-btn"><spring:message code="create"/></button>

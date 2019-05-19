@@ -18,10 +18,8 @@ import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
-import ar.edu.itba.paw.webapp.form.NewPitchForm;
 
 @Controller
 public class ClubController extends BaseController {
@@ -38,11 +36,17 @@ public class ClubController extends BaseController {
 	@RequestMapping("/club/{clubId}")
 	public ModelAndView showClub(@PathVariable("clubId") long clubid) 
 			throws ClubNotFoundException {
-		List<Pitch> pitches = ps.findByClubId(clubid, 1);
+		
 		ModelAndView mav = new ModelAndView("club");
-		mav.addObject("pitches", pitches);
+		
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		mav.addObject("club", club);
+		
+		List<Pitch> pitches = ps.findByClubId(clubid, 1);
+		mav.addObject("pitches", pitches);
+		
+		mav.addObject("past_events_count", cs.countPastEvents(clubid));
+		
 		return mav;
 	}
 
@@ -50,20 +54,28 @@ public class ClubController extends BaseController {
 	public ModelAndView clubs(
 			@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
 			@PathVariable("pageNum") int pageNum,
-			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "name", required = false) String clubName,
             @RequestParam(value = "location", required = false) String location) {
-		String queryString = buildQueryString(name, location);
+		String queryString = buildQueryString(clubName, location);
 		
 		ModelAndView mav = new ModelAndView("clubList");
 		
-		mav.addObject("page", pageNum);
+		mav.addObject("pageNum", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("lastPageNum", cs.countClubPages());
-        mav.addObject("clubs", cs.findBy(
-				Optional.ofNullable(name), 
-        		Optional.ofNullable(location), 
-        		pageNum));
+        mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
         
+        List<Club> clubs = cs.findBy(
+				Optional.ofNullable(clubName), 
+        		Optional.ofNullable(location), 
+        		pageNum);
+        mav.addObject("clubs", clubs);
+        mav.addObject("clubQty", clubs.size());
+        
+        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
+        		Optional.ofNullable(location));
+        mav.addObject("totalClubQty", totalClubQty);
+
 		return mav;
 	}
 	

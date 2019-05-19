@@ -6,5 +6,9 @@
   </head>
   <body>
     <h1>Something went wrong!</h1>
+    <span class="just-row">
+      <span><spring:message code="click_oops"/></span>
+      <a class="link-text" href="<c:url value='/' />"><span class="link-text"><spring:message code="here"/></span></a>
+    </span>
   </body>
 </html>

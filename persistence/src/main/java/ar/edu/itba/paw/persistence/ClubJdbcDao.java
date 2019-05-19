@@ -79,6 +79,11 @@ public class ClubJdbcDao implements ClubDao {
 				+ " FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", crm, pitchid)
 		.stream().findAny();
 	}
+	
+	@Override
+	public int getPageInitialClubIndex(final int pageNum) {
+		return (pageNum -1) * MAX_ROWS + 1;
+	}
 
 	@Override
 	public int countClubPages() {
@@ -90,26 +95,46 @@ public class ClubJdbcDao implements ClubDao {
 	}
 
 	@Override
-	public List<Club> findBy(Optional<String> name, Optional<String> location, int page) {
+	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page) {
+		
+		List<Object> paramValues = new ArrayList<>();
+		StringBuilder queryString = new StringBuilder("SELECT * ");
+		queryString.append(getFilterQueryEndString(paramValues, clubName, location));
+		queryString.append(" ORDER BY clubname ASC ");
+		
 		int offset = (page - 1) * MAX_ROWS;
+		queryString.append(" OFFSET ? ;");
+		paramValues.add(offset);
+		
+		return jdbcTemplate.query(queryString.toString(), crm, paramValues.toArray());
+	}
+	
+	@Override
+	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
+		List<Object> paramValues = new ArrayList<>();
+		StringBuilder queryString = new StringBuilder("SELECT count(*) ");
+		queryString.append(getFilterQueryEndString(paramValues, clubName, location));
+		
+		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, paramValues.toArray());
+	}
+	
+	private String getFilterQueryEndString(List<Object> paramValues, final Optional<String> clubName, 
+			final Optional<String> location) {
 		int presentFields = 0;
-		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("clubname", name.orElse(null)),
+				new Filter("clubname", clubName.orElse(null)),
 				new Filter("location", location.orElse(null))
 		};
-		StringBuilder queryString = new StringBuilder("SELECT * FROM clubs ");
+		StringBuilder queryString = new StringBuilder(" FROM clubs ");
 		for(Filter param : params) {
 			if(!isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
 				queryString.append(param.queryAsString());
-				list.add(param.getValue());
+				paramValues.add(param.getValue());
 				presentFields++;
 			}
 		}
-		queryString.append(" OFFSET ? ;");
-		list.add(offset);
-		return jdbcTemplate.query(queryString.toString(), crm, list.toArray());
+		return queryString.toString();
 	}
 	
 	private boolean isEmpty(Object value) {
@@ -120,6 +145,13 @@ public class ClubJdbcDao implements ClubDao {
 		if(currentFilter == 0)
 			return " WHERE ";
 		return " AND ";
+	}
+
+	@Override
+	public int countPastEvents(final long clubid) {
+		return jdbcTemplate.queryForObject("SELECT count(*) FROM events NATURAL JOIN pitches "
+				+ " WHERE clubid = ? AND ends_at < ?", Integer.class, clubid, 
+				Timestamp.from(Instant.now()));
 	}
 
 }
