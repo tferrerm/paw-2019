@@ -13,6 +13,8 @@ public interface UserService {
 	
 	public Optional<User> findByUsername(final String username);
 	
+	public int countVotesReceived(final long userid);
+	
 	/**
 	 * 
 	 * @param username

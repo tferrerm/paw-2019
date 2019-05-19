@@ -53,6 +53,14 @@ public class UserJdbcDao implements UserDao {
 	}
 	
 	@Override
+	public Optional<Integer> countVotesReceived(final long userid) {
+		return jdbcTemplate.query("SELECT sum(vote) "
+				+ " FROM events_users WHERE eventid IN "
+				+ " (SELECT eventid FROM events WHERE userid = ?)", (rs, rowNum) -> rs.getInt("s"), userid)
+				.stream().findFirst();
+	}
+	
+	@Override
 	public User create(final String username, final String firstname, final String lastname,
 			final String password, final Role role) throws UserAlreadyExistsException {
 		final Map<String, Object> args = new HashMap<>();
