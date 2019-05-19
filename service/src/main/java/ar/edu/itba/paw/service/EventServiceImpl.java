@@ -20,6 +20,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
+import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -43,8 +44,9 @@ public class EventServiceImpl implements EventService {
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
 	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
 			"day_fri", "day_sat", "day_sun"};
-	private static final int EVENT_ID_INDEX = 0;
 	private static final int EVENT_INSCRIPTIONS_INDEX = 1;
+	private static final int MIN_HOUR = 9;
+	private static final int MAX_HOUR = 23;
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 
@@ -245,7 +247,7 @@ public class EventServiceImpl implements EventService {
 			final String startsAtHour, final String endsAtHour) 
 					throws 	InvalidDateFormatException, EventInPastException,
 							MaximumDateExceededException, EndsBeforeStartsException, 
-							EventOverlapException {
+							EventOverlapException, HourOutOfRangeException {
 		
 		int mp = Integer.parseInt(maxParticipants);
 		int startsAt = Integer.parseInt(startsAtHour);
@@ -263,6 +265,8 @@ public class EventServiceImpl implements EventService {
     		throw new MaximumDateExceededException();
     	if(endsAt <= startsAt)
     		throw new EndsBeforeStartsException();
+    	if(startsAt < MIN_HOUR || startsAt >= MAX_HOUR || endsAt > MAX_HOUR || endsAt <= MIN_HOUR)
+    		throw new HourOutOfRangeException();
 
 		return ed.create(name, owner, pitch, description, mp, 
 				dateInstant.plus(startsAt, ChronoUnit.HOURS), dateInstant.plus(endsAt, ChronoUnit.HOURS));

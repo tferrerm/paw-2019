@@ -26,6 +26,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
+import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -249,6 +250,8 @@ public class EventController extends BaseController {
     		return eventCreationError("date_exceeded", pitchId, form);
     	} catch(EventOverlapException e) {
     		return eventCreationError("event_overlap", pitchId, form);
+    	} catch(HourOutOfRangeException e) {
+    		return eventCreationError("hour_out_of_range", pitchId, form);
     	}
     	return new ModelAndView("redirect:/event/" + ev.getEventId());
     }
