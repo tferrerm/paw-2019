@@ -37,6 +37,14 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> findByUsername(final String username) {
 		return ud.findByUsername(username);
 	}
+	
+	@Override
+	public int countVotesReceived(final long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return ud.countVotesReceived(userid).orElse(0);
+	}
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
