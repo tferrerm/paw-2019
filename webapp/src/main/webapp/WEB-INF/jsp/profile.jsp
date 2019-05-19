@@ -54,6 +54,10 @@
 							<span class="notice"> ${mainClub.name}</span>
 						</div>
 					</c:if>
+					<div class="notice" style="padding: 5px 0">
+						<spring:message code="user_vote_balance"/>
+						<span class="notice"> ${votes_received} </span>
+					</div>
 				</div>
 			</div>
 		</div>
