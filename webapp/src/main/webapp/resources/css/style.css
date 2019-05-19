@@ -184,8 +184,9 @@ a.link-text{
   margin-bottom: 0;
 }
 
-.events-column {
-
+.event-points {
+  margin-top: 20px;
+  margin-left: 100px;
 }
 
 .events-column div {
@@ -710,6 +711,17 @@ ul.pitch-item {
     height: 30px;
     font-size: 13px;
     text-align: center;
+}
+
+.vote-balance {
+  margin-left: 20px;
+}
+
+.voting-buttons {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .w-50 {
