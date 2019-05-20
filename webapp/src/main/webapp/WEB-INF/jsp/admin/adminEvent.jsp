@@ -16,7 +16,14 @@
 				<h2 class="no-margin">${event.name}</h2>
 				<div class="detail-container">
 					<div class="status">
-						<h3><spring:message code="status"/> Uncompleted</h3>
+						<c:choose>
+							<c:when test="${participant_count < event.maxParticipants}">
+								<h3><spring:message code="status"/> <spring:message code="uncompleted"/></h3>
+							</c:when>
+							<c:otherwise>
+								<h3><spring:message code="status"/> <spring:message code="completed"/></h3>
+							</c:otherwise>
+						</c:choose>
 						<div class="progress">
 							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 						</div>
@@ -30,7 +37,7 @@
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="sport"/></span>
-								<span>${event.pitch.sport}</span>
+								<span><spring:message code="${event.pitch.sport}"/></span>
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="club"/></span>

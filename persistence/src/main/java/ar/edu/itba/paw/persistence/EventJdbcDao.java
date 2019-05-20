@@ -29,7 +29,6 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.rowmapper.ClubRowMapper;
-import ar.edu.itba.paw.persistence.rowmapper.EventListRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.InscriptionsRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
@@ -39,7 +38,7 @@ public class EventJdbcDao implements EventDao {
 	
 	private JdbcTemplate jdbcTemplate;
 	private final SimpleJdbcInsert jdbcInsert;
-	private final SimpleJdbcInsert jdbcInscriptionInsert; // PREGUNTARRRRRRRRRRRRRRRRRRRRRRRRRR
+	private final SimpleJdbcInsert jdbcInscriptionInsert;
 	private static final int MAX_ROWS = 10;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
@@ -48,9 +47,6 @@ public class EventJdbcDao implements EventDao {
 	
 	@Autowired
 	private UserRowMapper urm;
-	
-	@Autowired
-	private EventListRowMapper elrm;
 	
 	@Autowired
 	private InscriptionsRowMapper irm;
@@ -170,7 +166,7 @@ public class EventJdbcDao implements EventDao {
 		queryString.append(" OFFSET ? ;");
 		paramValues.add(offset);
 		
-		return jdbcTemplate.query(queryString.toString(), erm /*elrm*/, paramValues.toArray());
+		return jdbcTemplate.query(queryString.toString(), erm, paramValues.toArray());
 	}
 	
 	@Override
