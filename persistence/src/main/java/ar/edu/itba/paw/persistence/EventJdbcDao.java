@@ -192,18 +192,18 @@ public class EventJdbcDao implements EventDao {
 			final Optional<Integer> vacancies) {
 		int presentFields = 0;
 		Filter[] params = { 
-				new Filter("eventname", eventName.orElse(null)),
-				new Filter("clubname", clubName.orElse(null)),
-				new Filter("sport", sport.orElse(null)),
-				new Filter("customOrganizerFilter", organizer.orElse(null)),
-				new Filter("customVacanciesFilter", vacancies.orElse(null)),
-				new Filter("starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
+				new Filter("eventname", eventName),
+				new Filter("clubname", clubName),
+				new Filter("sport", sport),
+				new Filter("customOrganizerFilter", organizer),
+				new Filter("customVacanciesFilter", vacancies),
+				new Filter("starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
 		};
 		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches "
 				+ " NATURAL JOIN clubs NATURAL JOIN users) AS t ");
 		
 		for(Filter param : params) {
-			if(!isEmpty(param.getValue())) {
+			if(param.getValue().isPresent()) {
 				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
 				case "customOrganizerFilter":
@@ -216,10 +216,12 @@ public class EventJdbcDao implements EventDao {
 					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
+					if(isEmpty(param.getValue()))
+						continue;
 					queryString.append(param.queryAsString());
 					break;
 				}
-				paramValues.add(param.getValue());
+				paramValues.add(param.getValue().get());
 				presentFields++;
 			}
 		}
@@ -235,19 +237,19 @@ public class EventJdbcDao implements EventDao {
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("e.eventname", eventName.orElse(null)),
-				new Filter("clubname", establishment.orElse(null)),
-				new Filter("sport", sport.orElse(null)),
-				new Filter("customOrganizerFilter", organizer.orElse(null)),
-				new Filter("customVacanciesFilter", vacancies.orElse(null)),
-				new Filter("e.starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
+				new Filter("e.eventname", eventName),
+				new Filter("clubname", establishment),
+				new Filter("sport", sport),
+				new Filter("customOrganizerFilter", organizer),
+				new Filter("customVacanciesFilter", vacancies),
+				new Filter("e.starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
 		};
 		StringBuilder queryString = new StringBuilder("SELECT e.eventid, count(evu.eventid) FROM "
 				+ " events AS e INNER JOIN users AS u ON e.userid = u.userid NATURAL JOIN pitches "
 				+ " NATURAL JOIN clubs LEFT OUTER JOIN events_users AS evu ON e.eventid = evu.eventid ");
 		
 		for(Filter param : params) {
-			if(!isEmpty(param.getValue())) {
+			if(param.getValue().isPresent()) {
 				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
 				case "customOrganizerFilter":
@@ -261,10 +263,12 @@ public class EventJdbcDao implements EventDao {
 					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
+					if(isEmpty(param.getValue()))
+						continue;
 					queryString.append(param.queryAsString());
 					break;
 				}
-				list.add(param.getValue());
+				list.add(param.getValue().get());
 				presentFields++;
 			}
 		}
@@ -273,14 +277,19 @@ public class EventJdbcDao implements EventDao {
 		return jdbcTemplate.query(queryString.toString(), irm, list.toArray());
 	}
 	
-	private boolean isEmpty(Object value) {
-		return value == null;
-	}
-	
 	private String buildPrefix(int currentFilter) {
 		if(currentFilter == 0)
 			return " WHERE ";
 		return " AND ";
+	}
+	
+	/**
+	 * Check if optional is present first
+	 * @param str Optional (not empty)
+	 * @return
+	 */
+	private boolean isEmpty(Optional<?> opt) {
+		return opt.get().toString().isEmpty();
 	}
 
 	@Override

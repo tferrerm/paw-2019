@@ -89,17 +89,17 @@ public class PitchJdbcDao implements PitchDao {
 			final Optional<String> clubName) {
 		int presentFields = 0;
 		Filter[] params = { 
-				new Filter("pitchname", pitchName.orElse("")),
-				new Filter("sport", sport.orElse("")),
-				new Filter("location", location.orElse("")),
-				new Filter("clubname", clubName.orElse(""))
+				new Filter("pitchname", pitchName),
+				new Filter("sport", sport),
+				new Filter("location", location),
+				new Filter("clubname", clubName)
 		};
 		StringBuilder queryString = new StringBuilder(" FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {
-			if(!((String)param.getValue()).isEmpty()) {
+			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
 				queryString.append(param.queryAsString());
-				paramValues.add(param.getValue());
+				paramValues.add(param.getValue().get());
 				presentFields++;
 			}
 		}
@@ -111,6 +111,10 @@ public class PitchJdbcDao implements PitchDao {
 		if(currentFilter == 0)
 			return " WHERE ";
 		return " AND ";
+	}
+	
+	private boolean isEmpty(Optional<?> opt) {
+		return opt.get().toString().isEmpty();
 	}
 	
 	@Override
