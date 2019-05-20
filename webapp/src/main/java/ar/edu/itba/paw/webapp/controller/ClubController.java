@@ -24,8 +24,8 @@ import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
 @Controller
 public class ClubController extends BaseController {
 	
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClubController.class);
-	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@Autowired
 	private ClubService cs;

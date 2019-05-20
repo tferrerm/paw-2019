@@ -66,15 +66,18 @@ public class EventController extends BaseController {
 
 	@RequestMapping("/home")
 	public ModelAndView home()	{
-//		ems.joinEventEmail("sswinnen@itba.edu.ar","Juan", "Evento", LocaleContextHolder.getLocale());
 		ModelAndView mav = new ModelAndView("home");
+		
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
 		List<Event> upcomingEvents = es.findByUserInscriptions(true, loggedUser().getUserid(), 1);
 		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
+		
 		mav.addObject("myEvents", myEvents);
 		mav.addObject("scheduleHeaders", scheduleDaysHeader);
+		
 		boolean noParticipations = upcomingEvents.isEmpty();
 		mav.addObject("noParticipations", noParticipations);
+		
 	    return mav;
 	}
 
@@ -82,8 +85,18 @@ public class EventController extends BaseController {
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
 		long userid = loggedUser().getUserid();
-		mav.addObject("future_events", es.findByOwner(true, userid, pageNum));
-		mav.addObject("past_events", es.findByOwner(false, userid, pageNum));
+		List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
+		List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
+		
+		mav.addObject("future_events", futureEvents);
+		mav.addObject("past_events", pastEvents);
+		
+		mav.addObject("page", pageNum);
+		int futureEventQty = es.countByOwner(true, userid);
+		int pastEventQty = es.countByOwner(false, userid);
+		boolean countFutureOwnedPages = (futureEventQty > pastEventQty);
+        mav.addObject("lastPageNum", es.countUserOwnedPages(countFutureOwnedPages, userid));
+        
 	    return mav;
 	}
 

@@ -74,15 +74,24 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Event> findByOwner(boolean futureEvents, long userid, int pageNum) {
+	public List<Event> findByOwner(final boolean futureEvents, final long userid, final int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
-		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches "
+		StringBuilder queryString = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches "
 				+ " NATURAL JOIN users NATURAL JOIN clubs "
 				+ " WHERE userid = ? AND starts_at ");
-		query.append((futureEvents) ? " > ? ORDER BY starts_at ASC " : " <= ? ORDER BY starts_at DESC ");
-		query.append(" OFFSET ?");
-		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), offset);
+		queryString.append((futureEvents) ? " > ? ORDER BY starts_at ASC " : " <= ? ORDER BY starts_at DESC ");
+		queryString.append(" OFFSET ?");
+		return jdbcTemplate.query(queryString.toString(), erm, userid, Timestamp.from(now), offset);
+	}
+	
+	@Override
+	public int countByOwner(final boolean futureEvents, final long userid) {
+		StringBuilder queryString = new StringBuilder("SELECT count(*) FROM events WHERE userid = ? "
+				+ " AND starts_at ");
+		queryString.append((futureEvents) ? " > ? " : " <= ? ");
+		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, userid,
+				Timestamp.from(Instant.now()));
 	}
 	
 	@Override
@@ -92,7 +101,7 @@ public class EventJdbcDao implements EventDao {
 		StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
 				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
 				+ " WHERE EXISTS (SELECT eventid FROM events_users "
-				+ " WHERE eventid = t.eventid AND userid = ?) AND starts_at ");
+				+ " WHERE eventid = t.eventid AND userid = ?) AND t.starts_at ");
 		query.append((futureEvents) ? " > ? ORDER BY t.starts_at ASC " : " <= ? ORDER BY t.starts_at DESC ");
 		query.append(" OFFSET ?");
 		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), offset);
@@ -102,7 +111,7 @@ public class EventJdbcDao implements EventDao {
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid) {
 		StringBuilder query = new StringBuilder("SELECT count(*) FROM events AS e "
 				+ " WHERE EXISTS (SELECT * FROM events_users WHERE eventid = e.eventid "
-				+ " AND userid = ?) AND starts_at ");
+				+ " AND userid = ?) AND e.starts_at ");
 		query.append((futureEvents) ? " > ? " : " <= ? ");
 		return jdbcTemplate.queryForObject(query.toString(), Integer.class, userid, 
 				Timestamp.from(Instant.now()));
@@ -323,8 +332,8 @@ public class EventJdbcDao implements EventDao {
 				+ " eventid = ?", Integer.class, eventid);
 	}
 
-	@Override // BOOLEANNNNNNNNNNNNNNNNNNNN
-	public boolean joinEvent(final User user, final Event event)
+	@Override
+	public void joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, UserBusyException {
 		
 		Timestamp eventStartsAt = Timestamp.from(event.getStartsAt());
@@ -351,8 +360,6 @@ public class EventJdbcDao implements EventDao {
 			throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
 					+ event.getEventId());
 		}
-		
-		return true;
 	}
 	
 	@Override
@@ -377,8 +384,8 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
 		Integer userEvents = 0;
-		StringBuilder query = new StringBuilder("SELECT count(*) FROM events_users NATURAL JOIN events "
-				+ " WHERE userid = ? AND ends_at ");
+		StringBuilder query = new StringBuilder("SELECT count(*) FROM events_users AS eu INNER JOIN "
+				+ " events AS e ON eu.eventid = e.eventid WHERE eu.userid = ? AND e.ends_at ");
 		query.append((isCurrentEventsQuery) ? " > ? " : " <= ? ");
 		userEvents = jdbcTemplate.queryForObject(query.toString(), Integer.class,
 					userid, Timestamp.from(Instant.now()));
@@ -452,6 +459,15 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public int countUserInscriptionPages(final boolean onlyFuture, final long userid) {
 		int rows = countByUserInscriptions(onlyFuture, userid);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
+	}
+	
+	@Override
+	public int countUserOwnedPages(final boolean onlyFuture, final long userid) {
+		int rows = countByOwner(onlyFuture, userid);
 		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;

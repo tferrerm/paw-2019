@@ -60,11 +60,18 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Event> findByOwner(boolean futureEvents, long userid, int pageNum) {
+	public List<Event> findByOwner(final boolean futureEvents, final long userid, final int pageNum) {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
 		return ed.findByOwner(futureEvents, userid, pageNum);
+	}
+	
+	@Override
+	public int countByOwner(final boolean futureEvents, final long userid) {
+		if(userid <= 0)
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		return ed.countByOwner(futureEvents, userid);
 	}
 	
 	@Override
@@ -125,7 +132,7 @@ public class EventServiceImpl implements EventService {
 
 			Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
 
-			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7; // Should change if dayAmount != 7
+			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7;
 			if(dayIndex < 0)
 				dayIndex += 7;
 			
@@ -184,6 +191,8 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid) {
+		if(userid <= 0)
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		return ed.countByUserInscriptions(futureEvents, userid);
 	}
 
@@ -213,20 +222,6 @@ public class EventServiceImpl implements EventService {
 		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
 				Optional.ofNullable(sportString), organizer, vacancies);
 	}
-
-	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<String> sport, Optional<Integer> vacancies, int page) {
-		if(page <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
-		}
-		String sportString = null;
-		if(sport.isPresent()) {
-			sportString = sport.get().toString();
-		}
-
-		return ed.countBy(onlyFuture, name, establishment, Optional.ofNullable(sportString),
-				vacancies, page);
-	}*/
 
 	@Override
 	public int countUserEventPages(long userid) {
@@ -291,15 +286,14 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public boolean joinEvent(final User user, final Event event)
+	public void joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException {
 
-		// si no tiro excepcion y hago metodo separado, no obligo a validar esto
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
 			throw new EventFullException();
 		}
 
-		return ed.joinEvent(user, event);
+		ed.joinEvent(user, event);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
@@ -402,7 +396,16 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public int countUserInscriptionPages(final boolean onlyFuture, final long userid) {
+		if(userid <= 0)
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		return ed.countUserInscriptionPages(onlyFuture, userid);
+	}
+	
+	@Override
+	public int countUserOwnedPages(final boolean onlyFuture, final long userid) {
+		if(userid <= 0)
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		return ed.countUserOwnedPages(onlyFuture, userid);
 	}
 
 }

@@ -107,14 +107,6 @@ public class EventJdbcDaoTest {
 	}
 	
 	@Test
-	public void testFindByUserInscriptions() {
-		List<Event> events = ed.findByUserInscriptions(true, OWNER.getUserid(), 1);
-		events.size();
-		//Assert.assertEquals(1, events.size());
-		//Assert.assertEquals(Long.valueOf(1), events.get(0).getInscriptions());
-	}
-	
-	@Test
 	public void testFindFuture() {
 		List<Event> events = ed.findFutureEvents(1);
 		Assert.assertEquals(1, events.size());

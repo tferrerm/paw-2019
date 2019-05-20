@@ -30,9 +30,17 @@ public interface EventService {
 	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
 	 * @param userid 		Owner of Events.
 	 * @param pageNum 		Page number.
-	 * @return a list of Events.
+	 * @return The list of owned Events.
 	 */
-	public List<Event> findByOwner(boolean futureEvents, final long userid, int pageNum);
+	public List<Event> findByOwner(final boolean futureEvents, final long userid, final int pageNum);
+	
+	/**
+	 * Counts Events owned by a User.
+	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
+	 * @param userid 		Owner of Events.
+	 * @return The amount of owned Events.
+	 */
+	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
 	 * Gets Events for which a User has an inscription.
@@ -117,7 +125,7 @@ public interface EventService {
 											MaximumDateExceededException, EndsBeforeStartsException, 
 											EventOverlapException, HourOutOfRangeException;
 
-	public boolean joinEvent(final User user, final Event event)
+	public void joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
 
 	public void leaveEvent(final User user, final Event event);
@@ -202,5 +210,13 @@ public interface EventService {
 	 * @return The amount of pages.
 	 */
 	public int countUserInscriptionPages(final boolean onlyFuture, final long userid);
+	
+	/**
+	 * Gets the amount of pages the list of owned Events occupies.
+	 * @param onlyFuture	Search only for future Events (true) or only for past Events (false)
+	 * @param userid		The User's id.
+	 * @return The amount of pages.
+	 */
+	public int countUserOwnedPages(final boolean onlyFuture, final long userid);
 
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.EventService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -27,9 +26,6 @@ import ar.edu.itba.paw.webapp.form.FiltersForm;
 @RequestMapping("/admin")
 @Controller
 public class AdminController extends BaseController {
-
-	@Autowired
-	private UserService us;
 
 	@Autowired
 	private EventService es;
@@ -108,6 +104,7 @@ public class AdminController extends BaseController {
 			throws EventNotFoundException {
 		es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		es.deleteEvent(id);
+		LOGGER.debug("Deleted event with id {}", id);
 		return new ModelAndView("redirect:/admin/events/1");
 	}
 

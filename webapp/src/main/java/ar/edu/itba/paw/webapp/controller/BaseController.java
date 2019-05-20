@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,14 +25,11 @@ public class BaseController {
 	@Autowired
 	private UserService us;
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
 	@ModelAttribute("loggedUser")
 	public User loggedUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(auth == null) {
-			LOGGER.warn("Returning null as logged user");
+			LOGGER.debug("Returning null as logged user");
 			return null;
 		}
 		LOGGER.debug("Auth is: {}", auth.isAuthenticated());
@@ -41,7 +37,6 @@ public class BaseController {
 			return null;
 		}
 		final Optional<User> user = us.findByUsername(auth.getName());
-//		user.isPresent((u) -> (LOGGER.debug("Currently logged user is {}", user.get().getId())));
 		return user.get();
 	}
 	
