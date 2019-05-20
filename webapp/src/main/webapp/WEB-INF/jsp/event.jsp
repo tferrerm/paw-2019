@@ -14,7 +14,9 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h2>${event.name}</h2>
+			<div class="profile-title">
+				<h2>${event.name}</h2>
+			</div>
 			<div class="detail-container">
 				<c:if test="${!has_ended}">
 					<div class="status">

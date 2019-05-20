@@ -23,7 +23,7 @@
 				<form:form modelAttribute="signupForm" action="${postPath}"	method="post" enctype="multipart/form-data">
 					<div>
 						<form:label path="username"><spring:message code="username"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" path="username"/>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="username"/>
 						<form:errors path="username" cssClass="form-error" element="span"/>
 						<c:if test="${duplicateUsername != null}">
 						<div class="formError">
@@ -35,22 +35,22 @@
 					</div>
 					<div>
 						<form:label path="firstName"><spring:message code="first_name"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" path="firstName"/>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="firstName"/>
 						<form:errors path="firstName" cssClass="form-error" element="span"/>
 					</div>
 					<div>
 						<form:label path="lastName"><spring:message code="last_name"/> *</form:label>
-						<form:input  cssClass="form-control" type="text" path="lastName"/>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="lastName"/>
 						<form:errors path="lastName" cssClass="form-error" element="span"/>
 					</div>
 					<div>
 						<form:label path="password"><spring:message code="password"/> *</form:label>
-						<form:input	cssClass="form-control" type="password"	path="password"/>
+						<form:input	cssClass="form-control" type="password" maxlength="100" path="password"/>
 						<form:errors path="password" cssClass="form-error" element="span"/>
 					</div>
 					<div>
 						<form:label	path="repeatPassword"><spring:message code="repeat_password"/> *</form:label>
-						<form:input	cssClass="form-control" type="password"	path="repeatPassword"/>
+						<form:input	cssClass="form-control" type="password" maxlength="100" path="repeatPassword"/>
 						<form:errors path="repeatPassword" cssClass="form-error" element="span"/>
 					</div>
 					<div>

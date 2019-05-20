@@ -169,6 +169,7 @@ margin: 0 10px;
     margin: 10px 10px 10px 10px;
     padding: 10px;
     width: 100%;
+    word-break: break-all;
 }
 
 .detail-container {
@@ -484,6 +485,7 @@ a.logo-admin {
 .participants-list ul {
     list-style: none;
     padding: 0;
+    word-break: break-all;
 }
 
 .pitch-form-container {
@@ -522,6 +524,13 @@ ul.pitch-item {
 
 .profile-cont {
     padding: 30px;
+}
+
+.profile-title {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  word-break: break-all;
 }
 
 .profile-second {

@@ -140,6 +140,7 @@ public class EventServiceImpl implements EventService {
 			schedule[dayIndex][i] = event;
 			indexes[dayIndex]++;
 		}
+		
 		return schedule;
 	}	
 	
