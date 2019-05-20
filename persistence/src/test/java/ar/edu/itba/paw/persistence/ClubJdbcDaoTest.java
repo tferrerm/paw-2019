@@ -114,7 +114,7 @@ public class ClubJdbcDaoTest {
 	@Test
 	public void testCountPastEvents() {
 		int count = cd.countPastEvents(CLUBID);
-		Assert.assertEquals(0, count);
+		Assert.assertEquals(1, count);
 	}
 	
 	@Test

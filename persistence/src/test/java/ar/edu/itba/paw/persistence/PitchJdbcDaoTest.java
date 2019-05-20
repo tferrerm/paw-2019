@@ -123,6 +123,33 @@ public class PitchJdbcDaoTest {
 		Assert.assertEquals(0, invalidPage.size());
 	}
 	
+	@Test
+	public void testCountFiltered() {
+		int count = pd.countFilteredPitches(
+				Optional.of(NAME), 
+				Optional.of(Sport.SOCCER.toString()),
+				Optional.of(LOCATION),
+				Optional.of(CLUBNAME));
+		Assert.assertEquals(1, count);
+		count = pd.countFilteredPitches(
+				Optional.of(NAME), 
+				Optional.empty(),
+				Optional.empty(),
+				Optional.of(CLUBNAME));
+		Assert.assertEquals(1, count);
+		count = pd.countFilteredPitches(
+				Optional.of("BADSTRING"), 
+				Optional.of(Sport.SOCCER.toString()),
+				Optional.of(LOCATION),
+				Optional.of(CLUBNAME));
+		Assert.assertEquals(0, count);
+	}
+	
+	@Test
+	public void testCountPages() {
+		Assert.assertEquals(1, pd.countPitchPages());
+	}
+	
 	@Rollback
 	@Test
 	public void testDeletePitch() {
