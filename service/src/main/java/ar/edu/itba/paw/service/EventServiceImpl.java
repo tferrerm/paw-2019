@@ -313,6 +313,8 @@ public class EventServiceImpl implements EventService {
 		throws UserNotAuthorizedException {
 		if(owner.getUserid() != event.getOwner().getUserid())
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
+		if(owner.getUserid() == kickedUserId)
+			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
 		ed.kickFromEvent(kickedUserId, event.getEventId());
 	}
 

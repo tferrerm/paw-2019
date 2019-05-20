@@ -79,7 +79,7 @@
 						    <c:forEach var="user" items="${participants}">
 					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
 						              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
-													<c:if test="${!has_ended && isOwner}">
+													<c:if test="${!has_ended && isOwner && user.userid != event.owner.userid}">
 						              	<button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
 													</c:if>
 					              </form>
