@@ -13,7 +13,7 @@ public class Filter {
 	}
 	
 	public String queryAsString() {
-		return " " + name.toString() + " LIKE '%' || ? || '%' ";
+		return " " + name.toString() + " LIKE '%' || LOWER(?) || '%' ";
 	}
 	
 	public String queryAsInteger() {

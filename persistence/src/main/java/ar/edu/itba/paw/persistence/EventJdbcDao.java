@@ -192,9 +192,9 @@ public class EventJdbcDao implements EventDao {
 			final Optional<Integer> vacancies) {
 		int presentFields = 0;
 		Filter[] params = { 
-				new Filter("eventname", eventName),
-				new Filter("clubname", clubName),
-				new Filter("sport", sport),
+				new Filter("LOWER(eventname)", eventName),
+				new Filter("LOWER(clubname)", clubName),
+				new Filter("LOWER(sport)", sport),
 				new Filter("customOrganizerFilter", organizer),
 				new Filter("customVacanciesFilter", vacancies),
 				new Filter("starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
