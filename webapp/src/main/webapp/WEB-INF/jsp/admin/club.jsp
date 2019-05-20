@@ -21,9 +21,12 @@
 						<ul class="pitch-item">
 							<c:forEach var="pitch" items="${pitches}">
 								<div class="custom-row flex-space-between pitch-item">
-									<a href="<c:url value="/pitch/${pitch.pitchid}" /> " class="flex-1">${pitch.name}</a>
+									<span class="flex-1">${pitch.name}</span>
 									<div class="flex-1"><spring:message code="${pitch.sport}"/></div>
-									<a href="<c:url value="/club/${club.clubid}"/>" class="flex-1"> <button type="button" class="btn btn-primary"><spring:message code="view_club"/></button></a>
+									<form method="POST" class="no-margin" action="<c:url value="/admin/pitch/${pitch.pitchid}/delete"/>" >
+										<button type="submit" class="btn btn-primary btn-danger"><spring:message code="delete_pitch"/></button>
+									</form>
+									<a  > </a>
 								</div>
 							</c:forEach>
 						</ul>
@@ -58,7 +61,7 @@
 								<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
 							</div>
 							<div class="submit-container">
-								<button type="submit" class="btn btn-primary submit-btn"><spring:message code="create"/></button>
+								<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 							</div>
 						</form:form>
 					</div>

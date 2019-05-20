@@ -29,7 +29,7 @@
 						<form:errors path="location" cssClass="form-error" element="span"/>
 					</div>
 					<div class="submit-container">
-						<button type="submit" class="btn btn-primary submit-btn"><spring:message code="create"/></button>
+						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>
 				</form:form>
 			</div>
