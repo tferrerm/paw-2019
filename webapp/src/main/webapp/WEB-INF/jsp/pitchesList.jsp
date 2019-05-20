@@ -15,10 +15,10 @@
 	</head>
 
 	<body>
-	<%@include file="header.jsp" %>
-	<div class="main-container">
-		<%@include file="sidebar.jsp" %>
-		<div class="content-container">
+	   <%@ include file="header.jsp" %>
+	   <div class="main-container">
+	      <%@ include file="sidebar.jsp" %>
+		  <div class="content-container">
 			<h2><spring:message code="choosePitch" /></h2>
 			<div class="tbl">
 				<div class="table-header">
@@ -101,6 +101,7 @@
                     </div>
                 </c:if>
 			 </div>
+            </div>
         </div>
     </body>
 </html>

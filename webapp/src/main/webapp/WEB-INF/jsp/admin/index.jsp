@@ -55,7 +55,6 @@
 				<div class="custom-row">
 					<div>${event.pitch.club.name}</div>
 					<div>${event.pitch.sport}</div>
-					<div>${event.owner.firstname} ${event.owner.lastname}</div>
 					<div>${event.maxParticipants}</div>
 					<div>${event.startsAt}</div>
 					<div>

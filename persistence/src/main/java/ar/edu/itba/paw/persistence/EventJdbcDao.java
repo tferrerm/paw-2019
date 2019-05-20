@@ -84,7 +84,7 @@ public class EventJdbcDao implements EventDao {
 		StringBuilder query = new StringBuilder("SELECT * FROM events NATURAL JOIN pitches "
 				+ " NATURAL JOIN users NATURAL JOIN clubs "
 				+ " WHERE userid = ? AND starts_at ");
-		query.append((futureEvents) ? " > ? ORDER BY starts_at ASC " : " < ? ORDER BY starts_at DESC ");
+		query.append((futureEvents) ? " > ? ORDER BY starts_at ASC " : " <= ? ORDER BY starts_at DESC ");
 		query.append(" OFFSET ?");
 		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), offset);
 	}
@@ -97,9 +97,19 @@ public class EventJdbcDao implements EventDao {
 				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
 				+ " WHERE userid = ? AND EXISTS (SELECT eventid FROM events_users "
 				+ " WHERE eventid = t.eventid AND userid = ?) AND starts_at ");
-		query.append((futureEvents) ? " > ? ORDER BY t.starts_at ASC " : " < ? ORDER BY t.starts_at DESC ");
+		query.append((futureEvents) ? " > ? ORDER BY t.starts_at ASC " : " <= ? ORDER BY t.starts_at DESC ");
 		query.append(" OFFSET ?");
 		return jdbcTemplate.query(query.toString(), erm, userid, userid, Timestamp.from(now), offset);
+	}
+	
+	@Override
+	public Integer countByUserInscriptions(final boolean futureEvents, final long userid) {
+		StringBuilder query = new StringBuilder("SELECT count(*) FROM events AS e "
+				+ " WHERE EXISTS (SELECT * FROM events_users WHERE eventid = e.eventid "
+				+ " AND userid = ?) AND starts_at ");
+		query.append((futureEvents) ? " > ? " : " <= ? ");
+		return jdbcTemplate.queryForObject(query.toString(), Integer.class, userid, 
+				Timestamp.from(Instant.now()));
 	}
 	
 	@Override
@@ -421,6 +431,15 @@ public class EventJdbcDao implements EventDao {
 	public int vote(final boolean isUpvote, final long eventid, final long userid) {
 		return jdbcTemplate.update("UPDATE events_users SET vote = ? WHERE eventid = ? AND userid = ? ",
 				(isUpvote)? 1 : -1, eventid, userid);
+	}
+
+	@Override
+	public int countUserInscriptionPages(final boolean onlyFuture, final long userid) {
+		int rows = countByUserInscriptions(onlyFuture, userid);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 }

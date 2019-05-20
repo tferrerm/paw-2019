@@ -34,6 +34,14 @@ public interface EventDao {
 	 * @return a list of Events.
 	 */
 	public List<Event> findByUserInscriptions(boolean futureEvents, final long userid, int pageNum);
+	
+	/**
+	 * Counts Events for which a User has an inscription.
+	 * @param futureEvents	Finds only future Events (true) or only past Events (false).
+	 * @param userid		The User's id.
+	 * @return the amount of events for which a User has an inscription.
+	 */
+	public Integer countByUserInscriptions(final boolean futureEvents, final long userid);
 
 	public List<Event> findFutureEvents(final int pageNum);
 
@@ -172,5 +180,13 @@ public interface EventDao {
 	 * @return 0 if the User doesn't have an inscription for that Event, 1 otherwise.
 	 */
 	public int vote(final boolean isUpvote, final long eventid, final long userid);
+	
+	/**
+	 * Gets the amount of pages the list of inscripted Events occupies.
+	 * @param onlyFuture	Search only for future Events (true) or only for past Events (false)
+	 * @param userid		The User's id.
+	 * @return The amount of pages.
+	 */
+	public int countUserInscriptionPages(final boolean onlyFuture, final long userid);
 
 }

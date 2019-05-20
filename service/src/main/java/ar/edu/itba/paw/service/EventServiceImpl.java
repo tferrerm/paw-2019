@@ -177,6 +177,11 @@ public class EventServiceImpl implements EventService {
 		}
 		return events;
 	}
+	
+	@Override
+	public Integer countByUserInscriptions(final boolean futureEvents, final long userid) {
+		return ed.countByUserInscriptions(futureEvents, userid);
+	}
 
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
@@ -385,6 +390,11 @@ public class EventServiceImpl implements EventService {
 		int changed = ed.vote(isUpvote, event.getEventId(), userid);
 		if(changed == 0)
 			throw new UserNotAuthorizedException("User cannot vote if no inscription is present.");
+	}
+
+	@Override
+	public int countUserInscriptionPages(final boolean onlyFuture, final long userid) {
+		return ed.countUserInscriptionPages(onlyFuture, userid);
 	}
 
 }

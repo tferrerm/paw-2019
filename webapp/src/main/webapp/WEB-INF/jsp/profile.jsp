@@ -61,12 +61,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="tbl profile-cont profile-second">
-			<div class="">
-
-			</div>
-		</div>
-
 	</div>
 </div>
 

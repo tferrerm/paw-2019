@@ -17,7 +17,7 @@
 	<body>
     	<%@ include file="header.jsp" %>
     	<div class="main-container">
-    		<%@include file="sidebar.jsp" %>
+    		<%@ include file="sidebar.jsp" %>
     		<div class="content-container">
     			<h2><spring:message code="choose_event" /></h2>
     			<div class="tbl">
@@ -95,7 +95,7 @@
                             </a>
                         </div>
                     </c:if>
-                        <c:choose>
+                    <c:choose>
                         <c:when test="${eventQty > 0}">
                             <span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
                         </c:when>
