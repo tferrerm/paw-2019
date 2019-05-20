@@ -65,16 +65,17 @@ public interface EventService {
 	/**
 	 * Returns a list of Events matching present filters and sets the inscriptions field.
 	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param name				String to match an Event's name with.
-	 * @param establishment		String to match an Event's club name with.
+	 * @param eventName			String to match an Event's name with.
+	 * @param clubName			String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
+	 * @param organizer			String to match an Event's organizer's name with.
 	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param page				Page number.
-	 * @return
+	 * @param pageNum			Page number.
+	 * @return  The list of Events matching present filters.
 	 */
-	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> name, 
-			Optional<String> establishment, Optional<Sport> sport, 
-			Optional<Integer> vacancies, int page);
+	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
+			Optional<String> clubName, Optional<Sport> sport, Optional<String> organizer,
+			Optional<Integer> vacancies, int pageNum);
 
 	/**
 	 * Returns a list of Events matching present filters.
@@ -82,15 +83,16 @@ public interface EventService {
 	 * @param eventName			String to match an Event's name with.
 	 * @param clubName			String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
+	 * @param organizer			String to match an Event's organizer's name with.
 	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param page				Page number.
-	 * @return
+	 * @param pageNum			Page number.
+	 * @return The list of Events matching present filters.
 	 */
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<Integer> vacancies, int page);
+			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, int pageNum);
 	
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
-			final Optional<String> clubName, final Optional<Sport> sport, 
+			final Optional<String> clubName, final Optional<Sport> sport, Optional<String> organizer, 
 			final Optional<Integer> vacancies);
 
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,

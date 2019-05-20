@@ -196,19 +196,20 @@ public class EventController extends BaseController {
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());
         mav.addObject("lastPageNum", es.countFutureEventPages());
+        
         Integer vacanciesNum = null;
         if(vacancies != null)
         	vacanciesNum = Integer.valueOf(vacancies);
         
         List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
-        		Optional.ofNullable(establishment), Optional.ofNullable(sport), 
+        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vacanciesNum), pageNum);
 
         mav.addObject("events", events);
         mav.addObject("eventQty", events.size());
         
         Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
-        		Optional.ofNullable(establishment), Optional.ofNullable(sport), 
+        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vacanciesNum));
         mav.addObject("totalEventQty", totalEventQty);
         

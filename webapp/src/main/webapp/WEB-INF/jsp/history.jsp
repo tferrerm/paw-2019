@@ -47,41 +47,40 @@
 					</div>
 				</div>
 				<div class="table-navigator">
-		            <c:if test="${page != 1}">
-						<div>
-		                    <a href="<c:url value='/history/1' />">
-		                        <button type="button" class="btn btn-secondary">
-		                            <spring:message code="first"/>
-		                        </button>
-		                    </a>
-		                    <a href="<c:url value='/history/${page-1}' />">
-		                        <button type="button" class="btn btn-secondary">
-		                            <spring:message code="back"/>
-		                        </button>
-		                    </a>
-		                </div>
-		            </c:if>
-		            <c:choose>
+					<c:choose>
 		                <c:when test="${eventQty > 0}">
-		                    <span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
-		                </c:when>
+				            <c:if test="${page != 1}">
+								<div>
+				                    <a href="<c:url value='/history/1' />">
+				                        <button type="button" class="btn btn-secondary">
+				                            <spring:message code="first"/>
+				                        </button>
+				                    </a>
+				                    <a href="<c:url value='/history/${page-1}' />">
+				                        <button type="button" class="btn btn-secondary">
+				                            <spring:message code="back"/>
+				                        </button>
+				                    </a>
+				                </div>
+				            </c:if>
+		            		<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+		                	<c:if test="${page != lastPageNum}">
+								<div>
+				                    <a href="<c:url value='/history/${page+1}' />">
+				                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+				                    </a>
+				                    <a href="<c:url value='/history/${lastPageNum}' />">
+				                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+				                    </a>
+				                </div>
+				            </c:if>
+			            </c:when>
 		                <c:otherwise>
 		                    <div class="notice">
 		                        <spring:message code="no_results"/>
 		                    </div>
 		                </c:otherwise>
 		            </c:choose>
-					
-		            <c:if test="${page != lastPageNum}">
-						<div>
-		                    <a href="<c:url value='/history/${page+1}' />">
-		                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-		                    </a>
-		                    <a href="<c:url value='/history/${lastPageNum}' />">
-		                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-		                    </a>
-		                </div>
-		            </c:if>
 				</div>
 			</div>
 		</div>

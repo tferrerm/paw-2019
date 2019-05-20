@@ -56,6 +56,7 @@ public class ClubController extends BaseController {
 			@PathVariable("pageNum") int pageNum,
 			@RequestParam(value = "name", required = false) String clubName,
             @RequestParam(value = "location", required = false) String location) {
+		
 		String queryString = buildQueryString(clubName, location);
 		
 		ModelAndView mav = new ModelAndView("clubList");

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
@@ -42,18 +44,38 @@ public class AdminController extends BaseController {
 	@RequestMapping(value = "/events/{pageNum}")
 	public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
 									   @PathVariable("pageNum") final int pageNum,
-									   @RequestParam(value = "est" ,required = false) String establishment,
-									   @RequestParam(value = "sport", required = false) String sport,
+									   @RequestParam(value = "est" ,required = false) String clubName,
+									   @RequestParam(value = "sport", required = false) Sport sport,
 									   @RequestParam(value = "org", required = false) String organizer,
 									   @RequestParam(value = "vac", required = false) String vacancies,
 									   @RequestParam(value = "date", required = false) String date) {
-		String queryString = buildAdminQueryString(establishment, sport, organizer, vacancies, date);
+		
+		String sportName = "";
+    	if(sport != null)
+    		sportName = sport.toString();
+		String queryString = buildAdminQueryString(clubName, sportName, organizer, vacancies, date);
 		ModelAndView mav = new ModelAndView("admin/index");
 		mav.addObject("page", pageNum);
 		mav.addObject("queryString", queryString);
-		mav.addObject("filtersForm", form);
+		mav.addObject("sports", Sport.values());
 		mav.addObject("lastPageNum", es.countFutureEventPages());
-		mav.addObject("events", es.findFutureEvents(pageNum));
+		
+		Integer vacanciesNum = null;
+        if(vacancies != null)
+        	vacanciesNum = Integer.valueOf(vacancies);
+        
+		List<Event> events = es.findByWithInscriptions(true, Optional.empty(), Optional.ofNullable(clubName), 
+        		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
+        		Optional.ofNullable(vacanciesNum), pageNum);
+		mav.addObject("events", events);
+		mav.addObject("eventQty", events.size());
+		
+		Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
+				Optional.ofNullable(clubName), Optional.ofNullable(sport), 
+				Optional.ofNullable(organizer), Optional.ofNullable(vacanciesNum));
+        mav.addObject("totalEventQty", totalEventQty);
+        
+        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
 		return mav;
 	}
 	
@@ -61,11 +83,11 @@ public class AdminController extends BaseController {
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
         String establishment = form.getEstablishment();
         String sport = form.getSport();
-        //String organizer = form.getOrganizer();
+        String organizer = form.getOrganizer();
         String vacancies = form.getVacancies();
         String date = form.getDate();
-        //String queryString = buildAdminQueryString(establishment, sport, organizer, vacancies, date);
-        return new ModelAndView("redirect:/admin/events/1" /*+ queryString*/);
+        String queryString = buildAdminQueryString(establishment, sport, organizer, vacancies, date);
+        return new ModelAndView("redirect:/admin/events/1" + queryString);
     }
 
 	@RequestMapping(value = "/event/{id}")

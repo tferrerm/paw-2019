@@ -31,8 +31,18 @@
 						</div>
 						<div>
 							<form:label path="sport"><spring:message code="sport" /></form:label>
-							<form:input class="form-control" type="text" path="sport"/>
+							<form:select path="sport" cssClass="form-control">
+                                <form:option  value=""></form:option>
+                                <c:forEach var="sport" items="${sports}">
+                                    <form:option value="${sport}"><spring:message code="${sport}"/></form:option>
+                                </c:forEach>
+                            </form:select>
 							<form:errors path="sport" cssClass="form-error" element="p"/>
+						</div>
+						<div>
+							<form:label path="organizer"><spring:message code="organizer" /></form:label>
+							<form:input class="form-control" type="text" path="organizer"/>
+							<form:errors path="organizer" cssClass="form-error" element="p"/>
 						</div>
 						<div>
 							<form:label path="vacancies"><spring:message code="vacancies" /></form:label>
@@ -55,7 +65,8 @@
 				<div class="custom-row">
 					<div>${event.pitch.club.name}</div>
 					<div>${event.pitch.sport}</div>
-					<div>${event.maxParticipants}</div>
+					<div>${event.owner.firstname} ${event.owner.lastname}</div>
+					<div>${event.maxParticipants - event.inscriptions}</div>
 					<div>${event.startsAt}</div>
 					<div>
 						<a href="<c:url value="/admin/event/${event.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
@@ -64,14 +75,40 @@
 			</c:forEach>
 		</div>
 		<div class="table-navigator">
-			<div>
-				<a href="<c:url value='/admin/events/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-				<a href="<c:url value='/admin/events/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
-			</div>
-			<span><spring:message code="showing_items"/> 0-5 <spring:message code="of"/> 5</span>
-			<div>
-				<a href="<c:url value='/admin/events/${page+1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
-				<a href="<c:url value='/admin/events/${lastPageNum}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></div>
+			<c:choose>
+                <c:when test="${eventQty > 0}">
+		            <c:if test="${page != 1}">
+						<div>
+		                    <a href="<c:url value='/admin/events/1${queryString}' />">
+		                        <button type="button" class="btn btn-secondary">
+		                            <spring:message code="first"/>
+		                        </button>
+		                    </a>
+		                    <a href="<c:url value='/admin/events/${page-1}${queryString}' />">
+		                        <button type="button" class="btn btn-secondary">
+		                            <spring:message code="back"/>
+		                        </button>
+		                    </a>
+		                </div>
+		            </c:if>
+         			<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+		            <c:if test="${page != lastPageNum}">
+						<div>
+		                    <a href="<c:url value='/admin/events/${page+1}${queryString}' />">
+		                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+		                    </a>
+		                    <a href="<c:url value='/admin/events/${lastPageNum}${queryString}' />">
+		                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+		                    </a>
+		                </div>
+		            </c:if>
+		        </c:when>
+                <c:otherwise>
+                    <div class="notice">
+                        <spring:message code="no_results"/>
+                    </div>
+                </c:otherwise>
+            </c:choose>
 		</div>
 	</div>
 

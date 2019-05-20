@@ -12,6 +12,9 @@ public class FiltersForm {
 
 	@Size(max=64)
 	private String sport;
+	
+	@Size(max=64)
+	private String organizer;
 
 	@Size(max=64)
 	private String vacancies;
@@ -41,6 +44,14 @@ public class FiltersForm {
 
 	public void setSport(String sport) {
 		this.sport = sport;
+	}
+	
+	public String getOrganizer() {
+		return organizer;
+	}
+
+	public void setOrganizer(String organizer) {
+		this.organizer = organizer;
 	}
 
 	public String getVacancies() {

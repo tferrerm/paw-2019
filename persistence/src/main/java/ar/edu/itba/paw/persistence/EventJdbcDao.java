@@ -155,50 +155,60 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<String> sport, Optional<Integer> vacancies, int page) {
+	public List<Event> findBy(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<String> sport, 
+			final Optional<String> organizer, final Optional<Integer> vacancies, 
+			final int pageNum) {
 		
 		List<Object> paramValues = new ArrayList<>();
 		StringBuilder queryString = new StringBuilder("SELECT * ");
-		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, clubName, sport, vacancies));
-		
+		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, 
+				clubName, sport, organizer, vacancies));
 		queryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
 		
-		int offset = (page - 1) * MAX_ROWS;
+		int offset = (pageNum - 1) * MAX_ROWS;
 		queryString.append(" OFFSET ? ;");
 		paramValues.add(offset);
 		
-		return jdbcTemplate.query(queryString.toString(), elrm, paramValues.toArray());
+		return jdbcTemplate.query(queryString.toString(), erm /*elrm*/, paramValues.toArray());
 	}
 	
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
-			final Optional<Integer> vacancies) {
+			final Optional<String> organizer, final Optional<Integer> vacancies) {
 		
 		List<Object> paramValues = new ArrayList<>();
 		StringBuilder queryString = new StringBuilder("SELECT count(*) ");
-		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, clubName, sport, vacancies));
+		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, 
+				clubName, sport, organizer, vacancies));
 		
 		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, paramValues.toArray());
 	}
 	
-	private String getFilterQueryEndString(List<Object> paramValues, final boolean onlyFuture, final Optional<String> eventName, 
-			final Optional<String> clubName, final Optional<String> sport, 
+	private String getFilterQueryEndString(List<Object> paramValues, final boolean onlyFuture, 
+			final Optional<String> eventName, final Optional<String> clubName, 
+			final Optional<String> sport, final Optional<String> organizer,
 			final Optional<Integer> vacancies) {
 		int presentFields = 0;
 		Filter[] params = { 
 				new Filter("eventname", eventName.orElse(null)),
 				new Filter("clubname", clubName.orElse(null)),
 				new Filter("sport", sport.orElse(null)),
+				new Filter("customOrganizerFilter", organizer.orElse(null)),
 				new Filter("customVacanciesFilter", vacancies.orElse(null)),
 				new Filter("starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
 		};
-		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches NATURAL JOIN clubs) AS t ");
+		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches "
+				+ " NATURAL JOIN clubs NATURAL JOIN users) AS t ");
+		
 		for(Filter param : params) {
 			if(!isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
+				case "customOrganizerFilter":
+					queryString.append(" t.firstname || ' ' || t.lastname LIKE '%' || ? || '%' ");
+					break;
 				case "customVacanciesFilter":
 					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
 					break;
@@ -217,25 +227,32 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<String> sport, Optional<Integer> vacancies, int page) {
-		int offset = (page - 1) * MAX_ROWS;
+	public List<Long[]> countBy(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> establishment, final Optional<String> sport, 
+			final Optional<String> organizer, final Optional<Integer> vacancies, 
+			final int pageNum) {
+		int offset = (pageNum - 1) * MAX_ROWS;
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("e.eventname", name.orElse(null)),
+				new Filter("e.eventname", eventName.orElse(null)),
 				new Filter("clubname", establishment.orElse(null)),
 				new Filter("sport", sport.orElse(null)),
+				new Filter("customOrganizerFilter", organizer.orElse(null)),
 				new Filter("customVacanciesFilter", vacancies.orElse(null)),
 				new Filter("e.starts_at", (onlyFuture)? Timestamp.from(Instant.now()) : null)
 		};
 		StringBuilder queryString = new StringBuilder("SELECT e.eventid, count(evu.eventid) FROM "
-				+ " events AS e NATURAL JOIN pitches NATURAL JOIN clubs LEFT OUTER JOIN events_users AS evu "
-				+ " ON e.eventid = evu.eventid ");
+				+ " events AS e INNER JOIN users AS u ON e.userid = u.userid NATURAL JOIN pitches "
+				+ " NATURAL JOIN clubs LEFT OUTER JOIN events_users AS evu ON e.eventid = evu.eventid ");
+		
 		for(Filter param : params) {
 			if(!isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
+				case "customOrganizerFilter":
+					queryString.append(" u.firstname || ' ' || u.lastname LIKE '%' || ? || '%' ");
+					break;
 				case "customVacanciesFilter":
 					queryString.append(" ? <= max_participants - (SELECT count(*) "
 							+ " FROM events_users AS eu WHERE eu.eventid = e.eventid) ");

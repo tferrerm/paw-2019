@@ -162,22 +162,25 @@ public class EventServiceImpl implements EventService {
 	
 	@Transactional
 	@Override
-	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
-		List<Event> events = findBy(onlyFuture, name, establishment, sport, vacancies, page);
+	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
+			Optional<String> establishment, Optional<Sport> sport, Optional<String> organizer,
+			Optional<Integer> vacancies, int pageNum) {
+		List<Event> events = findBy(onlyFuture, eventName, establishment, sport, organizer, 
+				vacancies, pageNum);
+		
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
-		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, name, establishment,
-				Optional.ofNullable(sportString), vacancies, page);
+		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, eventName, establishment,
+				Optional.ofNullable(sportString), organizer, vacancies, pageNum);
 		
 		for(int i = 0; i < events.size(); i++) {
 			events.get(i).setInscriptions(eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
 		}
 		return events;
 	}
-	
+
 	@Override
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid) {
 		return ed.countByUserInscriptions(futureEvents, userid);
@@ -185,8 +188,8 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<Integer> vacancies, int page) {
-		if(page <= 0) {
+			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, int pageNum) {
+		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
 		String sportString = null;
@@ -194,20 +197,20 @@ public class EventServiceImpl implements EventService {
 			sportString = sport.get().toString();
 		}
 
-		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString),
-				vacancies, page);
+		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString), organizer,
+				vacancies, pageNum);
 	}
 	
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
-			final Optional<String> clubName, final Optional<Sport> sport, 
+			final Optional<String> clubName, final Optional<Sport> sport, final Optional<String> organizer,
 			final Optional<Integer> vacancies) {
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
 		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
-				Optional.ofNullable(sportString), vacancies);
+				Optional.ofNullable(sportString), organizer, vacancies);
 	}
 
 	/*public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,

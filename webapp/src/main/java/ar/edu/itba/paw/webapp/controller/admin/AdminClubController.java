@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +29,7 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
+import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
 import ar.edu.itba.paw.webapp.form.NewClubForm;
 import ar.edu.itba.paw.webapp.form.NewPitchForm;
 
@@ -57,12 +60,55 @@ public class AdminClubController extends BaseController {
 	}
 
 	@RequestMapping("/clubs/{pageNum}")
-	public ModelAndView clubs(@PathVariable("pageNum") int pageNum) {
+	public ModelAndView clubs(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
+			@PathVariable("pageNum") int pageNum,
+			@RequestParam(value = "name", required = false) String clubName,
+            @RequestParam(value = "location", required = false) String location) {
+		
+		String queryString = buildQueryString(clubName, location);
+		
 		ModelAndView mav = new ModelAndView("admin/clubList");
-		List<Club> clubs = cs.findAll(pageNum);
-		mav.addObject("clubs", clubs);
+		
+		mav.addObject("pageNum", pageNum);
+        mav.addObject("queryString", queryString);
+        mav.addObject("lastPageNum", cs.countClubPages());
+        mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
+        
+        List<Club> clubs = cs.findBy(
+				Optional.ofNullable(clubName), 
+        		Optional.ofNullable(location), 
+        		pageNum);
+        mav.addObject("clubs", clubs);
+        mav.addObject("clubQty", clubs.size());
+        
+        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
+        		Optional.ofNullable(location));
+        mav.addObject("totalClubQty", totalClubQty);
+        
 		return mav;
 	}
+	
+	@RequestMapping(value = "/clubs/filter")
+    public ModelAndView applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
+    	String name = form.getName();
+    	String location = form.getLocation();
+        String queryString = buildQueryString(name, location);
+        return new ModelAndView("redirect:/admin/clubs/1" + queryString);
+    }
+
+    private String buildQueryString(final String name, final String location){
+	    StringBuilder strBuilder = new StringBuilder();
+	    strBuilder.append("?");
+	    if(name != null && !name.isEmpty()) {
+        	strBuilder.append("name=").append(name).append("&");
+        }
+        if(location != null && !location.isEmpty()) {
+        	strBuilder.append("location=").append(location);
+        } else {
+        	strBuilder.deleteCharAt(strBuilder.length()-1);
+        }
+        return strBuilder.toString();
+    }
 	
 	@RequestMapping("/club/new")
 	public ModelAndView newClub(@ModelAttribute("newClubForm") final NewClubForm form) {

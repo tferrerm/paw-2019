@@ -15,9 +15,9 @@
 	</head>
 	
 	<body>
-		<%@include file="header.jsp" %>
+		<%@ include file="header.jsp" %>
 		<div class="main-container">
-			<%@include file="sidebar.jsp" %>
+			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
 				<h2><spring:message code="all_clubs" /></h2>
 				<div class="tbl club-table-size">
@@ -52,28 +52,28 @@
 					</c:forEach>
 				</div>
 				<div class="table-navigator">
-					<c:if test="${pageNum != 1}">
-						<div>
-							<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-							<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
-						</div>
-					</c:if>
 					<c:choose>
-		                    <c:when test="${clubQty > 0}">
-		                        <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
-		                    </c:when>
-		                    <c:otherwise>
-		                        <div class="notice">
-		                            <spring:message code="no_results"/>
-		                        </div>
-		                    </c:otherwise>
-		                </c:choose>
-					<c:if test="${pageNum != lastPageNum}">
-						<div>
-							<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
-							<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
-						</div>
-					</c:if>
+	                    <c:when test="${clubQty > 0}">
+							<c:if test="${pageNum != 1}">
+								<div>
+									<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
+									<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+								</div>
+							</c:if>
+							<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
+	                    	<c:if test="${pageNum != lastPageNum}">
+								<div>
+									<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
+									<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
+								</div>
+							</c:if>
+						</c:when>
+	                    <c:otherwise>
+	                        <div class="notice">
+	                            <spring:message code="no_results"/>
+	                        </div>
+	                    </c:otherwise>
+	                </c:choose>
 				</div>
 			</div>
 		</div>

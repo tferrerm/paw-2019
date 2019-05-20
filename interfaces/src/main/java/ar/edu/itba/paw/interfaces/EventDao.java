@@ -57,15 +57,17 @@ public interface EventDao {
 	/**
 	 * Returns a list of Events matching present filters.
 	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param name				String to match an Event's name with.
+	 * @param eventName			String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
+	 * @param organizer			String to match an Event's organizer's name with.
 	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param page				Page number.
+	 * @param pageNum			Page number.
 	 * @return a list of Events that matched given filters.
 	 */
-	public List<Event> findBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<String> sport, Optional<Integer> vacancies, int page);
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, 
+			Optional<String> establishment, Optional<String> sport, 
+			Optional<String> organizer, Optional<Integer> vacancies, int pageNum);
 	
 	/**
 	 * Returns the amount of Events matching present filters.
@@ -73,25 +75,28 @@ public interface EventDao {
 	 * @param name				String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
+	 * @param organizer			String to match an Event's organizer's name with.
 	 * @param vacancies			Minimum vacancies for an Event.
 	 * @return the amount of Events that matched given filters.
 	 */
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
-			final Optional<Integer> vacancies);
+			final Optional<String> organizer, final Optional<Integer> vacancies);
 
 	/**
 	 * Returns a combination of eventid and vacancies for that Event.
 	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param name				String to match an Event's name with.
+	 * @param eventName			String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
+	 * @param organizer			String to match an Event's organizer's name with.
 	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param page				Page number.
+	 * @param pageNum			Page number.
 	 * @return
 	 */
-	public List<Long[]> countBy(boolean onlyFuture, Optional<String> name, Optional<String> establishment,
-			Optional<String> sport, Optional<Integer> vacancies, int page);
+	public List<Long[]> countBy(boolean onlyFuture, Optional<String> eventName, 
+			Optional<String> establishment, Optional<String> sport, 
+			Optional<String> organizer, Optional<Integer> vacancies, int pageNum);
 
 	public int countUserEventPages(final long userid);
 
