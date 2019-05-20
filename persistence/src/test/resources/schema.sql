@@ -58,8 +58,9 @@ INSERT INTO users VALUES (1, 'user@name.com', 'first', 'last', '12345678', 'ROLE
 INSERT INTO users VALUES (2, 'other_user@name.com', 'second', 'fastlast', '87654321', 'ROLE_USER', '2015-02-14 00:00:00');
 INSERT INTO clubs VALUES (1, 'club', 'location', '2010-01-15 10:01:40');
 INSERT INTO pitches VALUES (1, 1, 'pitch', 'SOCCER', '2011-03-15 08:10:10');
-INSERT INTO events VALUES (2, 1, 1, 'event', 'description', 2, '2019-05-20 10:00:00', '2019-05-20 11:00:00', '2019-05-15 11:00:00');
+INSERT INTO events VALUES (2, 1, 1, 'event', 'description', 2, '2030-05-20 10:00:00', '2030-05-20 11:00:00', '2019-05-15 11:00:00');
 INSERT INTO events VALUES (1, 1, 1, 'old_event', 'old_description', 2, '2019-01-20 10:00:00', '2019-01-20 11:00:00', '2019-01-15 11:00:00');
 INSERT INTO events_users VALUES (1, 2, NULL);
 INSERT INTO events_users VALUES (2, 2, NULL);
-INSERT INTO events_users VALUES (1, 1, 1);
+INSERT INTO events_users VALUES (1, 1, -1);
+INSERT INTO events_users VALUES (2, 1, -1);

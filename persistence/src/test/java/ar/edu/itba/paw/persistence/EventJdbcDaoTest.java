@@ -56,6 +56,7 @@ public class EventJdbcDaoTest {
 	private static final String USERNAME = "test@test.test";
 	private static final String EVENTNAME = "event";
 	private static final User OWNER = new User(USERID, USERNAME, "first", "last", "12345678", Role.ROLE_USER);
+	private static final long CLUBID = 1;
 	private static final Club CLUB = new Club(1, "club", "location", Instant.now());
 	private static final Pitch PITCH = new Pitch(1, CLUB, "pitch", Sport.TENNIS, Instant.now());
 	private static final String DESCRIPTION = "description";
@@ -64,8 +65,8 @@ public class EventJdbcDaoTest {
 	private static final int DURATION = 1;
 	private static final Instant ENDS_AT = STARTS_AT.plus(DURATION, ChronoUnit.HOURS);
 	private static final Event EVENT = new Event(EVENTID, EVENTNAME, OWNER, PITCH, DESCRIPTION, 2, STARTS_AT, ENDS_AT);
-	private static final Timestamp STARTS = Timestamp.valueOf("2019-05-20 10:00:00");
-	private static final Timestamp ENDS = Timestamp.valueOf("2019-05-20 11:00:00");
+	private static final Timestamp STARTS = Timestamp.valueOf("2030-05-20 10:00:00");
+	private static final Timestamp ENDS = Timestamp.valueOf("2030-05-20 11:00:00");
 
 	@Rollback
 	@Test
@@ -137,7 +138,7 @@ public class EventJdbcDaoTest {
 	@Test
 	public void testFindCurrentEventsInPitch() {
 		List<Event> events = ed.findCurrentEventsInPitch(PITCH.getPitchid());
-		Assert.assertEquals(1, events.size());
+		Assert.assertEquals(0, events.size()); // Inserted events are either in the past or years from now
 	}
 	
 	@Test
@@ -218,13 +219,55 @@ public class EventJdbcDaoTest {
 	@Test
 	public void testLeaveEvent() {
 		ed.leaveEvent(OWNER, EVENT);
-		Assert.assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
+		Assert.assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
 	}
 	
 	@Rollback
 	@Test
 	public void testKickFromEvent() {
-		
+		ed.kickFromEvent(2, 2);
+		Assert.assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
+	}
+	
+	@Test
+	public void testCountUserEvents() {
+		int count = ed.countUserEvents(false, OWNER.getUserid());
+		Assert.assertEquals(1, count);
+		count = ed.countUserEvents(true, OWNER.getUserid());
+		Assert.assertEquals(1, count);
+	}
+	
+	@Test
+	public void testCountUserCurrentOwnedEvents() {
+		Assert.assertEquals(1, ed.countUserOwnedCurrEvents(OWNER.getUserid()));
+	}
+	
+	@Test
+	public void testFavoriteSport() {
+		Optional<Sport> fav = ed.getFavoriteSport(OWNER.getUserid());
+		Assert.assertTrue(fav.isPresent());
+		Assert.assertEquals(Sport.SOCCER, fav.get());
+	}
+	
+	@Test
+	public void testFavoriteClub() {
+		Optional<Club> club = ed.getFavoriteClub(OWNER.getUserid());
+		Assert.assertTrue(club.isPresent());
+		Assert.assertEquals(CLUBID, club.get().getClubid());
+	}
+	
+	@Rollback
+	@Test
+	public void testDeleteEvent() {
+		ed.deleteEvent(EVENTID);
+		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events"));
+	}
+	
+	@Test
+	public void testVoteBalance() {
+		Optional<Integer> balance = ed.getVoteBalance(OLD_EVENTID);
+		Assert.assertTrue(balance.isPresent());
+		Assert.assertEquals(-2, balance.get().intValue());
 	}
 
 }
