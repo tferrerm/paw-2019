@@ -195,7 +195,7 @@ public class EventJdbcDao implements EventDao {
 				new Filter("LOWER(eventname)", eventName),
 				new Filter("LOWER(clubname)", clubName),
 				new Filter("LOWER(sport)", sport),
-				new Filter("customOrganizerFilter", organizer),
+				new Filter("LOWER(firstname) || ' ' || LOWER(lastname)", organizer),
 				new Filter("customVacanciesFilter", vacancies),
 				new Filter("starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
 		};
@@ -204,20 +204,19 @@ public class EventJdbcDao implements EventDao {
 		
 		for(Filter param : params) {
 			if(param.getValue().isPresent()) {
-				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
-				case "customOrganizerFilter":
-					queryString.append(" t.firstname || ' ' || t.lastname LIKE '%' || ? || '%' ");
-					break;
 				case "customVacanciesFilter":
+					queryString.append(buildPrefix(presentFields));
 					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
 					break;
 				case "starts_at":
+					queryString.append(buildPrefix(presentFields));
 					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
 					if(isEmpty(param.getValue()))
 						continue;
+					queryString.append(buildPrefix(presentFields));
 					queryString.append(param.queryAsString());
 					break;
 				}
@@ -237,10 +236,10 @@ public class EventJdbcDao implements EventDao {
 		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
-				new Filter("e.eventname", eventName),
-				new Filter("clubname", establishment),
-				new Filter("sport", sport),
-				new Filter("customOrganizerFilter", organizer),
+				new Filter("LOWER(e.eventname)", eventName),
+				new Filter("LOWER(clubname)", establishment),
+				new Filter("LOWER(sport)", sport),
+				new Filter("LOWER(u.firstname) || ' ' || LOWER(u.lastname)", organizer),
 				new Filter("customVacanciesFilter", vacancies),
 				new Filter("e.starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
 		};
@@ -250,21 +249,20 @@ public class EventJdbcDao implements EventDao {
 		
 		for(Filter param : params) {
 			if(param.getValue().isPresent()) {
-				queryString.append(buildPrefix(presentFields));
 				switch(param.getName()) {
-				case "customOrganizerFilter":
-					queryString.append(" u.firstname || ' ' || u.lastname LIKE '%' || ? || '%' ");
-					break;
 				case "customVacanciesFilter":
+					queryString.append(buildPrefix(presentFields));
 					queryString.append(" ? <= max_participants - (SELECT count(*) "
 							+ " FROM events_users AS eu WHERE eu.eventid = e.eventid) ");
 					break;
 				case "e.starts_at":
+					queryString.append(buildPrefix(presentFields));
 					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
 					if(isEmpty(param.getValue()))
 						continue;
+					queryString.append(buildPrefix(presentFields));
 					queryString.append(param.queryAsString());
 					break;
 				}
