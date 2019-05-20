@@ -38,8 +38,8 @@ public class ClubServiceImpl implements ClubService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public Club create(long userId, String name, String location) {
-		return cd.create(userId, name, location);
+	public Club create(String name, String location) {
+		return cd.create(name, location);
 	}
 	
 	@Override
@@ -50,11 +50,6 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public void deleteClub(final long clubid) {
 		cd.deleteClub(clubid);
-	}
-	
-	@Override
-	public Optional<Club> getPitchClub(final long pitchid) {
-		return cd.getPitchClub(pitchid);
 	}
 
 	@Override

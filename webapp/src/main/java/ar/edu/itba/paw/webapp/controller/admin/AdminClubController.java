@@ -75,7 +75,7 @@ public class AdminClubController extends BaseController {
 			final BindingResult errors,
 			HttpServletRequest request) {
 		
-		Club c = cs.create(loggedUser().getUserid(),form.getName(), form.getLocation());
+		Club c = cs.create(form.getName(), form.getLocation());
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 		
 		return new ModelAndView("redirect:/admin/clubs/1");

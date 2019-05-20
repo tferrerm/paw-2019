@@ -51,10 +51,9 @@ public class ClubJdbcDao implements ClubDao {
 	}
 
 	@Override
-	public Club create(long userId, String name, String location) {
+	public Club create(String name, String location) {
 		final Map<String, Object> args = new HashMap<>();
 		Instant now = Instant.now();
-		args.put("userid",userId);
 		args.put("clubname", name);
 		args.put("location", location);
 		args.put("club_created_at", Timestamp.from(now));
@@ -71,13 +70,6 @@ public class ClubJdbcDao implements ClubDao {
 				+ " (SELECT pitchid FROM pitches WHERE clubid = ?)", clubid);
 		jdbcTemplate.update("DELETE FROM pitches WHERE clubid = ?", clubid);
 		jdbcTemplate.update("DELETE FROM clubs WHERE clubid = ?", clubid);
-	}
-	
-	@Override
-	public Optional<Club> getPitchClub(final long pitchid) {
-		return jdbcTemplate.query("SELECT clubid, clubname, location, club_created_at"
-				+ " FROM pitches NATURAL JOIN clubs WHERE pitchid = ?", crm, pitchid)
-		.stream().findAny();
 	}
 	
 	@Override

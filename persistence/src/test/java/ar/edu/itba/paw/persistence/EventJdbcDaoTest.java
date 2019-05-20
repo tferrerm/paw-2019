@@ -60,7 +60,7 @@ public class EventJdbcDaoTest {
 
 	@Rollback
 	@Test
-	public void testCreateEvent() {
+	public void testCreateEvent() throws Exception {
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "events");
 		final Event event = ed.create(EVENTNAME, OWNER, PITCH, DESCRIPTION, 
 				MAX_PARTICIPANTS, STARTS_AT, ENDS_AT);
