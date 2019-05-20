@@ -87,7 +87,6 @@ public class PitchJdbcDao implements PitchDao {
 	private String getFilterQueryEndString(List<Object> paramValues, final Optional<String> pitchName, 
 			final Optional<String> sport, final Optional<String> location, 
 			final Optional<String> clubName) {
-		int presentFields = 0;
 		Filter[] params = { 
 				new Filter("LOWER(pitchname)", pitchName),
 				new Filter("LOWER(sport)", sport),
@@ -97,10 +96,9 @@ public class PitchJdbcDao implements PitchDao {
 		StringBuilder queryString = new StringBuilder(" FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {
 			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
-				queryString.append(buildPrefix(presentFields));
+				queryString.append(buildPrefix(paramValues.size()));
 				queryString.append(param.queryAsString());
 				paramValues.add(param.getValue().get());
-				presentFields++;
 			}
 		}
 		
