@@ -214,7 +214,7 @@ margin: 0 10px;
 }
 
 a.event-link {
-  margin: 10px 0;
+  margin: 10px 5px;
 }
 
 .flex {
@@ -357,7 +357,7 @@ a.event-link {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
   list-style: none;
   background-color: white;
 }
@@ -378,7 +378,7 @@ a.event-link {
 }
 
 .home-evs-container {
-  width: 80%;
+  width: 90%;
   background-color: white;
 }
 
@@ -756,7 +756,7 @@ ul.pitch-item {
 .club-detail-container {
     display: flex;
     flex-direction: column;
-    padding: 50px;
+    padding: 25px;
     align-items: flex-start;
     align-self: center;
     background-color: white;
