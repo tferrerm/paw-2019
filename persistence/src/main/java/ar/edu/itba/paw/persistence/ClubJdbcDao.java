@@ -114,23 +114,23 @@ public class ClubJdbcDao implements ClubDao {
 			final Optional<String> location) {
 		int presentFields = 0;
 		Filter[] params = { 
-				new Filter("clubname", clubName.orElse(null)),
-				new Filter("location", location.orElse(null))
+				new Filter("clubname", clubName),
+				new Filter("location", location)
 		};
 		StringBuilder queryString = new StringBuilder(" FROM clubs ");
 		for(Filter param : params) {
-			if(!isEmpty(param.getValue())) {
+			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(presentFields));
 				queryString.append(param.queryAsString());
-				paramValues.add(param.getValue());
+				paramValues.add(param.getValue().get());
 				presentFields++;
 			}
 		}
 		return queryString.toString();
 	}
 	
-	private boolean isEmpty(Object value) {
-		return value == null;
+	private boolean isEmpty(Optional<?> opt) {
+		return opt.get().toString().isEmpty();
 	}
 	
 	private String buildPrefix(int currentFilter) {

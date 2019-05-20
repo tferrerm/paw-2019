@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.persistence;
 
+import java.util.Optional;
+
 public class Filter {
 	
 	private String name;
-	private final Object value;
+	private final Optional<?> value;
 	
-	public Filter(final String name, final Object value) {
+	public Filter(final String name, final Optional<?> value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -26,7 +28,7 @@ public class Filter {
 		return name;
 	}
 	
-	public Object getValue() {
+	public Optional<?> getValue() {
 		return value;
 	}
 
