@@ -15,7 +15,7 @@ public interface ClubService {
 	
 	public int countFilteredClubs(Optional<String> clubName, Optional<String> location);
 	
-	public Club create(long userId, String name, String location);
+	public Club create(String name, String location);
 	
 	/**
 	 * Gets the page's first Club's index in the overall filtered Clubs.
@@ -25,13 +25,6 @@ public interface ClubService {
 	public int getPageInitialClubIndex(final int pageNum);
 	
 	public void deleteClub(long clubid);
-	
-	/**
-	 * Gets the Club in which a Pitch is located if any.
-	 * @param pitchid	The id of the Pitch.
-	 * @return the Club in which the Pitch is located if any.
-	 */
-	public Optional<Club> getPitchClub(final long pitchid);
 	
 	public int countClubPages();
 	

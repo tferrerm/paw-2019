@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
 import org.junit.Assert;
@@ -16,6 +18,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 
@@ -24,12 +27,12 @@ import ar.edu.itba.paw.model.User;
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
 public class UserJdbcDaoTest {
-	
+
 	@Autowired
 	private DataSource ds;
-	
+
 	@Autowired
-	private UserJdbcDao userDao;
+	private UserDao userDao;
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -37,16 +40,17 @@ public class UserJdbcDaoTest {
 	public void setUp() {
 		jdbcTemplate = new JdbcTemplate(ds);
 	}
-	
-	private static final String USERNAME = "test_username";
-	private static final String FIRSTNAME = "firstname";
-	private static final String LASTNAME = "lastname";
-	private static final String PASSWORD = "test_password";
+
+	private static final long USERID = 1;
+	private static final String USERNAME = "user@name.com";
+	private static final String FIRSTNAME = "first";
+	private static final String LASTNAME = "last";
+	private static final String PASSWORD = "12345678";
 
 	@Rollback
 	@Test
 	public void testCreate() throws UserAlreadyExistsException {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate,"users");
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
 		final User user = userDao.create(USERNAME, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER);
 		Assert.assertNotNull(user);
 		Assert.assertEquals(USERNAME, user.getUsername());
@@ -56,6 +60,27 @@ public class UserJdbcDaoTest {
 		Assert.assertEquals(Role.ROLE_USER, user.getRole());
 		Assert.assertNotNull(user.getCreatedAt());
 		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+	}
+
+	@Test
+	public void testFindById() {
+		final Optional<User> user = userDao.findById(USERID);
+		Assert.assertTrue(user.isPresent());
+		Assert.assertEquals(USERID, user.get().getUserid());
+		Assert.assertEquals(USERNAME, user.get().getUsername());
+		Assert.assertEquals(FIRSTNAME, user.get().getFirstname());
+		Assert.assertEquals(LASTNAME, user.get().getLastname());
+		Assert.assertEquals(PASSWORD, user.get().getPassword());
+	}
+
+	@Test
+	public void testFindByUsername() {
+		final Optional<User> user = userDao.findByUsername(USERNAME);
+		Assert.assertTrue(user.isPresent());
+		Assert.assertEquals(USERNAME, user.get().getUsername());
+		Assert.assertEquals(FIRSTNAME, user.get().getFirstname());
+		Assert.assertEquals(LASTNAME, user.get().getLastname());
+		Assert.assertEquals(PASSWORD, user.get().getPassword());
 	}
 
 }

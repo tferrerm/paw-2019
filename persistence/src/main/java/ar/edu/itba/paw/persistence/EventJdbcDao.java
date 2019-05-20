@@ -298,7 +298,7 @@ public class EventJdbcDao implements EventDao {
 		final Number eventId = jdbcInsert.executeAndReturnKey(args);
 		
 		return new Event(eventId.longValue(), name, owner, pitch, description, 
-				maxParticipants, startsAt, endsAt);
+				maxParticipants, startsAt, endsAt, now);
 	}
 	
 	@Override
