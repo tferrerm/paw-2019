@@ -392,6 +392,8 @@ public class EventServiceImpl implements EventService {
 		throws UserNotAuthorizedException, EventNotFinishedException {
 		if(event.getEndsAt().isAfter(Instant.now()))
 			throw new EventNotFinishedException("User cannot vote if event has not finished.");
+		if(event.getOwner().getUserid() == userid)
+			throw new UserNotAuthorizedException("User cannot vote for themselves.");
 		int changed = ed.vote(isUpvote, event.getEventId(), userid);
 		if(changed == 0)
 			throw new UserNotAuthorizedException("User cannot vote if no inscription is present.");

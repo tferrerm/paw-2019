@@ -397,6 +397,10 @@ a.event-link {
   margin: 20px 0 10px;
 }
 
+.http-error {
+  margin: 30px;
+}
+
 .input-number {
     width: 65px;
 }

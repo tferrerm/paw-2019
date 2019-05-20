@@ -10,7 +10,7 @@
 		<title>Sport Matcher - Event</title>
 	</head>
 	<body>
-	<%@include file="header.jsp" %>
+	<%@ include file="header.jsp" %>
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
@@ -93,32 +93,34 @@
 						<h5 class="pitch-info-label vote-balance">${vote_balance}</h5>
 					</div>
 					<div class="voting-buttons">
-						<c:choose>
-							<c:when test="${user_vote > 0}">
-								<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
-									<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
-								</form>
-								<div>
-									<button type="submit" class="btn btn-success join-button vote-balance" disabled="true"><spring:message code="upvoted"/></button>
-								</div>
-							</c:when>
-							<c:when test="${user_vote < 0}">
-								<div>
-									<button type="submit" class="btn btn-danger join-button" disabled="true"><spring:message code="downvoted"/></button>
-								</div>
-								<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
-									<button type="submit" class="btn btn-success join-button vote-balance"><spring:message code="upvote"/></button>
-								</form>
-							</c:when>
-							<c:otherwise>
-								<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
-									<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
-								</form>
-								<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
-									<button type="submit" class="btn btn-success join-button vote-balance"><spring:message code="upvote"/></button>
-								</form>
-							</c:otherwise>
-						</c:choose>
+						<c:if test="${loggedUser.userid != event.owner.userid}">
+							<c:choose>
+								<c:when test="${user_vote > 0}">
+									<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+										<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
+									</form>
+									<div>
+										<button type="submit" class="btn btn-success join-button vote-balance" disabled="true"><spring:message code="upvoted"/></button>
+									</div>
+								</c:when>
+								<c:when test="${user_vote < 0}">
+									<div>
+										<button type="submit" class="btn btn-danger join-button" disabled="true"><spring:message code="downvoted"/></button>
+									</div>
+									<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+										<button type="submit" class="btn btn-success join-button vote-balance"><spring:message code="upvote"/></button>
+									</form>
+								</c:when>
+								<c:otherwise>
+									<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+										<button type="submit" class="btn btn-danger join-button"><spring:message code="downvote"/></button>
+									</form>
+									<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+										<button type="submit" class="btn btn-success join-button vote-balance"><spring:message code="upvote"/></button>
+									</form>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
 					</div>
 				</c:if>
 			</div>

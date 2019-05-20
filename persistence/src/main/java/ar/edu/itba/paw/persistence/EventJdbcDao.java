@@ -95,11 +95,11 @@ public class EventJdbcDao implements EventDao {
 		Instant now = Instant.now();
 		StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
 				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
-				+ " WHERE userid = ? AND EXISTS (SELECT eventid FROM events_users "
+				+ " WHERE EXISTS (SELECT eventid FROM events_users "
 				+ " WHERE eventid = t.eventid AND userid = ?) AND starts_at ");
 		query.append((futureEvents) ? " > ? ORDER BY t.starts_at ASC " : " <= ? ORDER BY t.starts_at DESC ");
 		query.append(" OFFSET ?");
-		return jdbcTemplate.query(query.toString(), erm, userid, userid, Timestamp.from(now), offset);
+		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), offset);
 	}
 	
 	@Override
