@@ -89,10 +89,10 @@ public class PitchJdbcDao implements PitchDao {
 			final Optional<String> clubName) {
 		int presentFields = 0;
 		Filter[] params = { 
-				new Filter("pitchname", pitchName),
-				new Filter("sport", sport),
-				new Filter("location", location),
-				new Filter("clubname", clubName)
+				new Filter("LOWER(pitchname)", pitchName),
+				new Filter("LOWER(sport)", sport),
+				new Filter("LOWER(location)", location),
+				new Filter("LOWER(clubname)", clubName)
 		};
 		StringBuilder queryString = new StringBuilder(" FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {

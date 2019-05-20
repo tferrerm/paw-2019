@@ -68,7 +68,7 @@ public class ClubController extends BaseController {
         
         List<Club> clubs = cs.findBy(
 				Optional.ofNullable(clubName), 
-        		Optional.ofNullable(location), 
+        		Optional.ofNullable(location),
         		pageNum);
         mav.addObject("clubs", clubs);
         mav.addObject("clubQty", clubs.size());

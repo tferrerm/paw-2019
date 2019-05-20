@@ -114,8 +114,8 @@ public class ClubJdbcDao implements ClubDao {
 			final Optional<String> location) {
 		int presentFields = 0;
 		Filter[] params = { 
-				new Filter("clubname", clubName),
-				new Filter("location", location)
+				new Filter("LOWER(clubname)", clubName),
+				new Filter("LOWER(location)", location)
 		};
 		StringBuilder queryString = new StringBuilder(" FROM clubs ");
 		for(Filter param : params) {
