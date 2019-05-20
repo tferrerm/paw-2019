@@ -111,7 +111,9 @@
                                         <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
                                         <form:select path="startsAtHour" cssClass="form-control">
                                             <c:forEach var="hourEntry" items="${availableHours}">
-                                                <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                                <c:if test="${hourEntry.key < maxHour}">
+                                                    <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                                </c:if>
                                             </c:forEach>
                                         </form:select>
                                         <form:errors path="startsAtHour" cssClass="form-error" element="span"/>
@@ -125,7 +127,9 @@
                                         <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
                                         <form:select path="endsAtHour" cssClass="form-control">
                                             <c:forEach var="hourEntry" items="${availableHours}">
-                                                <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                                <c:if test="${hourEntry.key > minHour}">
+                                                    <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                                </c:if>
                                             </c:forEach>
                                         </form:select>
                                         <form:errors path="endsAtHour" cssClass="form-error" element="span"/>

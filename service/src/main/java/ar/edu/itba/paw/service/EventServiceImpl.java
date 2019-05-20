@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -336,7 +337,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
-		Map<Integer, String> availableHoursMap = new HashMap<>();
+		Map<Integer, String> availableHoursMap = new LinkedHashMap<>();
 		for(int i = minHour; i <= maxHour; i++) {
 			availableHoursMap.put(i, i + ":00");
 		}

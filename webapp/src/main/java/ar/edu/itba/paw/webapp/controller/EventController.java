@@ -229,6 +229,7 @@ public class EventController extends BaseController {
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
 		mav.addObject("scheduleHeaders", scheduleDaysHeader);
 		mav.addObject("minHour", MIN_HOUR);
+		mav.addObject("maxHour", MAX_HOUR);
 		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
 		mav.addObject("schedule", schedule);
 		return mav;
