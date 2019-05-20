@@ -13,6 +13,7 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 
+@RequestMapping("/admin")
 @Controller
 public class AdminPitchController extends BaseController {
 	

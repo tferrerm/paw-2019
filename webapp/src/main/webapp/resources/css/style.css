@@ -764,3 +764,7 @@ ul.pitch-item {
 .club-detail-container .description-item {
     width: 650px;
 }
+
+.no-margin {
+  margin: 0;
+}
