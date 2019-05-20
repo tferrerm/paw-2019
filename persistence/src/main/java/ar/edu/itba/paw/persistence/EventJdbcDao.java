@@ -190,7 +190,6 @@ public class EventJdbcDao implements EventDao {
 			final Optional<String> eventName, final Optional<String> clubName, 
 			final Optional<String> sport, final Optional<String> organizer,
 			final Optional<Integer> vacancies) {
-		int presentFields = 0;
 		Filter[] params = { 
 				new Filter("LOWER(eventname)", eventName),
 				new Filter("LOWER(clubname)", clubName),
@@ -206,22 +205,21 @@ public class EventJdbcDao implements EventDao {
 			if(param.getValue().isPresent()) {
 				switch(param.getName()) {
 				case "customVacanciesFilter":
-					queryString.append(buildPrefix(presentFields));
+					queryString.append(buildPrefix(paramValues.size()));
 					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
 					break;
 				case "starts_at":
-					queryString.append(buildPrefix(presentFields));
+					queryString.append(buildPrefix(paramValues.size()));
 					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
 					if(isEmpty(param.getValue()))
 						continue;
-					queryString.append(buildPrefix(presentFields));
+					queryString.append(buildPrefix(paramValues.size()));
 					queryString.append(param.queryAsString());
 					break;
 				}
 				paramValues.add(param.getValue().get());
-				presentFields++;
 			}
 		}
 		return queryString.toString();
@@ -233,7 +231,6 @@ public class EventJdbcDao implements EventDao {
 			final Optional<String> organizer, final Optional<Integer> vacancies, 
 			final int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
-		int presentFields = 0;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
 				new Filter("LOWER(e.eventname)", eventName),
@@ -251,23 +248,22 @@ public class EventJdbcDao implements EventDao {
 			if(param.getValue().isPresent()) {
 				switch(param.getName()) {
 				case "customVacanciesFilter":
-					queryString.append(buildPrefix(presentFields));
+					queryString.append(buildPrefix(list.size()));
 					queryString.append(" ? <= max_participants - (SELECT count(*) "
 							+ " FROM events_users AS eu WHERE eu.eventid = e.eventid) ");
 					break;
 				case "e.starts_at":
-					queryString.append(buildPrefix(presentFields));
+					queryString.append(buildPrefix(list.size()));
 					queryString.append(param.queryAsGreaterInteger(true));
 					break;
 				default:
 					if(isEmpty(param.getValue()))
 						continue;
-					queryString.append(buildPrefix(presentFields));
+					queryString.append(buildPrefix(list.size()));
 					queryString.append(param.queryAsString());
 					break;
 				}
 				list.add(param.getValue().get());
-				presentFields++;
 			}
 		}
 		queryString.append(" GROUP BY e.eventid, e.starts_at ORDER BY e.starts_at ASC, e.eventid ASC OFFSET ? ;");

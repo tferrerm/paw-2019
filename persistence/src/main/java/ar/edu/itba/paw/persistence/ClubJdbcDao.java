@@ -112,7 +112,6 @@ public class ClubJdbcDao implements ClubDao {
 	
 	private String getFilterQueryEndString(List<Object> paramValues, final Optional<String> clubName, 
 			final Optional<String> location) {
-		int presentFields = 0;
 		Filter[] params = { 
 				new Filter("LOWER(clubname)", clubName),
 				new Filter("LOWER(location)", location)
@@ -120,10 +119,9 @@ public class ClubJdbcDao implements ClubDao {
 		StringBuilder queryString = new StringBuilder(" FROM clubs ");
 		for(Filter param : params) {
 			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
-				queryString.append(buildPrefix(presentFields));
+				queryString.append(buildPrefix(paramValues.size()));
 				queryString.append(param.queryAsString());
 				paramValues.add(param.getValue().get());
-				presentFields++;
 			}
 		}
 		return queryString.toString();
