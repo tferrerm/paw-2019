@@ -63,4 +63,4 @@ INSERT INTO events VALUES (1, 1, 1, 'old_event', 'old_description', 2, '2019-01-
 INSERT INTO events_users VALUES (1, 2, NULL);
 INSERT INTO events_users VALUES (2, 2, NULL);
 INSERT INTO events_users VALUES (1, 1, -1);
-INSERT INTO events_users VALUES (2, 1, -1);
+INSERT INTO events_users VALUES (2, 1, 1);

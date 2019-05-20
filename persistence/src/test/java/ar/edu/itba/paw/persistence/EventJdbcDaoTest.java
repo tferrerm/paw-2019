@@ -267,7 +267,25 @@ public class EventJdbcDaoTest {
 	public void testVoteBalance() {
 		Optional<Integer> balance = ed.getVoteBalance(OLD_EVENTID);
 		Assert.assertTrue(balance.isPresent());
-		Assert.assertEquals(-2, balance.get().intValue());
+		Assert.assertEquals(0, balance.get().intValue());
+	}
+	
+	@Test
+	public void testGetUserVote() {
+		Optional<Integer> vote = ed.getUserVote(OLD_EVENTID, OWNER.getUserid());
+		Assert.assertTrue(vote.isPresent());
+		Assert.assertEquals(-1, vote.get().intValue());
+	}
+	
+	@Rollback
+	@Test
+	public void testVote() {
+		int result = ed.vote(true, EVENTID, OWNER.getUserid());
+		Assert.assertEquals(1, result);
+		result = ed.vote(false, -1, OWNER.getUserid());
+		Assert.assertEquals(0, result);
+		result = ed.vote(true, -1, -1);
+		Assert.assertEquals(0, result);
 	}
 
 }
