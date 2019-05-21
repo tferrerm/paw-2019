@@ -35,13 +35,20 @@ public interface EventDao {
 	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
-	 * Gets Events for which a User has an inscription.
-	 * @param futureEvents 	Finds only future Events (true) or only past Events (false).
+	 * Gets future Events for which a User has an inscription. Maximum Events: 24 * 7
 	 * @param userid 		Inscripted User.
 	 * @param pageNum 		Page number.
 	 * @return a list of Events.
 	 */
-	public List<Event> findByUserInscriptions(boolean futureEvents, final long userid, int pageNum);
+	public List<Event> findFutureUserInscriptions(long userid);
+	
+	/**
+	 * Gets Events in which the User participated.
+	 * @param userid		Inscripted User.
+	 * @param pageNum		Page number.
+	 * @return a list of Events
+	 */
+	public List<Event> findPastUserInscriptions(long userid, int pageNum);
 	
 	/**
 	 * Counts Events for which a User has an inscription.

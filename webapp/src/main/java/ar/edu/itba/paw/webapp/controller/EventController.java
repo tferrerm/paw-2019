@@ -69,7 +69,7 @@ public class EventController extends BaseController {
 		ModelAndView mav = new ModelAndView("home");
 		
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		List<Event> upcomingEvents = es.findByUserInscriptions(true, loggedUser().getUserid(), 1);
+		List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid());
 		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
 		
 		mav.addObject("myEvents", myEvents);
@@ -105,7 +105,7 @@ public class EventController extends BaseController {
 		ModelAndView mav = new ModelAndView("history");
 		
 		long loggedUserId = loggedUser().getUserid();
-		List<Event> events = es.findByUserInscriptions(false, loggedUserId, pageNum);
+		List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
 		mav.addObject("past_participations", events);
 		mav.addObject("eventQty", events.size());
 		

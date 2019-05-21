@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="form-field">
                                     <form:label path="maxParticipants"><spring:message code="event_max_participants"/> *</form:label>
-                                    <form:input  cssClass="form-control input-number" min="0" type="number" path="maxParticipants"/>
+                                    <form:input  cssClass="form-control input-number" min="0" max="99" type="number" path="maxParticipants"/>
                                     <form:errors path="maxParticipants" cssClass="form-error" element="span"/>
                                 </div>
                                 <div class="form-field flex-space-between">

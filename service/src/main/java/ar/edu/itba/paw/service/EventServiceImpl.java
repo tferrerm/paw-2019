@@ -75,11 +75,19 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<Event> findByUserInscriptions(boolean futureEvents, final long userid, int pageNum) {
-		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+	public List<Event> findFutureUserInscriptions(final long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
-		return ed.findByUserInscriptions(futureEvents, userid, pageNum);
+		return ed.findFutureUserInscriptions(userid);
+	}
+	
+	@Override
+	public List<Event> findPastUserInscriptions(final long userid, int pageNum) {
+		if(userid <= 0 || pageNum <= 0) {
+			throw new IllegalArgumentException("Parameters must be positive.");
+		}
+		return ed.findPastUserInscriptions(userid, pageNum);
 	}
 
 	@Override

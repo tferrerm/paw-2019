@@ -463,6 +463,7 @@ a.logo-admin {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  word-break: break-all;
 }
 
 .notice {
@@ -706,7 +707,7 @@ ul.pitch-item {
 .table-navigator {
     color: grey;
     display: flex;
-    margin: 40px 0 20px 0;
+    margin: 10px 0 20px 0;
 }
 
 .table-navigator button{
@@ -729,6 +730,7 @@ ul.pitch-item {
 }
 
 .tbl {
+    width: 80%;
     margin: 20px;
 }
 

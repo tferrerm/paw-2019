@@ -40,6 +40,7 @@ public class EventJdbcDao implements EventDao {
 	private final SimpleJdbcInsert jdbcInsert;
 	private final SimpleJdbcInsert jdbcInscriptionInsert;
 	private static final int MAX_ROWS = 10;
+	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@Autowired
@@ -57,7 +58,6 @@ public class EventJdbcDao implements EventDao {
 	@Autowired
 	public EventJdbcDao(final DataSource ds) {
 		jdbcTemplate = new JdbcTemplate(ds);
-		jdbcTemplate.setMaxRows(MAX_ROWS);
 		jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
 				.withTableName("events")
 				.usingGeneratedKeyColumns("eventid");
@@ -81,8 +81,9 @@ public class EventJdbcDao implements EventDao {
 				+ " NATURAL JOIN users NATURAL JOIN clubs "
 				+ " WHERE userid = ? AND starts_at ");
 		queryString.append((futureEvents) ? " > ? ORDER BY starts_at ASC " : " <= ? ORDER BY starts_at DESC ");
-		queryString.append(" OFFSET ?");
-		return jdbcTemplate.query(queryString.toString(), erm, userid, Timestamp.from(now), offset);
+		queryString.append(" LIMIT ? OFFSET ?");
+		return jdbcTemplate.query(queryString.toString(), erm, userid, Timestamp.from(now),
+				MAX_ROWS, offset);
 	}
 	
 	@Override
@@ -95,16 +96,26 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum) {
+	public List<Event> findFutureUserInscriptions(long userid) {
+		Instant now = Instant.now();
+		StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
+				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
+				+ " WHERE EXISTS (SELECT eventid FROM events_users "
+				+ " WHERE eventid = t.eventid AND userid = ?) AND t.starts_at "
+				+ " > ? ORDER BY t.starts_at ASC LIMIT ? ");
+		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), MAX_EVENTS_PER_WEEK);
+	}
+	
+	@Override
+	public List<Event> findPastUserInscriptions(long userid, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
 		StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
 				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
 				+ " WHERE EXISTS (SELECT eventid FROM events_users "
-				+ " WHERE eventid = t.eventid AND userid = ?) AND t.starts_at ");
-		query.append((futureEvents) ? " > ? ORDER BY t.starts_at ASC " : " <= ? ORDER BY t.starts_at DESC ");
-		query.append(" OFFSET ?");
-		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), offset);
+				+ " WHERE eventid = t.eventid AND userid = ?) AND t.starts_at "
+				+ " <= ? ORDER BY t.starts_at DESC LIMIT ? OFFSET ?");
+		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), MAX_ROWS, offset);
 	}
 	
 	@Override
@@ -155,8 +166,8 @@ public class EventJdbcDao implements EventDao {
 		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs "
 				+ " NATURAL JOIN users WHERE pitchid = ? "
 				+ " AND starts_at > ? "
-				+ " AND starts_at < ? ", erm, pitchid,
-					Timestamp.from(today), Timestamp.from(inAWeek));
+				+ " AND starts_at < ? LIMIT ?", erm, pitchid,
+					Timestamp.from(today), Timestamp.from(inAWeek), MAX_EVENTS_PER_WEEK);
 	}
 	
 	@Override
@@ -172,7 +183,8 @@ public class EventJdbcDao implements EventDao {
 		queryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
 		
 		int offset = (pageNum - 1) * MAX_ROWS;
-		queryString.append(" OFFSET ? ;");
+		queryString.append(" LIMIT ? OFFSET ? ;");
+		paramValues.add(MAX_ROWS);
 		paramValues.add(offset);
 		
 		return jdbcTemplate.query(queryString.toString(), erm, paramValues.toArray());
@@ -378,7 +390,7 @@ public class EventJdbcDao implements EventDao {
 	public List<User> findEventUsers(final long eventid, final int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		return jdbcTemplate.query("SELECT * FROM events_users NATURAL JOIN users "
-				+ " WHERE eventid = ? OFFSET ?", urm, eventid, offset);
+				+ " WHERE eventid = ? LIMIT ? OFFSET ?", urm, eventid, MAX_ROWS, offset);
 	}
 	
 	@Override
@@ -395,7 +407,7 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public int countUserOwnedCurrEvents(final long userid) {
 		Integer userOwnerEvents = jdbcTemplate.queryForObject(
-				"SELECT count(*) FROM events WHERE userid = ? AND ends_at > ?",
+				"SELECT count(*) FROM events WHERE userid = ? AND starts_at > ?",
 				Integer.class, userid, Timestamp.from(Instant.now()));
 		return userOwnerEvents;
 	}
