@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 	<script
@@ -64,10 +65,15 @@
 			<c:forEach var="event" items="${events}">
 				<div class="custom-row">
 					<div>${event.pitch.club.name}</div>
-					<div>${event.pitch.sport}</div>
+					<div><spring:message code="${event.pitch.sport}"/></div>
 					<div>${event.owner.firstname} ${event.owner.lastname}</div>
 					<div>${event.maxParticipants - event.inscriptions}</div>
-					<div>${event.startsAt}</div>
+					<div>
+						<fmt:timeZone value="AR">
+							<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+							<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+						</fmt:timeZone>
+					</div>
 					<div>
 						<a href="<c:url value="/admin/event/${event.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
 					</div>
