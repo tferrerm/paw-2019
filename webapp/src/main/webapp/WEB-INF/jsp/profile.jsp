@@ -15,10 +15,14 @@
 	<div class="content-container">
 		<c:choose>
    			<c:when test="${user.userid == loggedUser.userid}">
-				<h2><spring:message code="user.greeting" arguments="${user.firstname} ${user.lastname}"/></h2>
+   				<div class="profile-title">
+                    <h2><spring:message code="user.greeting" arguments="${user.firstname} ${user.lastname}"/></h2>
+                </div>
 			</c:when>
 			<c:otherwise>
-				<h2>${user.firstname} ${user.lastname}</h2>
+				<div class="profile-title">
+	                <h2>${user.firstname} ${user.lastname}</h2>
+	            </div>
 			</c:otherwise>
 		</c:choose>
 		<div class="tbl profile-cont">

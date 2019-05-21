@@ -19,13 +19,13 @@
 				<c:url value="/admin/club/create" var="postPath"/>
 				<form:form modelAttribute="newClubForm" action="${postPath}" method="post" enctype="multipart/form-data">
 					<div>
-						<form:label path="name"><spring:message code="event_name"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" path="name"/>
+						<form:label path="name"><spring:message code="name"/> * </form:label>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="name"/>
 						<form:errors path="name" cssClass="form-error" element="span"/>
 					</div>
 					<div>
 						<form:label path="location"><spring:message code="event_location"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" path="location"/>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="location"/>
 						<form:errors path="location" cssClass="form-error" element="span"/>
 					</div>
 					<div class="submit-container">

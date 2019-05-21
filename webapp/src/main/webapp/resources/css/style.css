@@ -103,6 +103,7 @@ a.link-text{
   border-radius: 5px;
   margin: 10px;
   padding: 10px;
+  word-break: break-all;
 }
 
 .content-container {
@@ -135,6 +136,7 @@ a.link-text{
     border-bottom: 1px lightgrey solid;
     height: 50px;
     word-break: break-all;
+    padding: 10px;
 }
 
 .custom-row:hover {
@@ -371,6 +373,7 @@ a.event-link {
   flex-direction: column;
   align-items: center;
   border: 1px solid dodgerblue;
+  word-break: break-all;
 }
 
 .home-ev-title {
@@ -503,6 +506,7 @@ a.logo-admin {
 
 .pitch-info-label {
     font-weight: bold;
+    word-break: break-all;
 }
 
 .pitch-item {
@@ -725,7 +729,7 @@ ul.pitch-item {
 }
 
 .tbl {
-    min-width: 1000px;
+    margin: 20px;
 }
 
 .tbl-no-flex {
@@ -733,6 +737,13 @@ ul.pitch-item {
     border-radius: 10px;
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     min-width: 1000px;
+}
+
+.view-club {
+    height: 30px;
+    font-size: 13px;
+    text-align: center;
+    margin: 5px 0;
 }
 
 .view-event {
@@ -779,10 +790,7 @@ ul.pitch-item {
     border-radius: 10px;
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     justify-content: center;
-}
-
-.club-detail-container .description-item {
-    width: 650px;
+    width: 80%;
 }
 
 .no-margin {

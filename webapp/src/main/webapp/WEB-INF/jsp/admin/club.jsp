@@ -18,7 +18,9 @@
 		<div class="main-container">
 			<%@include file="sidebar.jsp" %>
 			<div class="content-container">
-				<h2 class="no-margin">${club.name}</h2>
+				<div class="profile-title">
+					<h2 class="no-margin">${club.name}</h2>
+				</div>
 				<div class="detail-container">
 					<div class="description-body">
 						<div class="description-item">
@@ -48,7 +50,7 @@
 							<form:form modelAttribute="newPitchForm" action="${postPath}" method="post" enctype="multipart/form-data">
 								<div>
 									<form:label path="name"><spring:message code="event_name"/> * </form:label>
-									<form:input  cssClass="form-control" type="text" path="name"/>
+									<form:input  cssClass="form-control" type="text" maxlength="100" path="name"/>
 									<form:errors path="name" cssClass="form-error" element="span"/>
 								</div>
 								<div style="margin: 5px 0">

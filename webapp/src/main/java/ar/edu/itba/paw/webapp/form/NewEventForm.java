@@ -12,7 +12,7 @@ public class NewEventForm {
 	private String description;
 	
 	@NotBlank
-	@Pattern(regexp = "[0-9]*[1-9]")
+	@Pattern(regexp = "[0-9]?[1-9]")
 	private String maxParticipants;
 	
 	@NotBlank
