@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,7 +91,7 @@ public interface EventService {
 	 */
 	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
 			Optional<String> clubName, Optional<Sport> sport, Optional<String> organizer,
-			Optional<Integer> vacancies, int pageNum);
+			Optional<Integer> vacancies, Optional<Instant> date, int pageNum);
 
 	/**
 	 * Returns a list of Events matching present filters.
@@ -104,11 +105,12 @@ public interface EventService {
 	 * @return The list of Events matching present filters.
 	 */
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, int pageNum);
+			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies,
+			Optional<Instant> date, int pageNum);
 	
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, Optional<String> organizer, 
-			final Optional<Integer> vacancies);
+			final Optional<Integer> vacancies, final Optional<Instant> date);
 
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
 			int maxHour, int dayAmount);

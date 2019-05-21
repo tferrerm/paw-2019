@@ -181,16 +181,16 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
 			Optional<String> establishment, Optional<Sport> sport, Optional<String> organizer,
-			Optional<Integer> vacancies, int pageNum) {
+			Optional<Integer> vacancies, Optional<Instant> date, int pageNum) {
 		List<Event> events = findBy(onlyFuture, eventName, establishment, sport, organizer, 
-				vacancies, pageNum);
+				vacancies, date, pageNum);
 		
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
 		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, eventName, establishment,
-				Optional.ofNullable(sportString), organizer, vacancies, pageNum);
+				Optional.ofNullable(sportString), organizer, vacancies, date, pageNum);
 		
 		for(int i = 0; i < events.size(); i++) {
 			events.get(i).setInscriptions(eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
@@ -207,7 +207,8 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, int pageNum) {
+			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, 
+			Optional<Instant> date, int pageNum) {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
@@ -217,19 +218,19 @@ public class EventServiceImpl implements EventService {
 		}
 
 		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString), organizer,
-				vacancies, pageNum);
+				vacancies, date, pageNum);
 	}
 	
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, final Optional<String> organizer,
-			final Optional<Integer> vacancies) {
+			final Optional<Integer> vacancies, Optional<Instant> date) {
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
 		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
-				Optional.ofNullable(sportString), organizer, vacancies);
+				Optional.ofNullable(sportString), organizer, vacancies, date);
 	}
 
 	@Override

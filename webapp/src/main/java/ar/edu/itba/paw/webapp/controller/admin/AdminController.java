@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +34,7 @@ public class AdminController extends BaseController {
 	private EventService es;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 
 	@RequestMapping(value = "/")
 	public ModelAndView adminHome() {
@@ -59,16 +63,20 @@ public class AdminController extends BaseController {
 		Integer vacanciesNum = null;
         if(vacancies != null)
         	vacanciesNum = Integer.valueOf(vacancies);
+        Instant dateInst = null;
+        if(date != null && !date.isEmpty())
+        	dateInst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
         
 		List<Event> events = es.findByWithInscriptions(true, Optional.empty(), Optional.ofNullable(clubName), 
         		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
-        		Optional.ofNullable(vacanciesNum), pageNum);
+        		Optional.ofNullable(vacanciesNum), Optional.ofNullable(dateInst), pageNum);
 		mav.addObject("events", events);
 		mav.addObject("eventQty", events.size());
 		
 		Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
 				Optional.ofNullable(clubName), Optional.ofNullable(sport), 
-				Optional.ofNullable(organizer), Optional.ofNullable(vacanciesNum));
+				Optional.ofNullable(organizer), Optional.ofNullable(vacanciesNum),
+				Optional.ofNullable(dateInst));
         mav.addObject("totalEventQty", totalEventQty);
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));

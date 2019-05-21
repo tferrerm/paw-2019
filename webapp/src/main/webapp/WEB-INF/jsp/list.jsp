@@ -52,7 +52,7 @@
                                 </div>
                                 <div>
                                     <form:label path="date"><spring:message code="date" /></form:label>
-                                    <form:input class="form-control" type="text" path="date"/>
+                                    <form:input class="form-control" type="date" path="date"/>
                                     <form:errors path="date" cssClass="form-error" element="p"/>
                                 </div>
                                 <div>

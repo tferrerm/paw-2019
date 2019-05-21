@@ -24,6 +24,10 @@ public class Filter {
 		return " " + name.toString() + " >" + ((alsoEquals) ? "= ?" : " ?");
 	}
 	
+	public String queryAsDateRange() {
+		return " " + name.toString() + "::date = ?::date ";
+	}
+	
 	public String getName() {
 		return name;
 	}

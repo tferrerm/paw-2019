@@ -142,6 +142,7 @@ public class EventJdbcDaoTest {
 				Optional.of(Sport.SOCCER.toString()),
 				Optional.empty(),
 				Optional.of(1),
+				Optional.empty(),
 				1);
 		Assert.assertEquals(1, events.size());
 		Assert.assertEquals(EVENTID, events.get(0).getEventId());
@@ -153,6 +154,7 @@ public class EventJdbcDaoTest {
 				Optional.of(Sport.SOCCER.toString()),
 				Optional.empty(),
 				Optional.of(1),
+				Optional.empty(),
 				1);
 		Assert.assertEquals(2, includingOldEvents.size());
 		List<Event> oldEvents = ed.findBy(
@@ -162,6 +164,7 @@ public class EventJdbcDaoTest {
 				Optional.of(Sport.SOCCER.toString()),
 				Optional.empty(),
 				Optional.of(1),
+				Optional.empty(),
 				1);
 		Assert.assertEquals(1, oldEvents.size());
 		Assert.assertEquals(OLD_EVENTID, oldEvents.get(0).getEventId());
@@ -176,7 +179,8 @@ public class EventJdbcDaoTest {
 				Optional.of(CLUB.getName()),
 				Optional.empty(),
 				Optional.empty(),
-				Optional.of(1));
+				Optional.of(1),
+				Optional.empty());
 		Assert.assertEquals(1, count);
 		count = ed.countFilteredEvents(
 				false,
@@ -184,8 +188,18 @@ public class EventJdbcDaoTest {
 				Optional.of(CLUB.getName()),
 				Optional.empty(),
 				Optional.empty(),
-				Optional.of(1));
+				Optional.of(1),
+				Optional.empty());
 		Assert.assertEquals(2, count);
+		count = ed.countFilteredEvents(
+				false,
+				Optional.empty(),
+				Optional.empty(),
+				Optional.empty(),
+				Optional.empty(),
+				Optional.empty(),
+				Optional.of(Instant.now()));
+		Assert.assertEquals(0, count);
 	}
 	
 	@Test

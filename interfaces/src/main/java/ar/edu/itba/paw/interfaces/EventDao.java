@@ -81,8 +81,8 @@ public interface EventDao {
 	 * @return a list of Events that matched given filters.
 	 */
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> establishment, Optional<String> sport, 
-			Optional<String> organizer, Optional<Integer> vacancies, int pageNum);
+			Optional<String> establishment, Optional<String> sport, Optional<String> organizer,
+			Optional<Integer> vacancies, Optional<Instant> date, int pageNum);
 	
 	/**
 	 * Returns the amount of Events matching present filters.
@@ -96,7 +96,8 @@ public interface EventDao {
 	 */
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
-			final Optional<String> organizer, final Optional<Integer> vacancies);
+			final Optional<String> organizer, final Optional<Integer> vacancies,
+			final Optional<Instant> date);
 
 	/**
 	 * Returns a combination of eventid and vacancies for that Event.
@@ -111,7 +112,8 @@ public interface EventDao {
 	 */
 	public List<Long[]> countBy(boolean onlyFuture, Optional<String> eventName, 
 			Optional<String> establishment, Optional<String> sport, 
-			Optional<String> organizer, Optional<Integer> vacancies, int pageNum);
+			Optional<String> organizer, Optional<Integer> vacancies,
+			Optional<Instant> date, int pageNum);
 
 	public int countUserEventPages(final long userid);
 

@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +56,7 @@ public class EventController extends BaseController {
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
 	private static final int MAX_EVENTS_PER_DAY = 14;
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@Autowired
 	private EventService es;
@@ -203,6 +206,10 @@ public class EventController extends BaseController {
     	String sportName = "";
     	if(sport != null)
     		sportName = sport.toString();
+    	Instant dateInst = null;
+    	if(date != null && !date.isEmpty()) {
+    		dateInst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
+    	}
         String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("page", pageNum);
@@ -216,14 +223,14 @@ public class EventController extends BaseController {
         
         List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
         		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
-        		Optional.ofNullable(vacanciesNum), pageNum);
+        		Optional.ofNullable(vacanciesNum), Optional.ofNullable(dateInst), pageNum);
 
         mav.addObject("events", events);
         mav.addObject("eventQty", events.size());
         
         Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
         		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
-        		Optional.ofNullable(vacanciesNum));
+        		Optional.ofNullable(vacanciesNum), Optional.ofNullable(dateInst));
         mav.addObject("totalEventQty", totalEventQty);
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));

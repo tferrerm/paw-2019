@@ -173,13 +173,13 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public List<Event> findBy(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
-			final Optional<String> organizer, final Optional<Integer> vacancies, 
-			final int pageNum) {
+			final Optional<String> organizer, final Optional<Integer> vacancies,
+			Optional<Instant> date, final int pageNum) {
 		
 		List<Object> paramValues = new ArrayList<>();
 		StringBuilder queryString = new StringBuilder("SELECT * ");
 		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, 
-				clubName, sport, organizer, vacancies));
+				clubName, sport, organizer, vacancies, date));
 		queryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
 		
 		int offset = (pageNum - 1) * MAX_ROWS;
@@ -193,12 +193,13 @@ public class EventJdbcDao implements EventDao {
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
-			final Optional<String> organizer, final Optional<Integer> vacancies) {
+			final Optional<String> organizer, final Optional<Integer> vacancies,
+			final Optional<Instant> date) {
 		
 		List<Object> paramValues = new ArrayList<>();
 		StringBuilder queryString = new StringBuilder("SELECT count(*) ");
 		queryString.append(getFilterQueryEndString(paramValues, onlyFuture, eventName, 
-				clubName, sport, organizer, vacancies));
+				clubName, sport, organizer, vacancies, date));
 		
 		return jdbcTemplate.queryForObject(queryString.toString(), Integer.class, paramValues.toArray());
 	}
@@ -206,14 +207,17 @@ public class EventJdbcDao implements EventDao {
 	private String getFilterQueryEndString(List<Object> paramValues, final boolean onlyFuture, 
 			final Optional<String> eventName, final Optional<String> clubName, 
 			final Optional<String> sport, final Optional<String> organizer,
-			final Optional<Integer> vacancies) {
+			final Optional<Integer> vacancies, final Optional<Instant> date) {
 		Filter[] params = { 
 				new Filter("LOWER(eventname)", eventName),
 				new Filter("LOWER(clubname)", clubName),
 				new Filter("LOWER(sport)", sport),
 				new Filter("LOWER(firstname) || ' ' || LOWER(lastname)", organizer),
 				new Filter("customVacanciesFilter", vacancies),
-				new Filter("starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
+				new Filter("starts_at", Optional.ofNullable((date.isPresent()) ?
+						Timestamp.from(date.get()) : null)),
+				new Filter("futureFilter", 
+						Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
 		};
 		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches "
 				+ " NATURAL JOIN clubs NATURAL JOIN users) AS t ");
@@ -225,9 +229,15 @@ public class EventJdbcDao implements EventDao {
 					queryString.append(buildPrefix(paramValues.size()));
 					queryString.append(" ? <= max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
 					break;
+				case "futureFilter":
+					queryString.append(buildPrefix(paramValues.size()));
+					queryString.append(" starts_at >= ? ");
+					break;
 				case "starts_at":
 					queryString.append(buildPrefix(paramValues.size()));
-					queryString.append(param.queryAsGreaterInteger(true));
+					String criteria = (date.isPresent()) 
+						? param.queryAsDateRange() : param.queryAsGreaterInteger(true);
+					queryString.append(criteria);
 					break;
 				default:
 					if(isEmpty(param.getValue()))
@@ -246,7 +256,7 @@ public class EventJdbcDao implements EventDao {
 	public List<Long[]> countBy(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> establishment, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies, 
-			final int pageNum) {
+			Optional<Instant> date, final int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		List<Object> list = new ArrayList<>();
 		Filter[] params = { 
@@ -255,7 +265,10 @@ public class EventJdbcDao implements EventDao {
 				new Filter("LOWER(sport)", sport),
 				new Filter("LOWER(u.firstname) || ' ' || LOWER(u.lastname)", organizer),
 				new Filter("customVacanciesFilter", vacancies),
-				new Filter("e.starts_at", Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
+				new Filter("e.starts_at", Optional.ofNullable((date.isPresent()) ?
+						Timestamp.from(date.get()) : null)),
+				new Filter("futureFilter", 
+						Optional.ofNullable((onlyFuture)? Timestamp.from(Instant.now()) : null))
 		};
 		StringBuilder queryString = new StringBuilder("SELECT e.eventid, count(evu.eventid) FROM "
 				+ " events AS e INNER JOIN users AS u ON e.userid = u.userid NATURAL JOIN pitches "
@@ -269,9 +282,13 @@ public class EventJdbcDao implements EventDao {
 					queryString.append(" ? <= max_participants - (SELECT count(*) "
 							+ " FROM events_users AS eu WHERE eu.eventid = e.eventid) ");
 					break;
+				case "futureFilter":
+					queryString.append(buildPrefix(list.size()));
+					queryString.append(" e.starts_at >= ? ");
+					break;
 				case "e.starts_at":
 					queryString.append(buildPrefix(list.size()));
-					queryString.append(param.queryAsGreaterInteger(true));
+					queryString.append(param.queryAsDateRange());
 					break;
 				default:
 					if(isEmpty(param.getValue()))
