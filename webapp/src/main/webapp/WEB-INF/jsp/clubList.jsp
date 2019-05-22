@@ -47,8 +47,8 @@
 		            </div>
 					<c:forEach var="club" items="${clubs}">
 						<div class="custom-row flex-space-around">
-							<div>${club.name}</div>
-							<div>${club.location}</div>
+							<div class="home-header">${club.name}</div>
+							<div class="home-header">${club.location}</div>
 							<div>
 								<a href="<c:url value="/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
 							</div>
