@@ -33,7 +33,7 @@
                             <div class="table-titles">
                                 <div>
                                     <form:label path="name"><spring:message code="name" /></form:label>
-                                    <form:input class="form-control" type="text" path="name"/>
+                                    <form:input class="form-control" type="text" path="name" maxlength="100"/>
                                     <form:errors path="name" cssClass="formError" element="p"/>
                                 </div>
                                 <div>
@@ -48,12 +48,12 @@
                                 </div>
                                 <div>
                                     <form:label path="location"><spring:message code="location" /></form:label>
-                                    <form:input class="form-control" type="text" path="location"/>
+                                    <form:input class="form-control" type="text" path="location" maxlength="100"/>
                                     <form:errors path="location" cssClass="form-error" element="p"/>
                                 </div>
                                 <div>
                                     <form:label path="clubName"><spring:message code="club" /></form:label>
-                                    <form:input class="form-control" type="text" path="clubName"/>
+                                    <form:input class="form-control" type="text" path="clubName" maxlength="100"/>
                                     <form:errors path="clubName" cssClass="form-error" element="p"/>
                                 </div>
                                 <div>
