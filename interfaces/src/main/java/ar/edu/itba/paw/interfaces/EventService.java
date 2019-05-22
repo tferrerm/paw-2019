@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.interfaces;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,6 +11,7 @@ import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -91,7 +91,8 @@ public interface EventService {
 	 */
 	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
 			Optional<String> clubName, Optional<Sport> sport, Optional<String> organizer,
-			Optional<Integer> vacancies, Optional<Instant> date, int pageNum);
+			Optional<String> vacancies, Optional<String> date, int pageNum)
+			throws InvalidDateFormatException, InvalidVacancyNumberException;
 
 	/**
 	 * Returns a list of Events matching present filters.
@@ -105,12 +106,14 @@ public interface EventService {
 	 * @return The list of Events matching present filters.
 	 */
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies,
-			Optional<Instant> date, int pageNum);
+			Optional<Sport> sport, Optional<String> organizer, Optional<String> vacancies,
+			Optional<String> date, int pageNum)
+			throws InvalidDateFormatException, InvalidVacancyNumberException;
 	
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, Optional<String> organizer, 
-			final Optional<Integer> vacancies, final Optional<Instant> date);
+			final Optional<String> vacancies, final Optional<String> date)
+			throws InvalidDateFormatException, InvalidVacancyNumberException;
 
 	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
 			int maxHour, int dayAmount);

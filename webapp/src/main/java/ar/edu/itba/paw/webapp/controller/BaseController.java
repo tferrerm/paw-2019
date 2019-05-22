@@ -50,9 +50,9 @@ public class BaseController {
 		return new ModelAndView("403");
 	}
 	
-//    @ExceptionHandler({ Exception.class })
-//	private ModelAndView generalExceptionHandler() {
-//		return new ModelAndView("oops");
-//	}
+    @ExceptionHandler({ Exception.class })
+	private ModelAndView generalExceptionHandler() {
+		return new ModelAndView("oops");
+	}
 
 }

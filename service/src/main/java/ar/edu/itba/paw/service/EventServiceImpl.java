@@ -23,6 +23,7 @@ import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -181,16 +182,22 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
 			Optional<String> establishment, Optional<Sport> sport, Optional<String> organizer,
-			Optional<Integer> vacancies, Optional<Instant> date, int pageNum) {
+			Optional<String> vacancies, Optional<String> date, int pageNum) 
+			throws InvalidDateFormatException, InvalidVacancyNumberException {
+		
 		List<Event> events = findBy(onlyFuture, eventName, establishment, sport, organizer, 
 				vacancies, date, pageNum);
+		
+		Instant inst = instantFromOptionalStr(date);
+		Integer vac = integerFromOptionalStr(vacancies);
 		
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
 		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, eventName, establishment,
-				Optional.ofNullable(sportString), organizer, vacancies, date, pageNum);
+				Optional.ofNullable(sportString), organizer, Optional.ofNullable(vac), 
+				Optional.ofNullable(inst), pageNum);
 		
 		for(int i = 0; i < events.size(); i++) {
 			events.get(i).setInscriptions(eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
@@ -207,8 +214,9 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, 
-			Optional<Instant> date, int pageNum) {
+			Optional<Sport> sport, Optional<String> organizer, Optional<String> vacancies, 
+			Optional<String> date, int pageNum) 
+			throws InvalidDateFormatException, InvalidVacancyNumberException {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
@@ -216,21 +224,53 @@ public class EventServiceImpl implements EventService {
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
+		
+		Instant dateInst = instantFromOptionalStr(date);
+		Integer vacInt = integerFromOptionalStr(vacancies);
 
 		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString), organizer,
-				vacancies, date, pageNum);
+				Optional.ofNullable(vacInt), Optional.ofNullable(dateInst), pageNum);
 	}
 	
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, final Optional<String> organizer,
-			final Optional<Integer> vacancies, Optional<Instant> date) {
+			final Optional<String> vacancies, Optional<String> date) 
+			throws InvalidDateFormatException, InvalidVacancyNumberException {
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
+		
+		Integer vac = integerFromOptionalStr(vacancies);
+		Instant dateInst = instantFromOptionalStr(date);
 		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
-				Optional.ofNullable(sportString), organizer, vacancies, date);
+				Optional.ofNullable(sportString), organizer, Optional.ofNullable(vac), 
+				Optional.ofNullable(dateInst));
+	}
+	
+	private Instant instantFromOptionalStr(Optional<String> date) throws InvalidDateFormatException {
+		Instant inst = null;
+		if(date.isPresent() && !date.get().isEmpty()) {
+			try {
+				inst = LocalDate.parse(date.get()).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
+			} catch(DateTimeParseException e) {
+				throw new InvalidDateFormatException();
+			}
+		}
+		return inst;
+	}
+	
+	private Integer integerFromOptionalStr(Optional<String> str) 
+		throws InvalidVacancyNumberException {
+		Integer num = null;
+		if(str.isPresent() && !str.get().isEmpty())
+			try {
+				num = Integer.valueOf(str.get());
+			} catch(NumberFormatException e) {
+				throw new InvalidVacancyNumberException();
+			}
+		return num;
 	}
 
 	@Override
