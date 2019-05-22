@@ -25,7 +25,7 @@ public class Filter {
 	}
 	
 	public String queryAsDateRange() {
-		return " " + name.toString() + "::date = ?::date ";
+		return " CAST( " + name.toString() + " AS DATE) = CAST( ? AS DATE) ";
 	}
 	
 	public String getName() {
