@@ -30,7 +30,7 @@
 					<div class="table-titles">
 						<div>
 							<form:label path="establishment"><spring:message code="club" /></form:label>
-							<form:input class="form-control" type="text" path="establishment"/>
+							<form:input class="form-control" type="text" path="establishment" maxlength="100"/>
 							<form:errors path="establishment" cssClass="formError" element="p"/>
 						</div>
 						<div>
@@ -45,12 +45,12 @@
 						</div>
 						<div>
 							<form:label path="organizer"><spring:message code="organizer" /></form:label>
-							<form:input class="form-control" type="text" path="organizer"/>
+							<form:input class="form-control" type="text" path="organizer" maxlength="100"/>
 							<form:errors path="organizer" cssClass="form-error" element="p"/>
 						</div>
 						<div>
 							<form:label path="vacancies"><spring:message code="vacancies" /></form:label>
-							<form:input class="form-control" type="text" path="vacancies"/>
+							<form:input class="form-control" type="text" path="vacancies" maxlength="3"/>
 							<form:errors path="vacancies" cssClass="form-error" element="p"/>
 							<c:if test="${invalid_number_format == true}">
                 <span class="form-error">

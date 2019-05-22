@@ -32,12 +32,12 @@
 		                    <div class="table-titles flex-space-around">
 		                        <div>
 		                            <form:label path="name"><spring:message code="name" /></form:label>
-		                            <form:input class="form-control" type="text" path="name"/>
+		                            <form:input class="form-control" type="text" path="name" maxlength="100"/>
 		                            <form:errors path="name" cssClass="form-error" element="p"/>
 		                        </div>
 		                        <div>
 		                            <form:label path="location"><spring:message code="location" /></form:label>
-		                            <form:input class="form-control" type="text" path="location"/>
+		                            <form:input class="form-control" type="text" path="location" maxlength="100"/>
 		                            <form:errors path="location" cssClass="formError" element="p"/>
 		                        </div>
 		                        <div>
