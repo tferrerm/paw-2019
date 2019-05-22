@@ -71,6 +71,11 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "/login", method = {RequestMethod.GET})
 	public ModelAndView login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
+		if(cph.isAuthenticated()) {
+			if(cph.isAdmin())
+				return new ModelAndView("redirect:/admin/");
+			return new ModelAndView("redirect:/home");
+		}
 		ModelAndView mav = new ModelAndView("login");
 		mav.addObject("error", error);
 		return mav;
