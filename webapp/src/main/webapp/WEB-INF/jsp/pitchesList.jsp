@@ -65,10 +65,10 @@
                     </div>
                     <c:forEach var="pitch" items="${pitches}">
                         <div class="custom-row">
-                            <div>${pitch.name}</div>
+                            <div class="home-header">${pitch.name}</div>
                             <div><spring:message code="${pitch.sport}"/></div>
-                            <div>${pitch.club.location}</div>
-                            <div>${pitch.club.name}</div>
+                            <div class="home-header">${pitch.club.location}</div>
+                            <div class="home-header">${pitch.club.name}</div>
                             <div>
                                 <a href="<c:url value="/pitch/${pitch.pitchid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_pitch"/></button></a>
                             </div>
