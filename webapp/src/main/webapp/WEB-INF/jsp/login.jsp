@@ -15,7 +15,9 @@
 <%@include file="header.jsp" %>
 <div class="main-container">
   <div class="content-container">
-    <h2><spring:message code="login"/></h2>
+    <div class="profile-title">
+      <h2><spring:message code="login"/></h2>
+    </div>
     <div class="form-container">
     <c:url value="/login" var="loginUrl"/>
     <form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">

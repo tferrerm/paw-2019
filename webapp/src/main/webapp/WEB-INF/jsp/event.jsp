@@ -39,7 +39,7 @@
 					<div class="margin-right">
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="organizer"/> </span>
-							<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
+							<a class="link-text" href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="event_description"/></span>
@@ -51,8 +51,8 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="club"/> </span>
-							<a href="<c:url value="/club/${event.pitch.club.clubid}" /> ">${event.pitch.club.name}</a>
-							<span> - </span><a href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">${event.pitch.name}</a>
+							<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" /> ">${event.pitch.club.name}</a>
+							<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">${event.pitch.name}</a>
 						</div>
 						<div class="double-box">
 							<div class="description-item">

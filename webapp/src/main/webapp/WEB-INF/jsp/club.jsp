@@ -20,15 +20,17 @@
 				<div class="club-detail-container">
 					<div class="description-body">
 						<div class="description-item">
-							<span class="event-info-label"><spring:message code="location"/></span>
-							<p>${club.location}</p>
-						</div>
-						<div class="description-item">
-							<p><spring:message code="hosted"/> ${past_events_count} <spring:message code="events_lw"/></p>
+							<div class="flex">
+								<div class="h4 pitch-info-label">
+									<spring:message code="club_location"/>
+									<span class="h4"> ${club.location}</span>
+								</div>
+                            </div>
+							<h4><spring:message code="hosted"/> ${past_events_count} <spring:message code="event_s"/></h4>
 						</div>
 					</div>
 					<div class="description-item">
-						<span class="event-info-label"><spring:message code="pitches"/></span>
+						<span class="h4 pitch-info-label"><spring:message code="pitches"/></span>
 						<c:choose>
 							<c:when test="${empty pitches}">
 								<span><spring:message code="no_pitches"/></span>

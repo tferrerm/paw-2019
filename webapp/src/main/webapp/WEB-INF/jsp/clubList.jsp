@@ -20,7 +20,10 @@
 		<div class="main-container">
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
-				<h2><spring:message code="all_clubs" /></h2>
+				<div class="profile-title">
+                    <h2><spring:message code="all_clubs" /></h2>
+                </div>
+                <span class="help-message notice"><spring:message code="club_list_help"/></span>
 				<div class="tbl club-table-size">
 					<div class="table-header">
 		                <c:url value='/clubs/filter' var="postPath"/>

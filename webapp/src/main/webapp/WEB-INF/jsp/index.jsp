@@ -20,7 +20,9 @@
 	<%@include file="header.jsp" %>
 	<div class="main-container">
 		<div class="content-container">
-			<h2><spring:message code="register"/></h2>
+			<div class="profile-title">
+      			<h2><spring:message code="register"/></h2>
+    		</div>
 			<div class="form-container">
 				<c:url value="/user/create" var="postPath"/>
 				<form:form modelAttribute="signupForm" action="${postPath}"	method="post" enctype="multipart/form-data">
@@ -29,7 +31,7 @@
 						<form:input  cssClass="form-control" type="text" maxlength="100" path="username"/>
 						<form:errors path="username" cssClass="form-error" element="span"/>
 						<c:if test="${duplicateUsername != null}">
-						<div class="formError">
+						<div class="form-error">
 							<spring:message code="username" />
 							<c:out value="${duplicateUsername}" />
 							<spring:message code="already_exists" />
@@ -65,9 +67,9 @@
 
 
 					<c:if test="${fileErrorMessage != null}">
-						<div class="formError">
-							<c:out value="${fileErrorMessage}" />
+						<div class="form-error">
 							<spring:message code="file_error" />
+							<c:out value="${fileErrorMessage}" />
 						</div>
 					</c:if>
 					<div class="submit-container">

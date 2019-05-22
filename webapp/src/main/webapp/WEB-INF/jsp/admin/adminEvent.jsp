@@ -16,7 +16,7 @@
 		<div class="main-container">
 			<%@include file="sidebar.jsp" %>
 			<div class="content-container">
-				<div class="profile-title no-margin">
+				<div class="profile-title">
 					<h2>${event.name}</h2>
 				</div>
 				<div class="detail-container">

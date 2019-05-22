@@ -17,7 +17,10 @@
 		<div class="main-container">
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
-				<h2><spring:message code="myParticipations" /></h2>
+				<div class="profile-title">
+                    <h2><spring:message code="myParticipations" /></h2>
+                </div>
+                <span class="help-message notice"><spring:message code="history_help"/></span>
 				<c:choose>
            			<c:when test="${eventQty > 0}">
 						<div class="tbl">

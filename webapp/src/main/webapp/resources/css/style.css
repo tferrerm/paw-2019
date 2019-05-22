@@ -27,7 +27,8 @@ h2 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 32px;
     font-weight: 600;
-    padding: 20px 0;
+    padding: 15px 0;
+    margin-bottom: 0;
 }
 
 h3 {
@@ -38,7 +39,6 @@ h3 {
 
 label {
     margin: 0;
-
 }
 
 span {
@@ -103,7 +103,7 @@ a.link-text{
   border-radius: 5px;
   margin: 10px;
   padding: 10px;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .content-container {
@@ -135,7 +135,7 @@ a.link-text{
 .custom-row {
     border-bottom: 1px lightgrey solid;
     height: 50px;
-    word-break: break-all;
+    word-break: break-word;
     padding: 10px;
 }
 
@@ -172,7 +172,7 @@ margin: 0 10px;
     margin: 10px 10px 10px 10px;
     padding: 10px;
     width: 100%;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .detail-container {
@@ -344,6 +344,10 @@ a.event-link {
     margin-right: 15px;
 }
 
+.help-message {
+  margin-bottom: 10px;
+}
+
 .home-event {
   background-color: dodgerblue;
   width: 80%;
@@ -373,7 +377,7 @@ a.event-link {
   flex-direction: column;
   align-items: center;
   border: 1px solid dodgerblue;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .home-ev-title {
@@ -463,7 +467,7 @@ a.logo-admin {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .notice {
@@ -490,7 +494,6 @@ a.logo-admin {
 .participants-list ul {
     list-style: none;
     padding: 0;
-    word-break: break-all;
 }
 
 .pitch-form-container {
@@ -507,7 +510,7 @@ a.logo-admin {
 
 .pitch-info-label {
     font-weight: bold;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .pitch-item {
@@ -517,6 +520,10 @@ a.logo-admin {
 
 ul.pitch-item {
     padding-inline-start: 5px;
+}
+
+.pitch-name {
+    max-width: 50%;
 }
 
 .pitch-pic-container {
@@ -530,13 +537,15 @@ ul.pitch-item {
 
 .profile-cont {
     padding: 30px;
+    max-width: 800px;
 }
 
 .profile-title {
   display: flex;
   justify-content: center;
   width: 90%;
-  word-break: break-all;
+  word-break: break-word;
+  margin-top: 10px;
 }
 
 .profile-second {
@@ -545,11 +554,14 @@ ul.pitch-item {
 }
 
 .profile-top {
+    align-items: center;
     display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .profile-pic-container {
-    margin-right: 30px;
+  margin: 15px;
 }
 
 .progress-bar-completion {
@@ -677,7 +689,7 @@ ul.pitch-item {
     align-items: center;
     display: flex;
     justify-content: center;
-    width: 20%;
+    width: 30%;
 }
 
 .table-titles {
@@ -730,8 +742,8 @@ ul.pitch-item {
 }
 
 .tbl {
-    width: 80%;
-    margin: 20px;
+    width: 85%;
+    margin: 10px 20px;
 }
 
 .tbl-no-flex {
@@ -739,6 +751,12 @@ ul.pitch-item {
     border-radius: 10px;
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     min-width: 1000px;
+}
+
+.username {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
 }
 
 .view-club {
@@ -779,7 +797,7 @@ ul.pitch-item {
 }
 
 .club-pitches-list {
-    width: 550px;
+    width: 100%;
 }
 
 .club-detail-container {

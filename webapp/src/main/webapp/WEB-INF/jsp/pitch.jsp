@@ -27,7 +27,7 @@
                         <div class="stats">
                             <div class="h4 pitch-info-label" style="padding: 5px 0">
                                 <spring:message code="pitch_club" />
-                                <span class="h4"> ${pitch.club.name}</span>
+                                <a class="h4 link-text" href="<c:url value="/club/${pitch.club.clubid}" /> ">${pitch.club.name}</a>
                             </div>
                             <div class="h4 pitch-info-label" style="padding: 5px 0">
                                 <spring:message code="pitch_sport"/>
@@ -88,7 +88,7 @@
                                 </div>
                                 <div class="form-field">
                                     <form:label path="maxParticipants"><spring:message code="event_max_participants"/> *</form:label>
-                                    <form:input  cssClass="form-control input-number" min="0" max="99" type="number" path="maxParticipants"/>
+                                    <form:input  cssClass="form-control input-number" min="1" max="99" type="number" path="maxParticipants"/>
                                     <form:errors path="maxParticipants" cssClass="form-error" element="span"/>
                                 </div>
                                 <div class="form-field flex-space-between">
