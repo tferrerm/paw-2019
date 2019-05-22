@@ -1,6 +1,7 @@
 <%@	taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@	taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 	<head>
         <script
@@ -12,6 +13,9 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
+		<title>
+			<spring:message code="sport_matcher" /> - <spring:message code="events" />
+		</title>
 	</head>
 
 	<body>

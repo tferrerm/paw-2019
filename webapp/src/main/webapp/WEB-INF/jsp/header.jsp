@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
-    <title>Title</title>
+    <title><spring:message code="sport_matcher" /></title>
 </head>
 <body>
     <div class="header">
