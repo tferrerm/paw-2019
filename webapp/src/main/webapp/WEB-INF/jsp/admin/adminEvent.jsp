@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt" %>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 	<head>
@@ -35,7 +36,7 @@
 						<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
 					</div>
 					<div class="description-body">
-						<div>
+						<div class="margin-right">
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="organizer"/> </span>
 								<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
@@ -51,7 +52,17 @@
 							<div class="double-box">
 								<div class="description-item">
 									<span class="event-info-label"><spring:message code="date"/></span>
-									<span>${event.startsAt}</span>
+									<span class="just-row">
+										<fmt:timeZone value="AR">
+											<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+											<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+										</fmt:timeZone>
+										<span class="date-separator">-</span>
+										<fmt:timeZone value="AR">
+											<fmt:parseDate value="${event.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+											<fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+										</fmt:timeZone>
+									</span>
 								</div>
 								<div class="description-item">
 									<span class="event-info-label"><spring:message code="vacancies"/></span>
@@ -64,7 +75,7 @@
 							<span class="event-info-label"><spring:message code="participants"/></span>
 							<ul>
 							    <c:forEach var="user" items="${participants}">
-					              <a href="<c:url value="/user/${user.userid}" /> "><p class="event-participants">${user.firstname} ${user.lastname}</p></a>
+					              	<p class="event-participants">${user.firstname} ${user.lastname}</p>
 					            </c:forEach>
 				          	</ul>
 						</div>
