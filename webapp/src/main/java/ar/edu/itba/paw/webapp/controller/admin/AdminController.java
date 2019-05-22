@@ -1,8 +1,5 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
@@ -34,7 +33,6 @@ public class AdminController extends BaseController {
 	private EventService es;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
-	private static final String TIME_ZONE = "America/Buenos_Aires";
 
 	@RequestMapping(value = "/")
 	public ModelAndView adminHome() {
@@ -59,25 +57,26 @@ public class AdminController extends BaseController {
 		mav.addObject("queryString", queryString);
 		mav.addObject("sports", Sport.values());
 		mav.addObject("lastPageNum", es.countFutureEventPages());
-		
-		Integer vacanciesNum = null;
-        if(vacancies != null)
-        	vacanciesNum = Integer.valueOf(vacancies);
-        Instant dateInst = null;
-        if(date != null && !date.isEmpty())
-        	dateInst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
         
-		List<Event> events = es.findByWithInscriptions(true, Optional.empty(), Optional.ofNullable(clubName), 
-        		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
-        		Optional.ofNullable(vacanciesNum), Optional.ofNullable(dateInst), pageNum);
-		mav.addObject("events", events);
-		mav.addObject("eventQty", events.size());
-		
-		Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
-				Optional.ofNullable(clubName), Optional.ofNullable(sport), 
-				Optional.ofNullable(organizer), Optional.ofNullable(vacanciesNum),
-				Optional.ofNullable(dateInst));
-        mav.addObject("totalEventQty", totalEventQty);
+		try {
+			List<Event> events = es.findByWithInscriptions(true, Optional.empty(), Optional.ofNullable(clubName), 
+	        		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
+	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
+			mav.addObject("events", events);
+			mav.addObject("eventQty", events.size());
+			
+			Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
+					Optional.ofNullable(clubName), Optional.ofNullable(sport), 
+					Optional.ofNullable(organizer), Optional.ofNullable(vacancies),
+					Optional.ofNullable(date));
+	        mav.addObject("totalEventQty", totalEventQty);
+		} catch(InvalidDateFormatException e) {
+			mav.addObject("invalid_date_format", true);
+			return mav;
+		} catch(InvalidVacancyNumberException e) {
+        	mav.addObject("invalid_number_format", true);
+        	return mav;
+        }
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
 		return mav;

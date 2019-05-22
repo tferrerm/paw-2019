@@ -52,11 +52,21 @@
 							<form:label path="vacancies"><spring:message code="vacancies" /></form:label>
 							<form:input class="form-control" type="text" path="vacancies"/>
 							<form:errors path="vacancies" cssClass="form-error" element="p"/>
+							<c:if test="${invalid_number_format == true}">
+                <span class="form-error">
+                  <spring:message code="invalid_number_format"/>
+                </span>
+              </c:if>
 						</div>
 						<div>
 							<form:label path="date"><spring:message code="date" /></form:label>
 							<form:input class="form-control" type="date" path="date"/>
 							<form:errors path="date" cssClass="form-error" element="p"/>
+							<c:if test="${invalid_date_format == true}">
+                <span class="form-error">
+                  <spring:message code="invalid_date_format"/>
+                </span>
+              </c:if>
 						</div>
 						<div>
 							<button class="btn btn-primary" type="submit"><spring:message code="filter" /></button>

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +28,7 @@ import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InvalidDateFormatException;
+import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -56,7 +55,6 @@ public class EventController extends BaseController {
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
 	private static final int MAX_EVENTS_PER_DAY = 14;
-	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@Autowired
 	private EventService es;
@@ -206,10 +204,7 @@ public class EventController extends BaseController {
     	String sportName = "";
     	if(sport != null)
     		sportName = sport.toString();
-    	Instant dateInst = null;
-    	if(date != null && !date.isEmpty()) {
-    		dateInst = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-    	}
+
         String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("page", pageNum);
@@ -217,21 +212,25 @@ public class EventController extends BaseController {
         mav.addObject("sports", Sport.values());
         mav.addObject("lastPageNum", es.countFutureEventPages());
         
-        Integer vacanciesNum = null;
-        if(vacancies != null)
-        	vacanciesNum = Integer.valueOf(vacancies);
-        
-        List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
-        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
-        		Optional.ofNullable(vacanciesNum), Optional.ofNullable(dateInst), pageNum);
-
-        mav.addObject("events", events);
-        mav.addObject("eventQty", events.size());
-        
-        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
-        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
-        		Optional.ofNullable(vacanciesNum), Optional.ofNullable(dateInst));
-        mav.addObject("totalEventQty", totalEventQty);
+        try {
+	        List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
+	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
+	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
+	
+	        mav.addObject("events", events);
+	        mav.addObject("eventQty", events.size());
+	        
+	        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
+	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
+	        		Optional.ofNullable(vacancies), Optional.ofNullable(date));
+	        mav.addObject("totalEventQty", totalEventQty);
+        } catch(InvalidDateFormatException e) {
+        	mav.addObject("invalid_date_format", true);
+        	return mav;
+        } catch(InvalidVacancyNumberException e) {
+        	mav.addObject("invalid_number_format", true);
+        	return mav;
+        }
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         
