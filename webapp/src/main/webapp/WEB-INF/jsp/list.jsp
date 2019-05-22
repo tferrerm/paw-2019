@@ -81,8 +81,8 @@
                     </div>
                     <c:forEach var="event" items="${events}">
                         <div class="custom-row">
-                            <div>${event.name}</div>
-                            <div>${event.pitch.club.name}</div>
+                            <div class="home-header">${event.name}</div>
+                            <div class="home-header">${event.pitch.club.name}</div>
                             <div><spring:message code="${event.pitch.sport}"/></div>
                             <div>${event.maxParticipants - event.inscriptions}</div>
                             <div>
