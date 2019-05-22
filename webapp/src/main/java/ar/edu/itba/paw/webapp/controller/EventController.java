@@ -36,6 +36,7 @@ import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -43,6 +44,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
+import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewEventForm;
 
@@ -64,6 +66,9 @@ public class EventController extends BaseController {
 
     @Autowired
     private PitchService ps;
+    
+    @Autowired
+    private UserService us;
 
 	@RequestMapping("/home")
 	public ModelAndView home()	{
@@ -186,10 +191,11 @@ public class EventController extends BaseController {
     public ModelAndView kickUserFromEvent(
     		@PathVariable("eventId") long eventid,
     		@PathVariable("userId") long kickedUserId)
-    				throws UserNotAuthorizedException, EventNotFoundException {
+    		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException {
     	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
     	es.kickFromEvent(loggedUser(), kickedUserId, event);
-    	ems.youWereKicked(loggedUser(), event, LocaleContextHolder.getLocale());
+    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
     	return new ModelAndView("redirect:/event/" + eventid);
     }
 
@@ -357,6 +363,11 @@ public class EventController extends BaseController {
 	
 	@ExceptionHandler({ EventNotFinishedException.class })
 	private ModelAndView eventNotFinished() {
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler({ UserNotFoundException.class })
+	private ModelAndView userNotFound() {
 		return new ModelAndView("404");
 	}
 
