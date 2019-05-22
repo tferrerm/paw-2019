@@ -2,7 +2,7 @@
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
   <head>
-    <link rel="stylesheet"  href="<c:url  value="/css/style.css"/>"  />
+    <link rel="stylesheet" href="<c:url  value="/css/style.css"/>"  />
   </head>
   <body>
     <%@ include file="header.jsp" %>

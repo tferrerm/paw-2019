@@ -5,10 +5,13 @@
     <link rel="stylesheet" href="<c:url value="/css/style.css"/>"/>
   </head>
   <body>
-    <h1>Something went wrong!</h1>
-    <span class="just-row">
-      <span><spring:message code="click_oops"/></span>
-      <a class="link-text" href="<c:url value='/' />"><span class="link-text"><spring:message code="here"/></span></a>
-    </span>
+    <%@ include file="header.jsp" %>
+    <div class="http-error">
+      <h2><spring:message code="oops"/></h2>
+      <span class="just-row">
+        <span class="notice"><spring:message code="click_oops"/> <br/></span>
+        <a class="link-text" href="<c:url value='/' />"><span class="link-text notice"><spring:message code="here"/></span></a>
+      </span>
+    </div>
   </body>
 </html>
