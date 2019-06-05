@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -33,7 +32,6 @@ import ar.edu.itba.paw.persistence.rowmapper.EventRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.InscriptionsRowMapper;
 import ar.edu.itba.paw.persistence.rowmapper.UserRowMapper;
 
-@Repository
 public class EventJdbcDao implements EventDao {
 	
 	private JdbcTemplate jdbcTemplate;

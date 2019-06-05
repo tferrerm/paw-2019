@@ -2,15 +2,48 @@ package ar.edu.itba.paw.model;
 
 import java.time.Instant;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_userid_seq")
+	@SequenceGenerator(sequenceName = "users_userid_seq", name = "users_userid_seq", allocationSize = 1)
+	@Column(name = "userid")
 	private long userid;
+	
+	@Column(length = 100, nullable = false, unique = true)
 	private String username;
+	
+	@Column(length = 100, nullable = false)
 	private String firstname;
+	
+	@Column(length = 100, nullable = false)
 	private String lastname;
+	
+	@Column(length = 100, nullable = false)
 	private String password;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(length = 50, nullable = false)
 	private Role role;
+	
+	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
+	
+	/*package*/ User() {
+		
+	}
 	
 	public User(long userid, String username, String firstname, String lastname, 
 			String password, Role role, Instant createdAt) {

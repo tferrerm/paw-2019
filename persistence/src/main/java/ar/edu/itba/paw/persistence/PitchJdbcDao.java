@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.PitchDao;
 import ar.edu.itba.paw.model.Club;
@@ -21,7 +20,6 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.persistence.rowmapper.PitchRowMapper;
 
-@Repository
 public class PitchJdbcDao implements PitchDao {
 	
 	private JdbcTemplate jdbcTemplate;
