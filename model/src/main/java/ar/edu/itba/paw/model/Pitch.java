@@ -47,6 +47,7 @@ public class Pitch {
 	}
 	
 	public Pitch(long pitchid, String name, Sport sport, Instant createdAt) {
+		super();
 		this.pitchid = pitchid;
 		this.name = name;
 		this.sport = sport;

@@ -34,6 +34,7 @@ public class Club {
 	}
 	
 	public Club(long clubid, String name, String location, Instant createdAt) {
+		super();
 		this.clubid = clubid;
 		this.name = name;
 		this.location = location;

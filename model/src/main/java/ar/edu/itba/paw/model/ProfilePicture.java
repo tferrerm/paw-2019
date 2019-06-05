@@ -31,6 +31,7 @@ public class ProfilePicture {
 	}
 	
 	public ProfilePicture(long profilePictureId, long userid) {
+		super();
 		this.profilePictureId = profilePictureId;
 		this.userid = userid;
 	}

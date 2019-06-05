@@ -54,6 +54,7 @@ public class Event {
 	
 	public Event(long eventId, String name, Pitch pitch, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
+		super();
 		this.eventId = eventId;
 		this.name = name;
 		this.pitch = pitch;

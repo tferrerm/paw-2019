@@ -53,6 +53,7 @@ public class User {
 	
 	public User(long userid, String username, String firstname, String lastname, 
 			String password, Role role) {
+		super();
 		this.userid = userid;
 		this.username = username;
 		this.firstname = firstname;

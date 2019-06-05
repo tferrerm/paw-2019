@@ -31,6 +31,7 @@ public class PitchPicture {
 	}
 	
 	public PitchPicture(long pitchPictureId, long pitchid) {
+		super();
 		this.pitchPictureId = pitchPictureId;
 		this.pitchid = pitchid;
 	}
