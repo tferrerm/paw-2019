@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.time.Instant;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -36,6 +39,12 @@ public class Pitch {
 	
 	@Column(name = "pitch_created_at", nullable = false)
 	private Instant createdAt;
+	
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "pitch")
+	private List<Event> pitchEvents;
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "belongsTo")
+	private PitchPicture pitchPicture;
 	
 	/*package*/ Pitch() {
 		
@@ -88,6 +97,14 @@ public class Pitch {
 
 	public Instant getCreatedAt() {
 		return createdAt;
+	}
+	
+	public List<Event> getPitchEvents() {
+		return pitchEvents;
+	}
+	
+	public PitchPicture getPitchPicture() {
+		return pitchPicture;
 	}
 
 }

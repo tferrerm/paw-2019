@@ -21,7 +21,7 @@ public class PitchPicture {
 	private long pitchPictureId;
 	
 	@OneToOne(fetch = FetchType.EAGER, optional = false)
-	private long pitchid;
+	private Pitch belongsTo;
 	
 	@Column(name = "data", nullable = false)
 	private byte[] data;
@@ -30,28 +30,28 @@ public class PitchPicture {
 		
 	}
 	
-	public PitchPicture(long pitchPictureId, long pitchid) {
+	public PitchPicture(long pitchPictureId, Pitch belongsTo) {
 		super();
 		this.pitchPictureId = pitchPictureId;
-		this.pitchid = pitchid;
+		this.belongsTo = belongsTo;
 	}
 	
-	public PitchPicture(long pitchPictureId, long pitchid, byte[] data) {
-		this(pitchPictureId, pitchid);
+	public PitchPicture(long pitchPictureId, Pitch belongsTo, byte[] data) {
+		this(pitchPictureId, belongsTo);
 		this.data = data;
 	}
 	
 	@Override
 	public String toString() {
-		return "Pitch Picture id: " + pitchPictureId + " Pitch id: " + pitchid;
+		return "Pitch Picture id: " + pitchPictureId + " Pitch id: " + belongsTo.getPitchid();
 	}
 
 	public long getPitchPictureId() {
 		return pitchPictureId;
 	}
 
-	public long getPitchid() {
-		return pitchid;
+	public Pitch getBelongsTo() {
+		return belongsTo;
 	}
 
 	public byte[] getData() {

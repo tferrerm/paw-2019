@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.time.Instant;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -47,6 +49,9 @@ public class Event {
 	
 	@Column(name = "event_created_at", nullable = false)
 	private Instant createdAt;
+	
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "inscriptions")
+	private List<User> participants;
 	
 	/*package*/ Event() {
 		
@@ -135,6 +140,10 @@ public class Event {
 
 	public Instant getCreatedAt() {
 		return createdAt;
+	}
+	
+	public List<User> getParticipants() {
+		return participants;
 	}
 
 }

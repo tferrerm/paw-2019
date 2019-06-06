@@ -1,14 +1,22 @@
 package ar.edu.itba.paw.model;
 
 import java.time.Instant;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -40,6 +48,19 @@ public class User {
 	
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
+	
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "owner")
+	private List<Event> ownedEvents;
+	
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "events_users",
+			joinColumns = { @JoinColumn(name = "userid") },
+			inverseJoinColumns = { @JoinColumn(name = "eventid") })
+	private List<Event> inscriptions;
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "addedBy")
+	private ProfilePicture profilePicture;
 	
 	/*package*/ User() {
 		
@@ -108,6 +129,18 @@ public class User {
 	
 	public Instant getCreatedAt() {
 		return createdAt;
+	}
+	
+	public List<Event> getOwnedEvents() {
+		return ownedEvents;
+	}
+	
+	public List<Event> getInscriptions() {
+		return inscriptions;
+	}
+	
+	public ProfilePicture getProfilePicture() {
+		return profilePicture;
 	}
 
 }

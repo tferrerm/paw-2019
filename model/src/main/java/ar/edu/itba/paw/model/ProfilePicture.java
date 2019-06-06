@@ -21,7 +21,7 @@ public class ProfilePicture {
 	private long profilePictureId;
 	
 	@OneToOne(fetch = FetchType.EAGER, optional = false)
-	private long userid;
+	private User addedBy;
 	
 	@Column(name = "data", nullable = false)
 	private byte[] data;
@@ -30,28 +30,28 @@ public class ProfilePicture {
 		
 	}
 	
-	public ProfilePicture(long profilePictureId, long userid) {
+	public ProfilePicture(long profilePictureId, User addedBy) {
 		super();
 		this.profilePictureId = profilePictureId;
-		this.userid = userid;
+		this.addedBy = addedBy;
 	}
 	
-	public ProfilePicture(long profilePictureId, long userid, byte[] data) {
-		this(profilePictureId, userid);
+	public ProfilePicture(long profilePictureId, User addedBy, byte[] data) {
+		this(profilePictureId, addedBy);
 		this.data = data;
 	}
 	
 	@Override
 	public String toString() {
-		return "Profile Picture id: " + profilePictureId + " User id: " + userid;
+		return "Profile Picture id: " + profilePictureId + " User id: " + addedBy.getUserid();
 	}
 
 	public long getProfilePictureId() {
 		return profilePictureId;
 	}
 
-	public long getUserid() {
-		return userid;
+	public User getAddedBy() {
+		return addedBy;
 	}
 
 	public byte[] getData() {

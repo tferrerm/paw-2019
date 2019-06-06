@@ -1,12 +1,15 @@
 package ar.edu.itba.paw.model;
 
 import java.time.Instant;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -28,6 +31,9 @@ public class Club {
 	
 	@Column(name = "club_created_at", nullable = false)
 	private Instant createdAt;
+	
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "club")
+	private List<Pitch> clubPitches;
 	
 	/*package*/ Club() {
 		
@@ -71,6 +77,10 @@ public class Club {
 
 	public Instant getCreatedAt() {
 		return createdAt;
+	}
+	
+	public List<Pitch> getClubPitches() {
+		return clubPitches;
 	}
 
 }
