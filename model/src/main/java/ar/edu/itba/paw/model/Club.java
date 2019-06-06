@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,6 +30,7 @@ public class Club {
 	@Column(name = "location", length = 100, nullable = false)
 	private String location;
 	
+	@Convert(converter = InstantTimestampConverter.class)
 	@Column(name = "club_created_at", nullable = false)
 	private Instant createdAt;
 	
