@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -49,6 +50,11 @@ public class User {
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 	
+	@PrePersist
+	protected void onCreate() {
+		createdAt = Instant.now();
+	}
+	
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "owner")
 	private List<Event> ownedEvents;
 	
@@ -66,22 +72,33 @@ public class User {
 		
 	}
 	
-	public User(long userid, String username, String firstname, String lastname, 
+	public User(String username, String firstname, String lastname, 
 			String password, Role role, Instant createdAt) {
-		this(userid, username, firstname, lastname, password, role);
-		this.createdAt = createdAt;
-	}
-	
-	public User(long userid, String username, String firstname, String lastname, 
-			String password, Role role) {
 		super();
-		this.userid = userid;
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.password = password;
 		this.role = role;
+		this.createdAt = createdAt;
 	}
+	
+	public User(long userid, String username, String firstname, String lastname, 
+			String password, Role role, Instant createdAt) {
+		this(username, firstname, lastname, password, role, createdAt);
+		this.userid = userid;
+	}
+	
+//	public User(long userid, String username, String firstname, String lastname, 
+//			String password, Role role) {
+//		super();
+//		this.userid = userid;
+//		this.username = username;
+//		this.firstname = firstname;
+//		this.lastname = lastname;
+//		this.password = password;
+//		this.role = role;
+//	}
 	
 	@Override
 	public String toString() {

@@ -20,9 +20,9 @@ public class ProfilePictureJdbcDao implements ProfilePictureDao {
 	private final SimpleJdbcInsert jdbcInsert;
 	private static final int MAX_ROWS = 1;
 	
-	private static final RowMapper<ProfilePicture> ROW_MAPPER = (rs, rowNum) ->
-	new ProfilePicture(rs.getLong("profile_picture_id"), rs.getLong("userid"),
-			rs.getBytes("data"));
+	//private static final RowMapper<ProfilePicture> ROW_MAPPER = (rs, rowNum) ->
+	//new ProfilePicture(rs.getLong("profile_picture_id"), rs.getLong("userid"),
+	//		rs.getBytes("data"));
 	
 	@Autowired
 	public ProfilePictureJdbcDao(final DataSource ds) {
@@ -35,9 +35,9 @@ public class ProfilePictureJdbcDao implements ProfilePictureDao {
 
 	@Override
 	public Optional<ProfilePicture> findByUserId(long userid) {
-		return jdbcTemplate.query("SELECT * FROM profile_pictures WHERE userid = ?", ROW_MAPPER, userid)
-				.stream()
-				.findFirst();
+		return null;//jdbcTemplate.query("SELECT * FROM profile_pictures WHERE userid = ?", ROW_MAPPER, userid)
+				//.stream()
+				//.findFirst();
 	}
 
 	@Override

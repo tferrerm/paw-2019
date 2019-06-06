@@ -20,9 +20,9 @@ public class PitchPictureJdbcDao implements PitchPictureDao {
 	private final SimpleJdbcInsert jdbcInsert;
 	private static final int MAX_ROWS = 1;
 	
-	private static final RowMapper<PitchPicture> ROW_MAPPER = (rs, rowNum) ->
-	new PitchPicture(rs.getLong("pitch_picture_id"), rs.getLong("pitchid"),
-			rs.getBytes("data"));
+	//private static final RowMapper<PitchPicture> ROW_MAPPER = (rs, rowNum) ->
+	//new PitchPicture(rs.getLong("pitch_picture_id"), rs.getLong("pitchid"),
+	//		rs.getBytes("data"));
 	
 	@Autowired
 	public PitchPictureJdbcDao(final DataSource ds) {
@@ -35,9 +35,9 @@ public class PitchPictureJdbcDao implements PitchPictureDao {
 
 	@Override
 	public Optional<PitchPicture> findByPitchId(long pitchid) {
-		return jdbcTemplate.query("SELECT * FROM pitch_pictures WHERE pitchid = ?", ROW_MAPPER, pitchid)
-				.stream()
-				.findFirst();
+		return null;//jdbcTemplate.query("SELECT * FROM pitch_pictures WHERE pitchid = ?", ROW_MAPPER, pitchid)
+				//.stream()
+				//.findFirst();
 	}
 
 	@Override
