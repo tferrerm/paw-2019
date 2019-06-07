@@ -34,17 +34,17 @@ public class ClubHibernateDao implements ClubDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Club> findAll(int page) {
-		Query idQuery = em.createNativeQuery("SELECT clubid FROM clubs;");
+		Query idQuery = em.createQuery("SELECT clubid FROM Club ");
 		idQuery.setFirstResult((page - 1) * MAX_ROWS);
 		idQuery.setMaxResults(MAX_ROWS);
-		final List<Long> ids = (List<Long>) idQuery.getResultList();
+		final List<Long> ids = idQuery.getResultList();
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
 		Root<Club> from = cq.from(Club.class);
 		
-		final TypedQuery<Club> query = em.createQuery(cq.select(from).where(
-				cb.isMember(ids, from.get("clubid"))).distinct(true)
+		final TypedQuery<Club> query = em.createQuery(
+				cq.select(from).where(from.get("clubid").in(ids)).distinct(true)
 			);
 		
 		return query.getResultList();
