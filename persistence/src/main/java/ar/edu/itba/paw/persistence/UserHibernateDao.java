@@ -36,8 +36,11 @@ public class UserHibernateDao implements UserDao {
 
 	@Override
 	public Optional<Integer> countVotesReceived(long userid) {
-		// TODO Auto-generated method stub
-		return null;
+		/*final TypedQuery<Integer> query = em.createQuery("SELECT sum(")
+		return jdbcTemplate.query("SELECT sum(vote) "
+				+ " FROM events_users WHERE eventid IN "
+				+ " (SELECT eventid FROM events WHERE userid = ?)", (rs, rowNum) -> rs.getInt(1), userid)
+				.stream().findFirst();*/
 	}
 
 	@Override

@@ -50,6 +50,14 @@ public class Pitch {
 		
 	}
 	
+	public Pitch(Club club, String name, Sport sport, Instant createdAt) {
+		super();
+		this.club = club;
+		this.name = name;
+		this.sport = sport;
+		this.createdAt = createdAt;
+	}
+	
 	public Pitch(long pitchid, Club club, String name, Sport sport, Instant createdAt) {
 		this(pitchid, name, sport, createdAt);
 		this.club = club;
