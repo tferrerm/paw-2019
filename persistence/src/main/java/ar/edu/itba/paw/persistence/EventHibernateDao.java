@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.persistence;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
@@ -59,17 +64,37 @@ public class EventHibernateDao implements EventDao {
 				+ " WHERE u.userid = :userid AND e.startsAt > :now ORDER BY e.startsAt ASC");
 		
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
-		query.setParameter("now", Instant.now());
+		query.setParameter("now", Timestamp.from(Instant.now()));
 		query.setParameter("userid", userid);
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> findPastUserInscriptions(long userid, int pageNum) {
-		// TODO Auto-generated method stub
-		return null;
+		Query idQuery = em.createNativeQuery("SELECT eventid FROM events ");
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		final List<Long> ids = idQuery.getResultList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
+		
+		/*StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
+				+ " NATURAL JOIN users NATURAL JOIN clubs) AS t "
+				+ " WHERE EXISTS (SELECT eventid FROM events_users "
+				+ " WHERE eventid = t.eventid AND userid = ?) AND t.starts_at "
+				+ " <= ? ORDER BY t.starts_at DESC LIMIT ? OFFSET ?");*/
+		
 	}
 
 	@Override

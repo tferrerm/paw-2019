@@ -34,7 +34,7 @@ public class ClubHibernateDao implements ClubDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Club> findAll(int page) {
-		Query idQuery = em.createQuery("SELECT clubid FROM Club ");
+		Query idQuery = em.createNativeQuery("SELECT clubid FROM clubs ");
 		idQuery.setFirstResult((page - 1) * MAX_ROWS);
 		idQuery.setMaxResults(MAX_ROWS);
 		final List<Long> ids = idQuery.getResultList();
