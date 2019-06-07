@@ -27,7 +27,7 @@ public class ProfilePictureHibernateDao implements ProfilePictureDao {
 
 	@Override
 	public void create(User user, byte[] data) {
-		final ProfilePicture pp = new ProfilePicture(user);
+		final ProfilePicture pp = new ProfilePicture(user, data);
 		em.persist(pp);
 	}
 

@@ -69,7 +69,7 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public int getPageInitialClubIndex(int pageNum) {
-		return 1;
+		return (pageNum -1) * MAX_ROWS + 1;
 	}
 
 	@Override

@@ -7,7 +7,11 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
@@ -29,9 +33,24 @@ public class PitchHibernateDao implements PitchDao {
 		return Optional.of(em.find(Pitch.class, pitchid));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
-		return Collections.emptyList();
+		Query idQuery = em.createNativeQuery("SELECT pitchid FROM pitches WHERE clubid = :clubid ");
+		idQuery.setParameter("clubid", clubid);
+		idQuery.setFirstResult((page - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		final List<Long> ids = idQuery.getResultList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Pitch> cq = cb.createQuery(Pitch.class);
+		Root<Pitch> from = cq.from(Pitch.class);
+		
+		final TypedQuery<Pitch> query = em.createQuery(
+				cq.select(from).where(from.get("pitchid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
 	}
 
 	@Override
