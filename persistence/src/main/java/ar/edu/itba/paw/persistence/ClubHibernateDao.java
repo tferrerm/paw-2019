@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
@@ -27,19 +29,22 @@ public class ClubHibernateDao implements ClubDao {
 		return Optional.of(em.find(Club.class, clubid));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Club> findAll(int page) {
-		Query idQuery = em.createNativeQuery("SELECT clubid FROM Club");
+		Query idQuery = em.createNativeQuery("SELECT clubid FROM clubs;");
 		idQuery.setFirstResult((page - 1) * MAX_ROWS);
 		idQuery.setMaxResults(MAX_ROWS);
 		final List<Long> ids = (List<Long>) idQuery.getResultList();
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Club> q = cb.createQuery(Club.class);
-		Root<Club> from = q.from(Club.class);
-		from.fetch(""); // ALGO
-		final TypedQuery<Club> query = em.createQuery(
-				q.select(from).where(cb.isMember(ids, from.get("clubid").in(ids))).distinct()
+		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
+		Root<Club> from = cq.from(Club.class);
+		
+		final TypedQuery<Club> query = em.createQuery(cq.select(from).where(
+				cb.isMember(ids, from.get("clubid"))).distinct(true)
 			);
+		
 		return query.getResultList();
 	}
 
