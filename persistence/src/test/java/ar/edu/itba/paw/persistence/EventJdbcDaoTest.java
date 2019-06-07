@@ -55,7 +55,7 @@ public class EventJdbcDaoTest {
 	private static final long USERID = 1;
 	private static final String USERNAME = "test@test.test";
 	private static final String EVENTNAME = "event";
-	private static final User OWNER = new User(USERID, USERNAME, "first", "last", "12345678", Role.ROLE_USER);
+	private static final User OWNER = new User(USERNAME, "first", "last", "12345678", Role.ROLE_USER, Instant.now());
 	private static final long CLUBID = 1;
 	private static final Club CLUB = new Club(1, "club", "location", Instant.now());
 	private static final Pitch PITCH = new Pitch(1, CLUB, "pitch", Sport.TENNIS, Instant.now());

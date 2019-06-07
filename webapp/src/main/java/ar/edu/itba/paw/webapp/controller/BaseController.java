@@ -40,7 +40,7 @@ public class BaseController {
 		return user.get();
 	}
 	
-	@ExceptionHandler({ IllegalArgumentException.class })
+	/*@ExceptionHandler({ IllegalArgumentException.class })
 	private ModelAndView illegalIdOrPageNumber() {
 		return new ModelAndView("404");
 	}
@@ -53,6 +53,6 @@ public class BaseController {
     @ExceptionHandler({ Exception.class })
 	private ModelAndView generalExceptionHandler() {
 		return new ModelAndView("oops");
-	}
+	}*/
 
 }

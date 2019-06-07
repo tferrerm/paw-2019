@@ -4,6 +4,12 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -14,12 +20,18 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
+@Repository
 public class EventHibernateDao implements EventDao {
+	
+	private static final int MAX_ROWS = 10;
+	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
+	
+	@PersistenceContext
+	private EntityManager em;
 
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.of(em.find(Event.class, eventid));
 	}
 
 	@Override
@@ -30,14 +42,28 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public int countByOwner(boolean futureEvents, long userid) {
-		// TODO Auto-generated method stub
-		return 0;
+		StringBuilder queryString = new StringBuilder("SELECT count(*) FROM Event AS e "
+				+ " WHERE e.userid = :userid AND e.startsAt ");
+		queryString.append((futureEvents) ? " > :now " : " <= :now ");
+		
+		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
+		query.setParameter("now", Instant.now());
+		query.setParameter("userid", userid);
+		
+		return query.getSingleResult().intValue();
 	}
 
 	@Override
 	public List<Event> findFutureUserInscriptions(long userid) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder queryString = new StringBuilder("SELECT e FROM Event AS e JOIN e.participants AS u "
+				+ " WHERE u.userid = :userid AND e.startsAt > :now ORDER BY e.startsAt ASC");
+		
+		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
+		query.setParameter("now", Instant.now());
+		query.setParameter("userid", userid);
+		query.setMaxResults(MAX_EVENTS_PER_WEEK);
+		
+		return query.getResultList();
 	}
 
 	@Override
@@ -48,7 +74,16 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public Integer countByUserInscriptions(boolean futureEvents, long userid) {
-		// TODO Auto-generated method stub
+		/*StringBuilder queryString = new StringBuilder("SELECT count(*) "
+				+ " FROM Event AS e JOIN e.participants AS u "
+				+ " WHERE u.userid = :userid AND e.starts_at > :now ORDER BY e.starts_at ASC");
+		
+		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
+		query.setParameter("now", Instant.now());
+		query.setParameter("userid", userid);
+		query.setMaxResults(MAX_EVENTS_PER_WEEK);
+		
+		return query.getResultList();*/
 		return null;
 	}
 
@@ -151,13 +186,13 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public Optional<Sport> getFavoriteSport(long userid) {
 		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Club> getFavoriteClub(long userid) {
 		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
@@ -175,13 +210,13 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public Optional<Integer> getVoteBalance(long eventid) {
 		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Integer> getUserVote(long eventid, long userid) {
 		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
 	}
 
 	@Override

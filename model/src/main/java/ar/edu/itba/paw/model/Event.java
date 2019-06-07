@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
@@ -28,9 +29,11 @@ public class Event {
 	private String name;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "userid")
 	private User owner;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "pitchid")
 	private Pitch pitch;
 	
 	@Column(length = 500, nullable = true)

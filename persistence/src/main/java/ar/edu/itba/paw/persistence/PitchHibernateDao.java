@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,11 +9,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.paw.interfaces.PitchDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 
+@Repository
 public class PitchHibernateDao implements PitchDao {
 	
 	private static final int MAX_ROWS = 10;
@@ -27,19 +31,19 @@ public class PitchHibernateDao implements PitchDao {
 
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
-		
+		return Collections.emptyList();
 	}
 
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport, Optional<String> location,
 			Optional<String> clubName, int page) {
-		
+		return Collections.emptyList();
 	}
 
 	@Override
 	public Integer countFilteredPitches(Optional<String> pitchName, Optional<String> sport, Optional<String> location,
 			Optional<String> clubName) {
-		
+		return 0;
 	}
 
 	@Override
@@ -61,7 +65,7 @@ public class PitchHibernateDao implements PitchDao {
 
 	@Override
 	public int getPageInitialPitchIndex(int pageNum) {
-		
+		return 1;
 	}
 
 	@Override

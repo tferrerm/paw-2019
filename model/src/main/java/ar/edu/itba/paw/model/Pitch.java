@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -28,6 +29,7 @@ public class Pitch {
 	private long pitchid;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "clubid")
 	private Club club;
 	
 	@Column(name = "pitchname", length = 100, nullable = false)

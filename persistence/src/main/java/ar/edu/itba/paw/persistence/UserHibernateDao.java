@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.persistence;
 
+import java.math.BigInteger;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -34,13 +37,16 @@ public class UserHibernateDao implements UserDao {
 		return query.getResultList().stream().findFirst();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Optional<Integer> countVotesReceived(long userid) {
-		/*final TypedQuery<Integer> query = em.createQuery("SELECT sum(")
-		return jdbcTemplate.query("SELECT sum(vote) "
-				+ " FROM events_users WHERE eventid IN "
-				+ " (SELECT eventid FROM events WHERE userid = ?)", (rs, rowNum) -> rs.getInt(1), userid)
-				.stream().findFirst();*/
+		Query votesQuery = em.createNativeQuery("SELECT sum(vote) FROM events_users "
+				+ " WHERE eventid IN (SELECT eventid FROM events WHERE userid = :userid);");
+		votesQuery.setParameter("userid", userid);
+		List<BigInteger> list = ((List<BigInteger>) votesQuery.getResultList());
+		if(list.isEmpty())
+			return Optional.empty();
+		return Optional.of(list.get(0).intValue());
 	}
 
 	@Override

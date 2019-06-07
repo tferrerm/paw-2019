@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,12 +11,14 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.model.Club;
 
+@Repository
 public class ClubHibernateDao implements ClubDao {
 	
 	private static final int MAX_ROWS = 10;
@@ -50,12 +52,12 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page) {
-		
+		return Collections.emptyList();
 	}
 
 	@Override
 	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
-		
+		return 0;
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public int getPageInitialClubIndex(int pageNum) {
-		
+		return 1;
 	}
 
 	@Override
@@ -78,7 +80,7 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public int countClubPages() {
-		TypedQuery<Integer> query = em.createQuery("SELECT count(*) FROM Club", Integer.class);
+		TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Club", Long.class);
 		int rows = query.getSingleResult().intValue();
 		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)
@@ -88,7 +90,8 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public int countPastEvents(long clubid) {
-		TypedQuery<Integer> query = em.createQuery("SELECT count(*) FROM Event AS e WHERE e.endsAt < :now AND e.pitch.club.clubid = :clubid", Integer.class);
+		TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Event AS e "
+				+ " WHERE e.endsAt < :now AND e.pitch.club.clubid = :clubid", Long.class);
 		query.setParameter("now", Instant.now());
 		query.setParameter("clubid", clubid);
 		return query.getSingleResult().intValue();

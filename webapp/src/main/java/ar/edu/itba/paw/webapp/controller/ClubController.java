@@ -66,10 +66,10 @@ public class ClubController extends BaseController {
         mav.addObject("lastPageNum", cs.countClubPages());
         mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
         
-        List<Club> clubs = cs.findBy(
+        List<Club> clubs = cs.findAll(1);/*cs.findBy(
 				Optional.ofNullable(clubName), 
         		Optional.ofNullable(location),
-        		pageNum);
+        		pageNum);*/
         mav.addObject("clubs", clubs);
         mav.addObject("clubQty", clubs.size());
         
