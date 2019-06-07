@@ -26,7 +26,7 @@
                 <div class="profile-title">
                     <h2><spring:message code="choose_tournament"/></h2>
                 </div>
-                <span class="help-message notice"><spring:message code="event_list_help"/></span>
+                <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
     			<div class="tbl">
     				<div class="table-header">
                         <c:url value='/tournaments/filter' var="postPath"/>
@@ -79,23 +79,35 @@
                         </form:form>
 
                     </div>
-                    <c:forEach var="event" items="${events}">
-                        <div class="custom-row">
-                            <div>${event.name}</div>
-                            <div>${event.pitch.club.name}</div>
-                            <div><spring:message code="${event.pitch.sport}"/></div>
-                            <div>${event.maxParticipants - event.inscriptions}</div>
-                            <div>
-    							<fmt:timeZone value="AR">
-    								<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-    								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-    							</fmt:timeZone>
-                            </div>
-                            <div>
-                                <a href="<c:url value="/event/${event.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
-                            </div>
+<%--                    <c:forEach var="tournament" items="${tournaments}">--%>
+<%--                        <div class="custom-row">--%>
+<%--                            <div>${tournament.name}</div>--%>
+<%--                            <div>${tournament.pitch.club.name}</div>--%>
+<%--                            <div><spring:message code="${tournament.pitch.sport}"/></div>--%>
+<%--                            <div>${tournament.maxParticipants - tournament.inscriptions}</div>--%>
+<%--                            <div>--%>
+<%--    							<fmt:timeZone value="AR">--%>
+<%--    								<fmt:parseDate value="${tournament.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />--%>
+<%--    								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />--%>
+<%--    							</fmt:timeZone>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <a href="<c:url value="/event/${tournament.eventId}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </c:forEach>--%>
+                    <div class="custom-row">
+                        <div>Torneo</div>
+                        <div>HARDCODED</div>
+                        <div>HARDCODED</div>
+                        <div>HARDCODED</div>
+                        <div>
+                            HARDCODED
                         </div>
-                    </c:forEach>
+                        <div>
+                            <a href="<c:url value="/tournament/1"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_tournament"/></button></a>
+                        </div>
+                    </div>
     			</div>
     			<div class="table-navigator">
                     <c:choose>

@@ -36,6 +36,13 @@ public class TournamentController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TournamentController.class);
 
+    @RequestMapping(value = "/tournament/{tournamentId}")
+    public ModelAndView retrieveTournaments(@PathVariable long tournamentId) {
+        ModelAndView mav = new ModelAndView("tournament");
+        mav.addObject("tournament",  null);
+        return mav;
+    }
+
     @RequestMapping(value = "/tournaments/{pageNum}")
     public ModelAndView retrieveTournaments(@ModelAttribute("tournamentFiltersForm") final FiltersForm form,
                                          @PathVariable("pageNum") final int pageNum,
@@ -113,6 +120,13 @@ public class TournamentController extends BaseController {
         	strBuilder.deleteCharAt(strBuilder.length()-1);
         }
         return strBuilder.toString();
+    }
+
+    @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join")
+    public ModelAndView joinTeam(@PathVariable long tournamentId, @PathVariable long teamId) {
+        ModelAndView mav = new ModelAndView("tournament");
+        mav.addObject("tournament",  null);
+        return mav;
     }
 
 	@ExceptionHandler({ EventNotFoundException.class })
