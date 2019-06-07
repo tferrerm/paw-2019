@@ -36,7 +36,7 @@ public class ClubHibernateDao implements ClubDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Club> q = cb.createQuery(Club.class);
 		Root<Club> from = q.from(Club.class);
-		from.fetch("");
+		from.fetch(""); // ALGO
 		final TypedQuery<Club> query = em.createQuery(
 				q.select(from).where(cb.isMember(ids, from.get("clubid").in(ids))).distinct()
 			);
