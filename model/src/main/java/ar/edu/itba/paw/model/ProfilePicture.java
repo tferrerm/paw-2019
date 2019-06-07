@@ -32,14 +32,13 @@ public class ProfilePicture {
 		
 	}
 	
-	public ProfilePicture(long profilePictureId, User addedBy) {
+	public ProfilePicture(User addedBy) {
 		super();
-		this.profilePictureId = profilePictureId;
 		this.addedBy = addedBy;
 	}
 	
-	public ProfilePicture(long profilePictureId, User addedBy, byte[] data) {
-		this(profilePictureId, addedBy);
+	public ProfilePicture(User addedBy, byte[] data) {
+		this(addedBy);
 		this.data = data;
 	}
 	

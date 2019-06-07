@@ -11,6 +11,7 @@ import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PictureService;
 import ar.edu.itba.paw.interfaces.PitchPictureDao;
 import ar.edu.itba.paw.interfaces.PitchPictureService;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.PitchPicture;
 
 @Service
@@ -35,12 +36,12 @@ public class PitchPictureServiceImpl implements PitchPictureService {
 	
 	@Transactional
 	@Override
-	public void create(long pitchid, byte[] data) throws PictureProcessingException {
+	public void create(Pitch pitch, byte[] data) throws PictureProcessingException {
 		if(data.length == 0)
 			return;
 		try {
 			byte[] convertedPicture = ps.convert(data, MAX_WIDTH, MAX_HEIGHT);
-			ppd.create(pitchid, convertedPicture);
+			ppd.create(pitch, convertedPicture);
 		} catch(IllegalArgumentException | IOException e) {
 			throw new PictureProcessingException("The pitch picture could not be processed. " + 
 					e.getMessage());

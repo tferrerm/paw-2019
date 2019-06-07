@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 			throws UserAlreadyExistsException, PictureProcessingException {
 		User user = ud.create(username.toLowerCase(), firstname, lastname, password, role);
 		if(picture != null) {
-			pps.create(user.getUserid(), picture);
+			pps.create(user, picture);
 		}
 		return user;
 	}

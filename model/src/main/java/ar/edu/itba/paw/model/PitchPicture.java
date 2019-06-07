@@ -32,14 +32,13 @@ public class PitchPicture {
 		
 	}
 	
-	public PitchPicture(long pitchPictureId, Pitch belongsTo) {
+	public PitchPicture(Pitch belongsTo) {
 		super();
-		this.pitchPictureId = pitchPictureId;
 		this.belongsTo = belongsTo;
 	}
 	
-	public PitchPicture(long pitchPictureId, Pitch belongsTo, byte[] data) {
-		this(pitchPictureId, belongsTo);
+	public PitchPicture(Pitch belongsTo, byte[] data) {
+		this(belongsTo);
 		this.data = data;
 	}
 	

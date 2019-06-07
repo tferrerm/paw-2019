@@ -12,6 +12,7 @@ import ar.edu.itba.paw.interfaces.PictureService;
 import ar.edu.itba.paw.interfaces.ProfilePictureDao;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.model.ProfilePicture;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class ProfilePictureServiceImpl implements ProfilePictureService {
@@ -35,13 +36,13 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 
 	@Transactional
 	@Override
-	public void create(long userid, byte[] data) 
+	public void create(User user, byte[] data) 
 		throws PictureProcessingException {
 		if(data.length == 0)
 			return;
 		try {
 			byte[] convertedPicture = ps.convert(data, MAX_WIDTH, MAX_HEIGHT);
-			ppd.create(userid, convertedPicture);
+			ppd.create(user, convertedPicture);
 		} catch(IllegalArgumentException | IOException e) {
 			throw new PictureProcessingException("The profile picture could not be processed. " + 
 					e.getMessage());

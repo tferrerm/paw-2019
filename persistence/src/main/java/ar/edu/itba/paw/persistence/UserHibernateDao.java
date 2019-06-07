@@ -44,7 +44,7 @@ public class UserHibernateDao implements UserDao {
 				+ " WHERE eventid IN (SELECT eventid FROM events WHERE userid = :userid);");
 		votesQuery.setParameter("userid", userid);
 		List<BigInteger> list = ((List<BigInteger>) votesQuery.getResultList());
-		if(list.isEmpty())
+		if(list.isEmpty() || list.get(0) == null)
 			return Optional.empty();
 		return Optional.of(list.get(0).intValue());
 	}

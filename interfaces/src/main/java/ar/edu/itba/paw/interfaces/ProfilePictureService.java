@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.model.ProfilePicture;
+import ar.edu.itba.paw.model.User;
 
 public interface ProfilePictureService {
 	
@@ -16,6 +17,6 @@ public interface ProfilePictureService {
 	 * @throws IllegalArgumentException If the raw data is not identified as a picture
 	 * @throws PictureProcessingException If there is an error when handling the picture's bytes
 	 */
-	public void create(long userid, byte[] data) throws PictureProcessingException;
+	public void create(User user, byte[] data) throws PictureProcessingException;
 
 }
