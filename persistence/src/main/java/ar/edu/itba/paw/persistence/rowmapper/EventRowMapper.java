@@ -21,7 +21,7 @@ public class EventRowMapper implements RowMapper<Event> {
 	@Override
 	public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return new Event(
-				rs.getLong("eventid"),
+				//rs.getLong("eventid"),
 				rs.getString("eventname"),
 				urm.mapRow(rs, rowNum),
 				prm.mapRow(rs, rowNum),

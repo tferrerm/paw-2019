@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -53,6 +54,11 @@ public class Event {
 	@Column(name = "event_created_at", nullable = false)
 	private Instant createdAt;
 	
+	@PrePersist
+	protected void onCreate() {
+		createdAt = Instant.now();
+	}
+	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "inscriptions")
 	private List<User> participants;
 	
@@ -60,10 +66,9 @@ public class Event {
 		
 	}
 	
-	public Event(long eventId, String name, Pitch pitch, String description,
+	public Event(String name, Pitch pitch, String description,
 			int maxParticipants, Instant startsAt, Instant endsAt) {
 		super();
-		this.eventId = eventId;
 		this.name = name;
 		this.pitch = pitch;
 		this.description = description;
@@ -72,23 +77,23 @@ public class Event {
 		this.endsAt = endsAt;
 	}
 	
-	public Event(long eventId, String name, User owner, Pitch pitch, String description,
+	public Event(String name, User owner, Pitch pitch, String description,
 	int maxParticipants, Instant startsAt, Instant endsAt) {
-		this(eventId, name, pitch, description,
+		this(name, pitch, description,
 			maxParticipants, startsAt, endsAt);
 		this.owner = owner;
 	}
 	
-	public Event(long eventId, String name, User owner, Pitch pitch, String description, 
+	public Event(String name, User owner, Pitch pitch, String description, 
 			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
-		this(eventId, name, owner, pitch, description, maxParticipants, startsAt,
+		this(name, owner, pitch, description, maxParticipants, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
 	}
 	
-	public Event(long eventId, String name, Pitch pitch, String description, 
+	public Event(String name, Pitch pitch, String description, 
 			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
-		this(eventId, name, pitch, description, maxParticipants, startsAt,
+		this(name, pitch, description, maxParticipants, startsAt,
 			endsAt);
 		this.createdAt = createdAt;
 	}

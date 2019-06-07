@@ -347,9 +347,9 @@ public class EventJdbcDao implements EventDao {
 		args.put("starts_at", Timestamp.from(startsAt));
 		args.put("ends_at", Timestamp.from(endsAt));
 		args.put("event_created_at", Timestamp.from(now));
-		final Number eventId = jdbcInsert.executeAndReturnKey(args);
+		//final Number eventId = jdbcInsert.executeAndReturnKey(args);
 		
-		return new Event(eventId.longValue(), name, owner, pitch, description, 
+		return new Event(name, owner, pitch, description, 
 				maxParticipants, startsAt, endsAt, now);
 	}
 	
