@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
+import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,12 +133,38 @@ public class EventHibernateDao implements EventDao {
 		return Collections.emptyList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> clubName, Optional<String> sport, 
-			Optional<String> organizer, Optional<Integer> vacancies, 
-			Optional<Instant> date, int pageNum) {
-		return null;
+	public List<Event> findBy(final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<String> sport, 
+			final Optional<String> organizer, final Optional<Integer> vacancies, 
+			final Optional<Instant> date, final int pageNum) {
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT eventid ");
+		idQueryString.append(getFilterQueryEndString(paramsMap, eventName, clubName, 
+				sport, organizer, vacancies, date));
+		idQueryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
+		
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		final List<Long> ids = idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
 	}
 
 	@Override
@@ -145,6 +172,63 @@ public class EventHibernateDao implements EventDao {
 			Optional<String> sport, Optional<String> organizer, Optional<Integer> vacancies, Optional<Instant> date) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private String getFilterQueryEndString(Map<String, Object> paramsMap,
+			final Optional<String> eventName, final Optional<String> clubName, 
+			final Optional<String> sport, final Optional<String> organizer, 
+			final Optional<Integer> vacancies, final Optional<Instant> date) {
+		
+		Filter[] params = { 
+				new Filter("eventname", eventName),
+				new Filter("clubname", clubName),
+				new Filter("sport", sport),
+				new Filter("firstname || ' ' || lastname", organizer),
+				new Filter("customVacanciesFilter", vacancies),
+				new Filter("starts_at", Optional.of(
+						(date.isPresent()) ? Timestamp.from(date.get()) : Timestamp.from(Instant.now())
+				))
+		};
+		
+		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches "
+				+ " NATURAL JOIN clubs NATURAL JOIN users) AS t ");
+		
+		for(Filter param : params) {
+			if(param.getValue().isPresent()) {
+				int paramNum = paramsMap.size();
+				switch(param.getName()) {
+				case "customVacanciesFilter":
+					queryString.append(buildPrefix(paramNum));
+					queryString.append(" :" + Filter.getParamName() + paramNum + 
+							" <= max_participants - (SELECT count(*) FROM events_users AS eu "
+							+ " WHERE eu.eventid = e.eventid) ");
+					break;
+				case "starts_at":
+					queryString.append(buildPrefix(paramNum));
+					queryString.append(param.queryAsDateRange(paramNum, date.isPresent()));
+					break;
+				default:
+					if(isEmpty(param.getValue()))
+						continue;
+					queryString.append(buildPrefix(paramNum));
+					queryString.append(param.queryAsString(paramNum));
+					break;
+				}
+				paramsMap.put(Filter.getParamName() + paramNum, param.getValue().get());
+			}
+		}
+		
+		return queryString.toString();
+	}
+	
+	private boolean isEmpty(Optional<?> opt) {
+		return opt.get().toString().isEmpty();
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 	@Override

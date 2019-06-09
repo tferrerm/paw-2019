@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +73,7 @@ public class PitchHibernateDao implements PitchDao {
 		final List<Long> ids = idQuery.getResultList();
 		
 		if(ids.isEmpty())
-			return new ArrayList<Pitch>();
+			return Collections.emptyList();
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Pitch> cq = cb.createQuery(Pitch.class);
@@ -104,9 +104,10 @@ public class PitchHibernateDao implements PitchDao {
 		StringBuilder queryString = new StringBuilder(" FROM pitches NATURAL JOIN clubs ");
 		for(Filter param : params) {
 			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
-				queryString.append(buildPrefix(paramsMap.size()));
-				queryString.append(param.queryAsString());
-				paramsMap.put(param.getName(), param.getValue().get());
+				int paramNum = paramsMap.size();
+				queryString.append(buildPrefix(paramNum));
+				queryString.append(param.queryAsString(paramNum));
+				paramsMap.put(Filter.getParamName() + paramNum, param.getValue().get());
 			}
 		}
 		return queryString.toString();

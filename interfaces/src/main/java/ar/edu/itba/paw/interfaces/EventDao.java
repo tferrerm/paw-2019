@@ -71,7 +71,6 @@ public interface EventDao {
 
 	/**
 	 * Returns a list of Events matching present filters.
-	 * @param onlyFuture		Search only future Events (true) or any Events (false).
 	 * @param eventName			String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
@@ -80,9 +79,9 @@ public interface EventDao {
 	 * @param pageNum			Page number.
 	 * @return a list of Events that matched given filters.
 	 */
-	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> establishment, Optional<String> sport, Optional<String> organizer,
-			Optional<Integer> vacancies, Optional<Instant> date, int pageNum);
+	public List<Event> findBy(final Optional<String> eventName, final Optional<String> clubName, 
+			final Optional<String> sport, final Optional<String> organizer,
+			final Optional<Integer> vacancies, final Optional<Instant> date, final int pageNum);
 	
 	/**
 	 * Returns the amount of Events matching present filters.
