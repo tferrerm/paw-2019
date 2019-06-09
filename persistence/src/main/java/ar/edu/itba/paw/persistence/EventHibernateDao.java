@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +66,7 @@ public class EventHibernateDao implements EventDao {
 				+ " WHERE u.userid = :userid AND e.startsAt > :now ORDER BY e.startsAt ASC");
 		
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
-		query.setParameter("now", Timestamp.from(Instant.now()));
+		query.setParameter("now", Instant.now());
 		query.setParameter("userid", userid);
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
@@ -130,7 +129,7 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public List<Event> findCurrentEventsInPitch(long pitchid) {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -177,8 +176,10 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public Event create(String name, User owner, Pitch pitch, String description, int maxParticipants, Instant startsAt,
 			Instant endsAt) throws EventOverlapException {
-		// TODO Auto-generated method stub
-		return null;
+		final Event event = new Event(name, owner, pitch, description, 
+				maxParticipants, startsAt, endsAt);
+		em.persist(event);
+		return event;
 	}
 
 	@Override

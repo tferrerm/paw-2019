@@ -64,7 +64,7 @@ public class EventJdbcDaoTest {
 	private static final Instant STARTS_AT = Instant.now();
 	private static final int DURATION = 1;
 	private static final Instant ENDS_AT = STARTS_AT.plus(DURATION, ChronoUnit.HOURS);
-	private static final Event EVENT = new Event(EVENTID, EVENTNAME, OWNER, PITCH, DESCRIPTION, 2, STARTS_AT, ENDS_AT);
+	private static final Event EVENT = new Event(EVENTNAME, OWNER, PITCH, DESCRIPTION, 2, STARTS_AT, ENDS_AT);
 	private static final Timestamp STARTS = Timestamp.valueOf("2030-05-20 10:00:00");
 	private static final Timestamp ENDS = Timestamp.valueOf("2030-05-20 11:00:00");
 
