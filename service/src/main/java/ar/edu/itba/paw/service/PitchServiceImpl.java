@@ -88,6 +88,7 @@ public class PitchServiceImpl implements PitchService {
 		return pd.getPageInitialPitchIndex(pageNum);
 	}
 	
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void deletePitch(long pitchid) {
 		pd.deletePitch(pitchid);

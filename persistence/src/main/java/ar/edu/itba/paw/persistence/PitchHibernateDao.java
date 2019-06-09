@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -53,16 +55,71 @@ public class PitchHibernateDao implements PitchDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport, Optional<String> location,
 			Optional<String> clubName, int page) {
-		return Collections.emptyList();
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT pitchid ");
+		idQueryString.append(getFilterQueryEndString(paramsMap, name, sport, location, clubName));
+		idQueryString.append(" ORDER BY pitchname ASC ");
+		
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		idQuery.setFirstResult((page - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		final List<Long> ids = idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return new ArrayList<Pitch>();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Pitch> cq = cb.createQuery(Pitch.class);
+		Root<Pitch> from = cq.from(Pitch.class);
+		
+		final TypedQuery<Pitch> query = em.createQuery(
+				cq.select(from).where(from.get("pitchid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
 	}
 
 	@Override
-	public Integer countFilteredPitches(Optional<String> pitchName, Optional<String> sport, Optional<String> location,
-			Optional<String> clubName) {
+	public Integer countFilteredPitches(Optional<String> pitchName, Optional<String> sport, 
+			Optional<String> location, Optional<String> clubName) {
 		return 0;
+	}
+	
+	private String getFilterQueryEndString(Map<String, Object> paramsMap, 
+			final Optional<String> pitchName, final Optional<String> sport,
+			final Optional<String> location, final Optional<String> clubName) {
+		Filter[] params = { 
+				new Filter("pitchname", pitchName),
+				new Filter("sport", sport),
+				new Filter("location", location),
+				new Filter("clubname", clubName)
+		};
+		StringBuilder queryString = new StringBuilder(" FROM pitches NATURAL JOIN clubs ");
+		for(Filter param : params) {
+			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(paramsMap.size()));
+				queryString.append(param.queryAsString());
+				paramsMap.put(param.getName(), param.getValue().get());
+			}
+		}
+		return queryString.toString();
+	}
+	
+	private boolean isEmpty(Optional<?> opt) {
+		return opt.get().toString().isEmpty();
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 	@Override
@@ -84,7 +141,7 @@ public class PitchHibernateDao implements PitchDao {
 
 	@Override
 	public int getPageInitialPitchIndex(int pageNum) {
-		return 1;
+		return (pageNum -1) * MAX_ROWS + 1;
 	}
 
 	@Override

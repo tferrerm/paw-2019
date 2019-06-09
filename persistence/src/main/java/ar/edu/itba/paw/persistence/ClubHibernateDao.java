@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -50,14 +52,76 @@ public class ClubHibernateDao implements ClubDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page) {
-		return Collections.emptyList();
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT clubid ");
+		idQueryString.append(getFilterQueryEndString(paramsMap, clubName, location));
+		idQueryString.append(" ORDER BY clubname ASC ");
+		
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		idQuery.setFirstResult((page - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		final List<Long> ids = idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return new ArrayList<Club>();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
+		Root<Club> from = cq.from(Club.class);
+		
+		final TypedQuery<Club> query = em.createQuery(
+				cq.select(from).where(from.get("clubid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
 	}
 
 	@Override
 	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
+		/*Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT count(*) ");
+		idQueryString.append(getFilterQueryEndString(paramsMap, clubName, location));
+		idQueryString.append(" ORDER BY clubname ASC ");
+		
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}*/
+		
 		return 0;
+	}
+	
+	private String getFilterQueryEndString(Map<String, Object> paramsMap, 
+			final Optional<String> clubName, final Optional<String> location) {
+		Filter[] params = { 
+				new Filter("clubname", clubName),
+				new Filter("location", location)
+		};
+		StringBuilder queryString = new StringBuilder(" FROM clubs ");
+		for(Filter param : params) {
+			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
+				queryString.append(buildPrefix(paramsMap.size()));
+				queryString.append(param.queryAsString());
+				paramsMap.put(param.getName(), param.getValue().get());
+			}
+		}
+		return queryString.toString();
+	}
+	
+	private boolean isEmpty(Optional<?> opt) {
+		return opt.get().toString().isEmpty();
+	}
+	
+	private String buildPrefix(int currentFilter) {
+		if(currentFilter == 0)
+			return " WHERE ";
+		return " AND ";
 	}
 
 	@Override

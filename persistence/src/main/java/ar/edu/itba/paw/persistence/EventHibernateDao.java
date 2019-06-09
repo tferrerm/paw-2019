@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -60,7 +62,7 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public List<Event> findFutureUserInscriptions(long userid) {
-		StringBuilder queryString = new StringBuilder("SELECT e FROM Event AS e JOIN e.participants AS u "
+		/*StringBuilder queryString = new StringBuilder("SELECT e FROM Event AS e JOIN e.participants AS u "
 				+ " WHERE u.userid = :userid AND e.startsAt > :now ORDER BY e.startsAt ASC");
 		
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
@@ -68,7 +70,7 @@ public class EventHibernateDao implements EventDao {
 		query.setParameter("userid", userid);
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
-		return query.getResultList();
+		return query.getResultList();*/return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -131,10 +133,10 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> establishment,
-			Optional<String> sport, Optional<String> organizer, Optional<Integer> vacancies, Optional<Instant> date,
-			int pageNum) {
-		// TODO Auto-generated method stub
+	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, 
+			Optional<String> clubName, Optional<String> sport, 
+			Optional<String> organizer, Optional<Integer> vacancies, 
+			Optional<Instant> date, int pageNum) {
 		return null;
 	}
 
@@ -224,8 +226,7 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public int getPageInitialEventIndex(int pageNum) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (pageNum - 1) * MAX_ROWS + 1;
 	}
 
 	@Override
