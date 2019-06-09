@@ -228,7 +228,7 @@ public class EventServiceImpl implements EventService {
 		Instant dateInst = instantFromOptionalStr(date);
 		Integer vacInt = integerFromOptionalStr(vacancies);
 
-		return ed.findBy(onlyFuture, eventName, clubName, Optional.ofNullable(sportString), organizer,
+		return ed.findBy(eventName, clubName, Optional.ofNullable(sportString), organizer,
 				Optional.ofNullable(vacInt), Optional.ofNullable(dateInst), pageNum);
 	}
 	

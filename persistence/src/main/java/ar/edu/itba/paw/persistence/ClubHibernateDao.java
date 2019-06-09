@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +69,7 @@ public class ClubHibernateDao implements ClubDao {
 		final List<Long> ids = idQuery.getResultList();
 		
 		if(ids.isEmpty())
-			return new ArrayList<Club>();
+			return Collections.emptyList();
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
@@ -106,9 +106,10 @@ public class ClubHibernateDao implements ClubDao {
 		StringBuilder queryString = new StringBuilder(" FROM clubs ");
 		for(Filter param : params) {
 			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
-				queryString.append(buildPrefix(paramsMap.size()));
-				queryString.append(param.queryAsString());
-				paramsMap.put(param.getName(), param.getValue().get());
+				int paramNum = paramsMap.size();
+				queryString.append(buildPrefix(paramNum));
+				queryString.append(param.queryAsString(paramNum));
+				paramsMap.put(Filter.getParamName() + paramNum, param.getValue().get());
 			}
 		}
 		return queryString.toString();
