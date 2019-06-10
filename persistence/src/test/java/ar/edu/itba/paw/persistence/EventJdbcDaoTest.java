@@ -107,27 +107,6 @@ public class EventJdbcDaoTest {
 	}
 	
 	@Test
-	public void testFindFuture() {
-		List<Event> events = ed.findFutureEvents(1);
-		Assert.assertEquals(1, events.size());
-		Assert.assertEquals(EVENTNAME, events.get(0).getName());
-		Assert.assertEquals(PITCH.getPitchid(), events.get(0).getPitch().getPitchid());
-		Assert.assertEquals(DESCRIPTION, events.get(0).getDescription());
-		Assert.assertEquals(MAX_PARTICIPANTS, events.get(0).getMaxParticipants());
-		Assert.assertEquals(STARTS.toInstant(), events.get(0).getStartsAt());
-		Assert.assertEquals(ENDS.toInstant(), events.get(0).getEndsAt());
-		Assert.assertNotNull(events.get(0).getCreatedAt());
-	}
-	
-	@Test
-	public void testFindEventUsers() {
-		List<User> users = ed.findEventUsers(EVENTID, 1);
-		Assert.assertEquals(2, users.size());
-		List<User> noUsers = ed.findEventUsers(EVENTID, 2);
-		Assert.assertEquals(0, noUsers.size());
-	}
-	
-	@Test
 	public void testFindCurrentEventsInPitch() {
 		List<Event> events = ed.findCurrentEventsInPitch(PITCH.getPitchid());
 		Assert.assertEquals(0, events.size()); // Inserted events are either in the past or years from now

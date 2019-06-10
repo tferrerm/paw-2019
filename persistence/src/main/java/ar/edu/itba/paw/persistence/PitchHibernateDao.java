@@ -44,6 +44,9 @@ public class PitchHibernateDao implements PitchDao {
 		idQuery.setMaxResults(MAX_ROWS);
 		final List<Long> ids = idQuery.getResultList();
 		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Pitch> cq = cb.createQuery(Pitch.class);
 		Root<Pitch> from = cq.from(Pitch.class);

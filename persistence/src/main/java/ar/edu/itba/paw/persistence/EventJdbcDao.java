@@ -125,24 +125,6 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public int countUserEventPages(final long userid) {
-		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events_users WHERE userid = ?",
-				Integer.class, userid);
-		int pageCount = rows / MAX_ROWS;
-		if(rows % MAX_ROWS != 0)
-			pageCount += 1;
-		return pageCount;
-	}
-	
-	@Override
-	public List<Event> findFutureEvents(int pageNum) {
-		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events NATURAL JOIN pitches NATURAL JOIN clubs "
-				+ " JOIN users ON events.userid = users.userid WHERE starts_at > ?"
-				+ " OFFSET ?", erm, Timestamp.from(Instant.now()), offset);
-	}
-	
-	@Override
 	public int countFutureEventPages() {
 		Integer rows = jdbcTemplate.queryForObject("SELECT count(*) FROM events WHERE "
 				+ " starts_at > ?",	Integer.class, Timestamp.from(Instant.now()));
@@ -396,13 +378,6 @@ public class EventJdbcDao implements EventDao {
 		return jdbcTemplate.update("DELETE FROM events_users " +
 				" WHERE eventid = ? AND userid = ?", eventId, kickedUserId);
 	}
-
-	@Override
-	public List<User> findEventUsers(final long eventid, final int pageNum) {
-		int offset = (pageNum - 1) * MAX_ROWS;
-		return jdbcTemplate.query("SELECT * FROM events_users NATURAL JOIN users "
-				+ " WHERE eventid = ? LIMIT ? OFFSET ?", urm, eventid, MAX_ROWS, offset);
-	}
 	
 	@Override
 	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
@@ -495,12 +470,6 @@ public class EventJdbcDao implements EventDao {
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
 		return pageCount;
-	}
-
-	@Override
-	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

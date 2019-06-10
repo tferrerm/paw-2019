@@ -19,8 +19,8 @@ import ar.edu.itba.paw.exception.InvalidDateFormatException;
 import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
@@ -100,11 +100,10 @@ public class AdminController extends BaseController {
 			throws EventNotFoundException {
 		ModelAndView mav = new ModelAndView("admin/adminEvent");
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-		List<User> participants = es.findEventUsers(event.getEventId(), 1);
+		List<Inscription> inscriptions = event.getInscriptions();
 		mav.addObject("event", event);
-		mav.addObject("participant_count", es.countParticipants(event.getEventId()));
-		mav.addObject("participants", participants);
-		mav.addObject("is_participant", participants.contains(loggedUser()));
+		mav.addObject("participant_count", inscriptions.size());
+		mav.addObject("inscriptions", inscriptions);
 		return mav;
 	}
 

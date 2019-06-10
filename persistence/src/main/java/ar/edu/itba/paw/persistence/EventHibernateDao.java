@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -46,22 +47,40 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
-		return Optional.of(em.find(Event.class, eventid));
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		from.fetch("inscriptions", JoinType.LEFT);
 		
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(cb.equal(from.get("eventid"), eventid))
+			);
+		
+		return query.getResultList().stream().findFirst();
 	}
 
 	@Override
 	public List<Event> findByOwner(boolean futureEvents, long userid, int pageNum) {
-		StringBuilder queryString = new StringBuilder("FROM Event AS e "
-				+ " WHERE e.owner.userid = :userid AND e.startsAt ");
-		queryString.append((futureEvents)? 
-				" > :now ORDER BY e.startsAt ASC " : " <= :now ORDER BY e.startsAt DESC ");
 		
-		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
-		query.setParameter("now", Instant.now());
-		query.setParameter("userid", userid);
-		query.setFirstResult((pageNum - 1) * MAX_ROWS);
-		query.setMaxResults(MAX_ROWS);
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events "
+				+ " WHERE userid = :userid AND starts_at ");
+		idQueryString.append((futureEvents)? 
+				" > :now ORDER BY starts_at ASC " : " <= :now ORDER BY starts_at DESC ");
+		paramsMap.put("userid", userid);
+		paramsMap.put("now", Timestamp.from(Instant.now()));
+		
+		final List<Long> ids = getPageIds(idQueryString.toString(), paramsMap, pageNum);
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+			);
 		
 		return query.getResultList();
 	}
@@ -80,21 +99,39 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum) {
-		StringBuilder queryString = new StringBuilder("SELECT i.inscriptionEvent FROM Inscription AS i "
-				+ " WHERE i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt ");
-		queryString.append((futureEvents) ? " > :now " : " <= :now ");
-		queryString.append(" ORDER BY i.inscriptionEvent.startsAt ASC");
-		 
+	public List<Event> findPastUserInscriptions(long userid, int pageNum) {
+		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events AS e "
+				+ " WHERE EXISTS (SELECT eventid FROM events_users "
+				+ " WHERE eventid = e.eventid AND userid = :userid) "
+				+ " AND e.starts_at <= :now ORDER BY e.starts_at DESC");
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("userid", userid);
+		paramsMap.put("now", Timestamp.from(Instant.now()));
+		
+		final List<Long> ids = getPageIds(idQueryString.toString(), paramsMap, pageNum);
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
+	}
+	
+	@Override
+	public List<Event> findFutureUserInscriptions(long userid) {
+		StringBuilder queryString = new StringBuilder("SELECT inscriptionEvent FROM Inscription AS i "
+				+ " WHERE i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt > :now ");
+		
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
 		query.setParameter("userid", userid);
 		query.setParameter("now", Instant.now());
-		if(futureEvents) {
-			query.setMaxResults(MAX_EVENTS_PER_WEEK);
-		} else {
-			query.setFirstResult((pageNum - 1) * MAX_ROWS);
-			query.setMaxResults(MAX_ROWS);
-		}
+		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();
 	}
@@ -108,26 +145,8 @@ public class EventHibernateDao implements EventDao {
 		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
 		query.setParameter("userid", userid);
 		query.setParameter("now", Instant.now());
-		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getSingleResult().intValue();
-	}
-
-	@Override
-	public List<Event> findFutureEvents(int pageNum) { // SOLO LO USA TEST
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<User> findEventUsers(long eventid, int pageNum/*SACAR?*/) {
-		String queryString = "SELECT i.inscriptedUser FROM Inscription AS i "
-				+ " WHERE i.inscriptionEvent.eventid = :eventid";
-		 
-		TypedQuery<User> query = em.createQuery(queryString, User.class);
-		query.setParameter("eventid", eventid);
-		
-		return query.getResultList();
 	}
 
 	@Override
@@ -145,12 +164,12 @@ public class EventHibernateDao implements EventDao {
 		query.setParameter("pitchid", pitchid);
 		query.setParameter("today", today);
 		query.setParameter("inAWeek", inAWeek);
+		/* Only for prevention */
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> findBy(final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
@@ -163,13 +182,7 @@ public class EventHibernateDao implements EventDao {
 				sport, organizer, vacancies, date));
 		idQueryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
 		
-		Query idQuery = em.createNativeQuery(idQueryString.toString());
-		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
-			idQuery.setParameter(entry.getKey(), entry.getValue());
-		}
-		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
-		idQuery.setMaxResults(MAX_ROWS);
-		final List<Long> ids = idQuery.getResultList();
+		final List<Long> ids = getPageIds(idQueryString.toString(), paramsMap, pageNum);
 		
 		if(ids.isEmpty())
 			return Collections.emptyList();
@@ -184,6 +197,17 @@ public class EventHibernateDao implements EventDao {
 		
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Long> getPageIds(String idQueryString, Map<String, Object> paramsMap, int pageNum) {
+		Query idQuery = em.createNativeQuery(idQueryString);
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		return (List<Long>) idQuery.getResultList();
+	}
 
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
@@ -192,7 +216,7 @@ public class EventHibernateDao implements EventDao {
 			final Optional<Instant> date) {
 		
 		Map<String, Object> paramsMap = new HashMap<>();
-		StringBuilder idQueryString = new StringBuilder("SELECT eventid ");
+		StringBuilder idQueryString = new StringBuilder("SELECT count(eventid) ");
 		idQueryString.append(getFilterQueryEndString(paramsMap, eventName, clubName, 
 				sport, organizer, vacancies, date));
 		
@@ -201,7 +225,7 @@ public class EventHibernateDao implements EventDao {
 			idQuery.setParameter(entry.getKey(), entry.getValue());
 		}
 
-		return idQuery.getResultList().size();
+		return ((BigInteger) idQuery.getSingleResult()).intValue();
 	}
 	
 	private String getFilterQueryEndString(Map<String, Object> paramsMap,
@@ -262,12 +286,6 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public int countUserEventPages(long userid) { // NO SE USA?
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int countFutureEventPages() {
 		String queryString = "SELECT count(e) FROM Event AS e "
 				+ " WHERE e.startsAt > :now";
@@ -295,10 +313,24 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public Event create(String name, User owner, Pitch pitch, String description, int maxParticipants, Instant startsAt,
-			Instant endsAt) throws EventOverlapException {
-		final Event event = new Event(name, owner, pitch, description, 
-				maxParticipants, startsAt, endsAt);
+	public Event create(String name, User owner, Pitch pitch, String description, 
+			int maxParticipants, Instant startsAt, Instant endsAt) throws EventOverlapException {
+		
+		String eventOverlapQueryString = "SELECT count(*) FROM Event AS e "
+				+ " WHERE e.pitch.pitchid = :pitchid "
+				+ " AND ((e.startsAt <= :startsAt AND e.endsAt > :startsAt) "
+				+ " OR (e.startsAt > :startsAt AND e.startsAt < :endsAt))";
+		
+		TypedQuery<Long> query = em.createQuery(eventOverlapQueryString, Long.class);
+		query.setParameter("pitchid", pitch.getPitchid());
+		query.setParameter("startsAt", startsAt);
+		query.setParameter("endsAt", endsAt);
+		int eventOverlapQueryResult = query.getSingleResult().intValue();
+		
+		if(eventOverlapQueryResult > 0)
+			throw new EventOverlapException("Pitch is already taken in the chosen time period");
+		
+		final Event event = new Event(name, owner, pitch, description, maxParticipants, startsAt, endsAt);
 		em.persist(event);
 		return event;
 	}

@@ -35,13 +35,19 @@ public interface EventDao {
 	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
-	 * Gets Events for which a User has an inscription.
-	 * @param futureEvents	Finds only future Events (true) or only past Events (false).
-	 * @param userid		Inscripted User.
+	 * Gets past Events for which a User has an inscription.
+	 * @param userid		Inscripted User's id.
 	 * @param pageNum		Page number.
-	 * @return the list of events for which a User has an inscription.
+	 * @return the list of past events for which a User has an inscription.
 	 */
-	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum);
+	public List<Event> findPastUserInscriptions(long userid, int pageNum);
+	
+	/**
+	 * Gets future Events for which a User has an inscription. Max results = 24 * 7.
+	 * @param userid		Inscripted User's id.
+	 * @return the list of future events for which a User has an inscription.
+	 */
+	public List<Event> findFutureUserInscriptions(long userid);
 	
 	/**
 	 * Counts Events for which a User has an inscription.
@@ -50,10 +56,6 @@ public interface EventDao {
 	 * @return the amount of events for which a User has an inscription.
 	 */
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid);
-
-	public List<Event> findFutureEvents(final int pageNum);
-
-	public List<User> findEventUsers(final long eventid, final int pageNum);
 
 	/**
 	 * Finds Events in a Pitch. Only seven days of events will be returned.
@@ -90,8 +92,6 @@ public interface EventDao {
 			final Optional<String> clubName, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies,
 			final Optional<Instant> date);
-
-	public int countUserEventPages(final long userid);
 
 	/**
 	 * Gets the amount of pages all future Events occupy

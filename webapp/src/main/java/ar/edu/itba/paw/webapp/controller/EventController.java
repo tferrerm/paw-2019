@@ -38,6 +38,7 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -75,7 +76,7 @@ public class EventController extends BaseController {
 		ModelAndView mav = new ModelAndView("home");
 		
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		List<Event> upcomingEvents = es.findByUserInscriptions(true, loggedUser().getUserid(), 1);
+		List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid());
 		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
 		
 		mav.addObject("myEvents", myEvents);
@@ -112,7 +113,7 @@ public class EventController extends BaseController {
 		ModelAndView mav = new ModelAndView("history");
 		
 		long loggedUserId = loggedUser().getUserid();
-		List<Event> events = es.findByUserInscriptions(false, loggedUserId, pageNum);
+		List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
 		mav.addObject("past_participations", events);
 		mav.addObject("eventQty", events.size());
 		
@@ -134,14 +135,21 @@ public class EventController extends BaseController {
     	ModelAndView mav = new ModelAndView("event");
 	    
     	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    List<User> participants = es.findEventUsers(event.getEventId(), 1); // SACAR?
+	    List<Inscription> inscriptions = event.getInscriptions();
 	    User current = loggedUser();
 	    
         mav.addObject("event", event);
         
-        mav.addObject("participant_count", participants.size());
-        mav.addObject("participants", participants); // SACAR?
-        mav.addObject("is_participant", participants.contains(current));
+        mav.addObject("participant_count", inscriptions.size());
+        mav.addObject("inscriptions", inscriptions);
+        
+        boolean isParticipant = false;
+        for(Inscription i : inscriptions) {
+        	if(i.getInscriptedUser().equals(current))
+        		isParticipant = true;
+        }	
+        mav.addObject("is_participant", isParticipant);
+        
         mav.addObject("has_started", Instant.now().isAfter(event.getStartsAt()));
         mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
         

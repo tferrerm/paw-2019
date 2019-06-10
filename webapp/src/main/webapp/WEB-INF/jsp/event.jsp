@@ -79,10 +79,10 @@
 					<div class="participants-list">
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
-						    <c:forEach var="user" items="${participants}">
-					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${user.userid}"/>">
-						              <a class="link-text" href="<c:url value="/user/${user.userid}" /> ">${user.firstname} ${user.lastname}</a>
-													<c:if test="${!has_ended && isOwner && user.userid != event.owner.userid}">
+						    <c:forEach var="i" items="${inscriptions}">
+					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">
+						              <a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">${i.inscriptedUser.firstname} ${i.inscriptedUser.lastname}</a>
+													<c:if test="${!has_ended && isOwner && i.inscriptedUser.userid != event.owner.userid}">
 						              	<button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
 													</c:if>
 					              </form>

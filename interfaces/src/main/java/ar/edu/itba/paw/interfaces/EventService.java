@@ -44,25 +44,27 @@ public interface EventService {
 	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
-	 * Gets Events for which a User has an inscription.
-	 * @param futureEvents	Finds only future Events (true) or only past Events (false).
-	 * @param userid		Inscripted User.
-	 * @param pageNum		Page number.
-	 * @return the list of events for which a User has an inscription.
-	 */
-	public List<Event> findByUserInscriptions(final boolean futureEvents, final long userid, final int pageNum);
-	
-	/**
 	 * Counts the amount of Events for which a User has an inscription.
 	 * @param futureEvents	Finds only future Events (true) or only past Events (false).
 	 * @param userid		The User's id.
 	 * @return the amount of events for which a User has an inscription.
 	 */
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid);
-
-	public List<Event> findFutureEvents(int pageNum);
-
-	public List<User> findEventUsers(final long eventid, final int pageNum);
+	
+	/**
+	 * Gets past Events for which a User has an inscription.
+	 * @param userid		Inscripted User's id.
+	 * @param pageNum		Page number.
+	 * @return the list of past events for which a User has an inscription.
+	 */
+	public List<Event> findPastUserInscriptions(long userid, int pageNum);
+	
+	/**
+	 * Gets future Events for which a User has an inscription. Max results = 24 * 7.
+	 * @param userid		Inscripted User's id.
+	 * @return the list of future events for which a User has an inscription.
+	 */
+	public List<Event> findFutureUserInscriptions(long userid);
 
 	/**
 	 * Finds Events in a Pitch. Only seven days of Events will be returned.
@@ -112,8 +114,6 @@ public interface EventService {
 			int maxHour, int dayAmount);
 	
 	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents);
-
-	public int countUserEventPages(final long userid);
 
 	public int countFutureEventPages();
 

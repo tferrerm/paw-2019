@@ -81,15 +81,22 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<Event> findByUserInscriptions(final boolean futureEvents, final long userid, 
-			final int pageNum) {
+	public List<Event> findPastUserInscriptions(final long userid, final int pageNum) {
 		if(userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return ed.findByUserInscriptions(futureEvents, userid, pageNum);
+		return ed.findPastUserInscriptions(userid, pageNum);
+	}
+	
+	@Override
+	public List<Event> findFutureUserInscriptions(final long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return ed.findFutureUserInscriptions(userid);
 	}
 
 	@Override
@@ -278,22 +285,6 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public int countUserEventPages(long userid) {
-		if(userid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		}
-		return ed.countUserEventPages(userid);
-	}
-
-	@Override
-	public List<Event> findFutureEvents(int pageNum) {
-		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
-		}
-		return ed.findFutureEvents(pageNum);
-	}
-
-	@Override
 	public int countFutureEventPages() {
 		return ed.countFutureEventPages();
 	}
@@ -306,7 +297,7 @@ public class EventServiceImpl implements EventService {
 					throws 	InvalidDateFormatException, EventInPastException,
 							MaximumDateExceededException, EndsBeforeStartsException, 
 							EventOverlapException, HourOutOfRangeException {
-		
+		// ARREGLAR
 		int mp = Integer.parseInt(maxParticipants);
 		int startsAt = Integer.parseInt(startsAtHour);
     	int endsAt = Integer.parseInt(endsAtHour);
@@ -379,14 +370,6 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return ed.countParticipants(eventid);
-	}
-
-	@Override
-	public List<User> findEventUsers(final long eventid, final int pageNum) {
-		if(eventid <= 0 || pageNum <= 0) {
-			throw new IllegalArgumentException("Parameters must be greater than zero.");
-		}
-		return ed.findEventUsers(eventid, pageNum);
 	}
 
 	@Override
