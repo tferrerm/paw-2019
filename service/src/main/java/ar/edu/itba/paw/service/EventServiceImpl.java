@@ -32,7 +32,6 @@ import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -77,19 +76,15 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<Event> findFutureUserInscriptions(final long userid) {
+	public List<Event> findByUserInscriptions(final boolean futureEvents, final long userid, 
+			final int pageNum) {
 		if(userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
-		return ed.findFutureUserInscriptions(userid);
-	}
-	
-	@Override
-	public List<Event> findPastUserInscriptions(final long userid, int pageNum) {
-		if(userid <= 0 || pageNum <= 0) {
-			throw new IllegalArgumentException("Parameters must be positive.");
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return ed.findPastUserInscriptions(userid, pageNum);
+		return ed.findByUserInscriptions(futureEvents, userid, pageNum);
 	}
 
 	@Override

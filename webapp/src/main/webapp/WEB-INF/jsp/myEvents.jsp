@@ -22,7 +22,7 @@
                 </div>
                 <span class="help-message notice"><spring:message code="my_events_help"/></span>
 				<c:choose>
-					<c:when test="${empty pastEvents && empty future_events}">
+					<c:when test="${empty past_events && empty future_events}">
 						<div class="notice">
 							<spring:message code="no_past_or_future_events"/>
 						</div>

@@ -84,17 +84,16 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public int countFilteredClubs(Optional<String> clubName, Optional<String> location) {
-		/*Map<String, Object> paramsMap = new HashMap<>();
-		StringBuilder idQueryString = new StringBuilder("SELECT count(*) ");
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT clubid ");
 		idQueryString.append(getFilterQueryEndString(paramsMap, clubName, location));
-		idQueryString.append(" ORDER BY clubname ASC ");
 		
 		Query idQuery = em.createNativeQuery(idQueryString.toString());
 		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
 			idQuery.setParameter(entry.getKey(), entry.getValue());
-		}*/
+		}
 		
-		return 0;
+		return idQuery.getResultList().size();
 	}
 	
 	private String getFilterQueryEndString(Map<String, Object> paramsMap, 

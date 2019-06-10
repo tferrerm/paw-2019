@@ -57,18 +57,19 @@ public class PitchHibernateDao implements PitchDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Pitch> findBy(Optional<String> name, Optional<String> sport, Optional<String> location,
-			Optional<String> clubName, int page) {
+	public List<Pitch> findBy(Optional<String> pitchName, Optional<String> sport, Optional<String> location,
+			Optional<String> clubName, int pageNum) {
+		
 		Map<String, Object> paramsMap = new HashMap<>();
 		StringBuilder idQueryString = new StringBuilder("SELECT pitchid ");
-		idQueryString.append(getFilterQueryEndString(paramsMap, name, sport, location, clubName));
+		idQueryString.append(getFilterQueryEndString(paramsMap, pitchName, sport, location, clubName));
 		idQueryString.append(" ORDER BY pitchname ASC ");
 		
 		Query idQuery = em.createNativeQuery(idQueryString.toString());
 		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
 			idQuery.setParameter(entry.getKey(), entry.getValue());
 		}
-		idQuery.setFirstResult((page - 1) * MAX_ROWS);
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
 		idQuery.setMaxResults(MAX_ROWS);
 		final List<Long> ids = idQuery.getResultList();
 		
@@ -89,7 +90,17 @@ public class PitchHibernateDao implements PitchDao {
 	@Override
 	public Integer countFilteredPitches(Optional<String> pitchName, Optional<String> sport, 
 			Optional<String> location, Optional<String> clubName) {
-		return 0;
+
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT pitchid ");
+		idQueryString.append(getFilterQueryEndString(paramsMap, pitchName, sport, location, clubName));
+		
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		
+		return idQuery.getResultList().size();
 	}
 	
 	private String getFilterQueryEndString(Map<String, Object> paramsMap, 

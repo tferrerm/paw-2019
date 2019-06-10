@@ -44,20 +44,13 @@ public interface EventService {
 	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
-	 * Gets future Events for which a User has an inscription. Maximum Events: 24 * 7
-	 * @param userid 		Inscripted User.
-	 * @param pageNum 		Page number.
-	 * @return a list of Events.
-	 */
-	public List<Event> findFutureUserInscriptions(long userid);
-	
-	/**
-	 * Gets Events in which the User participated.
+	 * Gets Events for which a User has an inscription.
+	 * @param futureEvents	Finds only future Events (true) or only past Events (false).
 	 * @param userid		Inscripted User.
 	 * @param pageNum		Page number.
-	 * @return a list of Events
+	 * @return the list of events for which a User has an inscription.
 	 */
-	public List<Event> findPastUserInscriptions(long userid, int pageNum);
+	public List<Event> findByUserInscriptions(final boolean futureEvents, final long userid, final int pageNum);
 	
 	/**
 	 * Counts the amount of Events for which a User has an inscription.

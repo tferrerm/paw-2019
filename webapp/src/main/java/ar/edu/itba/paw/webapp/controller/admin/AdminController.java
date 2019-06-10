@@ -69,6 +69,7 @@ public class AdminController extends BaseController {
 					Optional.ofNullable(clubName), Optional.ofNullable(sport), 
 					Optional.ofNullable(organizer), Optional.ofNullable(vacancies),
 					Optional.ofNullable(date));
+			
 	        mav.addObject("totalEventQty", totalEventQty);
 		} catch(InvalidDateFormatException e) {
 			mav.addObject("invalid_date_format", true);
@@ -79,6 +80,7 @@ public class AdminController extends BaseController {
         }
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+        
 		return mav;
 	}
 	
