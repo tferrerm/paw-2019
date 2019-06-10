@@ -200,8 +200,8 @@ public class EventHibernateDao implements EventDao {
 				case "customVacanciesFilter":
 					queryString.append(buildPrefix(paramNum));
 					queryString.append(" :" + Filter.getParamName() + paramNum + 
-							" <= max_participants - (SELECT count(*) FROM events_users AS eu "
-							+ " WHERE eu.eventid = e.eventid) ");
+							" <= max_participants - (SELECT count(*) FROM events_users "
+							+ " WHERE eventid = t.eventid) ");
 					break;
 				case "starts_at":
 					queryString.append(buildPrefix(paramNum));
