@@ -81,10 +81,10 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum) {
-		StringBuilder queryString = new StringBuilder("SELECT i.event FROM Inscription AS i "
-				+ " WHERE i.inscriptedUser.userid = :userid AND i.event.startsAt ");
+		StringBuilder queryString = new StringBuilder("SELECT i.inscriptionEvent FROM Inscription AS i "
+				+ " WHERE i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt ");
 		queryString.append((futureEvents) ? " > :now " : " <= :now ");
-		queryString.append(" ORDER BY i.event.startsAt ASC");
+		queryString.append(" ORDER BY i.inscriptionEvent.startsAt ASC");
 		 
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
 		query.setParameter("userid", userid);
@@ -102,7 +102,7 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public Integer countByUserInscriptions(boolean futureEvents, long userid) {
 		StringBuilder queryString = new StringBuilder("SELECT count(i) FROM Inscription AS i WHERE "
-				+ " i.inscriptedUser.userid = :userid AND i.event.startsAt ");
+				+ " i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt ");
 		queryString.append((futureEvents) ? " > :now " : " <= :now ");
 		
 		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
@@ -122,7 +122,7 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public List<User> findEventUsers(long eventid, int pageNum/*SACAR?*/) {
 		String queryString = "SELECT i.inscriptedUser FROM Inscription AS i "
-				+ " WHERE i.event.eventid = :eventid";
+				+ " WHERE i.inscriptionEvent.eventid = :eventid";
 		 
 		TypedQuery<User> query = em.createQuery(queryString, User.class);
 		query.setParameter("eventid", eventid);
@@ -177,7 +177,7 @@ public class EventHibernateDao implements EventDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 		Root<Event> from = cq.from(Event.class);
-		from.fetch("inscriptions", JoinType.INNER);
+		from.fetch("inscriptions", JoinType.LEFT);
 		final TypedQuery<Event> query = em.createQuery(
 				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
 			);
@@ -220,8 +220,8 @@ public class EventHibernateDao implements EventDao {
 				))
 		};
 		
-		StringBuilder queryString = new StringBuilder(" FROM (events NATURAL JOIN pitches "
-				+ " NATURAL JOIN clubs NATURAL JOIN users) AS t ");
+		StringBuilder queryString = new StringBuilder(" FROM events "
+				+ " AS t ");
 		
 		for(Filter param : params) {
 			if(param.getValue().isPresent()) {
@@ -286,7 +286,7 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public int countParticipants(long eventid) {
 		String queryString = "SELECT count(i) FROM Inscription AS i "
-				+ " WHERE i.event.eventid = :eventid";
+				+ " WHERE i.inscriptionEvent.eventid = :eventid";
 		 
 		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
 		query.setParameter("eventid", eventid);
@@ -312,7 +312,7 @@ public class EventHibernateDao implements EventDao {
 		
 		String userBusyQueryString = "SELECT count(i) FROM Inscription AS i WHERE "
 				+ " i.inscriptedUser.userid = :userid AND "
-				+ " ((i.event.startsAt <= :startsAt AND ends_at > :startsAt) OR "
+				+ " ((i.inscriptionEvent.startsAt <= :startsAt AND ends_at > :startsAt) OR "
 				+ " (starts_at > :startsAt AND starts_at < :endsAt))";
 		
 		TypedQuery<Long> query = em.createQuery(userBusyQueryString.toString(), Long.class);

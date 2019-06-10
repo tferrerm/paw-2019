@@ -58,7 +58,7 @@ public class Event {
 		createdAt = Instant.now();
 	}
 	
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "event")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "inscriptionEvent")
 	private List<Inscription> inscriptions;
 	
 	/*package*/ Event() {

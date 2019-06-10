@@ -21,7 +21,7 @@ public class Inscription {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@MapsId("eventid")
 	@JoinColumn(name = "eventid", nullable = false)
-	private Event event;
+	private Event inscriptionEvent;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@MapsId("userid")
@@ -35,26 +35,26 @@ public class Inscription {
 		
 	}
 	
-	public Inscription(Event event, User inscriptedUser, Integer vote) {
-		this.event = event;
+	public Inscription(Event inscriptionEvent, User inscriptedUser, Integer vote) {
+		this.inscriptionEvent = inscriptionEvent;
 		this.inscriptedUser = inscriptedUser;
-		this.id = new InscriptionId(event.getEventId(), inscriptedUser.getUserid());
+		this.id = new InscriptionId(inscriptionEvent.getEventId(), inscriptedUser.getUserid());
 		this.vote = vote;
 	}
 	
 	public Inscription(Event event, User inscriptedUser) {
-		this.event = event;
+		this.inscriptionEvent = event;
 		this.inscriptedUser = inscriptedUser;
 		this.id = new InscriptionId(event.getEventId(), inscriptedUser.getUserid());
 	}
 	
 	@Override
 	public String toString() {
-		return "Inscription: Eventid = " + event + " Userid = " + inscriptedUser;
+		return "Inscription: Eventid = " + inscriptionEvent + " Userid = " + inscriptedUser;
 	}
 
-	public Event getEvent() {
-		return event;
+	public Event getInscriptionEvent() {
+		return inscriptionEvent;
 	}
 
 	public User getInscriptedUser() {
@@ -72,14 +72,14 @@ public class Inscription {
 		if(!(o instanceof Inscription))
 			return false;
 		Inscription other = (Inscription) o;
-		return this.getEvent().equals(other.getEvent()) 
+		return this.getInscriptionEvent().equals(other.getInscriptionEvent()) 
 				&& this.getInscriptedUser().equals(other.getInscriptedUser())
 				&& this.getVote().equals(other.getVote());
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.getEvent(), this.getInscriptedUser(), this.vote);
+		return Objects.hash(this.getInscriptionEvent(), this.getInscriptedUser(), this.vote);
 	}
 	
 }

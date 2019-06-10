@@ -228,9 +228,6 @@ public class EventServiceImpl implements EventService {
 		List<Event> events = ed.findBy(eventName, clubName, Optional.ofNullable(sportString), organizer,
 				Optional.ofNullable(vacInt), Optional.ofNullable(dateInst), pageNum);
 		
-		//for(Event e : events)
-		//	e.getInscriptions().size();
-		
 		return events;
 	}
 	
