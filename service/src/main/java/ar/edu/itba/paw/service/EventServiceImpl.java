@@ -37,6 +37,7 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.InscriptionHibernateDao;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -46,6 +47,9 @@ public class EventServiceImpl implements EventService {
 	
 	@Autowired
 	private UserDao ud;
+	
+	@Autowired
+	private InscriptionHibernateDao ihd;
 
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
@@ -196,20 +200,6 @@ public class EventServiceImpl implements EventService {
 		List<Event> events = findBy(onlyFuture, eventName, clubName, sport, organizer, 
 				vacancies, date, pageNum);
 		
-		/*Instant inst = instantFromOptionalStr(date);
-		Integer vac = integerFromOptionalStr(vacancies);
-		
-		String sportString = null;
-		if(sport.isPresent()) {
-			sportString = sport.get().toString();
-		}
-		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, eventName, clubName,
-				Optional.ofNullable(sportString), organizer, Optional.ofNullable(vac), 
-				Optional.ofNullable(inst), pageNum);
-		
-		for(int i = 0; i < events.size(); i++) {
-			events.get(i).setInscriptions(eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
-		}*/
 		return events;
 	}
 
@@ -349,8 +339,8 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void leaveEvent(final User user, final Event event) {
-		ed.leaveEvent(user, event);
+	public void leaveEvent(final long eventid, final long userid) {
+		ihd.deleteInscription(eventid, userid);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
@@ -361,7 +351,7 @@ public class EventServiceImpl implements EventService {
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		if(owner.getUserid() == kickedUserId)
 			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
-		ed.kickFromEvent(kickedUserId, event.getEventId());
+		ihd.deleteInscription(event.getEventId(), kickedUserId);
 	}
 
 	@Override

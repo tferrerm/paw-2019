@@ -191,8 +191,7 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveEvent(@PathVariable long id)
     	throws EventNotFoundException {
-	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    es.leaveEvent(loggedUser(), event);
+	    es.leaveEvent(id, loggedUser().getUserid());
         return new ModelAndView("redirect:/event/" + id);
     }
 

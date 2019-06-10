@@ -113,10 +113,6 @@ public interface EventDao {
 	public void joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, UserBusyException;
 
-	public void leaveEvent(final User user, final Event event);
-
-	public int kickFromEvent(final long kickedUserId, final long eventId);
-
 	/**
 	 * Gets the amount of current or past Events a User has participated in.
 	 * @param	isCurrentEventsQuery	Search for current Events only (true) or past Events only (false).

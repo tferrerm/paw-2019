@@ -23,7 +23,7 @@ public class Inscription {
 	@JoinColumn(name = "eventid", nullable = false)
 	private Event inscriptionEvent;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@MapsId("userid")
 	@JoinColumn(name = "userid", nullable = false)
 	private User inscriptedUser;

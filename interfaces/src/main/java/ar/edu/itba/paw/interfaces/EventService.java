@@ -133,7 +133,7 @@ public interface EventService {
 	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
 
-	public void leaveEvent(final User user, final Event event);
+	public void leaveEvent(final long eventid, final long userid);
 
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
 			throws UserNotAuthorizedException;

@@ -368,9 +368,8 @@ public class EventJdbcDao implements EventDao {
 	}
 	
 	@Override
-	public void leaveEvent(final User user, final Event event) {
-		jdbcTemplate.update("DELETE FROM events_users WHERE eventid = ? AND userid = ?",
-				event.getEventId(), user.getUserid());
+	public void leaveEvent(final long eventid, final long userid) {
+		
 	}
 	
 	@Override
