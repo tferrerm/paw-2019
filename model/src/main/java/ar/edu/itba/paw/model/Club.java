@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import java.time.Instant;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -34,7 +35,7 @@ public class Club {
 	@Column(name = "club_created_at", nullable = false)
 	private Instant createdAt;
 	
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "club")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "club")
 	private List<Pitch> clubPitches;
 	
 	/*package*/ Club() {

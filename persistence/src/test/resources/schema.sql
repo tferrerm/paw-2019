@@ -78,8 +78,8 @@ VALUES (1, 2);
 INSERT INTO events_users (userid, eventid)
 VALUES (2, 2);
 
---INSERT INTO events_users (userid, eventid, vote)
---VALUES (1, 1, -1);
+INSERT INTO events_users (userid, eventid, vote)
+VALUES (1, 1, -1);
 
---INSERT INTO events_users (userid, eventid, vote)
---VALUES (2, 1, 1);
+INSERT INTO events_users (userid, eventid, vote)
+VALUES (2, 1, 1);

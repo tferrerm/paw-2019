@@ -41,6 +41,9 @@ public class ClubHibernateDao implements ClubDao {
 		idQuery.setMaxResults(MAX_ROWS);
 		final List<Long> ids = idQuery.getResultList();
 		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
 		Root<Club> from = cq.from(Club.class);
