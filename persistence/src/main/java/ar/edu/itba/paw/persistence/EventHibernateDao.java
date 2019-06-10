@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -24,6 +25,7 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -31,7 +33,7 @@ import ar.edu.itba.paw.model.User;
 @Repository
 public class EventHibernateDao implements EventDao {
 	
-	private static final int MAX_ROWS = 10;
+	private static final int MAX_ROWS = 5;
 	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
 	
 	@PersistenceContext
@@ -45,14 +47,24 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public List<Event> findByOwner(boolean futureEvents, long userid, int pageNum) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder queryString = new StringBuilder("FROM Event AS e "
+				+ " WHERE e.owner.userid = :userid AND e.startsAt ");
+		queryString.append((futureEvents)? 
+				" > :now ORDER BY e.startsAt ASC " : " <= :now ORDER BY e.startsAt DESC ");
+		
+		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
+		query.setParameter("now", Instant.now());
+		query.setParameter("userid", userid);
+		query.setFirstResult((pageNum - 1) * MAX_ROWS);
+		query.setMaxResults(MAX_ROWS);
+		
+		return query.getResultList();
 	}
 
 	@Override
 	public int countByOwner(boolean futureEvents, long userid) {
 		StringBuilder queryString = new StringBuilder("SELECT count(*) FROM Event AS e "
-				+ " WHERE e.userid = :userid AND e.startsAt ");
+				+ " WHERE e.owner.userid = :userid AND e.startsAt ");
 		queryString.append((futureEvents) ? " > :now " : " <= :now ");
 		
 		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
@@ -104,17 +116,16 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public Integer countByUserInscriptions(boolean futureEvents, long userid) {
-		/*StringBuilder queryString = new StringBuilder("SELECT count(*) "
-				+ " FROM Event AS e JOIN e.participants AS u "
-				+ " WHERE u.userid = :userid AND e.starts_at > :now ORDER BY e.starts_at ASC");
+		StringBuilder queryString = new StringBuilder("SELECT count(i) FROM Inscription AS i WHERE "
+				+ " i.inscriptedUser.userid = :userid AND i.event.startsAt ");
+		queryString.append((futureEvents) ? " > :now " : " <= :now ");
 		
-		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
-		query.setParameter("now", Instant.now());
+		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
 		query.setParameter("userid", userid);
+		query.setParameter("now", Instant.now());
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
-		return query.getResultList();*/
-		return null;
+		return query.getSingleResult().intValue();
 	}
 
 	@Override
@@ -271,9 +282,34 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public void joinEvent(User user, Event event) throws UserAlreadyJoinedException, UserBusyException {
-		// TODO Auto-generated method stub
-
+	public void joinEvent(User user, Event event) 
+			throws UserAlreadyJoinedException, UserBusyException {
+		
+		Timestamp eventStartsAt = Timestamp.from(event.getStartsAt());
+		Timestamp eventEndsAt = Timestamp.from(event.getEndsAt());
+		
+		String userBusyQueryString = "SELECT count(i) FROM Inscription AS i WHERE "
+				+ " i.inscriptedUser.userid = :userid AND "
+				+ " ((i.event.startsAt <= :startsAt AND ends_at > :startsAt) OR "
+				+ " (starts_at > :startsAt AND starts_at < :endsAt))";
+		
+		TypedQuery<Long> query = em.createQuery(userBusyQueryString.toString(), Long.class);
+		query.setParameter("userid", user.getUserid());
+		query.setParameter("startsAt", event.getStartsAt()); // ARREGLAR
+		query.setParameter("endsAt", event.getEndsAt()); // ARREGLAR
+		
+		int userBusyQueryResult = query.getSingleResult().intValue();
+		
+		if(userBusyQueryResult > 0)
+			throw new UserBusyException("User " + user.getUserid() + " already joined "
+					+ "an event in that period");
+		
+		try {
+			em.persist(new Inscription(event, user));
+		} catch(EntityExistsException e) {
+			throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
+					+ event.getEventId());
+		}
 	}
 
 	@Override
@@ -343,14 +379,20 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public int countUserInscriptionPages(boolean onlyFuture, long userid) {
-		// TODO Auto-generated method stub
-		return 0;
+		int rows = countByUserInscriptions(onlyFuture, userid);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 	@Override
 	public int countUserOwnedPages(boolean onlyFuture, long userid) {
-		// TODO Auto-generated method stub
-		return 0;
+		int rows = countByOwner(onlyFuture, userid);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 }

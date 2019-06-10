@@ -59,7 +59,7 @@ public class AdminController extends BaseController {
 		mav.addObject("lastPageNum", es.countFutureEventPages());
         
 		try {
-			List<Event> events = es.findByWithInscriptions(true, Optional.empty(), Optional.ofNullable(clubName), 
+			List<Event> events = es.findBy(true, Optional.empty(), Optional.ofNullable(clubName), 
 	        		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
 	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
 			mav.addObject("events", events);

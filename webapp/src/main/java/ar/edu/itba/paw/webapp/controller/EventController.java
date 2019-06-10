@@ -201,17 +201,17 @@ public class EventController extends BaseController {
 
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
-                                         @PathVariable("pageNum") final int pageNum,
-                                         @RequestParam(value = "name", required = false) String name,
-                                         @RequestParam(value = "est", required = false) String establishment,
-                                         @RequestParam(value = "sport", required = false) Sport sport,
-                                         @RequestParam(value = "vac", required = false) String vacancies,
-                                         @RequestParam(value = "date", required = false) String date) {
+                                     @PathVariable("pageNum") final int pageNum,
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "est", required = false) String clubName,
+                                     @RequestParam(value = "sport", required = false) Sport sport,
+                                     @RequestParam(value = "vac", required = false) String vacancies,
+                                     @RequestParam(value = "date", required = false) String date) {
     	String sportName = "";
     	if(sport != null)
     		sportName = sport.toString();
 
-        String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
+        String queryString = buildQueryString(name, clubName, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
@@ -220,14 +220,14 @@ public class EventController extends BaseController {
         
         try {
 	        List<Event> events = es.findBy(true, Optional.ofNullable(name), 
-	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
+	        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
 	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
 	
 	        mav.addObject("events", events);
 	        mav.addObject("eventQty", events.size());
 	        
 	        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
-	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
+	        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
 	        		Optional.ofNullable(vacancies), Optional.ofNullable(date));
 	        mav.addObject("totalEventQty", totalEventQty);
         } catch(InvalidDateFormatException e) {
