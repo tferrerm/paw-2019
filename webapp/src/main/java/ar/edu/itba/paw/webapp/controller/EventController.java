@@ -133,19 +133,19 @@ public class EventController extends BaseController {
     	ModelAndView mav = new ModelAndView("event");
 	    
     	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    List<User> participants = es.findEventUsers(event.getEventId(), 1);
+	    List<User> participants = es.findEventUsers(event.getEventId(), 1); // SACAR?
 	    User current = loggedUser();
 	    
         mav.addObject("event", event);
         
-        mav.addObject("participant_count", es.countParticipants(event.getEventId()));
-        mav.addObject("participants", participants);
+        mav.addObject("participant_count", participants.size());
+        mav.addObject("participants", participants); // SACAR?
         mav.addObject("is_participant", participants.contains(current));
         mav.addObject("has_started", Instant.now().isAfter(event.getStartsAt()));
         mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
         
-        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId()));
-        mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
+        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId())); // SACAR?
+        mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid())); // SACAR?
         
         mav.addObject("eventFullError", eventFullError);
         mav.addObject("alreadyJoinedError", alreadyJoinedError);

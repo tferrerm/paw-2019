@@ -32,6 +32,7 @@ import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -231,8 +232,10 @@ public class EventServiceImpl implements EventService {
 
 		List<Event> events = ed.findBy(eventName, clubName, Optional.ofNullable(sportString), organizer,
 				Optional.ofNullable(vacInt), Optional.ofNullable(dateInst), pageNum);
+		
 		for(Event e : events)
 			e.getInscriptions().size();
+		
 		return events;
 	}
 	

@@ -98,22 +98,6 @@ public interface EventDao {
 			final Optional<String> organizer, final Optional<Integer> vacancies,
 			final Optional<Instant> date);
 
-	/**
-	 * Returns a combination of eventid and vacancies for that Event.
-	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param eventName			String to match an Event's name with.
-	 * @param establishment		String to match an Event's club name with.
-	 * @param sport				String to match an Event's Sport with.
-	 * @param organizer			String to match an Event's organizer's name with.
-	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param pageNum			Page number.
-	 * @return
-	 */
-	public List<Long[]> countBy(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> establishment, Optional<String> sport, 
-			Optional<String> organizer, Optional<Integer> vacancies,
-			Optional<Instant> date, int pageNum);
-
 	public int countUserEventPages(final long userid);
 
 	public int countFutureEventPages();

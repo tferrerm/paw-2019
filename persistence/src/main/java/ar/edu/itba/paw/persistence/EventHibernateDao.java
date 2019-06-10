@@ -40,6 +40,7 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
 		return Optional.of(em.find(Event.class, eventid));
+		
 	}
 
 	@Override
@@ -63,15 +64,16 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public List<Event> findFutureUserInscriptions(long userid) {
-		/*StringBuilder queryString = new StringBuilder("SELECT e FROM Event AS e JOIN e.participants AS u "
-				+ " WHERE u.userid = :userid AND e.startsAt > :now ORDER BY e.startsAt ASC");
-		
+		StringBuilder queryString = new StringBuilder("SELECT i.event FROM Inscription AS i "
+				+ " WHERE i.inscriptedUser.userid = :userid AND i.event.startsAt > :now "
+				+ " ORDER BY i.event.startsAt ASC");
+		 
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
 		query.setParameter("now", Instant.now());
 		query.setParameter("userid", userid);
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
-		return query.getResultList();*/return null;
+		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -122,9 +124,14 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<User> findEventUsers(long eventid, int pageNum) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> findEventUsers(long eventid, int pageNum/*SACAR?*/) {
+		StringBuilder queryString = new StringBuilder("SELECT i.inscriptedUser FROM Inscription AS i "
+				+ " WHERE i.event.eventid = :eventid");
+		 
+		TypedQuery<User> query = em.createQuery(queryString.toString(), User.class);
+		query.setParameter("eventid", eventid);
+		
+		return query.getResultList();
 	}
 
 	@Override
@@ -232,16 +239,6 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<Long[]> countBy(final boolean onlyFuture, final Optional<String> eventName, 
-			final Optional<String> clubName, final Optional<String> sport, 
-			final Optional<String> organizer, final Optional<Integer> vacancies, 
-			final Optional<Instant> date, final int pageNum) {
-
-		return null;
-		
-	}
-
-	@Override
 	public int countUserEventPages(long userid) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -255,8 +252,13 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public int countParticipants(long eventid) {
-		// TODO Auto-generated method stub
-		return 0;
+		StringBuilder queryString = new StringBuilder("SELECT count(i) FROM Inscription AS i "
+				+ " WHERE i.event.eventid = :eventid");
+		 
+		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
+		query.setParameter("eventid", eventid);
+		
+		return query.getSingleResult().intValue();
 	}
 
 	@Override
