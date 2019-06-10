@@ -397,12 +397,12 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public int getVoteBalance(final long eventid) {
-		return ed.getVoteBalance(eventid).orElse(0);
+		return ihd.getVoteBalance(eventid).orElse(0);
 	}
 
 	@Override
 	public int getUserVote(final long eventid, final long userid) {
-		return ed.getUserVote(eventid, userid).orElse(0);
+		return ihd.getUserVote(eventid, userid).orElse(0);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
@@ -413,7 +413,7 @@ public class EventServiceImpl implements EventService {
 			throw new EventNotFinishedException("User cannot vote if event has not finished.");
 		if(event.getOwner().getUserid() == userid)
 			throw new UserNotAuthorizedException("User cannot vote for themselves.");
-		int changed = ed.vote(isUpvote, event.getEventId(), userid);
+		int changed = ihd.vote(isUpvote, event.getEventId(), userid);
 		if(changed == 0)
 			throw new UserNotAuthorizedException("User cannot vote if no inscription is present.");
 	}

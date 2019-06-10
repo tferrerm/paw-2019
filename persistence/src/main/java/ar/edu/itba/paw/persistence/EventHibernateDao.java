@@ -389,24 +389,6 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public Optional<Integer> getVoteBalance(long eventid) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-	@Override
-	public Optional<Integer> getUserVote(long eventid, long userid) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-	@Override
-	public int vote(boolean isUpvote, long eventid, long userid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int countUserInscriptionPages(boolean onlyFuture, long userid) {
 		int rows = countByUserInscriptions(onlyFuture, userid);
 		int pageCount = rows / MAX_ROWS;
