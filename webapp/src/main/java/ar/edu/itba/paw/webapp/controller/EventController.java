@@ -219,7 +219,7 @@ public class EventController extends BaseController {
         mav.addObject("lastPageNum", es.countFutureEventPages());
         
         try {
-	        List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
+	        List<Event> events = es.findBy(true, Optional.ofNullable(name), 
 	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
 	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
 	

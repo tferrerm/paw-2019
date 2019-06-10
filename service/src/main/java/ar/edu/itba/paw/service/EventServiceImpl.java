@@ -211,7 +211,8 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		return ed.countByUserInscriptions(futureEvents, userid);
 	}
-
+	
+	@Transactional
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<String> organizer, Optional<String> vacancies, 
@@ -228,8 +229,11 @@ public class EventServiceImpl implements EventService {
 		Instant dateInst = instantFromOptionalStr(date);
 		Integer vacInt = integerFromOptionalStr(vacancies);
 
-		return ed.findBy(eventName, clubName, Optional.ofNullable(sportString), organizer,
+		List<Event> events = ed.findBy(eventName, clubName, Optional.ofNullable(sportString), organizer,
 				Optional.ofNullable(vacInt), Optional.ofNullable(dateInst), pageNum);
+		for(Event e : events)
+			e.getInscriptions().size();
+		return events;
 	}
 	
 	@Override

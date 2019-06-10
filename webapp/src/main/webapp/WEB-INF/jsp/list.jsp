@@ -85,7 +85,7 @@
                             <div>${event.name}</div>
                             <div>${event.pitch.club.name}</div>
                             <div><spring:message code="${event.pitch.sport}"/></div>
-                            <div>${event.inscriptions}</div>
+                            <div>${event.maxParticipants - fn:length(event.inscriptions)}</div>
                             <div>
     							<fmt:timeZone value="AR">
     								<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
