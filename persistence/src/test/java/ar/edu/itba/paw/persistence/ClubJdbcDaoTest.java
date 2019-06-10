@@ -47,7 +47,6 @@ public class ClubJdbcDaoTest {
 	@Rollback
 	@Test
 	public void testCreate() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "clubs");
 		final Club club = cd.create(CLUBNAME, LOCATION);
 		Assert.assertNotNull(club);
 		Assert.assertEquals(CLUBNAME, club.getName());
