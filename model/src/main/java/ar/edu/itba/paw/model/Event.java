@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import java.time.Instant;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,8 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -24,7 +25,7 @@ public class Event {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "events_eventid_seq")
 	@SequenceGenerator(sequenceName = "events_eventid_seq", name = "events_eventid_seq", allocationSize = 1)
 	@Column(name = "eventid")
-	private long eventId;
+	private long eventid;
 	
 	@Column(name = "eventname", length = 100, nullable = false)
 	private String name;
@@ -43,8 +44,6 @@ public class Event {
 	@Column(name = "max_participants", nullable = false)
 	private int maxParticipants;
 	
-	private Long inscriptions;
-	
 	@Column(name = "starts_at", nullable = false)
 	private Instant startsAt;
 	
@@ -59,8 +58,8 @@ public class Event {
 		createdAt = Instant.now();
 	}
 	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "inscriptions")
-	private List<User> participants;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "event")
+	private List<Inscription> inscriptions;
 	
 	/*package*/ Event() {
 		
@@ -100,11 +99,11 @@ public class Event {
 	
 	@Override
 	public String toString() {
-		return "Eventid: " + eventId + " Name: " + name;
+		return "Eventid: " + eventid + " Name: " + name;
 	}
 	
 	public long getEventId() {
-		return eventId;
+		return eventid;
 	}
 
 	public String getName() {
@@ -126,17 +125,6 @@ public class Event {
 	public int getMaxParticipants() {
 		return maxParticipants;
 	}
-	
-	/**
-	 * Returns null unless setter is called.
-	 */
-	public Long getInscriptions() {
-		return inscriptions;
-	}
-
-	public void setInscriptions(Long inscriptions) {
-		this.inscriptions = inscriptions;
-	}
 
 	public Instant getStartsAt() {
 		return startsAt;
@@ -150,8 +138,8 @@ public class Event {
 		return createdAt;
 	}
 	
-	public List<User> getParticipants() {
-		return participants;
+	public List<Inscription> getInscriptions() {
+		return inscriptions;
 	}
 
 }

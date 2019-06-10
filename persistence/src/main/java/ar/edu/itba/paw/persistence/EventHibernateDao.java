@@ -232,11 +232,13 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<Long[]> countBy(boolean onlyFuture, Optional<String> eventName, Optional<String> establishment,
-			Optional<String> sport, Optional<String> organizer, Optional<Integer> vacancies, Optional<Instant> date,
-			int pageNum) {
-		// TODO Auto-generated method stub
+	public List<Long[]> countBy(final boolean onlyFuture, final Optional<String> eventName, 
+			final Optional<String> clubName, final Optional<String> sport, 
+			final Optional<String> organizer, final Optional<Integer> vacancies, 
+			final Optional<Instant> date, final int pageNum) {
+
 		return null;
+		
 	}
 
 	@Override

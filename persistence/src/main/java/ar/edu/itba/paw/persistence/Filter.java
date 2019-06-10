@@ -24,8 +24,8 @@ public class Filter {
 		return " " + name.toString() + " >" + ((alsoEquals) ? "= ?" : " ?");
 	}*/
 	
-	public String queryAsDateRange(int paramNum, boolean alsoGreater) {
-		return " CAST( " + name.toString() + " AS DATE) " + ((alsoGreater)? ">" : "") + 
+	public String queryAsDateRange(int paramNum, boolean onlyAtDate) {
+		return " CAST( " + name.toString() + " AS DATE) " + ((onlyAtDate)? "" : ">") + 
 				"= CAST(:" + getParamName() + paramNum + " AS DATE) ";
 	}
 	

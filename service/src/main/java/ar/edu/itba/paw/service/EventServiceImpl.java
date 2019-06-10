@@ -181,27 +181,27 @@ public class EventServiceImpl implements EventService {
 	@Transactional
 	@Override
 	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> establishment, Optional<Sport> sport, Optional<String> organizer,
+			Optional<String> clubName, Optional<Sport> sport, Optional<String> organizer,
 			Optional<String> vacancies, Optional<String> date, int pageNum) 
 			throws InvalidDateFormatException, InvalidVacancyNumberException {
 		
-		List<Event> events = findBy(onlyFuture, eventName, establishment, sport, organizer, 
+		List<Event> events = findBy(onlyFuture, eventName, clubName, sport, organizer, 
 				vacancies, date, pageNum);
 		
-		Instant inst = instantFromOptionalStr(date);
+		/*Instant inst = instantFromOptionalStr(date);
 		Integer vac = integerFromOptionalStr(vacancies);
 		
 		String sportString = null;
 		if(sport.isPresent()) {
 			sportString = sport.get().toString();
 		}
-		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, eventName, establishment,
+		List<Long[]> eventInscriptions = ed.countBy(onlyFuture, eventName, clubName,
 				Optional.ofNullable(sportString), organizer, Optional.ofNullable(vac), 
 				Optional.ofNullable(inst), pageNum);
 		
 		for(int i = 0; i < events.size(); i++) {
 			events.get(i).setInscriptions(eventInscriptions.get(i)[EVENT_INSCRIPTIONS_INDEX]);
-		}
+		}*/
 		return events;
 	}
 

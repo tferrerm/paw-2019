@@ -58,12 +58,8 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "owner")
 	private List<Event> ownedEvents;
 	
-	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	@JoinTable(
-			name = "events_users",
-			joinColumns = { @JoinColumn(name = "userid") },
-			inverseJoinColumns = { @JoinColumn(name = "eventid") })
-	private List<Event> inscriptions;
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "inscriptedUser")
+	private List<Inscription> inscriptions;
 	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "addedBy")
 	private ProfilePicture profilePicture;
@@ -152,7 +148,7 @@ public class User {
 		return ownedEvents;
 	}
 	
-	public List<Event> getInscriptions() {
+	public List<Inscription> getInscriptions() {
 		return inscriptions;
 	}
 	
