@@ -366,18 +366,6 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public int countUserEvents(boolean isCurrentEventsQuery, long userid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int countUserOwnedCurrEvents(long userid) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public Optional<Sport> getFavoriteSport(long userid) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
@@ -396,8 +384,8 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public void deleteEvent(long eventid) {
-		// TODO Auto-generated method stub
-
+		Event event = em.find(Event.class, eventid);
+		em.remove(event);
 	}
 
 	@Override

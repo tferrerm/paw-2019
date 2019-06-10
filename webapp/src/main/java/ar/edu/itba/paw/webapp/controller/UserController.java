@@ -99,9 +99,9 @@ public class UserController extends BaseController {
 		final ModelAndView mav = new ModelAndView("profile");
 		mav.addObject("user", us.findById(userid)
 				.orElseThrow(UserNotFoundException::new));
-		mav.addObject("currEventsParticipant", es.countUserEvents(true, userid));
-		mav.addObject("currEventsOwned", es.countUserOwnedCurrEvents(userid));
-		mav.addObject("pastEventsParticipant", es.countUserEvents(false, userid));
+		mav.addObject("currEventsParticipant", es.countByUserInscriptions(true, userid));
+		mav.addObject("currEventsOwned", es.countByOwner(true, userid));
+		mav.addObject("pastEventsParticipant", es.countByUserInscriptions(false, userid));
 		mav.addObject("favoriteSport", es.getFavoriteSport(userid).orElse(null));
 		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		mav.addObject("votes_received", us.countVotesReceived(userid));

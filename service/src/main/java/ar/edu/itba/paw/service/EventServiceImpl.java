@@ -372,16 +372,6 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public int countUserEvents(boolean isCurrentEventsQuery, final long userid) {
-		return ed.countUserEvents(isCurrentEventsQuery, userid);
-	}
-
-	@Override
-	public int countUserOwnedCurrEvents(final long userid) {
-		return ed.countUserOwnedCurrEvents(userid);
-	}
-
-	@Override
 	public Optional<Sport> getFavoriteSport(final long userid) {
 		return ed.getFavoriteSport(userid);
 	}
@@ -396,6 +386,7 @@ public class EventServiceImpl implements EventService {
 		return ed.getPageInitialEventIndex(pageNum);
 	}
 	
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void deleteEvent(long eventid) {
 		if(eventid <= 0) {

@@ -143,21 +143,6 @@ public interface EventService {
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour);
 
 	/**
-	 * Gets the amount of current or past Events a User has participated in.
-	 * @param	isCurrentEventsQuery	Search for current Events only (true) or past Events only (false).
-	 * @param	userid 					The User's id.
-	 * @return							The amount of current Events owned by the User.
-	 */
-	public int countUserEvents(boolean isCurrentEventsQuery, final long userid);
-
-	/**
-	 * Gets the amount of current (not finished) Events owned by a User.
-	 * @param	userid 	The User's id.
-	 * @return the amount of current Events owned by the User.
-	 */
-	public int countUserOwnedCurrEvents(final long userid);
-
-	/**
 	 * Returns a User's favorite Sport(s) based on Events joined.
 	 * @param 	userid 	The User's id.
 	 * @return the User's favorite Sports.
