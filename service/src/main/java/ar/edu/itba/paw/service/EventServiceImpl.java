@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
@@ -41,6 +43,9 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	private EventDao ed;
+	
+	@Autowired
+	private UserDao ud;
 
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
@@ -335,9 +340,15 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void joinEvent(final User user, final Event event)
+	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException {
 
+		if(userid <= 0 || eventid <= 0)
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		
+		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
+		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
 			throw new EventFullException();
 		}

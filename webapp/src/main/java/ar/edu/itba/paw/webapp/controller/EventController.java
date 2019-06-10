@@ -163,7 +163,7 @@ public class EventController extends BaseController {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 	    ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    try {
-	    	es.joinEvent(loggedUser(), event);
+	    	es.joinEvent(loggedUser().getUserid(), id);
 
 	    } catch(EventFullException e) {
 	    	mav.addObject("eventFullError", true);

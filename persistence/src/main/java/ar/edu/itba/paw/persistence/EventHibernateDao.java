@@ -37,7 +37,7 @@ import ar.edu.itba.paw.model.User;
 @Repository
 public class EventHibernateDao implements EventDao {
 	
-	private static final int MAX_ROWS = 1;
+	private static final int MAX_ROWS = 10;
 	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
@@ -307,18 +307,15 @@ public class EventHibernateDao implements EventDao {
 	public void joinEvent(User user, Event event) 
 			throws UserAlreadyJoinedException, UserBusyException {
 		
-		Timestamp eventStartsAt = Timestamp.from(event.getStartsAt());
-		Timestamp eventEndsAt = Timestamp.from(event.getEndsAt());
-		
 		String userBusyQueryString = "SELECT count(i) FROM Inscription AS i WHERE "
 				+ " i.inscriptedUser.userid = :userid AND "
-				+ " ((i.inscriptionEvent.startsAt <= :startsAt AND ends_at > :startsAt) OR "
-				+ " (starts_at > :startsAt AND starts_at < :endsAt))";
+				+ " ((i.inscriptionEvent.startsAt <= :startsAt AND i.inscriptionEvent.endsAt > :startsAt) OR "
+				+ " (i.inscriptionEvent.startsAt > :startsAt AND i.inscriptionEvent.startsAt < :endsAt))";
 		
 		TypedQuery<Long> query = em.createQuery(userBusyQueryString.toString(), Long.class);
 		query.setParameter("userid", user.getUserid());
-		query.setParameter("startsAt", event.getStartsAt()); // ARREGLAR
-		query.setParameter("endsAt", event.getEndsAt()); // ARREGLAR
+		query.setParameter("startsAt", event.getStartsAt());
+		query.setParameter("endsAt", event.getEndsAt());
 		
 		int userBusyQueryResult = query.getSingleResult().intValue();
 		

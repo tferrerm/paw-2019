@@ -130,7 +130,7 @@ public interface EventService {
 											MaximumDateExceededException, EndsBeforeStartsException, 
 											EventOverlapException, HourOutOfRangeException;
 
-	public void joinEvent(final User user, final Event event)
+	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
 
 	public void leaveEvent(final User user, final Event event);
