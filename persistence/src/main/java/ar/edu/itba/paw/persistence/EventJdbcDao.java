@@ -93,7 +93,6 @@ public class EventJdbcDao implements EventDao {
 				Timestamp.from(Instant.now()));
 	}
 	
-	@Override
 	public List<Event> findFutureUserInscriptions(long userid) {
 		Instant now = Instant.now();
 		StringBuilder query = new StringBuilder("SELECT * FROM (events NATURAL JOIN pitches "
@@ -104,7 +103,6 @@ public class EventJdbcDao implements EventDao {
 		return jdbcTemplate.query(query.toString(), erm, userid, Timestamp.from(now), MAX_EVENTS_PER_WEEK);
 	}
 	
-	@Override
 	public List<Event> findPastUserInscriptions(long userid, int pageNum) {
 		int offset = (pageNum - 1) * MAX_ROWS;
 		Instant now = Instant.now();
@@ -168,7 +166,6 @@ public class EventJdbcDao implements EventDao {
 					Timestamp.from(today), Timestamp.from(inAWeek), MAX_EVENTS_PER_WEEK);
 	}
 	
-	@Override
 	public List<Event> findBy(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies,
@@ -233,15 +230,15 @@ public class EventJdbcDao implements EventDao {
 					break;
 				case "starts_at":
 					queryString.append(buildPrefix(paramValues.size()));
-					String criteria = (date.isPresent()) 
-						? param.queryAsDateRange() : param.queryAsGreaterInteger(true);
+					String criteria = "";//(date.isPresent()) 
+						//? param.queryAsDateRange() : param.queryAsGreaterInteger(true);
 					queryString.append(criteria);
 					break;
 				default:
 					if(isEmpty(param.getValue()))
 						continue;
 					queryString.append(buildPrefix(paramValues.size()));
-					queryString.append(param.queryAsString());
+					//queryString.append(param.queryAsString());
 					break;
 				}
 				paramValues.add(param.getValue().get());
@@ -250,7 +247,6 @@ public class EventJdbcDao implements EventDao {
 		return queryString.toString();
 	}
 	
-	@Override
 	public List<Long[]> countBy(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> establishment, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies, 
@@ -286,13 +282,13 @@ public class EventJdbcDao implements EventDao {
 					break;
 				case "e.starts_at":
 					queryString.append(buildPrefix(list.size()));
-					queryString.append(param.queryAsDateRange());
+					//queryString.append(param.queryAsDateRange());
 					break;
 				default:
 					if(isEmpty(param.getValue()))
 						continue;
 					queryString.append(buildPrefix(list.size()));
-					queryString.append(param.queryAsString());
+					//queryString.append(param.queryAsString());
 					break;
 				}
 				list.add(param.getValue().get());
@@ -499,6 +495,19 @@ public class EventJdbcDao implements EventDao {
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
 		return pageCount;
+	}
+
+	@Override
+	public List<Event> findByUserInscriptions(boolean futureEvents, long userid, int pageNum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Event> findBy(Optional<String> eventName, Optional<String> clubName, Optional<String> sport,
+			Optional<String> organizer, Optional<Integer> vacancies, Optional<Instant> date, int pageNum) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

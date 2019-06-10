@@ -136,7 +136,7 @@ public class EventJdbcDaoTest {
 	@Test
 	public void testFindBy() {
 		List<Event> events = ed.findBy(
-				true,
+				//true,
 				Optional.of(EVENTNAME),
 				Optional.of(CLUB.getName()),
 				Optional.of(Sport.SOCCER.toString()),
@@ -148,7 +148,7 @@ public class EventJdbcDaoTest {
 		Assert.assertEquals(EVENTID, events.get(0).getEventId());
 		Assert.assertEquals(EVENTNAME, events.get(0).getName());
 		List<Event> includingOldEvents = ed.findBy(
-				false,
+				//false,
 				Optional.of(EVENTNAME), // Name: event, search: '%' || 'event' || '%'
 				Optional.of(CLUB.getName()),
 				Optional.of(Sport.SOCCER.toString()),
@@ -158,7 +158,7 @@ public class EventJdbcDaoTest {
 				1);
 		Assert.assertEquals(2, includingOldEvents.size());
 		List<Event> oldEvents = ed.findBy(
-				false,
+				//false,
 				Optional.of(OLD_EVENTNAME), // Name: old_event
 				Optional.of(CLUB.getName()),
 				Optional.of(Sport.SOCCER.toString()),

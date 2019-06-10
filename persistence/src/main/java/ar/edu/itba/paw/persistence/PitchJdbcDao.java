@@ -95,7 +95,7 @@ public class PitchJdbcDao implements PitchDao {
 		for(Filter param : params) {
 			if(param.getValue().isPresent() && !isEmpty(param.getValue())) {
 				queryString.append(buildPrefix(paramValues.size()));
-				queryString.append(param.queryAsString());
+				//queryString.append(param.queryAsString());
 				paramValues.add(param.getValue().get());
 			}
 		}

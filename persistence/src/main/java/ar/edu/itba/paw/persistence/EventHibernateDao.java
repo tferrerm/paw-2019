@@ -18,6 +18,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
@@ -176,7 +177,7 @@ public class EventHibernateDao implements EventDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 		Root<Event> from = cq.from(Event.class);
-		
+		from.fetch("inscriptions", JoinType.INNER);
 		final TypedQuery<Event> query = em.createQuery(
 				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
 			);
