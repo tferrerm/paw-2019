@@ -68,6 +68,17 @@
 				</div>
 			</div>
 		</div>
+		<div class="tbl profile-cont">
+			<c:url value="/user/${user.userid}/comment" var="postPath"/>
+			<form:form id="commentForm" modelAttribute="commentForm" action="${postPath}">
+				<form:label path="comment"><spring:message code="comment"/></form:label>
+				<form:input class="form-control" type="text" path="comment" maxlength="500"/>
+				<form:errors path="comment" cssClass="form-error" element="span"/>
+				<div class="submit-container">
+					<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
+				</div>
+			</form:form>
+		</div>
 	</div>
 </div>
 

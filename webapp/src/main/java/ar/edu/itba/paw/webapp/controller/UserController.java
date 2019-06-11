@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
@@ -41,6 +42,7 @@ import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
 
 @Controller
@@ -94,7 +96,8 @@ public class UserController extends BaseController {
     }
 	
 	@RequestMapping("/user/{userId}")
-	public ModelAndView userProfile(@PathVariable("userId") long userid) 
+	public ModelAndView userProfile(@PathVariable("userId") long userid,
+			@ModelAttribute("commentForm") final CommentForm form) 
 	throws UserNotFoundException {
 		final ModelAndView mav = new ModelAndView("profile");
 		mav.addObject("user", us.findById(userid)
@@ -106,6 +109,15 @@ public class UserController extends BaseController {
 		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		mav.addObject("votes_received", us.countVotesReceived(userid));
 		return mav;
+	}
+	
+	@RequestMapping(value = "/user/{userId}/comment", method = { RequestMethod.POST })
+    public ModelAndView comment(@Valid @ModelAttribute("commentForm") final CommentForm form,
+    		@PathVariable("userId") long userId) throws UserNotAuthorizedException {
+		
+		us.createComment(loggedUser().getUserid(), userId, form.getComment());
+		
+	    return new ModelAndView("redirect:/user/" + userId);
 	}
 	
 	@RequestMapping("/")

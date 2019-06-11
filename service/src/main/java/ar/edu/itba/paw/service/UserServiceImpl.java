@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserComment;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,6 +47,19 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return ud.countVotesReceived(userid).orElse(0);
+	}
+	
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public UserComment createComment(final long commenterid, final long receiverid, final String comment) 
+			throws UserNotAuthorizedException {
+		
+		if(commenterid == receiverid)
+			throw new UserNotAuthorizedException("User is not authorized to comment own profile.");
+		User commenter = ud.findById(commenterid).orElseThrow(NoSuchElementException::new);
+		User receiver = ud.findById(receiverid).orElseThrow(NoSuchElementException::new);
+		
+		return ud.createComment(commenter, receiver, comment);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })

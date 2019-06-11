@@ -56,7 +56,7 @@ public class TournamentController extends BaseController {
     		sportName = sport.toString();
 
         String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
-        ModelAndView mav = new ModelAndView("tournaments");
+        ModelAndView mav = new ModelAndView("tournamentList");
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());

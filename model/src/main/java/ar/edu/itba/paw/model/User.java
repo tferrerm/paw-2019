@@ -58,6 +58,9 @@ public class User {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "inscriptedUser")
 	private List<Inscription> inscriptions;
 	
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "receiver")
+	private List<UserComment> comments;
+	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "addedBy")
 	private ProfilePicture profilePicture;
 	
@@ -147,6 +150,10 @@ public class User {
 	
 	public List<Inscription> getInscriptions() {
 		return inscriptions;
+	}
+	
+	public List<UserComment> getComments() {
+		return comments;
 	}
 	
 	public ProfilePicture getProfilePicture() {

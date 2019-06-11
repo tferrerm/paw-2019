@@ -4,8 +4,10 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserComment;
 
 public interface UserService {
 	
@@ -14,6 +16,9 @@ public interface UserService {
 	public Optional<User> findByUsername(final String username);
 	
 	public int countVotesReceived(final long userid);
+	
+	public UserComment createComment(final long commenterid, final long receiverid, final String comment)
+			throws UserNotAuthorizedException;
 	
 	/**
 	 * 

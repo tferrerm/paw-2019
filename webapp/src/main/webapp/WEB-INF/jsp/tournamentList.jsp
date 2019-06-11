@@ -29,7 +29,7 @@
                 <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
     			<div class="tbl">
     				<div class="table-header">
-                        <c:url value='/tournaments/filter' var="postPath"/>
+                        <c:url value='/tournament_list_help/filter' var="postPath"/>
                         <form:form id="searchfilters" class="searchfilters" modelAttribute="tournamentFiltersForm" action="${postPath}">
                             <div class="table-titles">
                                 <div>
