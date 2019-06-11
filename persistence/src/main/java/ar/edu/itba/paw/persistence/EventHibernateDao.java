@@ -365,16 +365,45 @@ public class EventHibernateDao implements EventDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Optional<Sport> getFavoriteSport(long userid) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		String queryString = "SELECT sport FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
+				+ " WHERE userid = :userid AND starts_at <= :now GROUP BY sport HAVING count(*) >= ANY (SELECT count(*) "
+				+ " FROM events_users NATURAL JOIN events NATURAL JOIN pitches WHERE userid = :userid AND starts_at <= :now GROUP BY sport) "
+				+ " ORDER BY sport ASC";
+		Query query = em.createNativeQuery(queryString);
+		query.setParameter("userid", userid);
+		query.setParameter("now", Timestamp.from(Instant.now()));
+		
+		return query.getResultList().stream().findFirst();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Optional<Club> getFavoriteClub(long userid) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		String queryString = " SELECT clubid FROM events_users "
+				+ " NATURAL JOIN events NATURAL JOIN pitches NATURAL JOIN clubs "
+				+ " WHERE userid = :userid AND starts_at <= :now "
+				+ " GROUP BY clubid HAVING count(*) >= ANY "
+				+ " (SELECT count(*) FROM events_users NATURAL JOIN events NATURAL JOIN pitches "
+				+ " WHERE userid = :userid AND starts_at <= :now GROUP BY clubid) ORDER BY clubid ASC ";
+		Query idsQuery = em.createNativeQuery(queryString);
+		idsQuery.setParameter("userid", userid);
+		idsQuery.setParameter("now", Timestamp.from(Instant.now()));
+		List<Long> ids = idsQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return Optional.empty();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
+		Root<Club> from = cq.from(Club.class);
+		final TypedQuery<Club> query = em.createQuery(
+				cq.select(from).where(cb.equal(from.get("clubid"), ids.get(0)))
+			);
+		
+		return query.getResultList().stream().findFirst();
 	}
 
 	@Override
