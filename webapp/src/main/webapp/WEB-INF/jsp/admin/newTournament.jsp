@@ -17,7 +17,7 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h2><spring:message code="create_club"/></h2>
+			<h2><spring:message code="create_tournament"/></h2>
 			<div class="form-container">
 				<c:url value="/admin/tournament/create" var="postPath"/>
 				<form:form modelAttribute="newTournamentForm" action="${postPath}" method="post" enctype="multipart/form-data">
