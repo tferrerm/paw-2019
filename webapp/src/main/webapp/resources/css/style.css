@@ -4,10 +4,14 @@ a, a:link, a:visited, a:hover {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     background-color: snow;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 18px;
     margin: 0;
+    height: 100%;
 }
 
 button {
@@ -50,6 +54,19 @@ span {
 a.link-text{
     color: blue;
     text-decoration: underline;
+}
+
+.align-start {
+    align-items: flex-start;
+}
+
+
+.align-end {
+    align-items: flex-end;
+}
+
+.align-center{
+    align-items: center;
 }
 
 .background-red {
@@ -179,6 +196,7 @@ margin: 0 10px;
     display: flex;
     flex-direction: column;
     padding: 25px;
+    margin: 10px 0;
     width: 60%;
 }
 
@@ -234,6 +252,7 @@ a.event-link {
 }
 
 .flex-column{
+    display: flex;
     flex-direction: column;
 }
 
@@ -453,6 +472,14 @@ a.logo-admin {
 .main-container {
     display: flex;
     height: 100%;
+}
+
+.ml-5 {
+    margin-left: 5px;
+}
+
+.mr-5 {
+    margin-right: 5px;
 }
 
 .margin-right {
@@ -752,6 +779,18 @@ ul.pitch-item {
     border-radius: 10px;
     box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
     min-width: 1000px;
+}
+
+.team-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff2e6;
+    border-radius: 5px;
+    margin: 10px 10px 10px 10px;
+    padding: 10px;
+    word-break: break-word;
+    width: 100%;
 }
 
 .username {
