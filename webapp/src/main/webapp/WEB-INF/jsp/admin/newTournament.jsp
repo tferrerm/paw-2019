@@ -27,9 +27,29 @@
 						<form:errors path="name" cssClass="form-error" element="span"/>
 					</div>
 					<div>
-						<form:label path="location"><spring:message code="event_location"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" maxlength="100" path="location"/>
-						<form:errors path="location" cssClass="form-error" element="span"/>
+						<form:label path="club"><spring:message code="club"/> * </form:label>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="club"/>
+						<form:errors path="club" cssClass="form-error" element="span"/>
+					</div>
+					<div>
+						<form:label path="sport"><spring:message code="sport"/> * </form:label>
+						<form:input  cssClass="form-control" type="text" maxlength="100" path="sport"/>
+						<form:errors path="sport" cssClass="form-error" element="span"/>
+					</div>
+					<div>
+						<form:label path="minParticipants"><spring:message code="min_participants"/> * </form:label>
+						<form:input  cssClass="form-control" type="number" maxlength="100" path="minParticipants"/>
+						<form:errors path="minParticipants" cssClass="form-error" element="span"/>
+					</div>
+					<div>
+						<form:label path="maxParticipants"><spring:message code="max_participants"/> * </form:label>
+						<form:input  cssClass="form-control" type="number" maxlength="100" path="maxParticipants"/>
+						<form:errors path="maxParticipants" cssClass="form-error" element="span"/>
+					</div>
+					<div>
+						<form:label path="teamSize"><spring:message code="team_size"/> * </form:label>
+						<form:input  cssClass="form-control" type="number" maxlength="100" path="teamSize"/>
+						<form:errors path="teamSize" cssClass="form-error" element="span"/>
 					</div>
 					<div class="submit-container">
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
