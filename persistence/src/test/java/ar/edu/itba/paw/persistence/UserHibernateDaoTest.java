@@ -26,7 +26,7 @@ import ar.edu.itba.paw.model.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
-public class UserJdbcDaoTest {
+public class UserHibernateDaoTest {
 
 	@Autowired
 	private DataSource ds;

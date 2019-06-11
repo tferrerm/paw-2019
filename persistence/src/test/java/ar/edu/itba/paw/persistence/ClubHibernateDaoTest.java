@@ -25,7 +25,7 @@ import ar.edu.itba.paw.model.Club;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
-public class ClubJdbcDaoTest {
+public class ClubHibernateDaoTest {
 	
 	@Autowired
 	private DataSource ds;

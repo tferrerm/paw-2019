@@ -55,7 +55,6 @@ public class EventServiceImpl implements EventService {
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
 	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
 			"day_fri", "day_sat", "day_sun"};
-	private static final int EVENT_INSCRIPTIONS_INDEX = 1;
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
