@@ -9,11 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
 
@@ -40,7 +37,7 @@ public class BaseController {
 		return user.get();
 	}
 	
-	@ExceptionHandler({ IllegalArgumentException.class })
+	/*@ExceptionHandler({ IllegalArgumentException.class })
 	private ModelAndView illegalIdOrPageNumber() {
 		return new ModelAndView("404");
 	}
@@ -53,6 +50,6 @@ public class BaseController {
     @ExceptionHandler({ Exception.class })
 	private ModelAndView generalExceptionHandler() {
 		return new ModelAndView("oops");
-	}
+	}*/
 
 }

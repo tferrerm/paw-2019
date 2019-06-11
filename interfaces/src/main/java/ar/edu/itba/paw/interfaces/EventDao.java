@@ -35,20 +35,19 @@ public interface EventDao {
 	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
-	 * Gets future Events for which a User has an inscription. Maximum Events: 24 * 7
-	 * @param userid 		Inscripted User.
-	 * @param pageNum 		Page number.
-	 * @return a list of Events.
-	 */
-	public List<Event> findFutureUserInscriptions(long userid);
-	
-	/**
-	 * Gets Events in which the User participated.
-	 * @param userid		Inscripted User.
+	 * Gets past Events for which a User has an inscription.
+	 * @param userid		Inscripted User's id.
 	 * @param pageNum		Page number.
-	 * @return a list of Events
+	 * @return the list of past events for which a User has an inscription.
 	 */
 	public List<Event> findPastUserInscriptions(long userid, int pageNum);
+	
+	/**
+	 * Gets future Events for which a User has an inscription. Max results = 24 * 7.
+	 * @param userid		Inscripted User's id.
+	 * @return the list of future events for which a User has an inscription.
+	 */
+	public List<Event> findFutureUserInscriptions(long userid);
 	
 	/**
 	 * Counts Events for which a User has an inscription.
@@ -57,10 +56,6 @@ public interface EventDao {
 	 * @return the amount of events for which a User has an inscription.
 	 */
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid);
-
-	public List<Event> findFutureEvents(final int pageNum);
-
-	public List<User> findEventUsers(final long eventid, final int pageNum);
 
 	/**
 	 * Finds Events in a Pitch. Only seven days of events will be returned.
@@ -71,7 +66,6 @@ public interface EventDao {
 
 	/**
 	 * Returns a list of Events matching present filters.
-	 * @param onlyFuture		Search only future Events (true) or any Events (false).
 	 * @param eventName			String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
@@ -80,9 +74,9 @@ public interface EventDao {
 	 * @param pageNum			Page number.
 	 * @return a list of Events that matched given filters.
 	 */
-	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> establishment, Optional<String> sport, Optional<String> organizer,
-			Optional<Integer> vacancies, Optional<Instant> date, int pageNum);
+	public List<Event> findBy(final Optional<String> eventName, final Optional<String> clubName, 
+			final Optional<String> sport, final Optional<String> organizer,
+			final Optional<Integer> vacancies, final Optional<Instant> date, final int pageNum);
 	
 	/**
 	 * Returns the amount of Events matching present filters.
@@ -100,23 +94,9 @@ public interface EventDao {
 			final Optional<Instant> date);
 
 	/**
-	 * Returns a combination of eventid and vacancies for that Event.
-	 * @param onlyFuture		Search only future Events (true) or any Events (false).
-	 * @param eventName			String to match an Event's name with.
-	 * @param establishment		String to match an Event's club name with.
-	 * @param sport				String to match an Event's Sport with.
-	 * @param organizer			String to match an Event's organizer's name with.
-	 * @param vacancies			Minimum vacancies for an Event.
-	 * @param pageNum			Page number.
-	 * @return
+	 * Gets the amount of pages all future Events occupy
+	 * @return the amount of future Event pages
 	 */
-	public List<Long[]> countBy(boolean onlyFuture, Optional<String> eventName, 
-			Optional<String> establishment, Optional<String> sport, 
-			Optional<String> organizer, Optional<Integer> vacancies,
-			Optional<Instant> date, int pageNum);
-
-	public int countUserEventPages(final long userid);
-
 	public int countFutureEventPages();
 
 	/**
@@ -132,25 +112,6 @@ public interface EventDao {
 
 	public void joinEvent(final User user, final Event event)
 			throws UserAlreadyJoinedException, UserBusyException;
-
-	public void leaveEvent(final User user, final Event event);
-
-	public int kickFromEvent(final long kickedUserId, final long eventId);
-
-	/**
-	 * Gets the amount of current or past Events a User has participated in.
-	 * @param	isCurrentEventsQuery	Search for current Events only (true) or past Events only (false).
-	 * @param	userid 					The User's id.
-	 * @return							The amount of current Events owned by the User.
-	 */
-	public int countUserEvents(boolean isCurrentEventsQuery, final long userid);
-
-	/**
-	 * Gets the amount of current (not finished) Events owned by a User.
-	 * @param	userid 	The User's id.
-	 * @return the amount of current Events owned by the User.
-	 */
-	public int countUserOwnedCurrEvents(final long userid);
 
 	/**
 	 * Returns a User's favorite Sport(s) based on Events joined.
@@ -178,30 +139,6 @@ public interface EventDao {
 	 * @param	eventid		The Event's id.
 	 */
 	public void deleteEvent(final long eventid);
-	
-	/**
-	 * Gets the sum of User votes for an Event, or empty Optional if no votes.
-	 * @param eventid	The Event's id.
-	 * @return the sum of all User votes for that Event.
-	 */
-	public Optional<Integer> getVoteBalance(final long eventid);
-	
-	/**
-	 * Gets the User's vote for that event.
-	 * @param eventid	The Event's id.
-	 * @param userid	The User's id.
-	 * @return -1 if downvote, 1 if upvote or empty Optional if such vote does not exist.
-	 */
-	public Optional<Integer> getUserVote(final long eventid, final long userid);
-	
-	/**
-	 * Sets a User's vote for an Event.
-	 * @param isUpvote	True for upvote, false for downvote.
-	 * @param eventid	The Event's id.
-	 * @param userid	The User's id.
-	 * @return 0 if the User doesn't have an inscription for that Event, 1 otherwise.
-	 */
-	public int vote(final boolean isUpvote, final long eventid, final long userid);
 	
 	/**
 	 * Gets the amount of pages the list of inscripted Events occupies.

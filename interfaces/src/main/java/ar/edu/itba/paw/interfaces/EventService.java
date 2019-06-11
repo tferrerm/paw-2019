@@ -44,32 +44,27 @@ public interface EventService {
 	public int countByOwner(final boolean futureEvents, final long userid);
 	
 	/**
-	 * Gets future Events for which a User has an inscription. Maximum Events: 24 * 7
-	 * @param userid 		Inscripted User.
-	 * @param pageNum 		Page number.
-	 * @return a list of Events.
-	 */
-	public List<Event> findFutureUserInscriptions(long userid);
-	
-	/**
-	 * Gets Events in which the User participated.
-	 * @param userid		Inscripted User.
-	 * @param pageNum		Page number.
-	 * @return a list of Events
-	 */
-	public List<Event> findPastUserInscriptions(long userid, int pageNum);
-	
-	/**
 	 * Counts the amount of Events for which a User has an inscription.
 	 * @param futureEvents	Finds only future Events (true) or only past Events (false).
 	 * @param userid		The User's id.
 	 * @return the amount of events for which a User has an inscription.
 	 */
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid);
-
-	public List<Event> findFutureEvents(int pageNum);
-
-	public List<User> findEventUsers(final long eventid, final int pageNum);
+	
+	/**
+	 * Gets past Events for which a User has an inscription.
+	 * @param userid		Inscripted User's id.
+	 * @param pageNum		Page number.
+	 * @return the list of past events for which a User has an inscription.
+	 */
+	public List<Event> findPastUserInscriptions(long userid, int pageNum);
+	
+	/**
+	 * Gets future Events for which a User has an inscription. Max results = 24 * 7.
+	 * @param userid		Inscripted User's id.
+	 * @return the list of future events for which a User has an inscription.
+	 */
+	public List<Event> findFutureUserInscriptions(long userid);
 
 	/**
 	 * Finds Events in a Pitch. Only seven days of Events will be returned.
@@ -120,8 +115,6 @@ public interface EventService {
 	
 	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents);
 
-	public int countUserEventPages(final long userid);
-
 	public int countFutureEventPages();
 
 	/**
@@ -137,10 +130,10 @@ public interface EventService {
 											MaximumDateExceededException, EndsBeforeStartsException, 
 											EventOverlapException, HourOutOfRangeException;
 
-	public void joinEvent(final User user, final Event event)
+	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
 
-	public void leaveEvent(final User user, final Event event);
+	public void leaveEvent(final long eventid, final long userid);
 
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
 			throws UserNotAuthorizedException;
@@ -148,21 +141,6 @@ public interface EventService {
 	public String[] getScheduleDaysHeader();
 
 	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour);
-
-	/**
-	 * Gets the amount of current or past Events a User has participated in.
-	 * @param	isCurrentEventsQuery	Search for current Events only (true) or past Events only (false).
-	 * @param	userid 					The User's id.
-	 * @return							The amount of current Events owned by the User.
-	 */
-	public int countUserEvents(boolean isCurrentEventsQuery, final long userid);
-
-	/**
-	 * Gets the amount of current (not finished) Events owned by a User.
-	 * @param	userid 	The User's id.
-	 * @return the amount of current Events owned by the User.
-	 */
-	public int countUserOwnedCurrEvents(final long userid);
 
 	/**
 	 * Returns a User's favorite Sport(s) based on Events joined.

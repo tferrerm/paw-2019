@@ -78,7 +78,7 @@ public class PitchServiceImpl implements PitchService {
 			throws PictureProcessingException {
 		Pitch pitch = pd.create(club, name, sport);
 		if(picture != null) {
-			pps.create(pitch.getPitchid(), picture);
+			pps.create(pitch, picture);
 		}
 		return pitch;
 	}
@@ -88,6 +88,7 @@ public class PitchServiceImpl implements PitchService {
 		return pd.getPageInitialPitchIndex(pageNum);
 	}
 	
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void deletePitch(long pitchid) {
 		pd.deletePitch(pitchid);

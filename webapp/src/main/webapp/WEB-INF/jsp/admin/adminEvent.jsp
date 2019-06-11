@@ -74,8 +74,8 @@
 						<div class="participants-list">
 							<span class="event-info-label"><spring:message code="participants"/></span>
 							<ul>
-							    <c:forEach var="user" items="${participants}">
-					              	<p class="event-participants">${user.firstname} ${user.lastname}</p>
+							    <c:forEach var="i" items="${inscriptions}">
+					              	<p class="event-participants">${i.inscriptedUser.firstname} ${i.inscriptedUser.lastname}</p>
 					            </c:forEach>
 				          	</ul>
 						</div>

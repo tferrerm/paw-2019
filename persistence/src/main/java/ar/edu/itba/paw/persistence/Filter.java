@@ -12,20 +12,21 @@ public class Filter {
 		this.value = value;
 	}
 	
-	public String queryAsString() {
-		return " " + name.toString() + " LIKE '%' || LOWER(?) || '%' ";
+	public String queryAsString(int paramNum) {
+		return " LOWER(" + name.toString() + ") LIKE '%' || LOWER(:" + getParamName() + paramNum + ") || '%' ";
 	}
 	
 	public String queryAsInteger() {
 		return " " + name.toString() + " = ? ";
 	}
 	
-	public String queryAsGreaterInteger(boolean alsoEquals) {
+	/*public String queryAsGreaterInteger(boolean alsoEquals) {
 		return " " + name.toString() + " >" + ((alsoEquals) ? "= ?" : " ?");
-	}
+	}*/
 	
-	public String queryAsDateRange() {
-		return " CAST( " + name.toString() + " AS DATE) = CAST( ? AS DATE) ";
+	public String queryAsDateRange(int paramNum, boolean onlyAtDate) {
+		return " CAST( " + name.toString() + " AS DATE) " + ((onlyAtDate)? "" : ">") + 
+				"= CAST(:" + getParamName() + paramNum + " AS DATE) ";
 	}
 	
 	public String getName() {
@@ -34,6 +35,10 @@ public class Filter {
 	
 	public Optional<?> getValue() {
 		return value;
+	}
+	
+	public static String getParamName() {
+		return "param_";
 	}
 
 }

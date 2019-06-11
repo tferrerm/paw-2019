@@ -47,6 +47,7 @@ public class ClubServiceImpl implements ClubService {
 		return cd.getPageInitialClubIndex(pageNum);
 	}
 	
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void deleteClub(final long clubid) {
 		cd.deleteClub(clubid);

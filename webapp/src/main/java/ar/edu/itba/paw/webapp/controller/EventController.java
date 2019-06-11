@@ -38,6 +38,7 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -100,6 +101,7 @@ public class EventController extends BaseController {
 		mav.addObject("page", pageNum);
 		int futureEventQty = es.countByOwner(true, userid);
 		int pastEventQty = es.countByOwner(false, userid);
+		
 		boolean countFutureOwnedPages = (futureEventQty > pastEventQty);
         mav.addObject("lastPageNum", es.countUserOwnedPages(countFutureOwnedPages, userid));
         
@@ -133,19 +135,26 @@ public class EventController extends BaseController {
     	ModelAndView mav = new ModelAndView("event");
 	    
     	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    List<User> participants = es.findEventUsers(event.getEventId(), 1);
+	    List<Inscription> inscriptions = event.getInscriptions();
 	    User current = loggedUser();
 	    
         mav.addObject("event", event);
         
-        mav.addObject("participant_count", es.countParticipants(event.getEventId()));
-        mav.addObject("participants", participants);
-        mav.addObject("is_participant", participants.contains(current));
+        mav.addObject("participant_count", inscriptions.size());
+        mav.addObject("inscriptions", inscriptions);
+        
+        boolean isParticipant = false;
+        for(Inscription i : inscriptions) {
+        	if(i.getInscriptedUser().equals(current))
+        		isParticipant = true;
+        }	
+        mav.addObject("is_participant", isParticipant);
+        
         mav.addObject("has_started", Instant.now().isAfter(event.getStartsAt()));
         mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
         
-        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId()));
-        mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
+        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId())); // SACAR?
+        mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid())); // SACAR?
         
         mav.addObject("eventFullError", eventFullError);
         mav.addObject("alreadyJoinedError", alreadyJoinedError);
@@ -162,7 +171,7 @@ public class EventController extends BaseController {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 	    ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    try {
-	    	es.joinEvent(loggedUser(), event);
+	    	es.joinEvent(loggedUser().getUserid(), id);
 
 	    } catch(EventFullException e) {
 	    	mav.addObject("eventFullError", true);
@@ -182,8 +191,7 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveEvent(@PathVariable long id)
     	throws EventNotFoundException {
-	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    es.leaveEvent(loggedUser(), event);
+	    es.leaveEvent(id, loggedUser().getUserid());
         return new ModelAndView("redirect:/event/" + id);
     }
 
@@ -201,17 +209,17 @@ public class EventController extends BaseController {
 
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
-                                         @PathVariable("pageNum") final int pageNum,
-                                         @RequestParam(value = "name", required = false) String name,
-                                         @RequestParam(value = "est", required = false) String establishment,
-                                         @RequestParam(value = "sport", required = false) Sport sport,
-                                         @RequestParam(value = "vac", required = false) String vacancies,
-                                         @RequestParam(value = "date", required = false) String date) {
+                                     @PathVariable("pageNum") final int pageNum,
+                                     @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "est", required = false) String clubName,
+                                     @RequestParam(value = "sport", required = false) Sport sport,
+                                     @RequestParam(value = "vac", required = false) String vacancies,
+                                     @RequestParam(value = "date", required = false) String date) {
     	String sportName = "";
     	if(sport != null)
     		sportName = sport.toString();
 
-        String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
+        String queryString = buildQueryString(name, clubName, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
@@ -219,15 +227,15 @@ public class EventController extends BaseController {
         mav.addObject("lastPageNum", es.countFutureEventPages());
         
         try {
-	        List<Event> events = es.findByWithInscriptions(true, Optional.ofNullable(name), 
-	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
+	        List<Event> events = es.findBy(true, Optional.ofNullable(name), 
+	        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
 	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
 	
 	        mav.addObject("events", events);
 	        mav.addObject("eventQty", events.size());
 	        
 	        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
-	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
+	        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
 	        		Optional.ofNullable(vacancies), Optional.ofNullable(date));
 	        mav.addObject("totalEventQty", totalEventQty);
         } catch(InvalidDateFormatException e) {

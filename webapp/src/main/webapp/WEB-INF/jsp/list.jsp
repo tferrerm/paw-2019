@@ -2,6 +2,7 @@
 <%@	taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 	<head>
         <script
@@ -84,7 +85,7 @@
                             <div class="home-header">${event.name}</div>
                             <div class="home-header">${event.pitch.club.name}</div>
                             <div><spring:message code="${event.pitch.sport}"/></div>
-                            <div>${event.maxParticipants - event.inscriptions}</div>
+                            <div>${event.maxParticipants - fn:length(event.inscriptions)}</div>
                             <div>
     							<fmt:timeZone value="AR">
     								<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />

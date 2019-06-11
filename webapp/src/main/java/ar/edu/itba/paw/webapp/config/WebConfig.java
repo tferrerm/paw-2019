@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.config;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,13 +15,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.DatabasePopulator;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,24 +69,46 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public DataSource dataSource() {
 		final SimpleDriverDataSource ds	= new SimpleDriverDataSource();
 		ds.setDriverClass(org.postgresql.Driver.class);
-		ds.setUrl("jdbc:postgresql://localhost:8000/paw");
+		ds.setUrl("jdbc:postgresql://localhost/paw-2");
 		ds.setUsername("root");
 		ds.setPassword("root");			
 		return ds;
 	}
-	
+
+	// JDBC configuration
+	// @Bean
+	// public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+	// 	final DataSourceInitializer dsi = new DataSourceInitializer();
+	// 	dsi.setDataSource(ds);
+	// 	dsi.setDatabasePopulator(databasePopulator());
+	// 	return dsi;
+	// }
+
+	// private DatabasePopulator databasePopulator()	{
+	// 	final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+	// 	dbp.addScript(schemaSql);
+	// 	return dbp;
+	// }
+
 	@Bean
-	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-		final DataSourceInitializer dsi = new DataSourceInitializer();
-		dsi.setDataSource(ds);
-		dsi.setDatabasePopulator(databasePopulator());
-		return dsi;
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+		factoryBean.setPackagesToScan("ar.edu.itba.paw.model");
+		factoryBean.setDataSource(dataSource());
+		final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		factoryBean.setJpaVendorAdapter(vendorAdapter);
+		final Properties properties = new Properties();
+		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+		properties.setProperty("hibernate.show_sql", "true");
+		properties.setProperty("format_sql", "true");
+		factoryBean.setJpaProperties(properties);
+		return factoryBean;
 	}
 
-	private DatabasePopulator databasePopulator()	{
-		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-		dbp.addScript(schemaSql);
-		return dbp;
+	@Bean
+	public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+		return new JpaTransactionManager(emf);
 	}
 	
 	@Primary
@@ -112,10 +135,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
-	@Bean
+	/*@Bean
 	public PlatformTransactionManager transactionManager(final DataSource ds) {
 		return new DataSourceTransactionManager(ds);
-	}
+	}*/
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

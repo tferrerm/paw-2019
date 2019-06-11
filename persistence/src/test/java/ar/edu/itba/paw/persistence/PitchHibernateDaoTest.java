@@ -28,7 +28,7 @@ import ar.edu.itba.paw.model.Sport;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
-public class PitchJdbcDaoTest {
+public class PitchHibernateDaoTest {
 	
 	@Autowired
 	private DataSource ds;

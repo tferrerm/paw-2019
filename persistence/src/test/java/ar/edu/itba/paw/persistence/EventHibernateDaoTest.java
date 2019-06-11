@@ -34,7 +34,7 @@ import ar.edu.itba.paw.model.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Transactional
-public class EventJdbcDaoTest {
+public class EventHibernateDaoTest {
 
 	@Autowired
 	private DataSource ds;
@@ -55,7 +55,7 @@ public class EventJdbcDaoTest {
 	private static final long USERID = 1;
 	private static final String USERNAME = "test@test.test";
 	private static final String EVENTNAME = "event";
-	private static final User OWNER = new User(USERID, USERNAME, "first", "last", "12345678", Role.ROLE_USER);
+	private static final User OWNER = new User(USERNAME, "first", "last", "12345678", Role.ROLE_USER, Instant.now());
 	private static final long CLUBID = 1;
 	private static final Club CLUB = new Club(1, "club", "location", Instant.now());
 	private static final Pitch PITCH = new Pitch(1, CLUB, "pitch", Sport.TENNIS, Instant.now());
@@ -64,7 +64,7 @@ public class EventJdbcDaoTest {
 	private static final Instant STARTS_AT = Instant.now();
 	private static final int DURATION = 1;
 	private static final Instant ENDS_AT = STARTS_AT.plus(DURATION, ChronoUnit.HOURS);
-	private static final Event EVENT = new Event(EVENTID, EVENTNAME, OWNER, PITCH, DESCRIPTION, 2, STARTS_AT, ENDS_AT);
+	private static final Event EVENT = new Event(EVENTNAME, OWNER, PITCH, DESCRIPTION, 2, STARTS_AT, ENDS_AT);
 	private static final Timestamp STARTS = Timestamp.valueOf("2030-05-20 10:00:00");
 	private static final Timestamp ENDS = Timestamp.valueOf("2030-05-20 11:00:00");
 
@@ -107,27 +107,6 @@ public class EventJdbcDaoTest {
 	}
 	
 	@Test
-	public void testFindFuture() {
-		List<Event> events = ed.findFutureEvents(1);
-		Assert.assertEquals(1, events.size());
-		Assert.assertEquals(EVENTNAME, events.get(0).getName());
-		Assert.assertEquals(PITCH.getPitchid(), events.get(0).getPitch().getPitchid());
-		Assert.assertEquals(DESCRIPTION, events.get(0).getDescription());
-		Assert.assertEquals(MAX_PARTICIPANTS, events.get(0).getMaxParticipants());
-		Assert.assertEquals(STARTS.toInstant(), events.get(0).getStartsAt());
-		Assert.assertEquals(ENDS.toInstant(), events.get(0).getEndsAt());
-		Assert.assertNotNull(events.get(0).getCreatedAt());
-	}
-	
-	@Test
-	public void testFindEventUsers() {
-		List<User> users = ed.findEventUsers(EVENTID, 1);
-		Assert.assertEquals(2, users.size());
-		List<User> noUsers = ed.findEventUsers(EVENTID, 2);
-		Assert.assertEquals(0, noUsers.size());
-	}
-	
-	@Test
 	public void testFindCurrentEventsInPitch() {
 		List<Event> events = ed.findCurrentEventsInPitch(PITCH.getPitchid());
 		Assert.assertEquals(0, events.size()); // Inserted events are either in the past or years from now
@@ -136,7 +115,7 @@ public class EventJdbcDaoTest {
 	@Test
 	public void testFindBy() {
 		List<Event> events = ed.findBy(
-				true,
+				//true,
 				Optional.of(EVENTNAME),
 				Optional.of(CLUB.getName()),
 				Optional.of(Sport.SOCCER.toString()),
@@ -148,7 +127,7 @@ public class EventJdbcDaoTest {
 		Assert.assertEquals(EVENTID, events.get(0).getEventId());
 		Assert.assertEquals(EVENTNAME, events.get(0).getName());
 		List<Event> includingOldEvents = ed.findBy(
-				false,
+				//false,
 				Optional.of(EVENTNAME), // Name: event, search: '%' || 'event' || '%'
 				Optional.of(CLUB.getName()),
 				Optional.of(Sport.SOCCER.toString()),
@@ -158,7 +137,7 @@ public class EventJdbcDaoTest {
 				1);
 		Assert.assertEquals(2, includingOldEvents.size());
 		List<Event> oldEvents = ed.findBy(
-				false,
+				//false,
 				Optional.of(OLD_EVENTNAME), // Name: old_event
 				Optional.of(CLUB.getName()),
 				Optional.of(Sport.SOCCER.toString()),
@@ -225,7 +204,7 @@ public class EventJdbcDaoTest {
 		ed.joinEvent(OWNER, EVENT);
 		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
 	}
-	
+	/*
 	@Rollback
 	@Test
 	public void testLeaveEvent() {
@@ -297,6 +276,6 @@ public class EventJdbcDaoTest {
 		Assert.assertEquals(0, result);
 		result = ed.vote(true, -1, -1);
 		Assert.assertEquals(0, result);
-	}
+	}*/
 
 }
