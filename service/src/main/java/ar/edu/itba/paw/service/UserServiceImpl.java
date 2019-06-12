@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
+import ar.edu.itba.paw.interfaces.InscriptionDao;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private ProfilePictureService pps;
+	
+	@Autowired
+	private InscriptionDao ihd;
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 
@@ -59,7 +63,21 @@ public class UserServiceImpl implements UserService {
 		User commenter = ud.findById(commenterid).orElseThrow(NoSuchElementException::new);
 		User receiver = ud.findById(receiverid).orElseThrow(NoSuchElementException::new);
 		
+		if(!ihd.haveRelationship(commenter, receiver))
+			throw new UserNotAuthorizedException("User is not authorized to comment if no shared events.");
+		
 		return ud.createComment(commenter, receiver, comment);
+	}
+	
+	@Override
+	public boolean haveRelationship(final long commenterid, final long receiverid) {
+		if(commenterid == receiverid)
+			return false;
+		
+		User commenter = ud.findById(commenterid).orElseThrow(NoSuchElementException::new);
+		User receiver = ud.findById(receiverid).orElseThrow(NoSuchElementException::new);
+		
+		return ihd.haveRelationship(commenter, receiver);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })

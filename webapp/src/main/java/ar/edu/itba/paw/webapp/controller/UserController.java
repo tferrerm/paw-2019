@@ -108,6 +108,7 @@ public class UserController extends BaseController {
 		mav.addObject("favoriteSport", es.getFavoriteSport(userid).orElse(null));
 		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		mav.addObject("votes_received", us.countVotesReceived(userid));
+		mav.addObject("haveRelationship", us.haveRelationship(loggedUser().getUserid(), userid));
 		return mav;
 	}
 	
@@ -192,6 +193,11 @@ public class UserController extends BaseController {
 	
 	@ExceptionHandler({UserNotFoundException.class})
 	private ModelAndView userNotFound() {
+		return new ModelAndView("404");
+	}
+	
+	@ExceptionHandler({UserNotAuthorizedException.class})
+	private ModelAndView userNotAuthorized() {
 		return new ModelAndView("404");
 	}
 

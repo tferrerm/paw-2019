@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.InscriptionDao;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.InscriptionId;
+import ar.edu.itba.paw.model.User;
 
 @Repository
 public class InscriptionHibernateDao implements InscriptionDao {
@@ -42,10 +43,10 @@ public class InscriptionHibernateDao implements InscriptionDao {
 
 	@Override
 	public Optional<Integer> getUserVote(long eventid, long userid) {
-		StringBuilder queryString = new StringBuilder("SELECT i.vote FROM Inscription AS i "
-				+ " WHERE i.inscriptionEvent.eventid = :eventid AND i.inscriptedUser.userid = :userid");
+		String queryString = "SELECT i.vote FROM Inscription AS i "
+				+ " WHERE i.inscriptionEvent.eventid = :eventid AND i.inscriptedUser.userid = :userid";
 		
-		TypedQuery<Integer> query = em.createQuery(queryString.toString(), Integer.class);
+		TypedQuery<Integer> query = em.createQuery(queryString, Integer.class);
 		query.setParameter("eventid", eventid);
 		query.setParameter("userid", userid);
 		
@@ -71,6 +72,22 @@ public class InscriptionHibernateDao implements InscriptionDao {
 		Inscription inscription = findByIds(eventid, userid)
 				.orElseThrow(NoSuchElementException::new);
 		em.remove(inscription);
+	}
+
+	@Override
+	public boolean haveRelationship(final User commenter, final User receiver) {
+		String queryString = "SELECT count(i1) FROM Inscription AS i1 "
+				+ " WHERE i1.inscriptedUser.userid = :commenterid "
+				+ " AND (EXISTS (FROM Inscription AS i2 WHERE i2.inscriptionEvent = i1.inscriptionEvent "
+				+ " AND i2.inscriptedUser.userid = :receiverid) OR EXISTS (FROM Inscription AS i3 "
+				+ " WHERE i3.inscriptionEvent = i1.inscriptionEvent "
+				+ " AND i3.inscriptionEvent.owner.userid = :receiverid))";
+		
+		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+		query.setParameter("commenterid", commenter.getUserid());
+		query.setParameter("receiverid", receiver.getUserid());
+		
+		return query.getSingleResult().intValue() > 0;
 	}
 	
 }

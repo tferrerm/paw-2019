@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Inscription;
+import ar.edu.itba.paw.model.User;
 
 public interface InscriptionDao {
 	
@@ -33,5 +34,7 @@ public interface InscriptionDao {
 	public int vote(final boolean isUpvote, final long eventid, final long userid);
 	
 	public void deleteInscription(final long eventid, final long userid);
+
+	public boolean haveRelationship(final User commenter, final User receiver);
 	
 }

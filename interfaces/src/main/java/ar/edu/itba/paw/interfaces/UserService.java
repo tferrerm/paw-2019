@@ -20,6 +20,8 @@ public interface UserService {
 	public UserComment createComment(final long commenterid, final long receiverid, final String comment)
 			throws UserNotAuthorizedException;
 	
+	public boolean haveRelationship(final long commenterid, final long receiverid);
+	
 	/**
 	 * 
 	 * @param username
