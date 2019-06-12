@@ -1,5 +1,6 @@
 <%@	taglib	prefix="c"	uri="http://java.sun.com/jstl/core_rt"%>
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form"	%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
@@ -79,6 +80,54 @@
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>
 				</form:form>
+				<c:forEach var="cmt" items="${comments}">
+                        <div class="custom-row">
+                            <div class="home-header">${cmt.commenter.firstname} ${cmt.commenter.lastname}</div>
+                            <div class="home-header">${cmt.comment}</div>
+                            <div>
+    							<fmt:timeZone value="AR">
+    								<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
+    								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+    							</fmt:timeZone>
+                            </div>
+                        </div>
+                    </c:forEach>
+				<div class="table-navigator">
+                    <c:choose>
+                        <c:when test="${commentQty > 0}">
+                            <c:if test="${currCommentPage != 1}">
+                				<div>
+                                    <a href="<c:url value='/user/${userid}?cmt=1' />">
+                                        <button type="button" class="btn btn-secondary">
+                                            <spring:message code="first"/>
+                                        </button>
+                                    </a>
+                                    <a href="<c:url value='/user/${userid}?cmt=${currCommentPage-1}' />">
+                                        <button type="button" class="btn btn-secondary">
+                                            <spring:message code="back"/>
+                                        </button>
+                                    </a>
+                                </div>
+                            </c:if>
+                            <span class="flex"><spring:message code="showing_items"/> ${commentsPageInitIndex}-${commentsPageInitIndex + commentQty - 1} <spring:message code="of"/> ${totalCommentQty}</span>
+                            <c:if test="${currCommentPage != maxCommentPage}">
+                				<div>
+                                    <a href="<c:url value='/user/${userid}?cmt=${currCommentPage+1}' />">
+                                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                                    </a>
+                                    <a href="<c:url value='/user/${userid}?cmt=${maxCommentPage}' />">
+                                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                                    </a>
+                                </div>
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="notice">
+                                <spring:message code="no_comments"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+    			</div>
 			</div>
 		</c:if>
 	</div>

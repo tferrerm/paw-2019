@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,8 @@ import ar.edu.itba.paw.model.UserComment;
 @Repository
 public class UserHibernateDao implements UserDao {
 	
+	private static final int MAX_ROWS = 10;
+	
 	@PersistenceContext
 	private EntityManager em;
 
@@ -33,7 +36,6 @@ public class UserHibernateDao implements UserDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<User> cq = cb.createQuery(User.class);
 		Root<User> from = cq.from(User.class);
-		from.fetch("comments", JoinType.LEFT);
 		
 		final TypedQuery<User> query = em.createQuery(
 				cq.select(from).where(cb.equal(from.get("userid"), userid))
@@ -71,6 +73,32 @@ public class UserHibernateDao implements UserDao {
 		
 		return userComment;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserComment> getCommentsByUser(final long userid, final int pageNum) {
+		String idQueryString = "SELECT commentid FROM user_comments "
+				+ " WHERE dest_userid = :userid ORDER BY created_at DESC";
+		Query idQuery = em.createNativeQuery(idQueryString);
+		idQuery.setParameter("userid", userid);
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		
+		final List<Long> ids = idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<UserComment> cq = cb.createQuery(UserComment.class);
+		Root<UserComment> from = cq.from(UserComment.class);
+		from.fetch("commenter", JoinType.LEFT);
+		final TypedQuery<UserComment> query = em.createQuery(
+				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
+	}
 
 	@Override
 	public User create(String username, String firstname, String lastname, String password, Role role)
@@ -78,6 +106,31 @@ public class UserHibernateDao implements UserDao {
 		final User user = new User(username, firstname, lastname, password, role, Instant.now());
 		em.persist(user);
 		return user;
+	}
+	
+	@Override
+	public int countByUserComments(final long userid) {
+		String queryString = "SELECT count(uc) FROM UserComment AS uc WHERE "
+				+ " uc.receiver.userid = :userid";
+		
+		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+		query.setParameter("userid", userid);
+		
+		return query.getSingleResult().intValue();
+	}
+	
+	@Override
+	public int getCommentsPageInitIndex(final int pageNum) {
+		return (pageNum - 1) * MAX_ROWS + 1;
+	}
+
+	@Override
+	public int getCommentsMaxPage(final long userid) {
+		int rows = countByUserComments(userid);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 }

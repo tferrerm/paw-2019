@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserComment;
 import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
@@ -97,7 +99,9 @@ public class UserController extends BaseController {
 	
 	@RequestMapping("/user/{userId}")
 	public ModelAndView userProfile(@PathVariable("userId") long userid,
-			@ModelAttribute("commentForm") final CommentForm form) throws UserNotFoundException {
+			@ModelAttribute("commentForm") final CommentForm form,
+			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum) 
+					throws UserNotFoundException {
 		
 		final ModelAndView mav = new ModelAndView("profile");
 		
@@ -108,7 +112,15 @@ public class UserController extends BaseController {
 		mav.addObject("favoriteSport", es.getFavoriteSport(userid).orElse(null));
 		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		mav.addObject("votes_received", us.countVotesReceived(userid));
+		
 		mav.addObject("haveRelationship", us.haveRelationship(loggedUser().getUserid(), userid));
+		List<UserComment> comments = us.getCommentsByUser(userid, pageNum);
+		mav.addObject("comments", comments);
+		mav.addObject("commentQty", comments.size());
+		mav.addObject("currCommentPage", pageNum);
+		mav.addObject("maxCommentPage", us.getCommentsMaxPage(userid));
+		mav.addObject("totalCommentQty", us.countByUserComments(userid));
+		mav.addObject("commentsPageInitIndex", us.getCommentsPageInitIndex(pageNum));
 		
 		return mav;
 	}

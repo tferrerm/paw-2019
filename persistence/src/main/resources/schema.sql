@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS user_comments(
   commenter_id INTEGER NOT NULL,
   dest_userid INTEGER NOT NULL,
   comment VARCHAR(500) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (commenter_id) REFERENCES users ON DELETE CASCADE,
   FOREIGN KEY (dest_userid) REFERENCES users ON DELETE CASCADE
 );
@@ -75,6 +76,7 @@ CREATE TABLE IF NOT EXISTS club_comments(
   commenter_id INTEGER NOT NULL,
   dest_clubid INTEGER NOT NULL,
   comment VARCHAR(500) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (commenter_id) REFERENCES users ON DELETE CASCADE,
   FOREIGN KEY (dest_clubid) REFERENCES users ON DELETE CASCADE
 );

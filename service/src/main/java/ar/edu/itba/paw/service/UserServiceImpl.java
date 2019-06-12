@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private InscriptionDao idao;
 	
+	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 
 	@Override
@@ -57,7 +59,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserComment createComment(final long commenterid, final long receiverid, final String comment) 
 			throws UserNotAuthorizedException {
-		
+		if(commenterid <= 0 || receiverid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		if(commenterid == receiverid)
 			throw new UserNotAuthorizedException("User is not authorized to comment own profile.");
 		User commenter = ud.findById(commenterid).orElseThrow(NoSuchElementException::new);
@@ -71,6 +75,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean haveRelationship(final long commenterid, final long receiverid) {
+		if(commenterid <= 0 || receiverid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		if(commenterid == receiverid)
 			return false;
 		
@@ -90,6 +97,41 @@ public class UserServiceImpl implements UserService {
 			pps.create(user, picture);
 		}
 		return user;
+	}
+
+	@Override
+	public List<UserComment> getCommentsByUser(final long userid, final int pageNum) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return ud.getCommentsByUser(userid, pageNum);
+	}
+
+	@Override
+	public int countByUserComments(long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return ud.countByUserComments(userid);
+	}
+	
+	@Override
+	public int getCommentsPageInitIndex(final int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return ud.getCommentsPageInitIndex(pageNum);
+	}
+	
+	@Override
+	public int getCommentsMaxPage(final long userid) {
+		if(userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return ud.getCommentsMaxPage(userid);
 	}
 
 }

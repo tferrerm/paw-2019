@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
@@ -44,5 +45,13 @@ public interface UserService {
 	public User create(String username, String firstname, String lastname, 
 			String password, Role role, byte[] picture)
 			throws UserAlreadyExistsException, PictureProcessingException;
+
+	public List<UserComment> getCommentsByUser(final long userid, final int pageNum);
+	
+	public int countByUserComments(final long userid);
+	
+	public int getCommentsPageInitIndex(final int pageNum);
+
+	public int getCommentsMaxPage(final long userid);
 
 }

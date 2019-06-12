@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
@@ -17,7 +18,15 @@ public interface UserDao {
 	
 	public UserComment createComment(final User commenter, final User receiver, final String comment);
 	
+	public List<UserComment> getCommentsByUser(final long userid, final int pageNum);
+	
 	public User create(String username, String firstname, String lastname, 
 			String password, Role role) throws UserAlreadyExistsException;
+	
+	public int countByUserComments(final long userid);
+	
+	public int getCommentsPageInitIndex(final int pageNum);
+
+	public int getCommentsMaxPage(final long userid);
 
 }

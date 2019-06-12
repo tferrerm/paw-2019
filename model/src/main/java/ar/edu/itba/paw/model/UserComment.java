@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -34,6 +36,14 @@ public class UserComment {
 	@Column(name = "comment", nullable = false)
 	private String comment;
 	
+	@Column(name = "created_at", nullable = false)
+	private Instant createdAt;
+	
+	@PrePersist
+	protected void onCreate() {
+		createdAt = Instant.now();
+	}
+	
 	/*package*/ UserComment() {
 		
 	}
@@ -47,7 +57,8 @@ public class UserComment {
 	
 	@Override
 	public String toString() {
-		return "User Comment: Commenter = " + commenter + " Receiver = " + receiver;
+		return "User Comment: Commenter = " + commenter + " Receiver = " + receiver 
+				+ " Created at = " + createdAt;
 	}
 	
 	@Override
@@ -77,6 +88,10 @@ public class UserComment {
 
 	public String getComment() {
 		return comment;
+	}
+	
+	public Instant getCreatedAt() {
+		return createdAt;
 	}
 
 }
