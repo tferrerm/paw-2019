@@ -123,6 +123,24 @@ a.link-text{
   word-break: break-word;
 }
 
+.comment-row {
+    border-bottom: 1px lightgrey solid;
+    height: 50px;
+    word-break: break-word;
+    padding: 10px;
+}
+
+.comment-row:last-child {
+    border-bottom: none;
+}
+
+.comment-row div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 30%;
+}
+
 .content-container {
     align-items: center;
     display: flex;
@@ -696,7 +714,7 @@ ul.pitch-item {
     padding-bottom: 10px;
 }
 
-.table-header, .custom-row {
+.table-header, .custom-row, .comment-row {
     display: flex;
     align-items: center;
     width: 100%;

@@ -81,7 +81,7 @@
 					</div>
 				</form:form>
 				<c:forEach var="cmt" items="${comments}">
-                        <div class="custom-row">
+                        <div class="comment-row">
                             <div class="home-header">${cmt.commenter.firstname} ${cmt.commenter.lastname}</div>
                             <div class="home-header">${cmt.comment}</div>
                             <div>
