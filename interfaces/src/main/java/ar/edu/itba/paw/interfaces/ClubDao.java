@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.User;
 
 public interface ClubDao {
 	
@@ -34,5 +36,7 @@ public interface ClubDao {
 	 * @return the amount of past Events for that Club.
 	 */
 	public int countPastEvents(final long clubid);
+	
+	public ClubComment createComment(final User commenter, final Club club, final String comment);
 
 }

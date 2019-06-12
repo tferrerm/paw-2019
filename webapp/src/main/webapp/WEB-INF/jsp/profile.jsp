@@ -68,8 +68,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="tbl profile-cont">
-			<c:if test="${haveRelationship}">
+		<c:if test="${haveRelationship}">
+			<div class="tbl profile-cont">
 				<c:url value="/user/${user.userid}/comment" var="postPath"/>
 				<form:form id="commentForm" modelAttribute="commentForm" action="${postPath}">
 					<form:label path="comment"><spring:message code="comment"/></form:label>
@@ -79,8 +79,8 @@
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>
 				</form:form>
-			</c:if>
-		</div>
+			</div>
+		</c:if>
 	</div>
 </div>
 

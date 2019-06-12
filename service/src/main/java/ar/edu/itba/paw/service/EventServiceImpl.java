@@ -31,13 +31,13 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.interfaces.InscriptionDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.persistence.InscriptionHibernateDao;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -49,7 +49,7 @@ public class EventServiceImpl implements EventService {
 	private UserDao ud;
 	
 	@Autowired
-	private InscriptionHibernateDao ihd;
+	private InscriptionDao idao;
 
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
@@ -339,7 +339,7 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void leaveEvent(final long eventid, final long userid) {
-		ihd.deleteInscription(eventid, userid);
+		idao.deleteInscription(eventid, userid);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
@@ -350,7 +350,7 @@ public class EventServiceImpl implements EventService {
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		if(owner.getUserid() == kickedUserId)
 			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
-		ihd.deleteInscription(event.getEventId(), kickedUserId);
+		idao.deleteInscription(event.getEventId(), kickedUserId);
 	}
 
 	@Override
@@ -396,12 +396,12 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public int getVoteBalance(final long eventid) {
-		return ihd.getVoteBalance(eventid).orElse(0);
+		return idao.getVoteBalance(eventid).orElse(0);
 	}
 
 	@Override
 	public int getUserVote(final long eventid, final long userid) {
-		return ihd.getUserVote(eventid, userid).orElse(0);
+		return idao.getUserVote(eventid, userid).orElse(0);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
@@ -412,7 +412,7 @@ public class EventServiceImpl implements EventService {
 			throw new EventNotFinishedException("User cannot vote if event has not finished.");
 		if(event.getOwner().getUserid() == userid)
 			throw new UserNotAuthorizedException("User cannot vote for themselves.");
-		int changed = ihd.vote(isUpvote, event.getEventId(), userid);
+		int changed = idao.vote(isUpvote, event.getEventId(), userid);
 		if(changed == 0)
 			throw new UserNotAuthorizedException("User cannot vote if no inscription is present.");
 	}

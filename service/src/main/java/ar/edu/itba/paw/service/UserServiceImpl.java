@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 	private ProfilePictureService pps;
 	
 	@Autowired
-	private InscriptionDao ihd;
+	private InscriptionDao idao;
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 		User commenter = ud.findById(commenterid).orElseThrow(NoSuchElementException::new);
 		User receiver = ud.findById(receiverid).orElseThrow(NoSuchElementException::new);
 		
-		if(!ihd.haveRelationship(commenter, receiver))
+		if(!idao.haveRelationship(commenter, receiver))
 			throw new UserNotAuthorizedException("User is not authorized to comment if no shared events.");
 		
 		return ud.createComment(commenter, receiver, comment);
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		User commenter = ud.findById(commenterid).orElseThrow(NoSuchElementException::new);
 		User receiver = ud.findById(receiverid).orElseThrow(NoSuchElementException::new);
 		
-		return ihd.haveRelationship(commenter, receiver);
+		return idao.haveRelationship(commenter, receiver);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })

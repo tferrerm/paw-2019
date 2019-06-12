@@ -1,21 +1,33 @@
 package ar.edu.itba.paw.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.ClubService;
+import ar.edu.itba.paw.interfaces.InscriptionDao;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class ClubServiceImpl implements ClubService {
 	
 	@Autowired
 	private ClubDao cd;
+	
+	@Autowired
+	private UserDao ud;
+	
+	@Autowired
+	private InscriptionDao idao;
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
@@ -74,6 +86,29 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public int countPastEvents(final long clubid) {
 		return cd.countPastEvents(clubid);
+	}
+	
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public ClubComment createComment(final long userid, final long clubid, final String comment) 
+			throws UserNotAuthorizedException {
+		
+		User commenter = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		Club club = cd.findById(clubid).orElseThrow(NoSuchElementException::new);
+		
+		if(!idao.haveRelationship(commenter, club))
+			throw new UserNotAuthorizedException("User is not authorized to comment if no shared events.");
+		
+		return cd.createComment(commenter, club, comment);
+	}
+	
+	@Override
+	public boolean haveRelationship(final long userid, final long clubid) {
+		
+		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		Club club = cd.findById(clubid).orElseThrow(NoSuchElementException::new);
+		
+		return idao.haveRelationship(user, club);
 	}
 
 }

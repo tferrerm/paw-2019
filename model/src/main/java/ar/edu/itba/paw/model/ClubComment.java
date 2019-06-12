@@ -1,10 +1,82 @@
 package ar.edu.itba.paw.model;
 
+import java.util.Objects;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name = "club_comments")
+@Entity
+@Table(name = "club_comments")
 public class ClubComment {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "club_comments_commentid_seq")
+	@SequenceGenerator(sequenceName = "club_comments_commentid_seq", name = "club_comments_commentid_seq", allocationSize = 1)
+	@Column(name = "commentid")
+	private long commentid;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "commenter_id", nullable = false)
+	private User commenter;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "dest_clubid", nullable = false)
+	private Club club;
+	
+	@Column(name = "comment", nullable = false)
+	private String comment;
+	
+	/*package*/ ClubComment() {
+		
+	}
+	
+	public ClubComment(User commenter, Club club, String comment) {
+		super();
+		this.commenter = commenter;
+		this.club = club;
+		this.comment = comment;
+	}
+	
+	@Override
+	public String toString() {
+		return "Club Comment: Commenter = " + commenter + " Club = " + club;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof ClubComment))
+			return false;
+		ClubComment other = (ClubComment) o;
+		return this.getCommenter().equals(other.getCommenter()) 
+				&& this.getClub().equals(other.getClub())
+				&& this.getComment().equals(other.getComment());
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.getCommenter(), this.getClub(), this.getComment());
+	}
+
+	public User getCommenter() {
+		return commenter;
+	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public String getComment() {
+		return comment;
+	}
 
 }

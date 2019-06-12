@@ -20,6 +20,14 @@ public interface UserService {
 	public UserComment createComment(final long commenterid, final long receiverid, final String comment)
 			throws UserNotAuthorizedException;
 	
+	/**
+	 * Returns true if the commenter and receiver have an Inscription for a common past Event
+	 * or if the commenter has an Inscription for a past Event which was owned by the receiver.
+	 * @param commenterid	The commenter's id.
+	 * @param receiverid	The receiver's id.
+	 * @return true if the commenter and receiver have an Inscription for a common past Event
+	 * or if the commenter has an Inscription for a past Event which was owned by the receiver.
+	 */
 	public boolean haveRelationship(final long commenterid, final long receiverid);
 	
 	/**

@@ -97,11 +97,11 @@ public class UserController extends BaseController {
 	
 	@RequestMapping("/user/{userId}")
 	public ModelAndView userProfile(@PathVariable("userId") long userid,
-			@ModelAttribute("commentForm") final CommentForm form) 
-	throws UserNotFoundException {
+			@ModelAttribute("commentForm") final CommentForm form) throws UserNotFoundException {
+		
 		final ModelAndView mav = new ModelAndView("profile");
-		mav.addObject("user", us.findById(userid)
-				.orElseThrow(UserNotFoundException::new));
+		
+		mav.addObject("user", us.findById(userid).orElseThrow(UserNotFoundException::new));
 		mav.addObject("currEventsParticipant", es.countByUserInscriptions(true, userid));
 		mav.addObject("currEventsOwned", es.countByOwner(true, userid));
 		mav.addObject("pastEventsParticipant", es.countByUserInscriptions(false, userid));
@@ -109,6 +109,7 @@ public class UserController extends BaseController {
 		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		mav.addObject("votes_received", us.countVotesReceived(userid));
 		mav.addObject("haveRelationship", us.haveRelationship(loggedUser().getUserid(), userid));
+		
 		return mav;
 	}
 	

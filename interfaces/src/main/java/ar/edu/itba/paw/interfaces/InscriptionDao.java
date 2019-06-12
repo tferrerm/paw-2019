@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import java.util.Optional;
 
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.User;
 
@@ -35,6 +36,24 @@ public interface InscriptionDao {
 	
 	public void deleteInscription(final long eventid, final long userid);
 
+	/**
+	 * Returns true if the commenter and receiver have an Inscription for a common past Event
+	 * or if the commenter has an Inscription for a past Event which was owned by the receiver.
+	 * @param commenter	The commenter.
+	 * @param receiver	The receiver.
+	 * @return true if the commenter and receiver have an Inscription for a common past Event
+	 * or if the commenter has an Inscription for a past Event which was owned by the receiver.
+	 */
 	public boolean haveRelationship(final User commenter, final User receiver);
+	
+	/**
+	 * Returns true if the User has an Inscription for a past Event which took place in the Club
+	 * or if the User has owned a past Event which took place in the Club.
+	 * @param commenter	The commenter.
+	 * @param club		The Club.
+	 * @return true if the User has an Inscription for a past Event which took place in the Club
+	 * or if the User has owned a past Event which took place in the Club.
+	 */
+	public boolean haveRelationship(final User commenter, final Club club);
 	
 }

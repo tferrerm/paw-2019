@@ -3,7 +3,9 @@ package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.ClubComment;
 
 public interface ClubService {
 	
@@ -34,5 +36,18 @@ public interface ClubService {
 	 * @return the amount of past Events for that Club.
 	 */
 	public int countPastEvents(final long clubid);
+	
+	public ClubComment createComment(final long userid, final long clubid, final String comment)
+			throws UserNotAuthorizedException;
+
+	/**
+	 * Returns true if the commenter has an Inscription for a past Event which took place in the Club
+	 * or if the User has owned a past Event which took place in the Club.
+	 * @param commenterid	The commenter's id.
+	 * @param clubid		The Club's id.
+	 * @return true if the commenter has an Inscription for a past Event which took place in the Club
+	 * or if the User has owned a past Event which took place in the Club.
+	 */
+	public boolean haveRelationship(final long commenterid, final long clubid);
 
 }

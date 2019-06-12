@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +13,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 
 @Controller
 public class ClubController extends BaseController {
@@ -34,8 +39,8 @@ public class ClubController extends BaseController {
 	private PitchService ps;
 	
 	@RequestMapping("/club/{clubId}")
-	public ModelAndView showClub(@PathVariable("clubId") long clubid) 
-			throws ClubNotFoundException {
+	public ModelAndView showClub(@PathVariable("clubId") long clubid,
+			@ModelAttribute("commentForm") final CommentForm form) throws ClubNotFoundException {
 		
 		ModelAndView mav = new ModelAndView("club");
 		
@@ -47,7 +52,18 @@ public class ClubController extends BaseController {
 		
 		mav.addObject("past_events_count", cs.countPastEvents(clubid));
 		
+		mav.addObject("haveRelationship", cs.haveRelationship(loggedUser().getUserid(), clubid));
+		
 		return mav;
+	}
+	
+	@RequestMapping(value = "/club/{clubId}/comment", method = { RequestMethod.POST })
+    public ModelAndView comment(@Valid @ModelAttribute("commentForm") final CommentForm form,
+    		@PathVariable("clubId") long clubId) throws UserNotAuthorizedException {
+		
+		cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
+		
+	    return new ModelAndView("redirect:/club/" + clubId);
 	}
 
 	@RequestMapping("/clubs/{pageNum}")

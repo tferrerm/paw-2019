@@ -19,6 +19,8 @@ import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.User;
 
 @Repository
 public class ClubHibernateDao implements ClubDao {
@@ -162,6 +164,15 @@ public class ClubHibernateDao implements ClubDao {
 		query.setParameter("now", Instant.now());
 		query.setParameter("clubid", clubid);
 		return query.getSingleResult().intValue();
+	}
+	
+	@Override
+	public ClubComment createComment(final User commenter, final Club club, final String comment) {
+		
+		final ClubComment clubComment = new ClubComment(commenter, club, comment);
+		em.persist(clubComment);
+		
+		return clubComment;
 	}
 
 }
