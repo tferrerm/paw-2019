@@ -1,40 +1,41 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exception.*;
-import ar.edu.itba.paw.interfaces.EmailService;
-import ar.edu.itba.paw.interfaces.EventService;
-import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
-import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
-import ar.edu.itba.paw.webapp.form.NewEventForm;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
+import ar.edu.itba.paw.interfaces.ClubService;
+import ar.edu.itba.paw.interfaces.TournamentService;
+import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
+import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
+import ar.edu.itba.paw.webapp.form.FiltersForm;
+import ar.edu.itba.paw.webapp.form.NewTournamentForm;
 
 
 @Controller
 public class TournamentController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TournamentController.class);
+	
+	@Autowired
+	private TournamentService ts;
+	
+	@Autowired
+	private ClubService cs;
 
     @RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournaments(@PathVariable long tournamentId) {
@@ -42,20 +43,56 @@ public class TournamentController extends BaseController {
         mav.addObject("tournament",  null);
         return mav;
     }
+    
+    @RequestMapping(value = "/club/{clubId}/tournament/new")
+    public ModelAndView tournamentFormView(@PathVariable("clubId") long tournamentId,
+    		@ModelAttribute("newTournamentForm") final NewTournamentForm form) {
+        
+    	// MOSTRAR GRID DEL CLUB CON CANTIDAD DE PITCHES DISPONIBLE PARA TAL DEPORTE
+    	
+        return new ModelAndView();
+    }
+    
+    @RequestMapping(value = "/club/{clubId}/tournament/create")
+    public ModelAndView createTournament(@PathVariable("clubId") long clubId,
+    		@Valid @ModelAttribute("newTournamentForm") final NewTournamentForm form,
+			final BindingResult errors, HttpServletRequest request) throws ClubNotFoundException {
+    	
+    	Sport sport = null;
+		try {
+			sport = Sport.valueOf(form.getSport());
+		} catch(IllegalArgumentException e) {
+			LOGGER.warn("Unable to convert sport to enum");
+			errors.rejectValue("sport", "sport_not_in_list");
+		}
+    	
+    	if(errors.hasErrors()) {
+    		return tournamentFormView(clubId, form);
+    	}
+    	
+    	Club club = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
+    	
+    	Tournament tournament = ts.create(form.getName(), sport, club, form.getMaxTeams(), 
+    			form.getTeamSize(), form.getFirstRoundDate(), form.getStartsAtHour(), 
+    			form.getEndsAtHour(), form.getInscriptionEndDate());
+    	
+    	return new ModelAndView("redirect:/tournament/" + tournament.getTournamentId());
+    }
 
     @RequestMapping(value = "/tournaments/{pageNum}")
-    public ModelAndView retrieveTournaments(@ModelAttribute("tournamentFiltersForm") final FiltersForm form,
-                                         @PathVariable("pageNum") final int pageNum,
-                                         @RequestParam(value = "name", required = false) String name,
-                                         @RequestParam(value = "est", required = false) String establishment,
-                                         @RequestParam(value = "sport", required = false) Sport sport,
-                                         @RequestParam(value = "vac", required = false) String vacancies,
-                                         @RequestParam(value = "date", required = false) String date) {
+    public ModelAndView retrieveTournaments(
+			@ModelAttribute("tournamentFiltersForm") final FiltersForm form,
+			@PathVariable("pageNum") final int pageNum,
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "est", required = false) String clubName,
+			@RequestParam(value = "sport", required = false) Sport sport,
+			@RequestParam(value = "vac", required = false) String vacancies,
+			@RequestParam(value = "date", required = false) String date) {
     	String sportName = "";
     	if(sport != null)
     		sportName = sport.toString();
 
-        String queryString = buildQueryString(name, establishment, sportName, vacancies, date);
+        String queryString = buildQueryString(name, clubName, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("tournamentList");
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);

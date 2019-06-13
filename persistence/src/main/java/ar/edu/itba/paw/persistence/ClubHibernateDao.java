@@ -21,6 +21,8 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
 
 @Repository
@@ -225,6 +227,23 @@ public class ClubHibernateDao implements ClubDao {
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
 		return pageCount;
+	}
+	
+	@Override
+	public List<Pitch> getAvailablePitches(final long clubid, Instant startsAt, Instant endsAt, 
+			int amount) {
+		String queryString = "FROM Pitch AS p WHERE p.club.clubid = :clubid AND "
+				+ " NOT EXISTS (FROM Event AS e WHERE e.pitch.pitchid = p.pitchid "
+				+ " AND ((e.startsAt <= :startsAt AND e.endsAt > :startsAt) "
+				+ " OR (e.startsAt > :startsAt AND e.startsAt < :endsAt)))";
+		
+		TypedQuery<Pitch> query = em.createQuery(queryString, Pitch.class);
+		query.setParameter("clubid", clubid);
+		query.setParameter("startsAt", startsAt);
+		query.setParameter("endsAt", endsAt);
+		query.setMaxResults(amount);
+		
+		return query.getResultList();
 	}
 
 }
