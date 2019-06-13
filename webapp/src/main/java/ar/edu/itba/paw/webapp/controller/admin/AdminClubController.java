@@ -124,7 +124,7 @@ public class AdminClubController extends BaseController {
 		Club c = cs.create(form.getName(), form.getLocation());
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 		
-		return new ModelAndView("redirect:/admin/clubs/1");
+		return new ModelAndView("redirect:/admin/home");
 	}
 
 	@RequestMapping(value = "/club/{clubId}/pitch/create", method = { RequestMethod.POST })
