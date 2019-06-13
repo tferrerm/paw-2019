@@ -55,5 +55,13 @@ public class UserServiceImplTest {
 		Assert.assertFalse(op.isPresent());
 		Mockito.verify(ud).findById(1);
 	}
+	
+	@Test
+	public void createTest() throws Exception {
+		Mockito.when(ud.create(EMAIL, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER))
+		.thenReturn(USER);
+		final User u = us.create(EMAIL, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER, null);
+		Assert.assertEquals(EMAIL, u.getUsername());
+	}
 
 }
