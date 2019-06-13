@@ -53,6 +53,7 @@ public class UserServiceImplTest {
 		Mockito.when(ud.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 		final Optional<User> op = us.findById(1);
 		Assert.assertFalse(op.isPresent());
+		Mockito.verify(ud).findById(1);
 	}
 
 }
