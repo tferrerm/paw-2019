@@ -5,6 +5,7 @@ import java.util.Optional;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.User;
 
 public interface TournamentService {
 	
@@ -12,6 +13,6 @@ public interface TournamentService {
 	
 	public Tournament create(final String name, final Sport sport, final Club club, final String maxTeams,
 			final String teamSize, final String firstRoundDate, final String startsAtHour,
-			final String endsAtHour, final String inscriptionEndDate);
+			final String endsAtHour, final String inscriptionEndDate, final User user);
 	
 }

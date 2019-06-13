@@ -22,7 +22,7 @@ public class TournamentTeam {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tournaments_teamid_seq")
 	@SequenceGenerator(sequenceName = "tournaments_teamid_seq", name = "tournaments_teamid_seq", allocationSize = 1)
 	@Column(name = "teamid")
-	private long teamId;
+	private long teamid;
 	
 	@Column(name = "teamname", length = 100, nullable = false)
 	private String teamName;
@@ -32,7 +32,7 @@ public class TournamentTeam {
 	private Tournament tournament;
 	
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournamentTeam")
-	private List<TournamentInscription> inscriptions;
+	private List<Inscription> inscriptions;
 	
 	/*package*/ TournamentTeam() {
 		
@@ -45,7 +45,7 @@ public class TournamentTeam {
 	
 	@Override
 	public String toString() {
-		return "TeamName: " + teamName + "; Tournament: " + tournament;
+		return "Team Id = " + teamid;
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class TournamentTeam {
 	}
 	
 	public long getTeamId() {
-		return teamId;
+		return teamid;
 	}
 	
 	public String getTeamName() {

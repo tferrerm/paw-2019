@@ -27,7 +27,7 @@ public class Tournament {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tournaments_tournamentid_seq")
 	@SequenceGenerator(sequenceName = "tournaments_tournamentid_seq", name = "tournaments_tournamentid_seq", allocationSize = 1)
 	@Column(name = "tournamentid")
-	private long tournamentId;
+	private long tournamentid;
 	
 	@Column(name = "tournamentname", length = 100, nullable = false)
 	private String tournamentName;
@@ -80,7 +80,7 @@ public class Tournament {
 	}
 
 	public long getTournamentId() {
-		return tournamentId;
+		return tournamentid;
 	}
 
 	public String getTournamentName() {

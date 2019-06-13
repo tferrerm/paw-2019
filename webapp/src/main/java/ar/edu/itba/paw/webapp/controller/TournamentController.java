@@ -43,41 +43,6 @@ public class TournamentController extends BaseController {
         mav.addObject("tournament",  null);
         return mav;
     }
-    
-    @RequestMapping(value = "/club/{clubId}/tournament/new")
-    public ModelAndView tournamentFormView(@PathVariable("clubId") long tournamentId,
-    		@ModelAttribute("newTournamentForm") final NewTournamentForm form) {
-        
-    	// MOSTRAR GRID DEL CLUB CON CANTIDAD DE PITCHES DISPONIBLE PARA TAL DEPORTE
-    	
-        return new ModelAndView();
-    }
-    
-    @RequestMapping(value = "/club/{clubId}/tournament/create")
-    public ModelAndView createTournament(@PathVariable("clubId") long clubId,
-    		@Valid @ModelAttribute("newTournamentForm") final NewTournamentForm form,
-			final BindingResult errors, HttpServletRequest request) throws ClubNotFoundException {
-    	
-    	Sport sport = null;
-		try {
-			sport = Sport.valueOf(form.getSport());
-		} catch(IllegalArgumentException e) {
-			LOGGER.warn("Unable to convert sport to enum");
-			errors.rejectValue("sport", "sport_not_in_list");
-		}
-    	
-    	if(errors.hasErrors()) {
-    		return tournamentFormView(clubId, form);
-    	}
-    	
-    	Club club = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
-    	
-    	Tournament tournament = ts.create(form.getName(), sport, club, form.getMaxTeams(), 
-    			form.getTeamSize(), form.getFirstRoundDate(), form.getStartsAtHour(), 
-    			form.getEndsAtHour(), form.getInscriptionEndDate());
-    	
-    	return new ModelAndView("redirect:/tournament/" + tournament.getTournamentId());
-    }
 
     @RequestMapping(value = "/tournaments/{pageNum}")
     public ModelAndView retrieveTournaments(

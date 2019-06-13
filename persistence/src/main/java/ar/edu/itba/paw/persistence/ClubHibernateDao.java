@@ -21,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
-import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
 

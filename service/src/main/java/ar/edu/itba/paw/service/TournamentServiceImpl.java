@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.User;
 
 @Service
 public class TournamentServiceImpl implements TournamentService {
@@ -46,7 +46,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public Tournament create(final String name, final Sport sport, final Club club, final String maxTeams,
 			final String teamSize, final String firstRoundDate, final String startsAtHour,
-			final String endsAtHour, final String inscriptionEndDate) {
+			final String endsAtHour, final String inscriptionEndDate, final User user) {
 		
 		int mt = Integer.parseInt(maxTeams);
 		int ts = Integer.parseInt(teamSize);
@@ -66,7 +66,7 @@ public class TournamentServiceImpl implements TournamentService {
     			firstRoundEndsAt, mt/2);
     	
     	return td.create(name, sport, club, availablePitches, mt, ts, firstRoundStartsAt,
-    			firstRoundEndsAt, inscriptionEndInstant);
+    			firstRoundEndsAt, inscriptionEndInstant, user);
     	
     	
 	}

@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.model;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,8 +14,6 @@ import javax.persistence.Table;
 @Table(name = "tournament_events")
 public class TournamentEvent {
 	
-	
-	
 	@EmbeddedId
 	private TournamentEventId id;
 	
@@ -29,7 +23,7 @@ public class TournamentEvent {
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@MapsId("eventid")
-	@JoinColumn(name = "eventid") // ARREGLAR
+	@JoinColumn(name = "eventid")
 	private Event event;
 	
 	@Column(name = "round", nullable = false)
@@ -99,40 +93,6 @@ public class TournamentEvent {
 
 	public int getSecondTeamScore() {
 		return secondTeamScore;
-	}
-	
-	@SuppressWarnings("serial")
-	@Embeddable
-	private class TournamentEventId implements Serializable {
-		@Column(name = "eventid", nullable = false)
-		private Long eventid;
-		
-		/*package*/ TournamentEventId() {
-			
-		}
-		
-		public TournamentEventId(Long eventid) {
-			this.eventid = eventid;
-		}
-		
-		@Override
-		public boolean equals(Object o) {
-			if(o == this)
-				return true;
-			if(!(o instanceof TournamentEventId))
-				return false;
-			TournamentEventId other = (TournamentEventId) o;
-			return this.getEventid().equals(other.getEventid());
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash(this.getEventid());
-		}
-
-		public Long getEventid() {
-			return eventid;
-		}
 	}
 	
 }

@@ -55,9 +55,11 @@ CREATE TABLE IF NOT EXISTS events(
 CREATE TABLE IF NOT EXISTS events_users(
   userid INTEGER NOT NULL,
   eventid INTEGER NOT NULL,
+  teamid INTEGER,
   vote INTEGER,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
   FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
+  FOREIGN KEY (teamid) REFERENCES tournament_teams ON DELETE CASCADE,
   PRIMARY KEY (userid, eventid)
 );
 
@@ -113,12 +115,4 @@ CREATE TABLE IF NOT EXISTS tournament_teams(
   tournamentid INTEGER NOT NULL,
   teamname VARCHAR(100) NOT NULL,
   FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS tournament_teams_users(
-  teamid INTEGER NOT NULL,
-  userid INTEGER NOT NULL,
-  FOREIGN KEY (teamid) REFERENCES tournament_teams ON DELETE CASCADE,
-  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
-  PRIMARY KEY(teamid, userid)
 );

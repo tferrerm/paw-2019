@@ -97,6 +97,16 @@ public class Event {
 		this.createdAt = createdAt;
 	}
 	
+	public Event(String name, User owner, Pitch pitch, int maxParticipants, Instant startsAt, 
+			Instant endsAt) {
+		this.name = name;
+		this.owner = owner;
+		this.pitch = pitch;
+		this.maxParticipants = maxParticipants;
+		this.startsAt = startsAt;
+		this.endsAt = endsAt;
+	}
+	
 	@Override
 	public String toString() {
 		return "Eventid: " + eventid + " Name: " + name;
