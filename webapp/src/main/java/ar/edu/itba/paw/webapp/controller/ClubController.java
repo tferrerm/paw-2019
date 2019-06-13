@@ -3,12 +3,14 @@ package ar.edu.itba.paw.webapp.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.ClubComment;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
@@ -40,6 +43,7 @@ public class ClubController extends BaseController {
 	
 	@RequestMapping("/club/{clubId}")
 	public ModelAndView showClub(@PathVariable("clubId") long clubid,
+			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,
 			@ModelAttribute("commentForm") final CommentForm form) throws ClubNotFoundException {
 		
 		ModelAndView mav = new ModelAndView("club");
@@ -53,13 +57,26 @@ public class ClubController extends BaseController {
 		mav.addObject("past_events_count", cs.countPastEvents(clubid));
 		
 		mav.addObject("haveRelationship", cs.haveRelationship(loggedUser().getUserid(), clubid));
+		List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
+		mav.addObject("comments", comments);
+		mav.addObject("commentQty", comments.size());
+		mav.addObject("currCommentPage", pageNum);
+		mav.addObject("maxCommentPage", cs.getCommentsMaxPage(clubid));
+		mav.addObject("totalCommentQty", cs.countByClubComments(clubid));
+		mav.addObject("commentsPageInitIndex", cs.getCommentsPageInitIndex(pageNum));
 		
 		return mav;
 	}
 	
 	@RequestMapping(value = "/club/{clubId}/comment", method = { RequestMethod.POST })
-    public ModelAndView comment(@Valid @ModelAttribute("commentForm") final CommentForm form,
-    		@PathVariable("clubId") long clubId) throws UserNotAuthorizedException {
+    public ModelAndView comment(@PathVariable("clubId") long clubId, 
+    		@Valid @ModelAttribute("commentForm") final CommentForm form,
+    		final BindingResult errors, HttpServletRequest request) 
+    				throws UserNotAuthorizedException, ClubNotFoundException {
+		
+		if(errors.hasErrors()) {
+    		return showClub(clubId, 1, form);
+    	}
 		
 		cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
 		

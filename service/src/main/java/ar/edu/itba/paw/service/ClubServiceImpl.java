@@ -41,11 +41,11 @@ public class ClubServiceImpl implements ClubService {
 	}
 	
 	@Override
-	public List<Club> findAll(int page) {
-		if(page <= 0) {
+	public List<Club> findAll(int pageNum) {
+		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return cd.findAll(page);
+		return cd.findAll(pageNum);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
@@ -56,12 +56,18 @@ public class ClubServiceImpl implements ClubService {
 	
 	@Override
 	public int getPageInitialClubIndex(final int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
 		return cd.getPageInitialClubIndex(pageNum);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void deleteClub(final long clubid) {
+		if(clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		cd.deleteClub(clubid);
 	}
 
@@ -71,11 +77,11 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int page) {
-		if(page <= 0) {
+	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int pageNum) {
+		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		return cd.findBy(clubName, location, page);
+		return cd.findBy(clubName, location, pageNum);
 	}
 	
 	@Override
@@ -85,6 +91,9 @@ public class ClubServiceImpl implements ClubService {
 
 	@Override
 	public int countPastEvents(final long clubid) {
+		if(clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		return cd.countPastEvents(clubid);
 	}
 	
@@ -92,6 +101,9 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public ClubComment createComment(final long userid, final long clubid, final String comment) 
 			throws UserNotAuthorizedException {
+		if(userid <= 0 || clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		
 		User commenter = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		Club club = cd.findById(clubid).orElseThrow(NoSuchElementException::new);
@@ -104,11 +116,49 @@ public class ClubServiceImpl implements ClubService {
 	
 	@Override
 	public boolean haveRelationship(final long userid, final long clubid) {
+		if(userid <= 0 || clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
 		
 		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		Club club = cd.findById(clubid).orElseThrow(NoSuchElementException::new);
 		
 		return idao.haveRelationship(user, club);
+	}
+
+	@Override
+	public List<ClubComment> getCommentsByClub(long clubid, int pageNum) {
+		if(clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return cd.getCommentsByClub(clubid, pageNum);
+	}
+
+	@Override
+	public int countByClubComments(long clubid) {
+		if(clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return cd.countByClubComments(clubid);
+	}
+
+	@Override
+	public int getCommentsPageInitIndex(int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return cd.getCommentsPageInitIndex(pageNum);
+	}
+
+	@Override
+	public int getCommentsMaxPage(long clubid) {
+		if(clubid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return cd.getCommentsMaxPage(clubid);
 	}
 
 }

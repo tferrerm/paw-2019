@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
@@ -173,6 +174,57 @@ public class ClubHibernateDao implements ClubDao {
 		em.persist(clubComment);
 		
 		return clubComment;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClubComment> getCommentsByClub(final long clubid, final int pageNum) {
+		String idQueryString = "SELECT commentid FROM club_comments "
+				+ " WHERE dest_clubid = :clubid ORDER BY created_at DESC";
+		Query idQuery = em.createNativeQuery(idQueryString);
+		idQuery.setParameter("clubid", clubid);
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		
+		final List<Long> ids = idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<ClubComment> cq = cb.createQuery(ClubComment.class);
+		Root<ClubComment> from = cq.from(ClubComment.class);
+		from.fetch("commenter", JoinType.LEFT);
+		final TypedQuery<ClubComment> query = em.createQuery(
+				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
+	}
+	
+	@Override
+	public int countByClubComments(final long clubid) {
+		String queryString = "SELECT count(cc) FROM ClubComment AS cc WHERE "
+				+ " cc.club.clubid = :clubid";
+		
+		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
+		query.setParameter("clubid", clubid);
+		
+		return query.getSingleResult().intValue();
+	}
+	
+	@Override
+	public int getCommentsPageInitIndex(final int pageNum) {
+		return (pageNum - 1) * MAX_ROWS + 1;
+	}
+
+	@Override
+	public int getCommentsMaxPage(final long clubid) {
+		int rows = countByClubComments(clubid);
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
 	}
 
 }

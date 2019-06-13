@@ -123,6 +123,10 @@ a.link-text{
   word-break: break-word;
 }
 
+.comments_form {
+  width: 100%;
+}
+
 .comment-row {
     border-bottom: 1px lightgrey solid;
     height: 50px;

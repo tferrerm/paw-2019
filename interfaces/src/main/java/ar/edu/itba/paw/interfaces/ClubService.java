@@ -49,5 +49,13 @@ public interface ClubService {
 	 * or if the User has owned a past Event which took place in the Club.
 	 */
 	public boolean haveRelationship(final long commenterid, final long clubid);
+	
+	public List<ClubComment> getCommentsByClub(final long clubid, final int pageNum);
+	
+	public int countByClubComments(final long clubid);
+	
+	public int getCommentsPageInitIndex(final int pageNum);
+
+	public int getCommentsMaxPage(final long clubid);
 
 }

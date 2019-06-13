@@ -69,29 +69,30 @@
 				</div>
 			</div>
 		</div>
-		<c:if test="${haveRelationship}">
-			<div class="tbl profile-cont">
+		<div class="tbl profile-cont">
+			<c:if test="${haveRelationship}">
 				<c:url value="/user/${user.userid}/comment" var="postPath"/>
-				<form:form id="commentForm" modelAttribute="commentForm" action="${postPath}">
+				<form:form id="commentForm" modelAttribute="commentForm" action="${postPath}" class="comments_form">
 					<form:label path="comment"><spring:message code="comment"/></form:label>
 					<form:input class="form-control" type="text" path="comment" maxlength="500"/>
 					<form:errors path="comment" cssClass="form-error" element="span"/>
 					<div class="submit-container">
-						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
+						<button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
 					</div>
 				</form:form>
-				<c:forEach var="cmt" items="${comments}">
-                        <div class="comment-row">
-                            <div class="home-header">${cmt.commenter.firstname} ${cmt.commenter.lastname}</div>
-                            <div class="home-header">${cmt.comment}</div>
-                            <div>
-    							<fmt:timeZone value="AR">
-    								<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
-    								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-    							</fmt:timeZone>
-                            </div>
+			</c:if>
+			<c:forEach var="cmt" items="${comments}">
+                    <div class="comment-row">
+                        <div class="home-header">${cmt.commenter.firstname} ${cmt.commenter.lastname}</div>
+                        <div class="home-header">${cmt.comment}</div>
+                        <div>
+							<fmt:timeZone value="AR">
+								<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
+								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+							</fmt:timeZone>
                         </div>
-                    </c:forEach>
+                    </div>
+                </c:forEach>
 				<div class="table-navigator">
                     <c:choose>
                         <c:when test="${commentQty > 0}">
@@ -129,7 +130,7 @@
                     </c:choose>
     			</div>
 			</div>
-		</c:if>
+		</div>
 	</div>
 </div>
 

@@ -38,5 +38,13 @@ public interface ClubDao {
 	public int countPastEvents(final long clubid);
 	
 	public ClubComment createComment(final User commenter, final Club club, final String comment);
+	
+	public List<ClubComment> getCommentsByClub(final long clubid, final int pageNum);
+	
+	public int countByClubComments(final long clubid);
+	
+	public int getCommentsPageInitIndex(final int pageNum);
+
+	public int getCommentsMaxPage(final long clubid);
 
 }

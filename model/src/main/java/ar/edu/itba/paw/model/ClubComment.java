@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -34,6 +36,14 @@ public class ClubComment {
 	@Column(name = "comment", nullable = false)
 	private String comment;
 	
+	@Column(name = "created_at", nullable = false)
+	private Instant createdAt;
+	
+	@PrePersist
+	protected void onCreate() {
+		createdAt = Instant.now();
+	}
+	
 	/*package*/ ClubComment() {
 		
 	}
@@ -47,7 +57,8 @@ public class ClubComment {
 	
 	@Override
 	public String toString() {
-		return "Club Comment: Commenter = " + commenter + " Club = " + club;
+		return "Club Comment: Commenter = " + commenter + " Club = " + club
+				+ " Created at = " + createdAt;
 	}
 	
 	@Override
@@ -59,12 +70,13 @@ public class ClubComment {
 		ClubComment other = (ClubComment) o;
 		return this.getCommenter().equals(other.getCommenter()) 
 				&& this.getClub().equals(other.getClub())
-				&& this.getComment().equals(other.getComment());
+				&& this.getComment().equals(other.getComment())
+				&& this.getCreatedAt().equals(other.getCreatedAt());
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.getCommenter(), this.getClub(), this.getComment());
+		return Objects.hash(this.getCommenter(), this.getClub(), this.getComment(), this.getCreatedAt());
 	}
 
 	public User getCommenter() {
@@ -77,6 +89,10 @@ public class ClubComment {
 
 	public String getComment() {
 		return comment;
+	}
+	
+	public Instant getCreatedAt() {
+		return createdAt;
 	}
 
 }

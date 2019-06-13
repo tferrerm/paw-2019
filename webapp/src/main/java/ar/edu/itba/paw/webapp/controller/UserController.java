@@ -99,8 +99,8 @@ public class UserController extends BaseController {
 	
 	@RequestMapping("/user/{userId}")
 	public ModelAndView userProfile(@PathVariable("userId") long userid,
-			@ModelAttribute("commentForm") final CommentForm form,
-			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum) 
+			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,
+			@ModelAttribute("commentForm") final CommentForm form) 
 					throws UserNotFoundException {
 		
 		final ModelAndView mav = new ModelAndView("profile");
@@ -126,8 +126,13 @@ public class UserController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/user/{userId}/comment", method = { RequestMethod.POST })
-    public ModelAndView comment(@Valid @ModelAttribute("commentForm") final CommentForm form,
-    		@PathVariable("userId") long userId) throws UserNotAuthorizedException {
+    public ModelAndView comment(@PathVariable("userId") long userId, 
+    		@Valid @ModelAttribute("commentForm") final CommentForm form, final BindingResult errors,
+			HttpServletRequest request) throws UserNotAuthorizedException, UserNotFoundException {
+		
+		if(errors.hasErrors()) {
+    		return userProfile(userId, 1, form);
+    	}
 		
 		us.createComment(loggedUser().getUserid(), userId, form.getComment());
 		

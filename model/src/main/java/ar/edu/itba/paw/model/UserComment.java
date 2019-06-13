@@ -70,12 +70,13 @@ public class UserComment {
 		UserComment other = (UserComment) o;
 		return this.getCommenter().equals(other.getCommenter()) 
 				&& this.getReceiver().equals(other.getReceiver())
-				&& this.getComment().equals(other.getComment());
+				&& this.getComment().equals(other.getComment())
+				&& this.getCreatedAt().equals(other.getCreatedAt());
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.getCommenter(), this.getReceiver(), this.getComment());
+		return Objects.hash(this.getCommenter(), this.getReceiver(), this.getComment(), this.getCreatedAt());
 	}
 
 	public User getCommenter() {
