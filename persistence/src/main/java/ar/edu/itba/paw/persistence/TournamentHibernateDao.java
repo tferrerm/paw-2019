@@ -2,11 +2,18 @@ package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +24,7 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
+import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 
 @Repository
@@ -28,7 +36,17 @@ public class TournamentHibernateDao implements TournamentDao {
 	private EntityManager em;
 	
 	public Optional<Tournament> findById(long tournamentid) {
-		return Optional.empty();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Tournament> cq = cb.createQuery(Tournament.class);
+		Root<Tournament> from = cq.from(Tournament.class);
+		from.fetch("teams", JoinType.LEFT);
+		from.fetch("events", JoinType.LEFT);
+		
+		final TypedQuery<Tournament> query = em.createQuery(
+				cq.select(from).where(cb.equal(from.get("tournamentid"), tournamentid))
+			);
+		
+		return query.getResultList().stream().findFirst();
 	}
 
 	@Override
@@ -39,24 +57,35 @@ public class TournamentHibernateDao implements TournamentDao {
 		
 		final Tournament tournament = new Tournament(name, sport, club, maxTeams, teamSize,
 				inscriptionEndsAt);
+		em.persist(tournament);
+		
+		/* Creation of teams */
+		for(int i = 1; i <= maxTeams; i++) {
+			StringBuilder teamName = new StringBuilder("Team ").append(i);
+			TournamentTeam team = new TournamentTeam(teamName.toString(), tournament);
+			em.persist(team);
+		}
+		
+		List<TournamentTeam> teams = tournament.getTeams();
+		List<List<Integer>> matchups = new ArrayList<>();
+		matchups.add(Arrays.asList(1, 2));
+		
+		/* Creation of tournament events by round */
 		Instant startsAt = firstRoundStartsAt;
 		Instant endsAt = firstRoundEndsAt;
-		// CREAR TOURNAMENT EVENTS
 		for(int i = 0; i < tournament.getRounds(); i++) {
+			StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1); // INTERNACIONALIZACION?
 			for(int j = 0; j < maxTeams / 2; j++) {
-				StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1); // INTERNACIONALIZACION?
-				
-				Event event = new Event(eventName.toString(), user, availablePitches.get(i), 
+				Event event = new Event(eventName.toString(), user, availablePitches.get(j), 
 						teamSize * 2, startsAt, endsAt);
 				em.persist(event);
-				TournamentEvent tournamentEvent = new TournamentEvent(tournament, event, i+1);
+				TournamentEvent tournamentEvent = new TournamentEvent(tournament, event, i+1, );
 				em.persist(tournamentEvent);
 			}
-			
-			startsAt = startsAt.plus(1, ChronoUnit.WEEKS); // FUNCIONA?
-			endsAt = endsAt.plus(1, ChronoUnit.WEEKS);
+			startsAt = startsAt.plus(7, ChronoUnit.DAYS);
+			endsAt = endsAt.plus(7, ChronoUnit.DAYS);
 		}
-		em.persist(tournament);
+		
 		return tournament;
 	}
 

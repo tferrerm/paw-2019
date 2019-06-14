@@ -1,13 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.TournamentService;
-import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.model.Tournament;
-import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
-import ar.edu.itba.paw.webapp.form.NewTournamentForm;
 
 
 @Controller

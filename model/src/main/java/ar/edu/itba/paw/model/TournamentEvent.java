@@ -47,16 +47,8 @@ public class TournamentEvent {
 		
 	}
 	
-	public TournamentEvent(Tournament tournament, Event event, int round) {
-		this.id = new TournamentEventId(event.getEventId());
-		this.tournament = tournament;
-		this.event = event;
-		this.round = round;
-	}
-	
 	public TournamentEvent(Tournament tournament, Event event, int round,
-			TournamentTeam firstTeam, TournamentTeam secondTeam, int firstTeamScore,
-			int secondTeamScore) {
+			TournamentTeam firstTeam, TournamentTeam secondTeam) {
 		this.id = new TournamentEventId(event.getEventId());
 		this.tournament = tournament;
 		this.event = event;

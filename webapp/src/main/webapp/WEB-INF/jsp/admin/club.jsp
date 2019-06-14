@@ -77,6 +77,9 @@
 						</div>
 					</div>
 				</div>
+				<form method="POST" action="<c:url value="/admin/club/${club.clubid}/tournament/new"/>">
+							<button type="submit" class="btn btn-primary join-button"><spring:message code="create_tournament"/></button>
+						</form>
 				<form method="POST" action="<c:url value="/admin/club/${club.clubid}/delete"/>">
 					<button type="submit" class="btn btn-danger join-button"><spring:message code="delete_club"/></button>
 				</form>

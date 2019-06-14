@@ -19,7 +19,7 @@
 		<div class="content-container">
 			<h2><spring:message code="create_tournament"/></h2>
 			<div class="form-container">
-				<c:url value="/admin/tournament/create" var="postPath"/>
+				<c:url value="/admin/club/${club.clubid}/tournament/create" var="postPath"/>
 				<form:form modelAttribute="newTournamentForm" action="${postPath}" method="post" enctype="multipart/form-data">
 					<div>
 						<form:label path="name"><spring:message code="name"/> * </form:label>
@@ -27,30 +27,49 @@
 						<form:errors path="name" cssClass="form-error" element="span"/>
 					</div>
 					<div>
-						<form:label path="club"><spring:message code="club"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" maxlength="100" path="club"/>
-						<form:errors path="club" cssClass="form-error" element="span"/>
-					</div>
-					<div>
-						<form:label path="sport"><spring:message code="sport"/> * </form:label>
-						<form:input  cssClass="form-control" type="text" maxlength="100" path="sport"/>
-						<form:errors path="sport" cssClass="form-error" element="span"/>
-					</div>
-					<div>
-						<form:label path="minParticipants"><spring:message code="min_participants"/> * </form:label>
-						<form:input  cssClass="form-control" type="number" maxlength="100" path="minParticipants"/>
-						<form:errors path="minParticipants" cssClass="form-error" element="span"/>
-					</div>
-					<div>
-						<form:label path="maxParticipants"><spring:message code="max_participants"/> * </form:label>
-						<form:input  cssClass="form-control" type="number" maxlength="100" path="maxParticipants"/>
-						<form:errors path="maxParticipants" cssClass="form-error" element="span"/>
+						<form:label path="maxTeams"><spring:message code="team_number"/> * </form:label>
+						<form:input  cssClass="form-control" type="number" maxlength="100" path="maxTeams"/>
+						<form:errors path="maxTeams" cssClass="form-error" element="span"/>
 					</div>
 					<div>
 						<form:label path="teamSize"><spring:message code="team_size"/> * </form:label>
 						<form:input  cssClass="form-control" type="number" maxlength="100" path="teamSize"/>
 						<form:errors path="teamSize" cssClass="form-error" element="span"/>
 					</div>
+					<div class="form-field flex-space-between">
+                        <div class="form-field-horizontal">
+                            <form:label path="firstRoundDate"><spring:message code="new_event_date"/> *</form:label>
+                            <form:input cssClass="form-control date-input" type="date" path="firstRoundDate"/>
+                            <form:errors path="firstRoundDate" cssClass="form-error" element="span"/>
+                        </div>
+                        <div>
+                            <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
+                            <form:select path="startsAtHour" cssClass="form-control">
+                                <c:forEach var="hourEntry" items="${availableHours}">
+                                    <c:if test="${hourEntry.key < maxHour}">
+                                        <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                    </c:if>
+                                </c:forEach>
+                            </form:select>
+                            <form:errors path="startsAtHour" cssClass="form-error" element="span"/>
+                        </div>
+                        <div>
+                            <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
+                            <form:select path="endsAtHour" cssClass="form-control">
+                                <c:forEach var="hourEntry" items="${availableHours}">
+                                    <c:if test="${hourEntry.key > minHour}">
+                                        <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                    </c:if>
+                                </c:forEach>
+                            </form:select>
+                            <form:errors path="endsAtHour" cssClass="form-error" element="span"/>
+                        </div>
+                    </div>
+                    <div>
+                        <form:label path="inscriptionEndDate"><spring:message code="new_event_date"/> *</form:label>
+                        <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate"/>
+                        <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
+                    </div>
 					<div class="submit-container">
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>

@@ -10,9 +10,6 @@ public class NewTournamentForm {
 	private String name;
 	
 	@NotBlank
-	private String sport;
-	
-	@NotBlank
 	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
 	private String maxTeams;
 	
@@ -40,14 +37,6 @@ public class NewTournamentForm {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getSport() {
-		return sport;
-	}
-
-	public void setSport(String sport) {
-		this.sport = sport;
 	}
 
 	public String getMaxTeams() {

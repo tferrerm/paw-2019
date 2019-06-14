@@ -30,7 +30,7 @@ public class Tournament {
 	private long tournamentid;
 	
 	@Column(name = "tournamentname", length = 100, nullable = false)
-	private String tournamentName;
+	private String name;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 50, nullable = false)
@@ -69,9 +69,9 @@ public class Tournament {
 		
 	}
 	
-	public Tournament(String tournamentName, Sport sport, Club tournamentClub,
+	public Tournament(String name, Sport sport, Club tournamentClub,
 			int maxTeams, int teamSize, Instant endsInscriptionAt) {
-		this.tournamentName = tournamentName;
+		this.name = name;
 		this.sport = sport;
 		this.tournamentClub = tournamentClub;
 		this.maxTeams = maxTeams;
@@ -84,7 +84,7 @@ public class Tournament {
 	}
 
 	public String getTournamentName() {
-		return tournamentName;
+		return name;
 	}
 
 	public Sport getSport() {
