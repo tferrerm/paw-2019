@@ -214,6 +214,23 @@ margin: 0 10px;
     word-break: break-word;
 }
 
+.detail-box {
+    margin: 20px 0;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+}
+
+.detail-box-data {
+    display: flex;
+    justify-content: center;
+    padding: 10px 40px;
+}
+
 .detail-container {
     display: flex;
     flex-direction: column;
@@ -225,6 +242,13 @@ margin: 0 10px;
 .double-box {
     display: flex;
     padding: 0;
+}
+
+.event-detail {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 10px;
 }
 
 .event-info-label {
@@ -643,6 +667,21 @@ ul.pitch-item {
     font-size: 18px;
 }
 
+.score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightskyblue;
+    border-radius: 5px;
+    margin: 10px 10px 10px 10px;
+    padding: 10px;
+    word-break: break-word;
+    justify-content: center;
+    font-size: 40px;
+    color: #444444;
+    font-weight: bold;
+}
+
 .sidebar {
     background-color: #444444;
     box-shadow: 0 3px 3px 3px rgba(57, 63, 72, 0.3);
@@ -812,7 +851,6 @@ ul.pitch-item {
     margin: 10px 10px 10px 10px;
     padding: 10px;
     word-break: break-word;
-    width: 100%;
 }
 
 .username {
