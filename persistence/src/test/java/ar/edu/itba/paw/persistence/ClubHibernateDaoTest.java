@@ -77,7 +77,7 @@ public class ClubHibernateDaoTest {
 	}
 	
 	@Test
-	public void testFindBy() {
+	public void testFindByValid() {
 		final List<Club> clubs = cd.findBy(
 				Optional.of(CLUBNAME),
 				Optional.of(LOCATION),
@@ -87,16 +87,33 @@ public class ClubHibernateDaoTest {
 		Assert.assertEquals(CLUBNAME, clubs.get(0).getName());
 		Assert.assertEquals(LOCATION, clubs.get(0).getLocation());
 		Assert.assertNotNull(clubs.get(0).getCreatedAt());
+
+	}
+	
+	@Test
+	public void testFindByValidSomeFilters() {
+		final List<Club> clubs = cd.findBy(
+				Optional.of(CLUBNAME),
+				Optional.empty(),
+				1);
+		Assert.assertEquals(1, clubs.size());
+		Assert.assertEquals(CLUBID, clubs.get(0).getClubid());
+		Assert.assertEquals(CLUBNAME, clubs.get(0).getName());
+		Assert.assertEquals(LOCATION, clubs.get(0).getLocation());
+		Assert.assertNotNull(clubs.get(0).getCreatedAt());
+	}
+	
+	@Test
+	public void testFindByInvalidField() {
 		final List<Club> noClubs = cd.findBy(
 				Optional.of("BADSTRING"),
 				Optional.of(LOCATION),
 				1);
 		Assert.assertEquals(0, noClubs.size());
-		final List<Club> clubs2 = cd.findBy(
-				Optional.of(CLUBNAME),
-				Optional.empty(),
-				1);
-		Assert.assertEquals(1, clubs2.size());
+	}
+	
+	@Test
+	public void testFindByInvalidPage() {
 		final List<Club> invalidPage = cd.findBy(
 				Optional.of(CLUBNAME),
 				Optional.of(LOCATION),

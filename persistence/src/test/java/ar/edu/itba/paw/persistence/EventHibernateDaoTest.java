@@ -99,9 +99,13 @@ public class EventHibernateDaoTest {
 	}
 	
 	@Test
-	public void testFindByOwner() {
+	public void testFindByOwnerFuture() {
 		List<Event> events = ed.findByOwner(true, OWNER.getUserid(), 1);
 		Assert.assertEquals(1, events.size());
+	}
+	
+	@Test
+	public void testFindByOwnerPast() {
 		List<Event> pastEvents = ed.findByOwner(false, OWNER.getUserid(), 1);
 		Assert.assertEquals(1, pastEvents.size());
 	}
