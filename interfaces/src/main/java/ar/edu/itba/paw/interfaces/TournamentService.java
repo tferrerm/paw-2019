@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.util.List;
 import java.util.Optional;
 
 import ar.edu.itba.paw.model.Club;
@@ -10,6 +11,8 @@ import ar.edu.itba.paw.model.User;
 public interface TournamentService {
 	
 	public Optional<Tournament> findById(long tournamentid);
+	
+	public List<Tournament> findBy(final int pageNum);
 	
 	public Tournament create(final String name, final Sport sport, final Club club, final String maxTeams,
 			final String teamSize, final String firstRoundDate, final String startsAtHour,

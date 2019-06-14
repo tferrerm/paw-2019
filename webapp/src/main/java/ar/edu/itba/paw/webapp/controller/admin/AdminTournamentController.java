@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -12,18 +16,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
+import ar.edu.itba.paw.webapp.form.FiltersForm;
 import ar.edu.itba.paw.webapp.form.NewTournamentForm;
 
 @RequestMapping("/admin")
@@ -54,6 +61,17 @@ public class AdminTournamentController extends BaseController {
         
         return mav;
     }
+	
+	@RequestMapping(value = "/tournaments/{pageNum}")
+	public ModelAndView retrieveEvents(@PathVariable("pageNum") final int pageNum) {
+		
+		ModelAndView mav = new ModelAndView("admin/tournamentList");
+		
+		List<Tournament> tournaments = ts.findBy(pageNum);
+		mav.addObject("tournaments", tournaments);
+		
+		return mav;
+	}
 	
 	@RequestMapping(value = "/club/{clubId}/tournament/new")
     public ModelAndView tournamentFormView(@PathVariable("clubId") long clubId,
@@ -89,7 +107,7 @@ public class AdminTournamentController extends BaseController {
     			form.getTeamSize(), form.getFirstRoundDate(), form.getStartsAtHour(), 
     			form.getEndsAtHour(), form.getInscriptionEndDate(), loggedUser());
     	
-    	return new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentId());
+    	return new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentid());
     }
     
     @ExceptionHandler({ TournamentNotFoundException.class })

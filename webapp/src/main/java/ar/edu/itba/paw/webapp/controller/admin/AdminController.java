@@ -43,10 +43,10 @@ public class AdminController extends BaseController {
 	@RequestMapping(value = "/events/{pageNum}")
 	public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
 									   @PathVariable("pageNum") final int pageNum,
-									   @RequestParam(value = "est", required = false) String clubName,
+									   @RequestParam(value = "establishment", required = false) String clubName,
 									   @RequestParam(value = "sport", required = false) Sport sport,
-									   @RequestParam(value = "org", required = false) String organizer,
-									   @RequestParam(value = "vac", required = false) String vacancies,
+									   @RequestParam(value = "organizer", required = false) String organizer,
+									   @RequestParam(value = "vacancies", required = false) String vacancies,
 									   @RequestParam(value = "date", required = false) String date) {
 		
 		String sportName = "";
@@ -54,17 +54,18 @@ public class AdminController extends BaseController {
     		sportName = sport.toString();
 		String queryString = buildAdminQueryString(clubName, sportName, organizer, vacancies, date);
 		ModelAndView mav = new ModelAndView("admin/index");
+		
 	   	Integer vac = tryInteger(vacancies);
     	Instant dateInst = tryInstant(date, TIME_ZONE);
-    	if(vac == null)
+    	if(vac == null && vacancies != null && !vacancies.isEmpty())
     		mav.addObject("invalid_number_format", true);
-    	if(dateInst == null)
+    	if(dateInst == null && date != null && !date.isEmpty())
     		mav.addObject("invalid_date_format", true);
+    	
 		mav.addObject("page", pageNum);
 		mav.addObject("queryString", queryString);
 		mav.addObject("sports", Sport.values());
 		mav.addObject("lastPageNum", es.countFutureEventPages());
-        
 		
 		List<Event> events = es.findBy(true, Optional.empty(), Optional.ofNullable(clubName), 
         		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
@@ -121,16 +122,16 @@ public class AdminController extends BaseController {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("?");
 		if(establishment != null && !establishment.isEmpty()) {
-			strBuilder.append("est=").append(establishment).append("&");
+			strBuilder.append("establishment=").append(establishment).append("&");
 		}
 		if(sport != null && !sport.isEmpty()) {
 			strBuilder.append("sport=").append(sport).append("&");
 		}
 		if(organizer != null && !organizer.isEmpty()) {
-			strBuilder.append("org=").append(organizer).append("&");
+			strBuilder.append("organizer=").append(organizer).append("&");
 		}
 		if(vacancies != null && !vacancies.isEmpty()) {
-			strBuilder.append("vac=").append(vacancies).append("&");
+			strBuilder.append("vacancies=").append(vacancies).append("&");
 		}
 		if(date != null && !date.isEmpty()) {
 			strBuilder.append("date=").append(date);

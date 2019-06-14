@@ -245,7 +245,7 @@ public class EventHibernateDao implements EventDao {
 		};
 		
 		StringBuilder queryString = new StringBuilder(" FROM "
-				+ " (events NATURAL JOIN pitches NATURAL JOIN clubs) "
+				+ " (events NATURAL JOIN pitches NATURAL JOIN clubs NATURAL JOIN users) "
 				+ " AS t ");
 		
 		for(Filter param : params) {

@@ -21,7 +21,7 @@ public class TournamentEvent {
 	@JoinColumn(name = "tournamentid")
 	private Tournament tournament;
 	
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	@MapsId("eventid")
 	@JoinColumn(name = "eventid")
 	private Event event;
@@ -38,10 +38,10 @@ public class TournamentEvent {
 	private TournamentTeam secondTeam;
 	
 	@Column(name = "first_team_score", nullable = false)
-	private int firstTeamScore;
+	private Integer firstTeamScore;
 	
 	@Column(name = "second_team_score", nullable = false)
-	private int secondTeamScore;
+	private Integer secondTeamScore;
 	
 	/*package*/ TournamentEvent() {
 		
@@ -49,14 +49,14 @@ public class TournamentEvent {
 	
 	public TournamentEvent(Tournament tournament, Event event, int round,
 			TournamentTeam firstTeam, TournamentTeam secondTeam) {
-		this.eventid = event.getEventId(); // ?
+		//this.eventid = event.getEventId(); // ?
 		this.tournament = tournament;
 		this.event = event;
 		this.round = round;
 		this.firstTeam = firstTeam;
 		this.secondTeam = secondTeam;
-		this.firstTeamScore = firstTeamScore;
-		this.secondTeamScore = secondTeamScore;
+		//this.firstTeamScore = null;
+		//this.secondTeamScore = null;
 	}
 
 	public Tournament getTournament() {
