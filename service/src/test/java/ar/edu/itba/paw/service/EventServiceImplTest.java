@@ -22,7 +22,7 @@ import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.persistence.TestConfig;
+import ar.edu.itba.paw.service.TestConfig;
 
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(classes = TestConfig.class)

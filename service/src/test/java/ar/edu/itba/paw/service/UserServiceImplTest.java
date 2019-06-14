@@ -15,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.persistence.TestConfig;
+import ar.edu.itba.paw.service.TestConfig;
 
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
