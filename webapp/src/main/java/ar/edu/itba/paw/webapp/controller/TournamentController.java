@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentEvent;
+import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,8 +127,16 @@ public class TournamentController extends BaseController {
         return mav;
     }
 
-	@ExceptionHandler({ EventNotFoundException.class })
-	private ModelAndView eventNotFound() {
+    @RequestMapping(value = "tournament-event/{id}")
+    public ModelAndView retrieveTournamentEvent( @PathVariable long id) throws TournamentEventNotFoundException {
+        ModelAndView mav = new ModelAndView("tournamentEvent");
+//        TournamentEvent tEvent = ts.findTournamentEventById(id).orElseThrow(TournamentEventNotFoundException::new);
+//        mav.addObject("tournamentEvent", tEvent );
+        return mav;
+    }
+
+	@ExceptionHandler({ TournamentEventNotFoundException.class })
+	private ModelAndView tournamentEventNotFound() {
 		return new ModelAndView("404");
 	}
 
