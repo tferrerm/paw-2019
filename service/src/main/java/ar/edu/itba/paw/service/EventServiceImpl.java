@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,8 +22,6 @@ import ar.edu.itba.paw.exception.EventInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InvalidDateFormatException;
-import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -175,6 +172,7 @@ public class EventServiceImpl implements EventService {
 		return DAYS_OF_WEEK_NUM;
 	}
 
+	@Override
 	public String[] getScheduleDaysHeader() {
 		Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
 		int currDayOfWeek = daysOfWeek.get(LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek());
@@ -189,12 +187,10 @@ public class EventServiceImpl implements EventService {
 		return nextSevenDays;
 	}
 	
-	@Transactional
 	@Override
 	public List<Event> findByWithInscriptions(boolean onlyFuture, Optional<String> eventName, 
 			Optional<String> clubName, Optional<Sport> sport, Optional<String> organizer,
-			Optional<String> vacancies, Optional<String> date, int pageNum) 
-			throws InvalidDateFormatException, InvalidVacancyNumberException {
+			Optional<Integer> vacancies, Optional<Instant> date, int pageNum) {
 		
 		List<Event> events = findBy(onlyFuture, eventName, clubName, sport, organizer, 
 				vacancies, date, pageNum);
@@ -212,22 +208,14 @@ public class EventServiceImpl implements EventService {
 	@Transactional
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
-			Optional<Sport> sport, Optional<String> organizer, Optional<String> vacancies, 
-			Optional<String> date, int pageNum) 
-			throws InvalidDateFormatException, InvalidVacancyNumberException {
+			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, 
+			Optional<Instant> date, int pageNum) {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
-		String sportString = null;
-		if(sport.isPresent()) {
-			sportString = sport.get().toString();
-		}
-		
-		Instant dateInst = instantFromOptionalStr(date);
-		Integer vacInt = integerFromOptionalStr(vacancies);
 
-		List<Event> events = ed.findBy(eventName, clubName, Optional.ofNullable(sportString), organizer,
-				Optional.ofNullable(vacInt), Optional.ofNullable(dateInst), pageNum);
+		List<Event> events = ed.findBy(eventName, clubName, sport.map(Sport::toString), organizer,
+				vacancies, date, pageNum);
 		
 		return events;
 	}
@@ -235,42 +223,10 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, final Optional<String> organizer,
-			final Optional<String> vacancies, Optional<String> date) 
-			throws InvalidDateFormatException, InvalidVacancyNumberException {
-		String sportString = null;
-		if(sport.isPresent()) {
-			sportString = sport.get().toString();
-		}
+			final Optional<Integer> vacancies, Optional<Instant> date) {
 		
-		Integer vac = integerFromOptionalStr(vacancies);
-		Instant dateInst = instantFromOptionalStr(date);
 		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
-				Optional.ofNullable(sportString), organizer, Optional.ofNullable(vac), 
-				Optional.ofNullable(dateInst));
-	}
-	
-	private Instant instantFromOptionalStr(Optional<String> date) throws InvalidDateFormatException {
-		Instant inst = null;
-		if(date.isPresent() && !date.get().isEmpty()) {
-			try {
-				inst = LocalDate.parse(date.get()).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-			} catch(DateTimeParseException e) {
-				throw new InvalidDateFormatException();
-			}
-		}
-		return inst;
-	}
-	
-	private Integer integerFromOptionalStr(Optional<String> str) 
-		throws InvalidVacancyNumberException {
-		Integer num = null;
-		if(str.isPresent() && !str.get().isEmpty())
-			try {
-				num = Integer.valueOf(str.get());
-			} catch(NumberFormatException e) {
-				throw new InvalidVacancyNumberException();
-			}
-		return num;
+				sport.map(Sport::toString), organizer, vacancies, date);
 	}
 
 	@Override
@@ -281,33 +237,22 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public Event create(final String name, final User owner, final Pitch pitch,
-			final String description, final String maxParticipants, final String date, 
-			final String startsAtHour, final String endsAtHour) 
-					throws 	InvalidDateFormatException, EventInPastException,
+			final String description, final int maxParticipants, final Instant date, 
+			final int startsAtHour, final int endsAtHour) 
+					throws 	EventInPastException,
 							MaximumDateExceededException, EndsBeforeStartsException, 
 							EventOverlapException, HourOutOfRangeException {
-		// ARREGLAR
-		int mp = Integer.parseInt(maxParticipants);
-		int startsAt = Integer.parseInt(startsAtHour);
-    	int endsAt = Integer.parseInt(endsAtHour);
-    	
-    	Instant dateInstant = null;
-    	try {
-    		dateInstant = LocalDate.parse(date).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-    	} catch(DateTimeParseException e) {
-    		throw new InvalidDateFormatException();
-    	}
-    	if(dateInstant.isBefore(today()))
+    	if(date.isBefore(today()))
     		throw new EventInPastException();
-    	if(dateInstant.compareTo(aWeeksTime()) > 0)
+    	if(date.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
-    	if(endsAt <= startsAt)
+    	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
-    	if(startsAt < MIN_HOUR || startsAt >= MAX_HOUR || endsAt > MAX_HOUR || endsAt <= MIN_HOUR)
+    	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException();
 
-		return ed.create(name, owner, pitch, description, mp, 
-				dateInstant.plus(startsAt, ChronoUnit.HOURS), dateInstant.plus(endsAt, ChronoUnit.HOURS));
+		return ed.create(name, owner, pitch, description, maxParticipants, 
+				date.plus(startsAtHour, ChronoUnit.HOURS), date.plus(endsAtHour, ChronoUnit.HOURS));
 	}
 	
 	private Instant today() {

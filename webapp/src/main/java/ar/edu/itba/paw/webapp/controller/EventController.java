@@ -27,8 +27,6 @@ import ar.edu.itba.paw.exception.EventInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InvalidDateFormatException;
-import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -220,30 +218,29 @@ public class EventController extends BaseController {
 
         String queryString = buildQueryString(name, clubName, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
+    	Integer vac = tryInteger(vacancies);
+    	Instant dateInst = tryInstant(date);
+    	if(vac == null)
+    		mav.addObject("invalid_number_format", true);
+    	if(dateInst == null)
+    		mav.addObject("invalid_date_format", true);
+    		
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());
         mav.addObject("lastPageNum", es.countFutureEventPages());
         
-        try {
-	        List<Event> events = es.findBy(true, Optional.ofNullable(name), 
-	        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
-	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
-	
-	        mav.addObject("events", events);
-	        mav.addObject("eventQty", events.size());
-	        
-	        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
-	        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
-	        		Optional.ofNullable(vacancies), Optional.ofNullable(date));
-	        mav.addObject("totalEventQty", totalEventQty);
-        } catch(InvalidDateFormatException e) {
-        	mav.addObject("invalid_date_format", true);
-        	return mav;
-        } catch(InvalidVacancyNumberException e) {
-        	mav.addObject("invalid_number_format", true);
-        	return mav;
-        }
+        List<Event> events = es.findBy(true, Optional.ofNullable(name), 
+        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
+        		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
+
+        mav.addObject("events", events);
+        mav.addObject("eventQty", events.size());
+        
+        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
+        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
+        		Optional.ofNullable(vac), Optional.ofNullable(dateInst));
+        mav.addObject("totalEventQty", totalEventQty);
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         
@@ -273,6 +270,19 @@ public class EventController extends BaseController {
     		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) throws PitchNotFoundException {
+    	
+    	Integer mp = tryInteger(form.getMaxParticipants());
+    	Integer sa = tryInteger(form.getStartsAtHour());
+    	Integer ea = tryInteger(form.getEndsAtHour());
+    	Instant date = tryInstant(form.getDate());
+    	if(mp == null)
+    		errors.rejectValue("maxParticipants", "wrong_int_format");
+    	if(sa == null)
+    		errors.rejectValue("startsAtHour", "wrong_int_format");
+    	if(ea == null)
+    		errors.rejectValue("endsAtHour", "wrong_int_format");
+    	if(date == null)
+    		errors.rejectValue("date", "wrong_date_format");
 
     	if(errors.hasErrors()) {
     		return seePitch(pitchId, form);
@@ -282,10 +292,7 @@ public class EventController extends BaseController {
     	Event ev = null;
     	try {
 	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-	    			form.getMaxParticipants(), form.getDate(), form.getStartsAtHour(),
-	    			form.getEndsAtHour());
-    	} catch(InvalidDateFormatException e) {
-    		return eventCreationError("invalid_date_format", pitchId, form);
+	    			mp, date, sa, ea);
     	} catch(EndsBeforeStartsException e) {
     		return eventCreationError("ends_before_starts", pitchId, form);
     	} catch(EventInPastException e) {

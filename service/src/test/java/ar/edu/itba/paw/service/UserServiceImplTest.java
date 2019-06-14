@@ -61,7 +61,13 @@ public class UserServiceImplTest {
 		Mockito.when(ud.create(EMAIL, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER))
 		.thenReturn(USER);
 		final User u = us.create(EMAIL, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER, null);
+		Assert.assertNotNull(u);
 		Assert.assertEquals(EMAIL, u.getUsername());
+		Assert.assertEquals(FIRSTNAME, u.getFirstname());
+		Assert.assertEquals(LASTNAME, u.getLastname());
+		Assert.assertEquals(PASSWORD, u.getPassword());
+		Assert.assertEquals(Role.ROLE_USER, u.getRole());
+		Assert.assertEquals(NOW, u.getCreatedAt());
 	}
 
 }
