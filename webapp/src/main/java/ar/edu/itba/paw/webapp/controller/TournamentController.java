@@ -66,7 +66,7 @@ public class TournamentController extends BaseController {
     }
 
     @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join")
-    public ModelAndView joinTeam(@PathVariable long tournamentid, @PathVariable long teamid) 
+    public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
     		throws UserBusyException, UserAlreadyJoinedException {
     	
         ts.joinTeam(tournamentid, teamid, loggedUser().getUserid());
