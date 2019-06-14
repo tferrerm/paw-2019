@@ -52,6 +52,7 @@ import ar.edu.itba.paw.webapp.form.NewEventForm;
 public class EventController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
@@ -208,9 +209,9 @@ public class EventController extends BaseController {
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                      @PathVariable("pageNum") final int pageNum,
                                      @RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "est", required = false) String clubName,
+                                     @RequestParam(value = "establishment", required = false) String clubName,
                                      @RequestParam(value = "sport", required = false) Sport sport,
-                                     @RequestParam(value = "vac", required = false) String vacancies,
+                                     @RequestParam(value = "vacancies", required = false) String vacancies,
                                      @RequestParam(value = "date", required = false) String date) {
     	String sportName = "";
     	if(sport != null)
@@ -218,11 +219,12 @@ public class EventController extends BaseController {
 
         String queryString = buildQueryString(name, clubName, sportName, vacancies, date);
         ModelAndView mav = new ModelAndView("list");
-    	Integer vac = tryInteger(vacancies);
-    	Instant dateInst = tryInstant(date);
-    	if(vac == null)
+    	
+        Integer vac = tryInteger(vacancies);
+    	Instant dateInst = tryInstant(date, TIME_ZONE);
+    	if(vac == null && vacancies != null && !vacancies.isEmpty())
     		mav.addObject("invalid_number_format", true);
-    	if(dateInst == null)
+    	if(dateInst == null && date != null && !date.isEmpty())
     		mav.addObject("invalid_date_format", true);
     		
         mav.addObject("page", pageNum);
@@ -274,7 +276,7 @@ public class EventController extends BaseController {
     	Integer mp = tryInteger(form.getMaxParticipants());
     	Integer sa = tryInteger(form.getStartsAtHour());
     	Integer ea = tryInteger(form.getEndsAtHour());
-    	Instant date = tryInstant(form.getDate());
+    	Instant date = tryInstant(form.getDate(), TIME_ZONE);
     	if(mp == null)
     		errors.rejectValue("maxParticipants", "wrong_int_format");
     	if(sa == null)
@@ -349,13 +351,13 @@ public class EventController extends BaseController {
         	strBuilder.append("name=").append(name).append("&");
         }
         if(establishment != null && !establishment.isEmpty()) {
-        	strBuilder.append("est=").append(establishment).append("&");
+        	strBuilder.append("establishment=").append(establishment).append("&");
         }
         if(sport != null && !sport.isEmpty()) {
         	strBuilder.append("sport=").append(sport).append("&");
         }
         if(vacancies != null && !vacancies.isEmpty()) {
-        	strBuilder.append("vac=").append(vacancies).append("&");
+        	strBuilder.append("vacancies=").append(vacancies).append("&");
         }
         if(date != null && !date.isEmpty()) {
         	strBuilder.append("date=").append(date);

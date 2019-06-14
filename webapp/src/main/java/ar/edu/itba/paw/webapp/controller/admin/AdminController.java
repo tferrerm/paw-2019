@@ -27,6 +27,8 @@ import ar.edu.itba.paw.webapp.form.FiltersForm;
 @RequestMapping("/admin")
 @Controller
 public class AdminController extends BaseController {
+	
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 
 	@Autowired
 	private EventService es;
@@ -53,7 +55,7 @@ public class AdminController extends BaseController {
 		String queryString = buildAdminQueryString(clubName, sportName, organizer, vacancies, date);
 		ModelAndView mav = new ModelAndView("admin/index");
 	   	Integer vac = tryInteger(vacancies);
-    	Instant dateInst = tryInstant(date);
+    	Instant dateInst = tryInstant(date, TIME_ZONE);
     	if(vac == null)
     		mav.addObject("invalid_number_format", true);
     	if(dateInst == null)

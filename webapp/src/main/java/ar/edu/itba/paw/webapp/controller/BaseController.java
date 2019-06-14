@@ -21,7 +21,6 @@ import ar.edu.itba.paw.model.User;
 public class BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
-	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@Qualifier("userServiceImpl")
 	@Autowired
@@ -45,18 +44,18 @@ public class BaseController {
     public Integer tryInteger(String str) {
     	Integer i = null;
     	try {
-    		Integer.parseInt(str);
+    		i = Integer.parseInt(str);
     	} catch(NumberFormatException e) {
     		return null;
     	}
     	return i;
     }
     
-    public Instant tryInstant(String str) {
+    public Instant tryInstant(String str, String timezone) {
     	Instant i = null;
     	try {
-    		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-    	} catch(DateTimeParseException e) {
+    		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(timezone)).toInstant();
+    	} catch(DateTimeParseException | NullPointerException e) {
     		return null;
     	}
     	return i;
