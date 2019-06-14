@@ -62,8 +62,8 @@ public class TournamentServiceImpl implements TournamentService {
     	// CHEQUEOS
     	
     	// VALIDAR QUE HAYA SUFICIENTES CANCHAS (IF SIZE < MT/2...)
-    	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), firstRoundStartsAt,
-    			firstRoundEndsAt, mt/2);
+    	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), sport, 
+    			firstRoundStartsAt, firstRoundEndsAt, mt/2);
     	
     	return td.create(name, sport, club, availablePitches, mt, ts, firstRoundStartsAt,
     			firstRoundEndsAt, inscriptionEndInstant, user);

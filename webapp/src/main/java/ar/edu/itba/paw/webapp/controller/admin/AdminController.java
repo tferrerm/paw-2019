@@ -41,7 +41,7 @@ public class AdminController extends BaseController {
 	@RequestMapping(value = "/events/{pageNum}")
 	public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
 									   @PathVariable("pageNum") final int pageNum,
-									   @RequestParam(value = "est" ,required = false) String clubName,
+									   @RequestParam(value = "est", required = false) String clubName,
 									   @RequestParam(value = "sport", required = false) Sport sport,
 									   @RequestParam(value = "org", required = false) String organizer,
 									   @RequestParam(value = "vac", required = false) String vacancies,

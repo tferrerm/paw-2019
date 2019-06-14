@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -55,10 +56,10 @@ public class Tournament {
 	private Instant createdAt;
 	
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournament")
-	private List<TournamentTeam> teams;
+	private Set<TournamentTeam> teams;
 	
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournament")
-	private List<TournamentEvent> events;
+	private Set<TournamentEvent> tournamentEvents;
 	
 	@PrePersist
 	protected void onCreate() {
@@ -111,12 +112,12 @@ public class Tournament {
 		return createdAt;
 	}
 
-	public List<TournamentTeam> getTeams() {
+	public Set<TournamentTeam> getTeams() {
 		return teams;
 	}
 
-	public List<TournamentEvent> getEvents() {
-		return events;
+	public Set<TournamentEvent> getTournamentEvents() {
+		return tournamentEvents;
 	}
 	
 	public int getRounds() {

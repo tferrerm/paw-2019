@@ -7,6 +7,7 @@ import java.util.Optional;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 public interface ClubDao {
@@ -49,7 +50,7 @@ public interface ClubDao {
 
 	public int getCommentsMaxPage(final long clubid);
 	
-	public List<Pitch> getAvailablePitches(final long clubid, Instant startsAt, Instant endsAt, 
-			int amount);
+	public List<Pitch> getAvailablePitches(final long clubid, final Sport sport, 
+			Instant startsAt, Instant endsAt, int amount);
 
 }
