@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -52,10 +52,12 @@ public class BaseController {
     }
     
     public Instant tryInstant(String str, String timezone) {
+    	if(str == null || timezone == null)
+    		return null;
     	Instant i = null;
     	try {
     		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(timezone)).toInstant();
-    	} catch(DateTimeParseException | NullPointerException e) {
+    	} catch(DateTimeException e) {
     		return null;
     	}
     	return i;
