@@ -58,6 +58,10 @@ public class TournamentEvent {
 		//this.firstTeamScore = null;
 		//this.secondTeamScore = null;
 	}
+	
+	public long getEventid() {
+		return eventid;
+	}
 
 	public Tournament getTournament() {
 		return tournament;

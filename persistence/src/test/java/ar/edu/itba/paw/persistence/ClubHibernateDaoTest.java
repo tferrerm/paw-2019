@@ -145,7 +145,7 @@ public class ClubHibernateDaoTest {
 	
 	@Rollback
 	@Test
-	public void testDeletePitch() {
+	public void testDeleteClub() {
 		cd.deleteClub(CLUBID);
 		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clubs"));
 		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "pitches"));

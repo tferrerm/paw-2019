@@ -3,9 +3,12 @@ package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 
 public interface TournamentService {
@@ -14,8 +17,13 @@ public interface TournamentService {
 	
 	public List<Tournament> findBy(final int pageNum);
 	
+	public Optional<TournamentTeam> findByTeamId(final long teamid);
+	
 	public Tournament create(final String name, final Sport sport, final Club club, final String maxTeams,
 			final String teamSize, final String firstRoundDate, final String startsAtHour,
 			final String endsAtHour, final String inscriptionEndDate, final User user);
+
+	public void joinTeam(final long tournamentid, final long teamid, final long userid) 
+			throws UserBusyException, UserAlreadyJoinedException;
 	
 }

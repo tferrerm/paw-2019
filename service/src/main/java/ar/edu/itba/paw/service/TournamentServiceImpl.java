@@ -6,20 +6,24 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 
 @Service
@@ -31,13 +35,16 @@ public class TournamentServiceImpl implements TournamentService {
 	@Autowired
 	private ClubDao cd;
 	
+	@Autowired
+	private UserDao ud;
+	
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 	
 	@Override
-	public Optional<Tournament> findById(long tournamentid) {
+	public Optional<Tournament> findById(final long tournamentid) {
 		if(tournamentid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
@@ -45,12 +52,21 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 	
 	@Override
-	public List<Tournament> findBy(int pageNum) {
+	public List<Tournament> findBy(final int pageNum) {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
 
 		return td.findBy(pageNum);
+	}
+	
+	@Override
+	public Optional<TournamentTeam> findByTeamId(final long teamid) {
+		if(teamid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+
+		return td.findByTeamId(teamid);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class })
@@ -80,6 +96,20 @@ public class TournamentServiceImpl implements TournamentService {
     			firstRoundEndsAt, inscriptionEndInstant, user);
     	
     	
+	}
+	
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void joinTeam(long tournamentid, long teamid, final long userid) 
+			throws UserBusyException, UserAlreadyJoinedException {
+		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		
+		td.joinTeam(tournament, team, user);
 	}
 
 }
