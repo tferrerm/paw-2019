@@ -16,6 +16,7 @@ import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
@@ -33,6 +34,7 @@ public class TournamentServiceImpl implements TournamentService {
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
+	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 	
 	@Override
 	public Optional<Tournament> findById(long tournamentid) {
@@ -40,6 +42,15 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return td.findById(tournamentid);
+	}
+	
+	@Override
+	public List<Tournament> findBy(int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+
+		return td.findBy(pageNum);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class })
@@ -70,5 +81,5 @@ public class TournamentServiceImpl implements TournamentService {
     	
     	
 	}
-	
+
 }

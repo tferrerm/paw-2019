@@ -13,6 +13,8 @@ import ar.edu.itba.paw.model.User;
 public interface TournamentDao {
 	
 	public Optional<Tournament> findById(long tournamentid);
+	
+	public List<Tournament> findBy(final int pageNum);
 
 	public Tournament create(final String name, final Sport sport, final Club club, 
 			final List<Pitch> availablePitches, final int maxTeams, final int teamSize, 

@@ -3,12 +3,13 @@ package ar.edu.itba.paw.persistence;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -47,6 +48,30 @@ public class TournamentHibernateDao implements TournamentDao {
 			);
 		
 		return query.getResultList().stream().findFirst();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Tournament> findBy(int pageNum) {
+		
+		String idQueryString = "SELECT tournamentid FROM tournaments NATURAL JOIN clubs ORDER BY clubname ASC";
+		Query idQuery = em.createNativeQuery(idQueryString);
+		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
+		idQuery.setMaxResults(MAX_ROWS);
+		List<Long> ids =  idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Tournament> cq = cb.createQuery(Tournament.class);
+		Root<Tournament> from = cq.from(Tournament.class);
+		from.fetch("tournamentClub");
+		final TypedQuery<Tournament> query = em.createQuery(
+				cq.select(from).where(from.get("tournamentid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
 	}
 
 	@Override

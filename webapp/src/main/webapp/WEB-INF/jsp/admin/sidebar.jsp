@@ -12,8 +12,8 @@
         <ul>
             <li><a href="<c:url value='/admin/events/1' />"><spring:message code="allEvents"/></a></li>
             <li><a href="<c:url value='/admin/club/new' />"><spring:message code="create_club"/></a></li>
-            <li><a href="<c:url value='/admin/tournament/new' />"><spring:message code="create_tournament"/></a></li>
             <li><a href="<c:url value='/admin/clubs/1' />"><spring:message code="all_clubs"/></a></li>
+            <li><a href="<c:url value='/admin/tournaments/1' />"><spring:message code="tournaments"/></a></li>
         </ul>
     </div>
 </body>

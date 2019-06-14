@@ -80,7 +80,7 @@ public class Tournament {
 		this.endsInscriptionAt = endsInscriptionAt;
 	}
 
-	public long getTournamentId() {
+	public long getTournamentid() {
 		return tournamentid;
 	}
 
