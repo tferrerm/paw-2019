@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.paw.exception.InvalidDateFormatException;
-import ar.edu.itba.paw.exception.InvalidVacancyNumberException;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
@@ -53,31 +52,30 @@ public class AdminController extends BaseController {
     		sportName = sport.toString();
 		String queryString = buildAdminQueryString(clubName, sportName, organizer, vacancies, date);
 		ModelAndView mav = new ModelAndView("admin/index");
+	   	Integer vac = tryInteger(vacancies);
+    	Instant dateInst = tryInstant(date);
+    	if(vac == null)
+    		mav.addObject("invalid_number_format", true);
+    	if(dateInst == null)
+    		mav.addObject("invalid_date_format", true);
 		mav.addObject("page", pageNum);
 		mav.addObject("queryString", queryString);
 		mav.addObject("sports", Sport.values());
 		mav.addObject("lastPageNum", es.countFutureEventPages());
         
-		try {
-			List<Event> events = es.findBy(true, Optional.empty(), Optional.ofNullable(clubName), 
-	        		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
-	        		Optional.ofNullable(vacancies), Optional.ofNullable(date), pageNum);
-			mav.addObject("events", events);
-			mav.addObject("eventQty", events.size());
-			
-			Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
-					Optional.ofNullable(clubName), Optional.ofNullable(sport), 
-					Optional.ofNullable(organizer), Optional.ofNullable(vacancies),
-					Optional.ofNullable(date));
-			
-	        mav.addObject("totalEventQty", totalEventQty);
-		} catch(InvalidDateFormatException e) {
-			mav.addObject("invalid_date_format", true);
-			return mav;
-		} catch(InvalidVacancyNumberException e) {
-        	mav.addObject("invalid_number_format", true);
-        	return mav;
-        }
+		
+		List<Event> events = es.findBy(true, Optional.empty(), Optional.ofNullable(clubName), 
+        		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
+        		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
+		mav.addObject("events", events);
+		mav.addObject("eventQty", events.size());
+		
+		Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
+				Optional.ofNullable(clubName), Optional.ofNullable(sport), 
+				Optional.ofNullable(organizer), Optional.ofNullable(vac),
+				Optional.ofNullable(dateInst));
+		
+        mav.addObject("totalEventQty", totalEventQty);
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         

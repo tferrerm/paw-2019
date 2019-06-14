@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -17,6 +21,7 @@ import ar.edu.itba.paw.model.User;
 public class BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@Qualifier("userServiceImpl")
 	@Autowired
@@ -36,6 +41,26 @@ public class BaseController {
 		final Optional<User> user = us.findByUsername(auth.getName());
 		return user.get();
 	}
+	
+    public Integer tryInteger(String str) {
+    	Integer i = null;
+    	try {
+    		Integer.parseInt(str);
+    	} catch(NumberFormatException e) {
+    		return null;
+    	}
+    	return i;
+    }
+    
+    public Instant tryInstant(String str) {
+    	Instant i = null;
+    	try {
+    		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
+    	} catch(DateTimeParseException e) {
+    		return null;
+    	}
+    	return i;
+    }
 	
 	/*@ExceptionHandler({ IllegalArgumentException.class })
 	private ModelAndView illegalIdOrPageNumber() {
