@@ -20,6 +20,7 @@ import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;

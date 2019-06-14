@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @Table(name = "tournament_events")
 public class TournamentEvent {
 	
-	@EmbeddedId
-	private TournamentEventId id;
+	@Id
+	private Long eventid;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "tournamentid")
@@ -49,7 +49,7 @@ public class TournamentEvent {
 	
 	public TournamentEvent(Tournament tournament, Event event, int round,
 			TournamentTeam firstTeam, TournamentTeam secondTeam) {
-		this.id = new TournamentEventId(event.getEventId());
+		this.eventid = event.getEventId(); // ?
 		this.tournament = tournament;
 		this.event = event;
 		this.round = round;
