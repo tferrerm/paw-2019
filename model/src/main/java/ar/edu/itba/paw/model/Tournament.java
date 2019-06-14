@@ -83,7 +83,7 @@ public class Tournament {
 		return tournamentid;
 	}
 
-	public String getTournamentName() {
+	public String getName() {
 		return name;
 	}
 

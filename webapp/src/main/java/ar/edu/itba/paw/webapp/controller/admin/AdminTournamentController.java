@@ -88,7 +88,7 @@ public class AdminTournamentController extends BaseController {
     			form.getTeamSize(), form.getFirstRoundDate(), form.getStartsAtHour(), 
     			form.getEndsAtHour(), form.getInscriptionEndDate(), loggedUser());
     	
-    	return new ModelAndView("redirect:/tournament/" + tournament.getTournamentId());
+    	return new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentId());
     }
     
     @ExceptionHandler({ TournamentNotFoundException.class })
