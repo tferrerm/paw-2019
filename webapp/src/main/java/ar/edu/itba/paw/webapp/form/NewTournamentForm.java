@@ -1,64 +1,45 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 public class NewTournamentForm {
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z0-9 ]+")
 	private String name;
-
-	@NotBlank
-	@Min(0)
-	private Integer minParticipants;
-
-	@NotBlank
-	@Min(0)
-	private Integer maxParticipants;
-
-	@NotBlank
-	@Min(0)
-	private Integer teamSize;
-
-	@NotBlank
-	private String club;
-
+	
 	@NotBlank
 	private String sport;
+	
+	@NotBlank
+	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
+	private String maxTeams;
+	
+	@NotBlank
+	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
+	private String teamSize;
+	
+	@NotBlank
+	private String firstRoundDate;
+	
+	@NotBlank
+	@Pattern(regexp = "[0-9]?[0-9]")
+	private String startsAtHour;
+	
+	@NotBlank
+	@Pattern(regexp = "[0-9]?[0-9]")
+	private String endsAtHour;
+	
+	@NotBlank
+	private String inscriptionEndDate;
 
-	public Integer getMinParticipants() {
-		return minParticipants;
+	public String getName() {
+		return name;
 	}
 
-	public void setMinParticipants(Integer minParticipants) {
-		this.minParticipants = minParticipants;
-	}
-
-	public Integer getMaxParticipants() {
-		return maxParticipants;
-	}
-
-	public void setMaxParticipants(Integer maxParticipants) {
-		this.maxParticipants = maxParticipants;
-	}
-
-	public Integer getTeamSize() {
-		return teamSize;
-	}
-
-	public void setTeamSize(Integer teamSize) {
-		this.teamSize = teamSize;
-	}
-
-	public String getClub() {
-		return club;
-	}
-
-	public void setClub(String club) {
-		this.club = club;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getSport() {
@@ -69,14 +50,53 @@ public class NewTournamentForm {
 		this.sport = sport;
 	}
 
-	public String getName() {
-		return name;
+	public String getMaxTeams() {
+		return maxTeams;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMaxTeams(String maxTeams) {
+		this.maxTeams = maxTeams;
 	}
 
+	public String getTeamSize() {
+		return teamSize;
+	}
 
+	public void setTeamSize(String teamSize) {
+		this.teamSize = teamSize;
+	}
+
+	public String getFirstRoundDate() {
+		return firstRoundDate;
+	}
+
+	public void setFirstRoundDate(String firstRoundDate) {
+		this.firstRoundDate = firstRoundDate;
+	}
+
+	public String getStartsAtHour() {
+		return startsAtHour;
+	}
+
+	public void setStartsAtHour(String startsAtHour) {
+		this.startsAtHour = startsAtHour;
+	}
+
+	public String getEndsAtHour() {
+		return endsAtHour;
+	}
+
+	public void setEndsAtHour(String endsAtHour) {
+		this.endsAtHour = endsAtHour;
+	}
+
+	public String getInscriptionEndDate() {
+		return inscriptionEndDate;
+	}
+
+	public void setInscriptionEndDate(String inscriptionEndDate) {
+		this.inscriptionEndDate = inscriptionEndDate;
+	}
 	
+
 }

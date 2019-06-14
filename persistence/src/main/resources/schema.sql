@@ -55,9 +55,11 @@ CREATE TABLE IF NOT EXISTS events(
 CREATE TABLE IF NOT EXISTS events_users(
   userid INTEGER NOT NULL,
   eventid INTEGER NOT NULL,
+  teamid INTEGER,
   vote INTEGER,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
   FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
+  FOREIGN KEY (teamid) REFERENCES tournament_teams ON DELETE CASCADE,
   PRIMARY KEY (userid, eventid)
 );
 
@@ -79,4 +81,38 @@ CREATE TABLE IF NOT EXISTS club_comments(
   created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (commenter_id) REFERENCES users ON DELETE CASCADE,
   FOREIGN KEY (dest_clubid) REFERENCES users ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tournaments(
+  tournamentid SERIAL PRIMARY KEY,
+  tournamentname VARCHAR(100) NOT NULL,
+  tournament_sport VARCHAR(100) NOT NULL,
+  clubid INTEGER NOT NULL,
+  max_teams INTEGER NOT NULL,
+  team_size INTEGER NOT NULL,
+  inscription_ends_at TIMESTAMP NOT NULL,
+  tournament_created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (clubid) REFERENCES clubs ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tournament_events(
+  eventid INTEGER NOT NULL,
+  tournamentid INTEGER NOT NULL,
+  round INTEGER NOT NULL,
+  first_teamid INTEGER NOT NULL,
+  second_teamid INTEGER NOT NULL,
+  first_team_score INTEGER NOT NULL,
+  second_team_score INTEGER NOT NULL,
+  FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
+  FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE,
+  FOREIGN KEY (first_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE,
+  FOREIGN KEY (second_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE,
+  PRIMARY KEY(eventid)
+);
+
+CREATE TABLE IF NOT EXISTS tournament_teams(
+  teamid SERIAL PRIMARY KEY,
+  tournamentid INTEGER NOT NULL,
+  teamname VARCHAR(100) NOT NULL,
+  FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE
 );
