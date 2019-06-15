@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,28 +10,29 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.ClubService;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.TournamentService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
-import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
+import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewTournamentForm;
 
 @RequestMapping("/admin")
@@ -53,11 +52,17 @@ public class AdminTournamentController extends BaseController {
 	@Autowired
 	private EventService es;
 	
+	@Autowired
+	private UserService us;
+	
+	@Autowired
+	private EmailService ems;
+	
 	@RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
     		throws TournamentNotFoundException {
 		
-        ModelAndView mav = new ModelAndView("admin/tournament");
+        ModelAndView mav = new ModelAndView("admin/tournamentInscription");
         
         Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
         mav.addObject("tournament",  tournament);
@@ -69,6 +74,7 @@ public class AdminTournamentController extends BaseController {
         return mav;
     }
 	
+	
 	@RequestMapping(value = "/tournaments/{pageNum}")
 	public ModelAndView retrieveEvents(@PathVariable("pageNum") final int pageNum) {
 		
@@ -79,6 +85,7 @@ public class AdminTournamentController extends BaseController {
 		
 		return mav;
 	}
+	
 	
 	@RequestMapping(value = "/club/{clubId}/tournament/new")
     public ModelAndView tournamentFormView(@PathVariable("clubId") long clubId,
@@ -98,7 +105,8 @@ public class AdminTournamentController extends BaseController {
         return mav;
     }
     
-    @RequestMapping(value = "/club/{clubId}/tournament/create")
+	
+    @RequestMapping(value = "/club/{clubId}/tournament/create", method = { RequestMethod.POST })
     public ModelAndView createTournament(@PathVariable("clubId") long clubId,
     		@Valid @ModelAttribute("newTournamentForm") final NewTournamentForm form,
 			final BindingResult errors, HttpServletRequest request) throws ClubNotFoundException {
@@ -116,6 +124,22 @@ public class AdminTournamentController extends BaseController {
     	
     	return new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentid());
     }
+    
+    
+    @RequestMapping(value = "/tournament/{tournamentId}/kick-user/{userId}", method = { RequestMethod.POST })
+    public ModelAndView kickUserFromTournament(
+    		@PathVariable("tournamentId") long tournamentid, @PathVariable("userId") long kickedUserId) 
+    				throws UserNotFoundException, TournamentNotFoundException {
+    	
+    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	User kickedUser = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
+    	
+    	ts.kickFromTournament(kickedUser, tournament);
+    	ems.youWereKicked(kickedUser, tournament, LocaleContextHolder.getLocale());
+    	
+    	return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
+    }
+    
     
     @ExceptionHandler({ TournamentNotFoundException.class })
 	public ModelAndView tournamentNotFoundHandler() {

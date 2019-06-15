@@ -16,6 +16,7 @@ import org.thymeleaf.context.Context;
 
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.User;
 
 @Async
@@ -107,8 +108,12 @@ public class EmailServiceImpl implements EmailService {
 			//LOGGER.error("Message sending exception", e);
 		}
 
-
 		this.mailSender.send(mimeMessage);
+	}
+
+	@Override
+	public void youWereKicked(User kickedUser, Tournament tournament, Locale locale) {
+		// HACER!
 	}
 
 }

@@ -29,6 +29,8 @@ public interface TournamentService {
 	
 	public void leaveTournament(final long tournamentid, final long userid);
 	
+	public void kickFromTournament(final User kickedUser, final Tournament tournament);
+	
 	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
 
 	public List<TournamentTeam> findTournamentTeams(final long tournamentid);

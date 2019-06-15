@@ -33,8 +33,11 @@
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex].teamid}"/>
-										<cr:forEach begin="0" end="${tournament.teamSize - 1}" step="1" var="userIndex">
-											<span>${teamsUsers[teamid][userIndex].firstname} ${teamsUsers[teamid][userIndex].lastname}</span>
+										<cr:forEach begin="1" end="${fn:length(teamsUsers[teamid])}" step="1" var="userIndex">
+											<span>${teamsUsers[teamid][userIndex-1].firstname} ${teamsUsers[teamid][userIndex-1].lastname}</span>
+											<form class="participant-item" method="POST" action="<c:url value="/admin/tournament/${tournament.tournamentid}/kick-user/${teamsUsers[teamid][userIndex-1].userid}"/>">
+									            <button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+								            </form>
 										</cr:forEach>
 										<cr:forEach begin="1" end="${tournament.teamSize - fn:length(teamsUsers[teamid])}" step="1">
 											<span>-</span>
@@ -47,8 +50,11 @@
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex + 1].teamid}"/>
-										<cr:forEach begin="0" end="${tournament.teamSize - 1}" step="1" var="userIndex">
-											<span>${teamsUsers[teamid][userIndex].firstname} ${teamsUsers[teamid][userIndex].lastname}</span>
+										<cr:forEach begin="1" end="${fn:length(teamsUsers[teamid])}" step="1" var="userIndex">
+											<span>${teamsUsers[teamid][userIndex-1].firstname} ${teamsUsers[teamid][userIndex-1].lastname}</span>
+											<form class="participant-item" method="POST" action="<c:url value="/admin/tournament/${tournament.tournamentid}/kick-user/${teamsUsers[teamid][userIndex-1].userid}"/>">
+									            <button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+								            </form>
 										</cr:forEach>
 										<cr:forEach begin="1" end="${tournament.teamSize - fn:length(teamsUsers[teamid])}" step="1">
 											<span>-</span>

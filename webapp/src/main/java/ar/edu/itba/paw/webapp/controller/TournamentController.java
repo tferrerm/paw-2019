@@ -39,7 +39,7 @@ public class TournamentController extends BaseController {
     public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
     		throws TournamentEventNotFoundException {
     	
-        ModelAndView mav = new ModelAndView("tournament");
+        ModelAndView mav = new ModelAndView("tournamentInscription");
         
         Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentEventNotFoundException::new);
         mav.addObject("tournament",  tournament);

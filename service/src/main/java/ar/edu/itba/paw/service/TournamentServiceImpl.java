@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
@@ -106,7 +107,7 @@ public class TournamentServiceImpl implements TournamentService {
 			throws UserBusyException, UserAlreadyJoinedException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		} // IF NO ARRANCO
+		} // IF NO ARRANCO, IF TEAM NO LLENO
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
@@ -121,7 +122,14 @@ public class TournamentServiceImpl implements TournamentService {
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
-		td.deleteTournamentInscription(team, user);
+		td.deleteTournamentInscriptions(team, user);
+	}
+	
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void kickFromTournament(final User kickedUser, final Tournament tournament) {
+		TournamentTeam team = td.findUserTeam(tournament, kickedUser).orElseThrow(NoSuchElementException::new);
+		td.deleteTournamentInscriptions(team, kickedUser);
 	}
 	
 	@Override

@@ -188,7 +188,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		
 	}
 	
-	public void deleteTournamentInscription(final TournamentTeam team, final User user) {
+	public void deleteTournamentInscriptions(final TournamentTeam team, final User user) {
 		String queryString = "FROM Inscription AS i WHERE i.inscriptedUser.userid = :userid "
 				+ "AND i.tournamentTeam.teamid = :teamid";
 		TypedQuery<Inscription> query = em.createQuery(queryString, Inscription.class);
