@@ -30,6 +30,10 @@ public interface TournamentDao {
 	public void joinTournament(Tournament tournament, TournamentTeam team, final User user) 
 			throws UserBusyException, UserAlreadyJoinedException;
 	
+	public void deleteTournamentInscription(final TournamentTeam team, final User user);
+	
+	public Optional<TournamentTeam> findUserTeam(final Tournament tournament, final User user);
+	
 	public List<TournamentEvent> findTournamentEventsByTeam(final Tournament tournament, final TournamentTeam team);
 
 	public List<TournamentTeam> findTournamentTeams(final long tournamentid);

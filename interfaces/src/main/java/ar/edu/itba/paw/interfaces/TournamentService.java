@@ -28,6 +28,8 @@ public interface TournamentService {
 			throws UserBusyException, UserAlreadyJoinedException;
 	
 	public void leaveTournament(final long tournamentid, final long userid);
+	
+	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
 
 	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
 

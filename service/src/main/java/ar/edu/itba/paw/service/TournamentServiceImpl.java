@@ -119,7 +119,19 @@ public class TournamentServiceImpl implements TournamentService {
 	public void leaveTournament(final long tournamentid, final long userid) {
 		// IF NO ARRANCO
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
+		td.deleteTournamentInscription(team, user);
+	}
+	
+	@Override
+	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid) {
+		if(tournamentid <= 0 || userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		return td.findUserTeam(tournament, user);
 	}
 
 	@Override

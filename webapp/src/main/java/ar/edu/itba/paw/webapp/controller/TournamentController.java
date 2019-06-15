@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -35,7 +36,9 @@ public class TournamentController extends BaseController {
 	private ClubService cs;
 
     @RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) throws TournamentEventNotFoundException {
+    public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
+    		throws TournamentEventNotFoundException {
+    	
         ModelAndView mav = new ModelAndView("tournament");
         
         Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentEventNotFoundException::new);
@@ -44,7 +47,6 @@ public class TournamentController extends BaseController {
         mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
         Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
         mav.addObject("teamsUsers", teamsUsers);
-        System.out.println(teamsUsers);
         
         return mav;
     }
@@ -77,11 +79,20 @@ public class TournamentController extends BaseController {
         return mav;
     }
 
-    @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join")
+    @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
     public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
     		throws UserBusyException, UserAlreadyJoinedException {
     	
         ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
+        
+        return new ModelAndView("redirect:/tournament/" + tournamentid);
+    }
+    
+    @RequestMapping(value = "tournament/{tournamentId}/leave", method = { RequestMethod.POST })
+    public ModelAndView leaveTournament(@PathVariable("tournamentId") long tournamentid) 
+    		throws UserBusyException, UserAlreadyJoinedException {
+    	
+        ts.leaveTournament(tournamentid, loggedUser().getUserid());
         
         return new ModelAndView("redirect:/tournament/" + tournamentid);
     }

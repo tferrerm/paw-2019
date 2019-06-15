@@ -42,7 +42,9 @@
 									</div>
 								</div>
 								<div class="flex flex-grow justify-center">
-									<a href="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex].teamid}/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
+									<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex].teamid}/join"/>">
+										<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
+									</form>
 								</div>
 							</div>
 							<div class="team-description w-100">
@@ -59,13 +61,18 @@
 									</div>
 								</div>
 								<div class="flex flex-grow justify-center">
-									<a href="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex + 1].teamid}/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
+									<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex + 1].teamid}/join"/>">
+										<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
+									</form>
 								</div>
 							</div>
 						</div>
 					</cr:forEach>
 				</div>
 			</div>
+			<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
+				<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
+			</form>
 		</div>
 	</div>
 

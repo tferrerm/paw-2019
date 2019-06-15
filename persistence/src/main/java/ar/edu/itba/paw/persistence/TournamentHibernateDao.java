@@ -187,11 +187,35 @@ public class TournamentHibernateDao implements TournamentDao {
 		}
 		
 	}
+	
+	public void deleteTournamentInscription(final TournamentTeam team, final User user) {
+		String queryString = "FROM Inscription AS i WHERE i.inscriptedUser.userid = :userid "
+				+ "AND i.tournamentTeam.teamid = :teamid";
+		TypedQuery<Inscription> query = em.createQuery(queryString, Inscription.class);
+		query.setParameter("teamid", team.getTeamid());
+		query.setParameter("userid", user.getUserid());
+		
+		for(Inscription i : query.getResultList()) {
+			em.remove(i);
+		}
+	}
+	
+	public Optional<TournamentTeam> findUserTeam(final Tournament tournament, final User user) {
+		String queryString = "FROM TournamentTeam AS tt "
+				+ " WHERE tt.tournament.tournamentid = :tournamentid "
+				+ " AND EXISTS (SELECT i FROM Inscription AS i WHERE i.inscriptedUser.userid = :userid "
+				+ " AND i.tournamentTeam.teamid = tt.teamid)";
+		TypedQuery<TournamentTeam> query = em.createQuery(queryString, TournamentTeam.class);
+		query.setParameter("tournamentid", tournament.getTournamentid());
+		query.setParameter("userid", user.getUserid());
+		
+		return query.getResultList().stream().findFirst();
+	}
 
 	@Override
 	public List<TournamentEvent> findTournamentEventsByTeam(final Tournament tournament, final TournamentTeam team) {
 		String queryString = "FROM TournamentEvent AS te "
-				+ " WHERE te.tournament.tournamentid = :tournamentid"
+				+ " WHERE te.tournament.tournamentid = :tournamentid "
 				+ " AND (te.firstTeam.teamid = :teamid OR te.secondTeam.teamid = :teamid)";
 		
 		TypedQuery<TournamentEvent> query = em.createQuery(queryString, TournamentEvent.class);

@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
@@ -51,13 +54,17 @@ public class AdminTournamentController extends BaseController {
 	private EventService es;
 	
 	@RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournaments(@PathVariable long tournamentId) 
+    public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
     		throws TournamentNotFoundException {
 		
         ModelAndView mav = new ModelAndView("admin/tournament");
         
-        Tournament tournament = ts.findById(tournamentId).orElseThrow(TournamentNotFoundException::new);
+        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
         mav.addObject("tournament",  tournament);
+      //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
+        mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
+        Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
+        mav.addObject("teamsUsers", teamsUsers);
         
         return mav;
     }
