@@ -39,6 +39,53 @@
                         </div>
                     </c:forEach>
     			</div>
+                <div class="tbl profile-cont">
+                    <c:forEach var="event" items="${roundEvents}">
+                        <c:url value="/tournament/${tournament.tournamentid}/result" var="postPath"/>
+                        <form:form id="tournamentResultForm" modelAttribute="tournamentResultForm" action="${postPath}" class="comments_form">
+                            <div>
+                                <span>${event.firstTeam.teamName}</span>
+                                <form:input class="form-control" type="text" path="firstResult" maxlength="3"/>
+                                <form:errors path="firstResult" cssClass="form-error" element="span"/>
+                            </div>
+                            <div>
+                                <span>${event.secondTeam.teamName}</span>
+                                <form:input class="form-control" type="text" path="secondResult" maxlength="3"/>
+                                <form:errors path="secondResult" cssClass="form-error" element="span"/>
+                            </div>
+                            <div class="submit-container">
+                                <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
+                            </div>
+                        </form:form>
+                    </c:forEach>    
+                    <div class="table-navigator">
+                        <c:if test="${currRoundPage != 1}">
+                            <div>
+                                <a href="<c:url value='/admin/tournament/${tournament.tournamentid}?round=1' />">
+                                    <button type="button" class="btn btn-secondary">
+                                        <spring:message code="first"/>
+                                    </button>
+                                </a>
+                                <a href="<c:url value='/admin/tournament/${tournament.tournamentid}?round=${currRoundPage-1}' />">
+                                    <button type="button" class="btn btn-secondary">
+                                        <spring:message code="back"/>
+                                    </button>
+                                </a>
+                            </div>
+                        </c:if>
+                        <span class="flex"><spring:message code="showing_pages"/> ${currRoundPage} <spring:message code="of"/> ${maxRoundPage}</span>
+                        <c:if test="${currRoundPage != maxRoundPage}">
+                            <div>
+                                <a href="<c:url value='/admin/tournament/${tournament.tournamentid}?round=${currRoundPage+1}' />">
+                                    <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                                </a>
+                                <a href="<c:url value='/admin/tournament/${tournament.tournamentid}?round=${maxRoundPage}' />">
+                                    <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                                </a>
+                            </div>
+                        </c:if>
+                    </div>
+                </div>
             </div>
         </div>
 	</body>

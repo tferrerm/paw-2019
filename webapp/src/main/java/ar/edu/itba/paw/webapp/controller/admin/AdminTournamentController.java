@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -30,6 +31,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
@@ -37,6 +39,7 @@ import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewTournamentForm;
+import ar.edu.itba.paw.webapp.form.TournamentResultForm;
 
 @RequestMapping("/admin")
 @Controller
@@ -62,14 +65,23 @@ public class AdminTournamentController extends BaseController {
 	private EmailService ems;
 	
 	@RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
+    public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
+    		@RequestParam(value = "round", defaultValue = "1") final int roundPage, // VER SI SE PUEDE PONER FECHA ACTUAL DEFAULT
+			@ModelAttribute("tournamentResultForm") final TournamentResultForm form) 
     		throws TournamentNotFoundException {
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		
-		if(ts.inscriptionEnded(tournament)) {
+		if(ts.inscriptionEnded(tournament)) { // SEPARAR EN DOS URL?
 			ModelAndView mav = new ModelAndView("admin/tournament");
+			mav.addObject("tournament",  tournament);
 			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
+			
+			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
+			mav.addObject("roundEvents", roundEvents);
+			mav.addObject("currRoundPage", roundPage);
+			mav.addObject("maxRoundPage", tournament.getRounds());
+			
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("admin/tournamentInscription");
@@ -89,6 +101,21 @@ public class AdminTournamentController extends BaseController {
 		    return mav;
 		}
     }
+	
+	
+	@RequestMapping(value = "/tournament/{tournamentId}/result", method = { RequestMethod.POST })
+    public ModelAndView comment(@PathVariable("tournamentId") long tournamentid, 
+    		@Valid @ModelAttribute("tournamentResultForm") final TournamentResultForm form, final BindingResult errors,
+			HttpServletRequest request) throws TournamentNotFoundException {
+		
+		if(errors.hasErrors()) {
+    		return retrieveTournament(tournamentid, 1, form); // IR A LA DEFAULT
+    	}
+		
+		//us.createComment(loggedUser().getUserid(), userId, form.getComment());
+		
+	    return new ModelAndView("redirect:/tournament/" + tournamentid);
+	}
 	
 	
 	@RequestMapping(value = "/tournaments/{pageNum}")

@@ -39,7 +39,7 @@ public class TournamentController extends BaseController {
 	private ClubService cs;
 
     @RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
+    public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid) 
     		throws TournamentNotFoundException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);

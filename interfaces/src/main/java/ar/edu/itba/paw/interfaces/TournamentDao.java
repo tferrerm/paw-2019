@@ -40,4 +40,6 @@ public interface TournamentDao {
 
 	public List<User> findTeamMembers(final TournamentTeam team);
 
+	public List<TournamentEvent> findTournamentEventsByRound(final Tournament tournament, final int roundPage);
+
 }

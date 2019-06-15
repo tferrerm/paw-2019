@@ -29,6 +29,7 @@ import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 
@@ -181,6 +182,18 @@ public class TournamentServiceImpl implements TournamentService {
 		return teamsScoresMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(
 	            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
 	                    LinkedHashMap::new));
+	}
+
+	@Override
+	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage) {
+		if(tournamentid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		if(roundPage <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		return td.findTournamentEventsByRound(tournament, roundPage);
 	}
 
 }

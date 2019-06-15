@@ -260,4 +260,16 @@ public class TournamentHibernateDao implements TournamentDao {
 		return query.getResultList();
 	}
 
+	@Override
+	public List<TournamentEvent> findTournamentEventsByRound(Tournament tournament, int roundPage) {
+		String queryString = "FROM TournamentEvent AS te JOIN FETCH te.firstTeam ft JOIN FETCH te.secondTeam st "
+				+ " WHERE te.tournament.tournamentid = :tournamentid AND te.round = :roundPage";
+		
+		TypedQuery<TournamentEvent> query = em.createQuery(queryString, TournamentEvent.class);
+		query.setParameter("tournamentid", tournament.getTournamentid());
+		query.setParameter("roundPage", roundPage);
+		
+		return query.getResultList();
+	}
+
 }

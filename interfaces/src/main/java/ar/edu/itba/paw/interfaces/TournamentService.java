@@ -9,6 +9,7 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 
@@ -40,5 +41,7 @@ public interface TournamentService {
 	public boolean inscriptionEnded(final Tournament tournament);
 
 	public Map<TournamentTeam, Integer> getTeamsScores(final Tournament tournament);
+
+	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage);
 	
 }
