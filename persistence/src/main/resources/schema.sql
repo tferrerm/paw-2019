@@ -114,5 +114,6 @@ CREATE TABLE IF NOT EXISTS tournament_teams(
   teamid SERIAL PRIMARY KEY,
   tournamentid INTEGER NOT NULL,
   teamname VARCHAR(100) NOT NULL,
+  teamscore INTEGER NOT NULL,
   FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE
 );

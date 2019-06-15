@@ -22,6 +22,7 @@ import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
+import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 
 
 @Controller
@@ -37,18 +38,23 @@ public class TournamentController extends BaseController {
 
     @RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
-    		throws TournamentEventNotFoundException {
+    		throws TournamentNotFoundException {
     	
-        ModelAndView mav = new ModelAndView("tournamentInscription");
-        
-        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentEventNotFoundException::new);
-        mav.addObject("tournament",  tournament);
-        //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
-        mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
-        Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
-        mav.addObject("teamsUsers", teamsUsers);
-        
-        return mav;
+    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		
+		if(ts.inscriptionEnded(tournament)) {
+			ModelAndView mav = new ModelAndView("tournament");
+			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
+			return mav;
+		} else {
+			ModelAndView mav = new ModelAndView("tournamentInscription");
+			mav.addObject("tournament",  tournament);
+		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
+		    mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
+		    Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
+		    mav.addObject("teamsUsers", teamsUsers);
+		    return mav;
+		}
     }
 
     @RequestMapping(value = "/tournaments/{pageNum}")
@@ -98,7 +104,8 @@ public class TournamentController extends BaseController {
     }
 
     @RequestMapping(value = "tournament-event/{id}")
-    public ModelAndView retrieveTournamentEvent( @PathVariable long id) throws TournamentEventNotFoundException {
+    public ModelAndView retrieveTournamentEvent( @PathVariable long id) 
+    		throws TournamentEventNotFoundException {
         ModelAndView mav = new ModelAndView("tournamentEvent");
 //        TournamentEvent tEvent = ts.findTournamentEventById(id).orElseThrow(TournamentEventNotFoundException::new);
 //        mav.addObject("tournamentEvent", tEvent );

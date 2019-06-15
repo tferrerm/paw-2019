@@ -62,16 +62,21 @@ public class AdminTournamentController extends BaseController {
     public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) 
     		throws TournamentNotFoundException {
 		
-        ModelAndView mav = new ModelAndView("admin/tournamentInscription");
-        
-        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
-        mav.addObject("tournament",  tournament);
-      //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
-        mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
-        Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
-        mav.addObject("teamsUsers", teamsUsers);
-        
-        return mav;
+		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		
+		if(ts.inscriptionEnded(tournament)) {
+			ModelAndView mav = new ModelAndView("admin/tournament");
+			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
+			return mav;
+		} else {
+			ModelAndView mav = new ModelAndView("admin/tournamentInscription");
+			mav.addObject("tournament",  tournament);
+		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
+		    mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
+		    Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
+		    mav.addObject("teamsUsers", teamsUsers);
+		    return mav;
+		}
     }
 	
 	

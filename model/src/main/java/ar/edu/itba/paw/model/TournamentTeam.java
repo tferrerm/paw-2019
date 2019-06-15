@@ -33,6 +33,9 @@ public class TournamentTeam {
 	@JoinColumn(name = "tournamentid")
 	private Tournament tournament;
 	
+	@Column(name = "teamscore", nullable = false)
+	private int teamScore;
+	
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournamentTeam")
 	private List<Inscription> inscriptions;
 	
@@ -75,6 +78,10 @@ public class TournamentTeam {
 	
 	public Tournament getTournament() {
 		return tournament;
+	}
+
+	public int getTeamScore() {
+		return teamScore;
 	}
 
 	public List<Inscription> getInscriptions() {

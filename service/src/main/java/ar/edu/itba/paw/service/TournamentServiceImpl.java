@@ -5,11 +5,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
-import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
@@ -162,6 +164,22 @@ public class TournamentServiceImpl implements TournamentService {
 			teamsUsersMap.put(team.getTeamid(), teamMembers);
 		}
 		return teamsUsersMap;
+	}
+
+	@Override
+	public boolean inscriptionEnded(Tournament tournament) {
+		return tournament.getEndsInscriptionAt().compareTo(Instant.now()) < 0;
+	}
+
+	@Override
+	public Map<TournamentTeam, Integer> getTeamsScores(Tournament tournament) {
+		Map<TournamentTeam, Integer> teamsScoresMap = new HashMap<>();
+		for(TournamentTeam team : tournament.getTeams()) {
+			teamsScoresMap.put(team, team.getTeamScore());
+		}
+		return teamsScoresMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(
+	            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+	                    LinkedHashMap::new));
 	}
 
 }

@@ -36,5 +36,9 @@ public interface TournamentService {
 	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
 
 	public Map<Long, List<User>> getTeamsUsers(final long tournamentid);
+
+	public boolean inscriptionEnded(final Tournament tournament);
+
+	public Map<TournamentTeam, Integer> getTeamsScores(final Tournament tournament);
 	
 }
