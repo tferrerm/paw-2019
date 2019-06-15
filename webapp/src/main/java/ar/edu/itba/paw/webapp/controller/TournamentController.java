@@ -83,7 +83,7 @@ public class TournamentController extends BaseController {
     	
         ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
         
-        return new ModelAndView("tournament");
+        return new ModelAndView("redirect:/tournament/" + tournamentid);
     }
 
     @RequestMapping(value = "tournament-event/{id}")

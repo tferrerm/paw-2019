@@ -18,7 +18,7 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<div class="profile-title">
-				<h2>Roland Garros</h2>
+				<h2>${tournament.name}</h2>
 			</div>
 			<div class="detail-container">
 				<div class="w-100 flex flex-grow justify-center">
