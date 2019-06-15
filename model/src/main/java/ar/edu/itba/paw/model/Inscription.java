@@ -29,7 +29,6 @@ public class Inscription {
 	private User inscriptedUser;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	//@MapsId("teamid")
 	@JoinColumn(name = "teamid", nullable = true)
 	private TournamentTeam tournamentTeam;
 	

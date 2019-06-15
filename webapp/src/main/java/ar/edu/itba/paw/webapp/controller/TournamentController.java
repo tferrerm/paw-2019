@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,8 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentTeam;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 
 
@@ -31,9 +35,17 @@ public class TournamentController extends BaseController {
 	private ClubService cs;
 
     @RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournaments(@PathVariable long tournamentId) {
+    public ModelAndView retrieveTournaments(@PathVariable("tournamentId") long tournamentid) throws TournamentEventNotFoundException {
         ModelAndView mav = new ModelAndView("tournament");
-        mav.addObject("tournament",  null);
+        
+        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentEventNotFoundException::new);
+        mav.addObject("tournament",  tournament);
+        //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
+        mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
+        Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
+        mav.addObject("teamsUsers", teamsUsers);
+        System.out.println(teamsUsers);
+        
         return mav;
     }
 
@@ -69,7 +81,7 @@ public class TournamentController extends BaseController {
     public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
     		throws UserBusyException, UserAlreadyJoinedException {
     	
-        ts.joinTeam(tournamentid, teamid, loggedUser().getUserid());
+        ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
         
         return new ModelAndView("tournament");
     }

@@ -37,10 +37,10 @@ public class TournamentEvent {
 	@JoinColumn(name = "second_teamid")
 	private TournamentTeam secondTeam;
 	
-	@Column(name = "first_team_score", nullable = false)
+	@Column(name = "first_team_score", nullable = true)
 	private Integer firstTeamScore;
 	
-	@Column(name = "second_team_score", nullable = false)
+	@Column(name = "second_team_score", nullable = true)
 	private Integer secondTeamScore;
 	
 	/*package*/ TournamentEvent() {
@@ -49,7 +49,7 @@ public class TournamentEvent {
 	
 	public TournamentEvent(Tournament tournament, Event event, int round,
 			TournamentTeam firstTeam, TournamentTeam secondTeam) {
-		//this.eventid = event.getEventId(); // ?
+		this.eventid = event.getEventId(); // ?
 		this.tournament = tournament;
 		this.event = event;
 		this.round = round;
@@ -59,11 +59,21 @@ public class TournamentEvent {
 		//this.secondTeamScore = null;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof TournamentEvent))
+			return false;
+		TournamentEvent other = (TournamentEvent) o;
+		return this.getEventid() == other.getEventid();
+	}
+	
 	public long getEventid() {
 		return eventid;
 	}
 
-	public Tournament getTournament() {
+	public Tournament getHostTournament() {
 		return tournament;
 	}
 

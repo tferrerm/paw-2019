@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,11 +57,15 @@ public class TournamentTeam {
 		if(!(o instanceof TournamentTeam))
 			return false;
 		TournamentTeam other = (TournamentTeam) o;
-		return this.getTeamId() == other.getTeamId() && this.getTeamName().equals(other.getTeamName()) 
-				&& this.getTournament().equals(other.getTournament());
+		return this.getTeamid() == other.getTeamid();
 	}
 	
-	public long getTeamId() {
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.getTeamid());
+	}
+	
+	public long getTeamid() {
 		return teamid;
 	}
 	
@@ -69,6 +75,10 @@ public class TournamentTeam {
 	
 	public Tournament getTournament() {
 		return tournament;
+	}
+
+	public List<Inscription> getInscriptions() {
+		return inscriptions;
 	}
 	
 }

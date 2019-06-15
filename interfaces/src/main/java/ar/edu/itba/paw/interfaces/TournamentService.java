@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -23,7 +24,13 @@ public interface TournamentService {
 			final String teamSize, final String firstRoundDate, final String startsAtHour,
 			final String endsAtHour, final String inscriptionEndDate, final User user);
 
-	public void joinTeam(final long tournamentid, final long teamid, final long userid) 
+	public void joinTournament(final long tournamentid, final long teamid, final long userid) 
 			throws UserBusyException, UserAlreadyJoinedException;
+	
+	public void leaveTournament(final long tournamentid, final long userid);
+
+	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
+
+	public Map<Long, List<User>> getTeamsUsers(final long tournamentid);
 	
 }

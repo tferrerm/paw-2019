@@ -27,9 +27,13 @@ public interface TournamentDao {
 			final Instant firstRoundStartsAt, final Instant firstRoundEndsAt, 
 			final Instant inscriptionEndsAt, final User user);
 
-	public void joinTeam(Tournament tournament, TournamentTeam team, final User user) 
+	public void joinTournament(Tournament tournament, TournamentTeam team, final User user) 
 			throws UserBusyException, UserAlreadyJoinedException;
 	
 	public List<TournamentEvent> findTournamentEventsByTeam(final Tournament tournament, final TournamentTeam team);
+
+	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
+
+	public List<User> findTeamMembers(final TournamentTeam team);
 
 }

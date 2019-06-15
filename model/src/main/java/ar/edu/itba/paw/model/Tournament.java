@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.model;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -78,6 +77,16 @@ public class Tournament {
 		this.maxTeams = maxTeams;
 		this.teamSize = teamSize;
 		this.endsInscriptionAt = endsInscriptionAt;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof Tournament))
+			return false;
+		Tournament other = (Tournament) o;
+		return this.getTournamentid() == other.getTournamentid();
 	}
 
 	public long getTournamentid() {

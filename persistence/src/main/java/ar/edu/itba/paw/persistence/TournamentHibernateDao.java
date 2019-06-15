@@ -105,7 +105,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		/* Creation of teams */
 		List<TournamentTeam> teams = new ArrayList<>();
 		for(int i = 1; i <= maxTeams; i++) {
-			StringBuilder teamName = new StringBuilder("Team ").append(i);
+			StringBuilder teamName = new StringBuilder("Team ").append(i); // INTERNACIONALIZACION
 			TournamentTeam team = new TournamentTeam(teamName.toString(), tournament);
 			teams.add(team);
 			em.persist(team);
@@ -115,7 +115,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		Instant startsAt = firstRoundStartsAt;
 		Instant endsAt = firstRoundEndsAt;
 		for(int i = 0; i < tournament.getRounds(); i++) {
-			StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1); // INTERNACIONALIZACION?
+			StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1); // INTERNACIONALIZACION
 			for(int j = 0; j < maxTeams/2; j++) {
 				Event event = new Event(eventName.toString(), user, availablePitches.get(j), 
 						teamSize * 2, startsAt, endsAt); // PASAR A EVENT DAO
@@ -146,7 +146,7 @@ public class TournamentHibernateDao implements TournamentDao {
 	}
 
 	@Override
-	public void joinTeam(Tournament tournament, TournamentTeam team, final User user) 
+	public void joinTournament(Tournament tournament, TournamentTeam team, final User user) 
 			throws UserBusyException, UserAlreadyJoinedException {
 		
 		/* Only checks for current week as tournaments must start within it and dates don´t change */
@@ -196,9 +196,42 @@ public class TournamentHibernateDao implements TournamentDao {
 		
 		TypedQuery<TournamentEvent> query = em.createQuery(queryString, TournamentEvent.class);
 		query.setParameter("tournamentid", tournament.getTournamentid());
-		query.setParameter("teamid", team.getTeamId());
+		query.setParameter("teamid", team.getTeamid());
 		/* For caution */
 		query.setMaxResults(tournament.getRounds());
+		
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TournamentTeam> findTournamentTeams(final long tournamentid) {
+		String idQueryString = "SELECT teamid FROM tournament_teams WHERE tournamentid = :tournamentid";
+		Query idQuery = em.createNativeQuery(idQueryString);
+		idQuery.setParameter("tournamentid", tournamentid);
+		List<Long> ids =  idQuery.getResultList();
+		
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TournamentTeam> cq = cb.createQuery(TournamentTeam.class);
+		Root<TournamentTeam> from = cq.from(TournamentTeam.class);
+		from.fetch("inscriptions");
+		final TypedQuery<TournamentTeam> query = em.createQuery(
+				cq.select(from).where(from.get("teamid").in(ids)).distinct(true)
+			);
+		
+		return query.getResultList();
+	}
+
+	@Override
+	public List<User> findTeamMembers(TournamentTeam team) {
+		String queryString = "SELECT DISTINCT i.inscriptedUser FROM Inscription AS i "
+				+ " WHERE i.tournamentTeam.teamid = :teamid";
+		
+		TypedQuery<User> query = em.createQuery(queryString, User.class);
+		query.setParameter("teamid", team.getTeamid());
 		
 		return query.getResultList();
 	}

@@ -1,7 +1,9 @@
 <%@	taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@	taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "cr" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
@@ -23,158 +25,45 @@
 					<h3><spring:message code="teams"/></h3>
 				</div>
 				<div class="flex-column w-100">
-					<div class="flex">
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
+					<cr:forEach begin="0" end="${tournament.maxTeams - 1}" step="2" var="teamIndex">
+						<div>
+							<div class="flex">
+							<div class="team-description w-100">
+								<span class="event-info-label">${teams[teamIndex].teamName}</span>
+								<div class="flex w-100">
+									<div class="flex flex-column align-center w-100">
+										<cr:set var="teamid" scope="page" value="${teams[teamIndex].teamid}"/>
+										<cr:forEach begin="0" end="${tournament.teamSize - 1}" step="1" var="userIndex">
+											<span>${teamsUsers[teamid][userIndex].firstname} ${teamsUsers[teamid][userIndex].lastname}</span>
+										</cr:forEach>
+										<cr:forEach begin="1" end="${tournament.teamSize - fn:length(teamsUsers[teamid])}" step="1">
+											<span>-</span>
+										</cr:forEach>
+									</div>
 								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
+								<div class="flex flex-grow justify-center">
+									<a href="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex].teamid}/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
 								</div>
 							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
+							<div class="team-description w-100">
+								<span class="event-info-label">${teams[teamIndex + 1].teamName}</span>
+								<div class="flex w-100">
+									<div class="flex flex-column align-center w-100">
+										<cr:set var="teamid" scope="page" value="${teams[teamIndex + 1].teamid}"/>
+										<cr:forEach begin="0" end="${tournament.teamSize - 1}" step="1" var="userIndex">
+											<span>${teamsUsers[teamid][userIndex].firstname} ${teamsUsers[teamid][userIndex].lastname}</span>
+										</cr:forEach>
+										<cr:forEach begin="1" end="${tournament.teamSize - fn:length(teamsUsers[teamid])}" step="1">
+											<span>-</span>
+										</cr:forEach>
+									</div>
+								</div>
+								<div class="flex flex-grow justify-center">
+									<a href="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex + 1].teamid}/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
+								</div>
 							</div>
 						</div>
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-					</div>
-					<div  class="flex flex-grow">
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-					</div>
-					<div  class="flex flex-grow">
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-					</div>
-					<div  class="flex flex-grow">
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-						<div class="team-description">
-							<span class="event-info-label">Team 1 </span>
-							<div class="flex w-100">
-								<div class="flex flex-column align-center w-50">
-									<span>Juan Perez</span>
-									<span>Pedro Gomez</span>
-									<span>Santiago Swinnen</span>
-								</div>
-								<div class="flex flex-column align-center w-50">
-									<span>Marcos Lund</span>
-									<span>Tomas Ferrer</span>
-									<span>Guido Princ</span>
-								</div>
-							</div>
-							<div class="flex flex-grow justify-center">
-								<a href="<c:url value="tournament/${tournamentId}/team/1/join"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="join_team"/></button></a>
-							</div>
-						</div>
-					</div>
+					</cr:forEach>
 				</div>
 			</div>
 		</div>

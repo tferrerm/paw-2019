@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -100,16 +102,46 @@ public class TournamentServiceImpl implements TournamentService {
 	
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void joinTeam(long tournamentid, long teamid, final long userid) 
+	public void joinTournament(long tournamentid, long teamid, final long userid) 
 			throws UserBusyException, UserAlreadyJoinedException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		}
+		} // IF NO ARRANCO
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		
-		td.joinTeam(tournament, team, user);
+		td.joinTournament(tournament, team, user);
+	}
+
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void leaveTournament(final long tournamentid, final long userid) {
+		// IF NO ARRANCO
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+	}
+
+	@Override
+	public List<TournamentTeam> findTournamentTeams(final long tournamentid) {
+		if(tournamentid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		return td.findTournamentTeams(tournamentid);
+	}
+
+	@Override
+	public Map<Long, List<User>> getTeamsUsers(long tournamentid) {
+		if(tournamentid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		Map<Long, List<User>> teamsUsersMap = new HashMap<>();
+		for(TournamentTeam team : tournament.getTeams()) {
+			List<User> teamMembers = td.findTeamMembers(team);
+			teamsUsersMap.put(team.getTeamid(), teamMembers);
+		}
+		return teamsUsersMap;
 	}
 
 }
