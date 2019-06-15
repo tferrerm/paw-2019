@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +52,15 @@ public class TournamentController extends BaseController {
 			ModelAndView mav = new ModelAndView("tournamentInscription");
 			mav.addObject("tournament",  tournament);
 		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
-		    mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
+			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
+			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
+				@Override
+				public int compare(TournamentTeam team1, TournamentTeam team2) {
+					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
+				}
+			};
+			Collections.sort(teams, cmp);
+		    mav.addObject("teams", teams);
 		    Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
 		    return mav;

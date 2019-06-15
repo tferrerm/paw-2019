@@ -92,11 +92,11 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<Event> findFutureUserInscriptions(final long userid) {
+	public List<Event> findFutureUserInscriptions(final long userid, final boolean withinWeek) {
 		if(userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
-		return ed.findFutureUserInscriptions(userid);
+		return ed.findFutureUserInscriptions(userid, withinWeek);
 	}
 
 	@Override

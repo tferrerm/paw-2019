@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,7 +159,7 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
-		Map<Long, List<User>> teamsUsersMap = new HashMap<>();
+		Map<Long, List<User>> teamsUsersMap = new TreeMap<>();
 		for(TournamentTeam team : tournament.getTeams()) {
 			List<User> teamMembers = td.findTeamMembers(team);
 			teamsUsersMap.put(team.getTeamid(), teamMembers);

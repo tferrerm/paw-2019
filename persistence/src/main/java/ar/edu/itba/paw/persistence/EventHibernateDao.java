@@ -124,13 +124,16 @@ public class EventHibernateDao implements EventDao {
 	}
 	
 	@Override
-	public List<Event> findFutureUserInscriptions(long userid) {
+	public List<Event> findFutureUserInscriptions(final long userid, final boolean withinWeek) {
 		StringBuilder queryString = new StringBuilder("SELECT inscriptionEvent FROM Inscription AS i "
 				+ " WHERE i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt > :now ");
+		if(withinWeek)
+			queryString.append(" AND i.inscriptionEvent.startsAt < :aWeekFromNow");
 		
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
 		query.setParameter("userid", userid);
 		query.setParameter("now", Instant.now());
+		query.setParameter("aWeekFromNow", Instant.now().truncatedTo(ChronoUnit.DAYS).plus(7, ChronoUnit.DAYS));
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();

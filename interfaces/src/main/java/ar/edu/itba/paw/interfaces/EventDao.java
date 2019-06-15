@@ -45,9 +45,10 @@ public interface EventDao {
 	/**
 	 * Gets future Events for which a User has an inscription. Max results = 24 * 7.
 	 * @param userid		Inscripted User's id.
+	 * @param withinWeek	Get events within current week (true) or without restriction (false).
 	 * @return the list of future events for which a User has an inscription.
 	 */
-	public List<Event> findFutureUserInscriptions(long userid);
+	public List<Event> findFutureUserInscriptions(final long userid, final boolean withinWeek);
 	
 	/**
 	 * Counts Events for which a User has an inscription.

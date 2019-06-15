@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
@@ -72,7 +75,15 @@ public class AdminTournamentController extends BaseController {
 			ModelAndView mav = new ModelAndView("admin/tournamentInscription");
 			mav.addObject("tournament",  tournament);
 		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
-		    mav.addObject("teams",  new ArrayList<>(tournament.getTeams()));
+			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
+			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
+				@Override
+				public int compare(TournamentTeam team1, TournamentTeam team2) {
+					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
+				}
+			};
+			Collections.sort(teams, cmp);
+		    mav.addObject("teams", teams);
 		    Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
 		    return mav;
