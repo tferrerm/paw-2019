@@ -75,6 +75,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <span>${event.secondTeam.teamName}</span>
+                                        <span>${event.event.pitch.name}</span>
                                     </div>
                                     <div class="submit-container">
                                         <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
@@ -87,9 +88,9 @@
                                     <span>-</span>
                                     <span>-</span>
                                     <span>${event.secondTeam.teamName}</span>
+                                    <span>${event.event.pitch.name}</span>
                                 </div>
                             </c:otherwise>
-                            <span>${event.event.pitch.name}</span>
                         </c:choose>
                     </c:forEach>    
                     <div class="table-navigator">
