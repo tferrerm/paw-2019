@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -193,7 +194,14 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
-		return td.findTournamentEventsByRound(tournament, roundPage);
+		List<TournamentEvent> events = td.findTournamentEventsByRound(tournament, roundPage);
+		Collections.sort(events, new Comparator<TournamentEvent>() {
+			@Override
+			public int compare(TournamentEvent event1, TournamentEvent event2) {
+				return ((Long) event1.getEventid()).compareTo(event2.getEventid());
+			}
+		});
+		return events;
 	}
 
 	@Transactional(rollbackFor = { Exception.class })

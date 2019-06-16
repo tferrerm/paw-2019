@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -21,6 +24,7 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.model.Tournament;
+import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
@@ -39,14 +43,25 @@ public class TournamentController extends BaseController {
 	private ClubService cs;
 
     @RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid) 
+    public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
+    		@RequestParam(value = "round", defaultValue = "1") final int roundPage) 
     		throws TournamentNotFoundException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		
 		if(ts.inscriptionEnded(tournament)) {
 			ModelAndView mav = new ModelAndView("tournament");
+			mav.addObject("tournament",  tournament);
 			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
+			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
+			mav.addObject("roundEvents", roundEvents);
+			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
+			for(TournamentEvent event : roundEvents) {
+				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
+			}
+			mav.addObject("eventsHaveResult", eventsHaveResult);
+			mav.addObject("currRoundPage", roundPage);
+			mav.addObject("maxRoundPage", tournament.getRounds());
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("tournamentInscription");

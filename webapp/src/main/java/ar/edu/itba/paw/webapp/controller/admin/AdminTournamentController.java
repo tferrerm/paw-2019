@@ -85,8 +85,9 @@ public class AdminTournamentController extends BaseController {
 			for(TournamentEvent event : roundEvents) {
 				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
 			}
-			mav.addObject("roundInPast", roundEvents.get(0).getEvent().getEndsAt().compareTo(Instant.now()) <= 0);
 			mav.addObject("eventsHaveResult", eventsHaveResult);
+			mav.addObject("roundInPast", roundEvents.get(0).getEvent().getEndsAt().compareTo(Instant.now()) <= 0);
+			
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
 			
