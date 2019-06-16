@@ -16,33 +16,43 @@
 	<div class="main-container">
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
-			<h3 class="home-title"><spring:message code="upcomingParticipations"/></h3>
 			<c:choose>
-				<c:when test="${!noParticipations}">
-					<span class="help-message notice"><spring:message code="home_help"/></span>
-					<div class="home-evs-container">
-						<div class="home-evs-group flex">
-							<c:forEach var="dayMessage" items="${scheduleHeaders}">
-								<span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
-							</c:forEach>
-						</div>
-					</div>
-					<div class="home-all-events">
-						<c:forEach var="row" items="${myEvents}">
-							<div class="home-ev-column">
-								<c:forEach var="event" items="${row}">
-									<c:choose>
-										<c:when test = "${event.name != null}">
-											<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
-										</c:when>
-									</c:choose>
+				<c:when test = "${loggedUser != null}">
+					<h3 class="home-title"><spring:message code="upcomingParticipations"/></h3>
+					<c:choose>
+						<c:when test="${!noParticipations}">
+							<span class="help-message notice"><spring:message code="home_help"/></span>
+							<div class="home-evs-container">
+								<div class="home-evs-group flex">
+									<c:forEach var="dayMessage" items="${scheduleHeaders}">
+										<span class="home-ev-title flex flex-1"><spring:message code="${dayMessage}"/></span>
+									</c:forEach>
+								</div>
+							</div>
+							<div class="home-all-events">
+								<c:forEach var="row" items="${myEvents}">
+									<div class="home-ev-column">
+										<c:forEach var="event" items="${row}">
+											<c:choose>
+												<c:when test = "${event.name != null}">
+													<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+									</div>
 								</c:forEach>
 							</div>
-						</c:forEach>
-					</div>
+						</c:when>
+						<c:otherwise>
+							<h4><spring:message code="home_default"/></h4>
+						</c:otherwise>
+					</c:choose>
 				</c:when>
 				<c:otherwise>
-					<h4><spring:message code="home_default"/></h4>
+					<span class="description-body">
+						<h2><spring:message code="sport_matcher"/></h2>
+						<spring:message code="introduction"/>
+					</span>
 				</c:otherwise>
 			</c:choose>
 			<div class="bottom-home-container">
