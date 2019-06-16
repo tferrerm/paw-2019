@@ -165,7 +165,7 @@ public class AdminTournamentController extends BaseController {
 		mav.addObject("minHour", MIN_HOUR);
 		mav.addObject("maxHour", MAX_HOUR);
 		
-		List<Event> clubEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);
+		List<Event> clubEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);System.out.println(clubEvents);
 		int[][] schedule = cs.convertEventListToSchedule(clubEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
 		mav.addObject("schedule", schedule);
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();

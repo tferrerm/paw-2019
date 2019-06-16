@@ -268,7 +268,7 @@ public class ClubHibernateDao implements ClubDao {
 		// Today at 00:00
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
 		// In seven days at 23:00
-		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+		Instant inAWeek = today.plus(7, ChronoUnit.DAYS);
 		
 		String queryString = "FROM Event AS e WHERE e.pitch.club.clubid = :clubid AND "
 				+ " e.pitch.sport = :sport AND e.startsAt > :today AND e.startsAt < :inAWeek";
