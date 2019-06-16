@@ -32,14 +32,16 @@ public class AdminController extends BaseController {
 
 	@Autowired
 	private EventService es;
-
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
+	
 	@RequestMapping(value = "/")
 	public ModelAndView adminHome() {
 		return new ModelAndView("redirect:/admin/events/1");
 	}
 
+	
 	@RequestMapping(value = "/events/{pageNum}")
 	public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
 									   @PathVariable("pageNum") final int pageNum,
@@ -85,6 +87,7 @@ public class AdminController extends BaseController {
 		return mav;
 	}
 	
+	
 	@RequestMapping(value = "/events/filter")
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
         String establishment = form.getEstablishment();
@@ -96,6 +99,7 @@ public class AdminController extends BaseController {
         return new ModelAndView("redirect:/admin/events/1" + queryString);
     }
 
+	
 	@RequestMapping(value = "/event/{id}")
 	public ModelAndView retrieveElement(@PathVariable long id)
 			throws EventNotFoundException {
@@ -108,6 +112,7 @@ public class AdminController extends BaseController {
 		return mav;
 	}
 
+	
 	@RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
 	public ModelAndView deleteEvent(@PathVariable final long id)
 			throws EventNotFoundException {
@@ -117,6 +122,7 @@ public class AdminController extends BaseController {
 		return new ModelAndView("redirect:/admin/events/1");
 	}
 
+	
 	private String buildAdminQueryString(final String establishment, final String sport,
 									final String organizer, final String vacancies, final String date) {
 		StringBuilder strBuilder = new StringBuilder();
@@ -141,6 +147,7 @@ public class AdminController extends BaseController {
 		}
 		return strBuilder.toString();
 	}
+	
 	
 	@ExceptionHandler({ EventNotFoundException.class })
 	public ModelAndView eventNotFound() {
