@@ -43,5 +43,7 @@ public interface TournamentService {
 	public Map<TournamentTeam, Integer> getTeamsScores(final Tournament tournament);
 
 	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage);
+
+	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult, final Integer secondResult);
 	
 }

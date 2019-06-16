@@ -196,4 +196,18 @@ public class TournamentServiceImpl implements TournamentService {
 		return td.findTournamentEventsByRound(tournament, roundPage);
 	}
 
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult, // IF YA TERMINO
+			final Integer secondResult) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		TournamentEvent event = td.findTournamentEventById(eventid).orElseThrow(NoSuchElementException::new);
+		if(!event.getTournament().equals(tournament)) {
+			throw new IllegalArgumentException("Event " + eventid + " does not belong to tournament " + tournament.getTournamentid());
+		}
+		td.postTournamentEventResult(tournament, event, firstResult, secondResult);
+	}
+
 }

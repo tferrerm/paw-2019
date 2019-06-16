@@ -73,7 +73,7 @@ public class TournamentEvent {
 		return eventid;
 	}
 
-	public Tournament getHostTournament() {
+	public Tournament getTournament() {
 		return tournament;
 	}
 

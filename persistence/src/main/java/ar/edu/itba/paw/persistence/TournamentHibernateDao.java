@@ -36,6 +36,9 @@ import ar.edu.itba.paw.model.User;
 public class TournamentHibernateDao implements TournamentDao {
 	
 	private static final int MAX_ROWS = 10;
+	private static final int WON = 3;
+	private static final int DRAW = 1;
+	private static final int LOST = 0;
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -270,6 +273,67 @@ public class TournamentHibernateDao implements TournamentDao {
 		query.setParameter("roundPage", roundPage);
 		
 		return query.getResultList();
+	}
+
+	@Override
+	public void postTournamentEventResult(final Tournament tournament, final TournamentEvent event,
+			final Integer firstResult, final Integer secondResult) {
+		
+		int result = (firstResult > secondResult)? WON : ((firstResult < secondResult)? LOST : DRAW);
+		
+		/*CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+		Root<TournamentEvent> from = cq.from(TournamentEvent.class);
+		final TypedQuery<Integer> query = em.createQuery(
+				cq.select(from.get("firstTeamScore")).where(cb.equal(from.get("eventid"), event.getEventid()))
+			);
+		Optional<Integer> prevFirstScore = query.getResultList().stream().findFirst();*/
+		
+		if(event.getFirstTeamScore() != null) {
+			int prevResult = (event.getFirstTeamScore() > event.getSecondTeamScore())? WON : 
+				((event.getFirstTeamScore() < event.getSecondTeamScore())? LOST : DRAW);
+			
+			if(result != prevResult) {
+				updateTeamScore(result - prevResult, event.getFirstTeam().getTeamid());
+				prevResult = (prevResult == WON)? LOST : (prevResult == LOST)? WON : DRAW;
+				result = (result == WON)? LOST : (result == LOST)? WON : DRAW;
+				updateTeamScore(result - prevResult, event.getSecondTeam().getTeamid());
+			}
+		} else {
+			updateTeamScore(result, event.getFirstTeam().getTeamid());
+			result = (result == WON)? LOST : (result == LOST)? WON : DRAW;
+			updateTeamScore(result, event.getSecondTeam().getTeamid());
+		}
+		
+		Query updateResultsQuery = em.createQuery("UPDATE TournamentEvent AS te SET te.firstTeamScore = :firstResult, "
+				+ " te.secondTeamScore = :secondResult WHERE te.eventid = :eventid");
+		updateResultsQuery.setParameter("eventid", event.getEventid());
+		updateResultsQuery.setParameter("firstResult", firstResult);
+		updateResultsQuery.setParameter("secondResult", secondResult);
+		updateResultsQuery.executeUpdate();
+	}
+	
+	private void updateTeamScore(int newScore, long teamid) {
+		Query query = em.createQuery("UPDATE TournamentTeam AS tt "
+				+ " SET tt.teamScore = tt.teamScore + :newScore "
+				+ " WHERE tt.teamid = :teamid");
+		query.setParameter("newScore", newScore);
+		query.setParameter("teamid", teamid);
+		query.executeUpdate();
+	}
+	
+	public Optional<TournamentEvent> findTournamentEventById(final long eventid) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<TournamentEvent> cq = cb.createQuery(TournamentEvent.class);
+		Root<TournamentEvent> from = cq.from(TournamentEvent.class);
+		from.fetch("firstTeam", JoinType.LEFT);
+		from.fetch("secondTeam", JoinType.LEFT);
+		
+		final TypedQuery<TournamentEvent> query = em.createQuery(
+				cq.select(from).where(cb.equal(from.get("eventid"), eventid))
+			);
+		
+		return query.getResultList().stream().findFirst();
 	}
 
 }

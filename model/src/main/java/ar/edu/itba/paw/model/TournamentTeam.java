@@ -46,6 +46,7 @@ public class TournamentTeam {
 	public TournamentTeam(String teamName, Tournament tournament) {
 		this.teamName = teamName;
 		this.tournament = tournament;
+		this.teamScore = 0;
 	}
 	
 	@Override

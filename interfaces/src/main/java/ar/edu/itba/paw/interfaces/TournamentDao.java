@@ -42,4 +42,9 @@ public interface TournamentDao {
 
 	public List<TournamentEvent> findTournamentEventsByRound(final Tournament tournament, final int roundPage);
 
+	public void postTournamentEventResult(final Tournament tournament, final TournamentEvent event,
+			final Integer firstResult, final Integer secondResult);
+
+	public Optional<TournamentEvent> findTournamentEventById(final long eventid);
+
 }

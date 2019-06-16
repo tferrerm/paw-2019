@@ -83,7 +83,7 @@ public class AdminTournamentController extends BaseController {
 			mav.addObject("roundEvents", roundEvents);
 			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
 			for(TournamentEvent event : roundEvents) {
-				eventsHaveResult.put(event.getEventid(), (Integer)event.getFirstTeamScore() != null);
+				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
 			}
 			mav.addObject("roundInPast", roundEvents.get(0).getEvent().getEndsAt().compareTo(Instant.now()) <= 0);
 			mav.addObject("eventsHaveResult", eventsHaveResult);
@@ -111,16 +111,24 @@ public class AdminTournamentController extends BaseController {
     }
 	
 	
-	@RequestMapping(value = "/tournament/{tournamentId}/result", method = { RequestMethod.POST })
-    public ModelAndView comment(@PathVariable("tournamentId") long tournamentid, 
+	@RequestMapping(value = "/tournament/{tournamentId}/event/{eventId}/result", method = { RequestMethod.POST })
+    public ModelAndView comment(@PathVariable("tournamentId") long tournamentid, @PathVariable("eventId") long eventid,
     		@Valid @ModelAttribute("tournamentResultForm") final TournamentResultForm form, final BindingResult errors,
 			HttpServletRequest request) throws TournamentNotFoundException {
+		
+		Integer firstResult = tryInteger(form.getFirstResult());
+    	Integer secondResult = tryInteger(form.getSecondResult());
+    	if(firstResult == null)
+    		errors.rejectValue("maxParticipants", "wrong_int_format");
+    	if(secondResult == null)
+    		errors.rejectValue("startsAtHour", "wrong_int_format");
 		
 		if(errors.hasErrors()) {
     		return retrieveTournament(tournamentid, 1, form); // IR A LA DEFAULT
     	}
 		
-		//us.createComment(loggedUser().getUserid(), userId, form.getComment());
+		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
 		
 	    return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
 	}
