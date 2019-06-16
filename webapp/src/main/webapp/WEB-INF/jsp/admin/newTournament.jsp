@@ -54,7 +54,7 @@
 					</div>
 					<div>
 						<form:label path="maxTeams"><spring:message code="team_number"/> * </form:label>
-						<form:input  cssClass="form-control" type="number" maxlength="100" path="maxTeams"/>
+						<form:input  cssClass="form-control" type="number" min="4" max="10" path="maxTeams"/>
 						<form:errors path="maxTeams" cssClass="form-error" element="span"/>
                         <c:if test="${invalid_team_amount}">
                             <span class="form-error">
@@ -69,7 +69,7 @@
 					</div>
 					<div>
 						<form:label path="teamSize"><spring:message code="team_size"/> * </form:label>
-						<form:input  cssClass="form-control" type="number" maxlength="100" path="teamSize"/>
+						<form:input  cssClass="form-control" type="number" min="3" max="11" path="teamSize"/>
 						<form:errors path="teamSize" cssClass="form-error" element="span"/>
                         <c:if test="${invalid_team_size}">
                             <span class="form-error">

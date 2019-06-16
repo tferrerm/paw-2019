@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
 
@@ -57,6 +58,18 @@ public class BaseController {
     	Instant i = null;
     	try {
     		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(timezone)).toInstant();
+    	} catch(DateTimeException e) {
+    		return null;
+    	}
+    	return i;
+    }
+    
+    public Instant tryDateTimeToInstant(String str, String timezone) {
+    	if(str == null || timezone == null)
+    		return null;
+    	Instant i = null;
+    	try {
+    		i = LocalDateTime.parse(str).atZone(ZoneId.of(timezone)).toInstant();
     	} catch(DateTimeException e) {
     		return null;
     	}

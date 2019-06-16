@@ -1,9 +1,15 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -194,11 +200,12 @@ public class AdminTournamentController extends BaseController {
     	Instant firstRoundDate = tryInstant(form.getFirstRoundDate(), TIME_ZONE);
     	Integer startsAt = tryInteger(form.getStartsAtHour());
     	Integer endsAt = tryInteger(form.getEndsAtHour());
-    	Instant inscriptionEndDate = tryInstant(form.getInscriptionEndDate(), TIME_ZONE);
+    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
+    	
     	if(maxTeams == null)
     		errors.rejectValue("maxTeams", "wrong_int_format");
     	if(teamSize == null)
-    		errors.rejectValue("maxParticipants", "wrong_int_format");
+    		errors.rejectValue("teamSize", "wrong_int_format");
     	if(firstRoundDate == null)
     		errors.rejectValue("firstRoundDate", "wrong_date_format");
     	if(startsAt == null)
