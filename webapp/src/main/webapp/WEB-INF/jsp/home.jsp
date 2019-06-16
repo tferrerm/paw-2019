@@ -49,9 +49,9 @@
 					</c:choose>
 				</c:when>
 				<c:otherwise>
-					<span class="description-body">
+					<span class="description-body pitch-item">
 						<h2><spring:message code="sport_matcher"/></h2>
-						<spring:message code="introduction"/>
+						<span class="pitch-item"><spring:message code="introduction"/></span>
 					</span>
 				</c:otherwise>
 			</c:choose>
