@@ -198,7 +198,7 @@ public class TournamentServiceImpl implements TournamentService {
 		Collections.sort(events, new Comparator<TournamentEvent>() {
 			@Override
 			public int compare(TournamentEvent event1, TournamentEvent event2) {
-				return ((Long) event1.getEventid()).compareTo(event2.getEventid());
+				return ((Long) event1.getEventId()).compareTo(event2.getEventId());
 			}
 		});
 		return events;

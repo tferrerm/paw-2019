@@ -86,12 +86,10 @@ public class AdminTournamentController extends BaseController {
 			mav.addObject("roundEvents", roundEvents);
 			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
 			for(TournamentEvent event : roundEvents) {
-				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
+				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
 			}
 			mav.addObject("eventsHaveResult", eventsHaveResult);
-			mav.addObject("roundStartsAt", roundEvents.get(0).getEvent().getStartsAt());
-			mav.addObject("roundEndsAt", roundEvents.get(0).getEvent().getEndsAt());
-			mav.addObject("roundInPast", roundEvents.get(0).getEvent().getEndsAt().compareTo(Instant.now()) <= 0);
+			mav.addObject("roundInPast", roundEvents.get(0).getEndsAt().compareTo(Instant.now()) <= 0);
 			
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
@@ -165,11 +163,9 @@ public class AdminTournamentController extends BaseController {
 		mav.addObject("minHour", MIN_HOUR);
 		mav.addObject("maxHour", MAX_HOUR);
 		
-		List<Event> clubEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);System.out.println(clubEvents);
-		int[][] schedule = cs.convertEventListToSchedule(clubEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
-		mav.addObject("schedule", schedule);
-		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		mav.addObject("scheduleHeaders", scheduleDaysHeader);
+		List<Event> clubEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);
+		mav.addObject("schedule", cs.convertEventListToSchedule(clubEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT));
+		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
 		mav.addObject("pitchQty", club.getClubPitches().stream()
 				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size());
     	
@@ -192,6 +188,8 @@ public class AdminTournamentController extends BaseController {
     	Tournament tournament = ts.create(form.getName(), Sport.SOCCER, club, form.getMaxTeams(), // NO PASAR STRINGS
     			form.getTeamSize(), form.getFirstRoundDate(), form.getStartsAtHour(), 
     			form.getEndsAtHour(), form.getInscriptionEndDate(), loggedUser());
+    	
+    	LOGGER.debug("Tournament {} created", tournament);
     	
     	return new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentid());
     }

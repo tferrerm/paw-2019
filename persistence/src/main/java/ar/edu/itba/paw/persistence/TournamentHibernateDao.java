@@ -23,7 +23,6 @@ import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -120,11 +119,8 @@ public class TournamentHibernateDao implements TournamentDao {
 		for(int i = 0; i < tournament.getRounds(); i++) {
 			StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1); // INTERNACIONALIZACION
 			for(int j = 0; j < maxTeams/2; j++) {
-				Event event = new Event(eventName.toString(), user, availablePitches.get(j), 
-						teamSize * 2, startsAt, endsAt); // PASAR A EVENT DAO
-				em.persist(event);
-				TournamentEvent tournamentEvent = new TournamentEvent(tournament, event, i + 1,
-						teams.get(j), teams.get(j + maxTeams/2));
+				TournamentEvent tournamentEvent = new TournamentEvent(eventName.toString(), user, availablePitches.get(j), 
+						teamSize * 2, startsAt, endsAt, tournament, i + 1, teams.get(j), teams.get(j + maxTeams/2));
 				em.persist(tournamentEvent);
 			}
 			startsAt = startsAt.plus(7, ChronoUnit.DAYS);
@@ -164,8 +160,8 @@ public class TournamentHibernateDao implements TournamentDao {
 		Instant secondRoundStartsAt = null;
 		for(TournamentEvent te : tournament.getTournamentEvents()) {
 			if(te.getRound() == 1) {
-				firstRoundStartsAt = te.getEvent().getStartsAt();
-				secondRoundStartsAt = te.getEvent().getEndsAt();
+				firstRoundStartsAt = te.getStartsAt();
+				secondRoundStartsAt = te.getEndsAt();
 				break;
 			}
 		}
@@ -182,10 +178,10 @@ public class TournamentHibernateDao implements TournamentDao {
 		List<TournamentEvent> tournamentEvents = findTournamentEventsByTeam(tournament, team);
 		for(TournamentEvent tournamentEvent : tournamentEvents) {
 			try {
-				em.persist(new Inscription(tournamentEvent.getEvent(), user, team));
+				em.persist(new Inscription(tournamentEvent, user, team));
 			} catch(EntityExistsException e) {
 				throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
-						+ tournamentEvent.getEventid());
+						+ tournamentEvent.getEventId());
 			}
 		}
 		
@@ -307,7 +303,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		
 		Query updateResultsQuery = em.createQuery("UPDATE TournamentEvent AS te SET te.firstTeamScore = :firstResult, "
 				+ " te.secondTeamScore = :secondResult WHERE te.eventid = :eventid");
-		updateResultsQuery.setParameter("eventid", event.getEventid());
+		updateResultsQuery.setParameter("eventid", event.getEventId());
 		updateResultsQuery.setParameter("firstResult", firstResult);
 		updateResultsQuery.setParameter("secondResult", secondResult);
 		updateResultsQuery.executeUpdate();
@@ -326,7 +322,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<TournamentEvent> cq = cb.createQuery(TournamentEvent.class);
 		Root<TournamentEvent> from = cq.from(TournamentEvent.class);
-		from.fetch("tournament", JoinType.LEFT);
+		//from.fetch("tournament", JoinType.LEFT);
 		from.fetch("firstTeam", JoinType.LEFT);
 		from.fetch("secondTeam", JoinType.LEFT);
 		

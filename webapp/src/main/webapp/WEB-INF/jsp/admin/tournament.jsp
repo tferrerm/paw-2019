@@ -43,15 +43,15 @@
                 <div class="tbl profile-cont">
                     <span><spring:message code="round" /> ${currRoundPage}</span>
                     <fmt:timeZone value="AR">
-                        <fmt:parseDate value="${roundStartsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                        <fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                         <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
                     </fmt:timeZone>
                     <fmt:timeZone value="AR">
-                        <fmt:parseDate value="${roundEndsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                        <fmt:parseDate value="${roundEvents[0].endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                         <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
                     </fmt:timeZone>
                     <c:forEach var="event" items="${roundEvents}">
-                        <cr:set var="eventid" scope="page" value="${event.eventid}"/>
+                        <cr:set var="eventid" scope="page" value="${event.eventId}"/>
                         <c:choose>
                             <c:when test="${roundInPast}">
                                 <c:url value="/admin/tournament/${tournament.tournamentid}/event/${eventid}/result" var="postPath"/>
@@ -75,7 +75,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <span>${event.secondTeam.teamName}</span>
-                                        <span>${event.event.pitch.name}</span>
+                                        <span>${event.pitch.name}</span>
                                     </div>
                                     <div class="submit-container">
                                         <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
@@ -88,7 +88,7 @@
                                     <span>-</span>
                                     <span>-</span>
                                     <span>${event.secondTeam.teamName}</span>
-                                    <span>${event.event.pitch.name}</span>
+                                    <span>${event.pitch.name}</span>
                                 </div>
                             </c:otherwise>
                         </c:choose>

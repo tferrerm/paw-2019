@@ -91,12 +91,23 @@ CREATE TABLE IF NOT EXISTS tournaments(
   max_teams INTEGER NOT NULL,
   team_size INTEGER NOT NULL,
   inscription_ends_at TIMESTAMP NOT NULL,
+  teams_filled BOOLEAN NOT NULL DEFAULT FALSE,
   tournament_created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (clubid) REFERENCES clubs ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tournament_events(
-  eventid INTEGER NOT NULL,
+  eventid SERIAL PRIMARY KEY,
+  userid INTEGER NOT NULL,
+  pitchid INTEGER NOT NULL,
+  eventname VARCHAR(100) NOT NULL,
+  description VARCHAR(500),
+  max_participants INTEGER NOT NULL,
+  starts_at TIMESTAMP NOT NULL,
+  ends_at TIMESTAMP,
+  event_created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
+  FOREIGN KEY (pitchid) REFERENCES pitches ON DELETE CASCADE
   tournamentid INTEGER NOT NULL,
   round INTEGER NOT NULL,
   first_teamid INTEGER NOT NULL,
@@ -106,8 +117,7 @@ CREATE TABLE IF NOT EXISTS tournament_events(
   FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
   FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE,
   FOREIGN KEY (first_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE,
-  FOREIGN KEY (second_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE,
-  PRIMARY KEY(eventid)
+  FOREIGN KEY (second_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tournament_teams(

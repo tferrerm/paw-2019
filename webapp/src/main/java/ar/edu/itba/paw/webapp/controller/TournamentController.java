@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
-import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
@@ -38,10 +36,8 @@ public class TournamentController extends BaseController {
 	
 	@Autowired
 	private TournamentService ts;
-	
-	@Autowired
-	private ClubService cs;
 
+	
     @RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
     		@RequestParam(value = "round", defaultValue = "1") final int roundPage) 
@@ -57,11 +53,9 @@ public class TournamentController extends BaseController {
 			mav.addObject("roundEvents", roundEvents);
 			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
 			for(TournamentEvent event : roundEvents) {
-				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
+				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
 			}
 			mav.addObject("eventsHaveResult", eventsHaveResult);
-			mav.addObject("roundStartsAt", roundEvents.get(0).getEvent().getStartsAt());
-			mav.addObject("roundEndsAt", roundEvents.get(0).getEvent().getEndsAt());
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
 			return mav;
@@ -73,7 +67,7 @@ public class TournamentController extends BaseController {
 			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
 				@Override
 				public int compare(TournamentTeam team1, TournamentTeam team2) {
-					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
+					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid()); // VER DE SACAR
 				}
 			};
 			Collections.sort(teams, cmp);
@@ -84,6 +78,7 @@ public class TournamentController extends BaseController {
 		}
     }
 
+    
     @RequestMapping(value = "/tournaments/{pageNum}")
     public ModelAndView retrieveTournaments(
 			@PathVariable("pageNum") final int pageNum) {
@@ -112,14 +107,18 @@ public class TournamentController extends BaseController {
         return mav;
     }
 
+    
     @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
     public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
     		throws UserBusyException, UserAlreadyJoinedException {
     	
         ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
         
+        LOGGER.debug("User {} joined Tournament {}", loggedUser(), tournamentid);
+        
         return new ModelAndView("redirect:/tournament/" + tournamentid);
     }
+    
     
     @RequestMapping(value = "tournament/{tournamentId}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveTournament(@PathVariable("tournamentId") long tournamentid) 

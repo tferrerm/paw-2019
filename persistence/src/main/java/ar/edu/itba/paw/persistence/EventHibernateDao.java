@@ -184,7 +184,7 @@ public class EventHibernateDao implements EventDao {
 			final Optional<Instant> date, final int pageNum) {
 		
 		Map<String, Object> paramsMap = new HashMap<>();
-		StringBuilder idQueryString = new StringBuilder("SELECT t.eventid ");
+		StringBuilder idQueryString = new StringBuilder("SELECT eventid ");
 		idQueryString.append(getFilterQueryEndString(paramsMap, eventName, clubName, 
 				sport, organizer, vacancies, date));
 		idQueryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
@@ -223,7 +223,7 @@ public class EventHibernateDao implements EventDao {
 			final Optional<Instant> date) {
 		
 		Map<String, Object> paramsMap = new HashMap<>();
-		StringBuilder idQueryString = new StringBuilder("SELECT count(t.eventid) ");
+		StringBuilder idQueryString = new StringBuilder("SELECT count(eventid) ");
 		idQueryString.append(getFilterQueryEndString(paramsMap, eventName, clubName, 
 				sport, organizer, vacancies, date));
 		
@@ -252,11 +252,12 @@ public class EventHibernateDao implements EventDao {
 		};
 		
 		StringBuilder queryString = new StringBuilder(" FROM "
-				+ " (events NATURAL JOIN pitches NATURAL JOIN clubs NATURAL JOIN users) AS t LEFT OUTER JOIN tournament_events ON t.eventid = tournament_events.eventid ");
+				+ " (events NATURAL JOIN pitches NATURAL JOIN clubs NATURAL JOIN users) AS t ");
 		
 		int paramNum = 0;
 		for(Filter param : params) {
 			if(param.getValue().isPresent()) {
+				paramNum = paramsMap.size();
 				switch(param.getName()) {
 				case "customVacanciesFilter":
 					queryString.append(buildPrefix(paramNum));
@@ -276,11 +277,8 @@ public class EventHibernateDao implements EventDao {
 					break;
 				}
 				paramsMap.put(Filter.getParamName() + paramNum, param.getValue().get());
-				paramNum = paramsMap.size();
 			}
 		}
-		queryString.append(buildPrefix(paramNum));
-		queryString.append(" tournamentid IS NULL ");
 		
 		return queryString.toString();
 	}

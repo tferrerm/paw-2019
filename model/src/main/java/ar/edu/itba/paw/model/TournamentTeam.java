@@ -2,7 +2,6 @@ package ar.edu.itba.paw.model;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
