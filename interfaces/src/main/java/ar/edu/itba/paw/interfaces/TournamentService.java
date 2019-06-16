@@ -1,9 +1,20 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.DateInPastException;
+import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionDateExceededException;
+import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InsufficientPitchesException;
+import ar.edu.itba.paw.exception.InvalidTeamAmountException;
+import ar.edu.itba.paw.exception.InvalidTeamSizeException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
+import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.model.Club;
@@ -21,9 +32,13 @@ public interface TournamentService {
 	
 	public Optional<TournamentTeam> findByTeamId(final long teamid);
 	
-	public Tournament create(final String name, final Sport sport, final Club club, final String maxTeams,
-			final String teamSize, final String firstRoundDate, final String startsAtHour,
-			final String endsAtHour, final String inscriptionEndDate, final User user);
+	public Tournament create(final String name, final Sport sport, final Club club, final Integer maxTeams,
+			final Integer teamSize, final Instant firstRoundDate, final Integer startsAt,
+			final Integer endsAt, final Instant inscriptionEndDate, final User user) 
+					throws DateInPastException, MaximumDateExceededException, EndsBeforeStartsException, 
+					HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException, 
+					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException, 
+					InscriptionDateExceededException;
 
 	public void joinTournament(final long tournamentid, final long teamid, final long userid) 
 			throws UserBusyException, UserAlreadyJoinedException;

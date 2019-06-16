@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
-import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
@@ -307,7 +307,7 @@ public class EventController extends BaseController {
 	    			mp, date, sa, ea);
     	} catch(EndsBeforeStartsException e) {
     		return eventCreationError("ends_before_starts", pitchId, form);
-    	} catch(EventInPastException e) {
+    	} catch(DateInPastException e) {
     		return eventCreationError("event_in_past", pitchId, form);
     	} catch(MaximumDateExceededException e) {
     		return eventCreationError("date_exceeded", pitchId, form);

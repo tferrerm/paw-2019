@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class NewTournamentForm {
 	
 	@NotBlank
+	@Pattern(regexp = "[a-zA-Z0-9 ]+")
 	private String name;
 	
 	@NotBlank
