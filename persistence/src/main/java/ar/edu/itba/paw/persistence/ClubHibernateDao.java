@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -29,13 +33,24 @@ import ar.edu.itba.paw.model.User;
 public class ClubHibernateDao implements ClubDao {
 	
 	private static final int MAX_ROWS = 10;
+	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
+	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@PersistenceContext
 	private EntityManager em;
 
 	@Override
 	public Optional<Club> findById(long clubid) {
-		return Optional.of(em.find(Club.class, clubid));
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Club> cq = cb.createQuery(Club.class);
+		Root<Club> from = cq.from(Club.class);
+		from.fetch("clubPitches", JoinType.LEFT);
+		
+		final TypedQuery<Club> query = em.createQuery(
+				cq.select(from).where(cb.equal(from.get("clubid"), clubid))
+			);
+		
+		return query.getResultList().stream().findFirst();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -243,6 +258,28 @@ public class ClubHibernateDao implements ClubDao {
 		query.setParameter("startsAt", startsAt);
 		query.setParameter("endsAt", endsAt);
 		query.setMaxResults(amount);
+		
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Event> findCurrentEventsInClub(final long clubid, final Sport sport) {
+		LocalDate ld = LocalDate.now();
+		// Today at 00:00
+		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
+		// In seven days at 23:00
+		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+		
+		String queryString = "FROM Event AS e WHERE e.pitch.club.clubid = :clubid AND "
+				+ " e.pitch.sport = :sport AND e.startsAt > :today AND e.startsAt < :inAWeek";
+		
+		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
+		query.setParameter("clubid", clubid);
+		query.setParameter("sport", sport);
+		query.setParameter("today", today);
+		query.setParameter("inAWeek", inAWeek);
+		/* Only for prevention */
+		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();
 	}

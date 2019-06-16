@@ -19,6 +19,31 @@
 		<div class="content-container">
 			<h2><spring:message code="create_tournament"/></h2>
 			<div class="form-container">
+				<table class="schedule-table flex">
+                    <tr>
+                        <th class="schedule-table-cell-size schedule-table-hours"></th>
+                        <c:forEach var="dayMessage" items="${scheduleHeaders}">
+                            <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
+                        </c:forEach>
+                    </tr>
+                    <c:set var="hours" value="${minHour}"/>
+                    <c:forEach var="row" items="${schedule}">
+                        <tr>
+                            <td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>
+                            <c:forEach var="column" items="${row}">
+                            	<c:choose>
+                                    <c:when test="${(pitchQty - column) == 0}">
+                                        <td class="schedule-table background-red schedule-table-cell-size">${pitchQty - column}</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td class="schedule-table background-yellow schedule-table-cell-size">${pitchQty - column}</td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </tr>
+                        <c:set var="hours" value="${hours + 1}"/>
+                    </c:forEach>
+                </table>
 				<c:url value="/admin/club/${club.clubid}/tournament/create" var="postPath"/>
 				<form:form modelAttribute="newTournamentForm" action="${postPath}" method="post" enctype="multipart/form-data">
 					<div>

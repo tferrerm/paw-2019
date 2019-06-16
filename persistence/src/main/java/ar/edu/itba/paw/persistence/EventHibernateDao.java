@@ -133,7 +133,11 @@ public class EventHibernateDao implements EventDao {
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
 		query.setParameter("userid", userid);
 		query.setParameter("now", Instant.now());
-		query.setParameter("aWeekFromNow", Instant.now().truncatedTo(ChronoUnit.DAYS).plus(7, ChronoUnit.DAYS));
+		// Today at 00:00
+		Instant today = LocalDate.now().atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
+		// In seven days at 23:00
+		Instant inAWeek = today.plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
+		query.setParameter("aWeekFromNow", inAWeek);
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();
@@ -153,7 +157,7 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<Event> findCurrentEventsInPitch(long pitchid) {
+	public List<Event> findCurrentEventsInPitch(final long pitchid) {
 		LocalDate ld = LocalDate.now();
 		// Today at 00:00
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();

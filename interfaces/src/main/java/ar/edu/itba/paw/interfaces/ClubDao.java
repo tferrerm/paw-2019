@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
@@ -52,5 +53,7 @@ public interface ClubDao {
 	
 	public List<Pitch> getAvailablePitches(final long clubid, final Sport sport, 
 			Instant startsAt, Instant endsAt, int amount);
+
+	public List<Event> findCurrentEventsInClub(final long clubid, final Sport sport);
 
 }

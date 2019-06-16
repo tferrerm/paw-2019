@@ -6,6 +6,8 @@ import java.util.Optional;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Sport;
 
 public interface ClubService {
 	
@@ -57,5 +59,10 @@ public interface ClubService {
 	public int getCommentsPageInitIndex(final int pageNum);
 
 	public int getCommentsMaxPage(final long clubid);
+
+	public List<Event> findCurrentEventsInClub(final long clubid, final Sport sport);
+
+	public int[][] convertEventListToSchedule(final List<Event> clubEvents, final int minHour, final int maxHour,
+			final int dayAmount);
 
 }
