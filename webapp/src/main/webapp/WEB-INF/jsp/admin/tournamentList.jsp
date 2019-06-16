@@ -28,14 +28,14 @@
                 </div>
     			<div class="tbl">
     				<div class="table-header">
-                        <div class="table-titles">
+                        <div class="table-titles flex-space-around">
                         	<span><spring:message code="event_name" /></span>
                         	<span><spring:message code="club" /></span>
                         	<span><spring:message code="sport" /></span>
                         </div>
                     </div>
                     <c:forEach var="tournament" items="${tournaments}">
-                        <div class="custom-row">
+                        <div class="custom-row flex-space-around">
                             <div>${tournament.name}</div>
                             <div>${tournament.tournamentClub.name}</div>
                             <div><spring:message code="${tournament.sport}"/></div>

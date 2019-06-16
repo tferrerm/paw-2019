@@ -499,7 +499,7 @@ a.event-link {
     font-size: 20px;
     margin-top: 15px;
     width: 170px;
-    height: 60px;
+    min-height: 60px;
 }
 
 .justify-center {
