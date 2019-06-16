@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +81,12 @@ public class AdminTournamentController extends BaseController {
 			
 			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
 			mav.addObject("roundEvents", roundEvents);
+			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
+			for(TournamentEvent event : roundEvents) {
+				eventsHaveResult.put(event.getEventid(), (Integer)event.getFirstTeamScore() != null);
+			}
+			mav.addObject("roundInPast", roundEvents.get(0).getEvent().getEndsAt().compareTo(Instant.now()) <= 0);
+			mav.addObject("eventsHaveResult", eventsHaveResult);
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
 			
@@ -114,7 +122,7 @@ public class AdminTournamentController extends BaseController {
 		
 		//us.createComment(loggedUser().getUserid(), userId, form.getComment());
 		
-	    return new ModelAndView("redirect:/tournament/" + tournamentid);
+	    return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
 	}
 	
 	

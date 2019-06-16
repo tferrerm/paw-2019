@@ -93,11 +93,11 @@ public class TournamentEvent {
 		return secondTeam;
 	}
 
-	public int getFirstTeamScore() {
+	public Integer getFirstTeamScore() {
 		return firstTeamScore;
 	}
 
-	public int getSecondTeamScore() {
+	public Integer getSecondTeamScore() {
 		return secondTeamScore;
 	}
 	

@@ -2,6 +2,7 @@
 <%@	taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix = "cr" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html>
 	<head>
         <script
@@ -41,22 +42,45 @@
     			</div>
                 <div class="tbl profile-cont">
                     <c:forEach var="event" items="${roundEvents}">
-                        <c:url value="/tournament/${tournament.tournamentid}/result" var="postPath"/>
-                        <form:form id="tournamentResultForm" modelAttribute="tournamentResultForm" action="${postPath}" class="comments_form">
-                            <div>
-                                <span>${event.firstTeam.teamName}</span>
-                                <form:input class="form-control" type="text" path="firstResult" maxlength="3"/>
-                                <form:errors path="firstResult" cssClass="form-error" element="span"/>
-                            </div>
-                            <div>
-                                <span>${event.secondTeam.teamName}</span>
-                                <form:input class="form-control" type="text" path="secondResult" maxlength="3"/>
-                                <form:errors path="secondResult" cssClass="form-error" element="span"/>
-                            </div>
-                            <div class="submit-container">
-                                <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
-                            </div>
-                        </form:form>
+                        <cr:set var="eventid" scope="page" value="${event.eventid}"/>
+                        <c:choose>
+                            <c:when test="${roundInPast}">
+                                <c:url value="/admin/tournament/${tournament.tournamentid}/result" var="postPath"/>
+                                <form:form id="tournamentResultForm" modelAttribute="tournamentResultForm" action="${postPath}" class="comments_form">
+                                    <div>
+                                        <span>${event.firstTeam.teamName}</span>
+                                        <c:choose>
+                                            <c:when test="${eventsHaveResult[eventid]}">
+                                                <form:input class="form-control" type="text" path="firstResult" maxlength="3" value="${event.secondTeamScore}"/>
+                                                <form:errors path="firstResult" cssClass="form-error" element="span"/>
+
+                                                <form:input class="form-control" type="text" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
+                                                <form:errors path="secondResult" cssClass="form-error" element="span"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <form:input class="form-control" type="text" path="firstResult" maxlength="3"/>
+                                                <form:errors path="firstResult" cssClass="form-error" element="span"/>
+
+                                                <form:input class="form-control" type="text" path="secondResult" maxlength="3"/>
+                                                <form:errors path="secondResult" cssClass="form-error" element="span"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <span>${event.secondTeam.teamName}</span>
+                                    </div>
+                                    <div class="submit-container">
+                                        <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
+                                    </div>
+                                </form:form>
+                            </c:when>
+                            <c:otherwise>
+                                <div>
+                                    <span>${event.firstTeam.teamName}</span>
+                                    <span>-</span>
+                                    <span>-</span>
+                                    <span>${event.secondTeam.teamName}</span>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </c:forEach>    
                     <div class="table-navigator">
                         <c:if test="${currRoundPage != 1}">
