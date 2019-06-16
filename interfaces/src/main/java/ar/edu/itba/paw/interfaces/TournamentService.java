@@ -36,7 +36,7 @@ public interface TournamentService {
 
 	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
 
-	public Map<Long, List<User>> getTeamsUsers(final long tournamentid);
+	public Map<Long, List<User>> mapTeamMembers(final long tournamentid);
 
 	public boolean inscriptionEnded(final Tournament tournament);
 
@@ -45,5 +45,9 @@ public interface TournamentService {
 	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage);
 
 	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult, final Integer secondResult);
+	
+	public Optional<TournamentEvent> findTournamentEventById(final long eventid);
+
+	public List<User> findTeamMembers(final TournamentTeam team);
 	
 }

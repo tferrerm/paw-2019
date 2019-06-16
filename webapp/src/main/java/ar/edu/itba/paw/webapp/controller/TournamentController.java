@@ -60,6 +60,8 @@ public class TournamentController extends BaseController {
 				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
 			}
 			mav.addObject("eventsHaveResult", eventsHaveResult);
+			mav.addObject("roundStartsAt", roundEvents.get(0).getEvent().getStartsAt());
+			mav.addObject("roundEndsAt", roundEvents.get(0).getEvent().getEndsAt());
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
 			return mav;
@@ -76,7 +78,7 @@ public class TournamentController extends BaseController {
 			};
 			Collections.sort(teams, cmp);
 		    mav.addObject("teams", teams);
-		    Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
+		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
 		    return mav;
 		}
@@ -128,15 +130,22 @@ public class TournamentController extends BaseController {
         return new ModelAndView("redirect:/tournament/" + tournamentid);
     }
 
-    @RequestMapping(value = "tournament-event/{id}")
-    public ModelAndView retrieveTournamentEvent( @PathVariable long id) 
-    		throws TournamentEventNotFoundException {
+    
+    @RequestMapping(value = "tournament/{tournamentId}/event/{eventId}")
+    public ModelAndView retrieveTournamentEvent(@PathVariable("tournamentId") long tournamentid,
+    		@PathVariable("eventId") long eventid) 
+    		throws TournamentNotFoundException, TournamentEventNotFoundException {
         ModelAndView mav = new ModelAndView("tournamentEvent");
-//        TournamentEvent tEvent = ts.findTournamentEventById(id).orElseThrow(TournamentEventNotFoundException::new);
-//        mav.addObject("tournamentEvent", tEvent );
+        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+        mav.addObject("tournament",  tournament);
+        TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
+        mav.addObject("tournamentEvent", tournamentEvent);
+        mav.addObject("firstTeamMembers", ts.findTeamMembers(tournamentEvent.getFirstTeam()));
+        mav.addObject("secondTeamMembers", ts.findTeamMembers(tournamentEvent.getSecondTeam()));
         return mav;
     }
 
+    
 	@ExceptionHandler({ TournamentEventNotFoundException.class })
 	private ModelAndView tournamentEventNotFound() {
 		return new ModelAndView("404");

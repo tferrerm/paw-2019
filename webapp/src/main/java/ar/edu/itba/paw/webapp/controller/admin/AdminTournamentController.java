@@ -86,6 +86,8 @@ public class AdminTournamentController extends BaseController {
 				eventsHaveResult.put(event.getEventid(), event.getFirstTeamScore() != null);
 			}
 			mav.addObject("eventsHaveResult", eventsHaveResult);
+			mav.addObject("roundStartsAt", roundEvents.get(0).getEvent().getStartsAt());
+			mav.addObject("roundEndsAt", roundEvents.get(0).getEvent().getEndsAt());
 			mav.addObject("roundInPast", roundEvents.get(0).getEvent().getEndsAt().compareTo(Instant.now()) <= 0);
 			
 			mav.addObject("currRoundPage", roundPage);
@@ -105,7 +107,7 @@ public class AdminTournamentController extends BaseController {
 			};
 			Collections.sort(teams, cmp);
 		    mav.addObject("teams", teams);
-		    Map<Long, List<User>> teamsUsers = ts.getTeamsUsers(tournamentid);
+		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
 		    return mav;
 		}

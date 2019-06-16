@@ -34,11 +34,13 @@ import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
+import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
@@ -69,6 +71,9 @@ public class EventController extends BaseController {
     
     @Autowired
     private UserService us;
+    
+    @Autowired
+    private TournamentService ts;
 
 	@RequestMapping("/home")
 	public ModelAndView home()	{
@@ -130,6 +135,11 @@ public class EventController extends BaseController {
     		@RequestParam(value = "alreadyJoinedError", required = false) boolean alreadyJoinedError,
     		@RequestParam(value = "userBusyError", required = false) boolean userBusyError)
     	throws EventNotFoundException, ClubNotFoundException {
+    	
+    	Optional<TournamentEvent> tournamentEvent = ts.findTournamentEventById(id);
+    	if(tournamentEvent.isPresent()) {
+    		return new ModelAndView("redirect:/tournament/" + tournamentEvent.get().getTournament().getTournamentid() + "/event/" + id);
+    	}
 	    
     	ModelAndView mav = new ModelAndView("event");
 	    

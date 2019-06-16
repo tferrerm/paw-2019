@@ -18,7 +18,7 @@
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
 				<div class="profile-title">
-                    <h2>Event</h2>
+                    <h2>${tournamentEvent.event.name}</h2>
                 </div>
                 <span class="help-message notice"><spring:message code="event_completed_description"/></span>
 				<div class="detail-box">
@@ -26,57 +26,56 @@
 						<div><spring:message code="event_detail"/></div>
 					</div>
 					<div>
-						<div class="detail-box-data">Dato 1</div>
-						<div class="detail-box-data">Dato 2</div>
-						<div class="detail-box-data">Dato 3</div>
+						<div class="detail-box-data">${tournament.name}</div>
+						<div class="detail-box-data"><span>${tournament.tournamentClub.name} - ${tournamentEvent.event.pitch.name}</span></div>
+						<div class="detail-box-data">
+							<fmt:timeZone value="AR">
+		                        <fmt:parseDate value="${tournamentEvent.event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+		                        <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+		                    </fmt:timeZone>
+		                    <fmt:timeZone value="AR">
+		                        <fmt:parseDate value="${tournamentEvent.event.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+		                        <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+		                    </fmt:timeZone>
+						</div>
 					</div>
 				</div>
 				<div class="tbl">
-							<div class="table-header">
-								<div class="flex-grow justify-center my-events-tbl-sub">
-									Equipo 1
-								</div>
-								<div class="flex-grow justify-center my-events-tbl-sub">
-									Equipo 2
-								</div>
+					<div class="table-header">
+						<div class="flex-grow justify-center my-events-tbl-sub">
+							${tournamentEvent.firstTeam.teamName}
+						</div>
+						<div class="flex-grow justify-center my-events-tbl-sub">
+							${tournamentEvent.secondTeam.teamName}
+						</div>
+					</div>
+					<div class="flex-grow w-100">
+						<div class=" flex-grow flex-column right-border w-50">
+							<div class="score">
+								${tournamentEvent.firstTeamScore}
 							</div>
-							<div class="flex-grow w-100">
-								<div class=" flex-grow flex-column right-border w-50">
-									<div class="score">
-										3
-									</div>
-									<div class="team-description">
-											<div class="flex flex-column align-center w-50">
-												<span>Juan Perez</span>
-												<span>Pedro Gomez</span>
-												<span>Santiago Swinnen</span>
-											</div>
-											<div class="flex flex-column align-center w-50">
-												<span>Marcos Lund</span>
-												<span>Tomas Ferrer</span>
-												<span>Guido Princ</span>
-											</div>
-									</div>
-								</div>
-								<div class="flex-grow flex-column w-50">
-								    <div class="score">
-										0
-									</div>
-									<div class="team-description">
-										<div class="flex flex-column align-center w-50">
-											<span>Juan Perez</span>
-											<span>Pedro Gomez</span>
-											<span>Santiago Swinnen</span>
-										</div>
-										<div class="flex flex-column align-center w-50">
-											<span>Marcos Lund</span>
-											<span>Tomas Ferrer</span>
-											<span>Guido Princ</span>
-										</div>
-									</div>
+							<div class="team-description">
+								<div class="flex flex-column align-center w-100">
+									<c:forEach var="teamMember" items="${firstTeamMembers}">
+										<span>${teamMember.firstname} ${teamMember.lastname}</span>
+									</c:forEach>
 								</div>
 							</div>
 						</div>
+						<div class="flex-grow flex-column w-50">
+						    <div class="score">
+								${tournamentEvent.secondTeamScore}
+							</div>
+							<div class="team-description">
+								<div class="flex flex-column align-center w-100">
+									<c:forEach var="teamMember" items="${secondTeamMembers}">
+										<span>${teamMember.firstname} ${teamMember.lastname}</span>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

@@ -156,7 +156,7 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 
 	@Override
-	public Map<Long, List<User>> getTeamsUsers(long tournamentid) {
+	public Map<Long, List<User>> mapTeamMembers(long tournamentid) {
 		if(tournamentid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
@@ -216,6 +216,20 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new IllegalArgumentException("Event " + eventid + " does not belong to tournament " + tournament.getTournamentid());
 		}
 		td.postTournamentEventResult(tournament, event, firstResult, secondResult);
+	}
+
+	@Override
+	public Optional<TournamentEvent> findTournamentEventById(final long eventid) {
+		if(eventid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+
+		return td.findTournamentEventById(eventid);
+	}
+
+	@Override
+	public List<User> findTeamMembers(final TournamentTeam team) {
+		return td.findTeamMembers(team);
 	}
 
 }

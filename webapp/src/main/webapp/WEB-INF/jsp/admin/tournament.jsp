@@ -41,6 +41,15 @@
                     </c:forEach>
     			</div>
                 <div class="tbl profile-cont">
+                    <span><spring:message code="round" /> ${currRoundPage}</span>
+                    <fmt:timeZone value="AR">
+                        <fmt:parseDate value="${roundStartsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                        <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+                    </fmt:timeZone>
+                    <fmt:timeZone value="AR">
+                        <fmt:parseDate value="${roundEndsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                        <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+                    </fmt:timeZone>
                     <c:forEach var="event" items="${roundEvents}">
                         <cr:set var="eventid" scope="page" value="${event.eventid}"/>
                         <c:choose>
@@ -80,6 +89,7 @@
                                     <span>${event.secondTeam.teamName}</span>
                                 </div>
                             </c:otherwise>
+                            <span>${event.event.pitch.name}</span>
                         </c:choose>
                     </c:forEach>    
                     <div class="table-navigator">
