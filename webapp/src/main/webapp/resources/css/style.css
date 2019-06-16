@@ -348,6 +348,17 @@ a.event-link {
     width: 100%;
 }
 
+.form-container-tournament {
+    align-self: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display:flex;
+    justify-content: space-between;
+    padding: 10px;
+
+}
+
 .form-error {
     color: red;
     font-size: 16px;
@@ -501,6 +512,10 @@ a.event-link {
   color: red;
   border-width: 0;
   margin-left: 5px;
+}
+
+.left-space {
+  margin-left: 20px;
 }
 
 .login-error {

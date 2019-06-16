@@ -18,7 +18,7 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="create_tournament"/></h2>
-			<div class="form-container">
+			<div class="form-container-tournament">
 				<table class="schedule-table flex">
                     <tr>
                         <th class="schedule-table-cell-size schedule-table-hours"></th>
@@ -45,6 +45,7 @@
                     </c:forEach>
                 </table>
 				<c:url value="/admin/club/${club.clubid}/tournament/create" var="postPath"/>
+				<div class="left-space">
 				<form:form modelAttribute="newTournamentForm" action="${postPath}" method="post" enctype="multipart/form-data">
 					<div>
 						<form:label path="name"><spring:message code="name"/> * </form:label>
@@ -91,7 +92,7 @@
                         </div>
                     </div>
                     <div>
-                        <form:label path="inscriptionEndDate"><spring:message code="new_event_date"/> *</form:label>
+                        <form:label path="inscriptionEndDate"><spring:message code="end_date"/> *</form:label>
                         <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate"/>
                         <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
                     </div>
@@ -99,6 +100,7 @@
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>
 				</form:form>
+				</div>
 			</div>
 		</div>
 	</div>
