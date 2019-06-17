@@ -18,7 +18,7 @@
 			<div class="profile-title">
 				<h2>${event.name}</h2>
 			</div>
-			<div class="detail-container">
+			<div class="detail-container average-min-width">
 				<c:if test="${!has_ended}">
 					<div class="status">
 						<c:choose>
