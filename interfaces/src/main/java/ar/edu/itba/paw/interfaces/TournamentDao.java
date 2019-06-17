@@ -47,4 +47,6 @@ public interface TournamentDao {
 
 	public Optional<TournamentEvent> findTournamentEventById(final long eventid);
 
+	public Optional<Integer> getCurrentRound(final Tournament tournament);
+
 }

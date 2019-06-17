@@ -70,6 +70,8 @@ public interface TournamentService {
 
 	public List<User> findTeamMembers(final TournamentTeam team);
 
+	public int getMinRoundForResultInput(final Tournament tournament);
+
 	public int getCurrentRound(final Tournament tournament);
 	
 }

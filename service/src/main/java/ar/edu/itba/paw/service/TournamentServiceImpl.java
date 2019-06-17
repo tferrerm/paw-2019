@@ -293,8 +293,20 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 
 	@Override
+	public int getMinRoundForResultInput(final Tournament tournament) {
+		for(int i = 1; i <= tournament.getRounds(); i++) {
+			for(TournamentEvent te : td.findTournamentEventsByRound(tournament, i)) {
+				if(te.getFirstTeamScore() == null || te.getSecondTeamScore() == null) {
+					return i;
+				}
+			}
+		}
+		return tournament.getRounds();
+	}
+
+	@Override
 	public int getCurrentRound(Tournament tournament) {
-		return 1;
+		return td.getCurrentRound(tournament).orElse(tournament.getRounds());
 	}
 
 }
