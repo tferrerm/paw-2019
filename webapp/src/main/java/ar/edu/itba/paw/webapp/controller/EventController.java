@@ -2,13 +2,11 @@ package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import ar.edu.itba.paw.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
-import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
@@ -40,6 +38,12 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
+import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.model.TournamentEvent;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
@@ -389,19 +393,19 @@ public class EventController extends BaseController {
 	    StringBuilder strBuilder = new StringBuilder();
 	    strBuilder.append("?");
 	    if(name != null && !name.isEmpty()) {
-        	strBuilder.append("name=").append(name).append("&");
+        	strBuilder.append("name=").append(encodeString(name)).append("&");
         }
         if(establishment != null && !establishment.isEmpty()) {
-        	strBuilder.append("establishment=").append(establishment).append("&");
+        	strBuilder.append("establishment=").append(encodeString(establishment)).append("&");
         }
         if(sport != null && !sport.isEmpty()) {
-        	strBuilder.append("sport=").append(sport).append("&");
+        	strBuilder.append("sport=").append(encodeString(sport)).append("&");
         }
         if(vacancies != null && !vacancies.isEmpty()) {
-        	strBuilder.append("vacancies=").append(vacancies).append("&");
+        	strBuilder.append("vacancies=").append(encodeString(vacancies)).append("&");
         }
         if(date != null && !date.isEmpty()) {
-        	strBuilder.append("date=").append(date);
+        	strBuilder.append("date=").append(encodeString(date));
         } else {
         	strBuilder.deleteCharAt(strBuilder.length()-1);
         }
