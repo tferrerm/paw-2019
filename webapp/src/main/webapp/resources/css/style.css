@@ -69,6 +69,14 @@ a.link-text{
     align-items: center;
 }
 
+.average-min-height {
+  min-height: 60%
+}
+
+.average-min-width {
+  min-width: 60%
+}
+
 .background-red {
     background: red;
 }
