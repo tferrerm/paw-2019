@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionDateExceededException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
@@ -27,6 +28,7 @@ import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.InvalidTeamAmountException;
 import ar.edu.itba.paw.exception.InvalidTeamSizeException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
+import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
 import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -35,6 +37,7 @@ import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
@@ -144,22 +147,40 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void joinTournament(long tournamentid, long teamid, final long userid) 
-			throws UserBusyException, UserAlreadyJoinedException {
+			throws UserBusyException, UserAlreadyJoinedException, InscriptionDateInPastException,
+			TeamAlreadyFilledException, UserAlreadyJoinedException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		} // IF NO ARRANCO, IF TEAM NO LLENO
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
-		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		} // YA SE UNIO
+		
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
+			throw new InscriptionDateInPastException();
+		}
+		
+		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		if(team.getInscriptions().size() == tournament.getTeamSize()) {
+			throw new TeamAlreadyFilledException();
+		}
+		for(Inscription inscription : team.getInscriptions()) {
+			if(inscription.getInscriptedUser().getUserid() == user.getUserid()) {
+				throw new UserAlreadyJoinedException("User " + user.getUserid() + " has already joined Tournament " + tournament.getTournamentid());
+			}
+		}
 		
 		td.joinTournament(tournament, team, user);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void leaveTournament(final long tournamentid, final long userid) {
-		// IF NO ARRANCO
+	public void leaveTournament(final long tournamentid, final long userid) 
+			throws InscriptionDateInPastException {
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
+			throw new InscriptionDateInPastException();
+		}
 		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
 		td.deleteTournamentInscriptions(team, user);
@@ -241,14 +262,17 @@ public class TournamentServiceImpl implements TournamentService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult, // IF YA TERMINO
-			final Integer secondResult) {
+	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult,
+			final Integer secondResult) throws EventHasNotEndedException {
 		if(eventid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		TournamentEvent event = td.findTournamentEventById(eventid).orElseThrow(NoSuchElementException::new);
 		if(!event.getTournament().equals(tournament)) {
 			throw new IllegalArgumentException("Event " + eventid + " does not belong to tournament " + tournament.getTournamentid());
+		}
+		if(event.getEndsAt().compareTo(Instant.now()) > 0) {
+			throw new EventHasNotEndedException();
 		}
 		td.postTournamentEventResult(tournament, event, firstResult, secondResult);
 	}

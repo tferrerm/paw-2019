@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.TournamentService;
@@ -110,9 +112,17 @@ public class TournamentController extends BaseController {
     
     @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
     public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
-    		throws UserBusyException, UserAlreadyJoinedException {
+    		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
     	
-        ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
+        try {
+			ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
+		} catch (InscriptionDateInPastException e) {
+			joinTournamentError("tournament_already_started", tournamentid);
+		} catch (TeamAlreadyFilledException e) {
+			joinTournamentError("team_already_filled", tournamentid);
+		} catch (UserAlreadyJoinedException e) {
+			joinTournamentError("already_joined_tournament", tournamentid);
+		}
         
         LOGGER.debug("User {} joined Tournament {}", loggedUser(), tournamentid);
         
@@ -120,11 +130,25 @@ public class TournamentController extends BaseController {
     }
     
     
+    private ModelAndView joinTournamentError(String error, long tournamentid) 
+    		throws TournamentNotFoundException {
+    	ModelAndView mav = retrieveTournament(tournamentid, 1);
+		mav.addObject(error, true);
+		return mav;
+    }
+    
+    
     @RequestMapping(value = "tournament/{tournamentId}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveTournament(@PathVariable("tournamentId") long tournamentid) 
-    		throws UserBusyException, UserAlreadyJoinedException {
+    		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
     	
-        ts.leaveTournament(tournamentid, loggedUser().getUserid());
+        try {
+			ts.leaveTournament(tournamentid, loggedUser().getUserid());
+		} catch (InscriptionDateInPastException e) {
+			ModelAndView mav = retrieveTournament(tournamentid, 1);
+			mav.addObject("tournament_already_started", true);
+			return mav;
+		}
         
         return new ModelAndView("redirect:/tournament/" + tournamentid);
     }

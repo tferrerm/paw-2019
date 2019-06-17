@@ -1,15 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionDateExceededException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
@@ -140,16 +135,22 @@ public class AdminTournamentController extends BaseController {
 		Integer firstResult = tryInteger(form.getFirstResult());
     	Integer secondResult = tryInteger(form.getSecondResult());
     	if(firstResult == null)
-    		errors.rejectValue("maxParticipants", "wrong_int_format");
+    		errors.rejectValue("firstResult", "wrong_int_format");
     	if(secondResult == null)
-    		errors.rejectValue("startsAtHour", "wrong_int_format");
+    		errors.rejectValue("secondResult", "wrong_int_format");
 		
 		if(errors.hasErrors()) {
     		return retrieveTournament(tournamentid, 1, form); // IR A LA DEFAULT
     	}
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
-		ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
+		try {
+			ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
+		} catch (EventHasNotEndedException e) {
+			ModelAndView mav = retrieveTournament(tournamentid, 1, form);
+    		mav.addObject("event_has_not_ended", true);
+    		return mav;
+		}
 		
 	    return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
 	}
@@ -258,10 +259,10 @@ public class AdminTournamentController extends BaseController {
     
     private ModelAndView tournamentCreationError(String error, long clubId, NewTournamentForm form) 
     		throws ClubNotFoundException {
-        	ModelAndView mav = tournamentFormView(clubId, form);
-    		mav.addObject(error, true);
-    		return mav;
-        }
+    	ModelAndView mav = tournamentFormView(clubId, form);
+		mav.addObject(error, true);
+		return mav;
+    }
     
     
     @RequestMapping(value = "/tournament/{tournamentId}/kick-user/{userId}", method = { RequestMethod.POST })

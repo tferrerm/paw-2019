@@ -60,17 +60,17 @@
                                         <span>${event.firstTeam.teamName}</span>
                                         <c:choose>
                                             <c:when test="${eventsHaveResult[eventid]}">
-                                                <form:input class="form-control" type="text" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
+                                                <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
                                                 <form:errors path="firstResult" cssClass="form-error" element="span"/>
 
-                                                <form:input class="form-control" type="text" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
+                                                <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
                                                 <form:errors path="secondResult" cssClass="form-error" element="span"/>
                                             </c:when>
                                             <c:otherwise>
-                                                <form:input class="form-control" type="text" path="firstResult" maxlength="3"/>
+                                                <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3"/>
                                                 <form:errors path="firstResult" cssClass="form-error" element="span"/>
 
-                                                <form:input class="form-control" type="text" path="secondResult" maxlength="3"/>
+                                                <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3"/>
                                                 <form:errors path="secondResult" cssClass="form-error" element="span"/>
                                             </c:otherwise>
                                         </c:choose>
