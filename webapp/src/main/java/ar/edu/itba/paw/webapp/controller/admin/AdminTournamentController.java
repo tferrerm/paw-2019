@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -197,6 +200,10 @@ public class AdminTournamentController extends BaseController {
 		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
 		mav.addObject("pitchQty", club.getClubPitches().stream()
 				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size());
+		mav.addObject("currentDate", LocalDate.now());
+		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+		mav.addObject("aWeekFromNowDate", LocalDate.now().plus(7, ChronoUnit.DAYS));
+		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
     	
         return mav;
     }

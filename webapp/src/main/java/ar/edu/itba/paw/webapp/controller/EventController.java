@@ -1,14 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import ar.edu.itba.paw.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
-import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
@@ -40,6 +41,12 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
+import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.model.TournamentEvent;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
@@ -259,6 +266,8 @@ public class EventController extends BaseController {
         mav.addObject("totalEventQty", totalEventQty);
         mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+        mav.addObject("currentDate", LocalDate.now());
+        mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
         
         return mav;
     }
@@ -268,16 +277,19 @@ public class EventController extends BaseController {
 	public ModelAndView seePitch(
 			@PathVariable("pitchId") long id,
 			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
+		
 		ModelAndView mav = new ModelAndView("pitch");
+		
 		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
-		List<Event> pitchEvents = es.findCurrentEventsInPitch(id);
-		boolean[][] schedule = es.convertEventListToSchedule(pitchEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT);
-		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		mav.addObject("scheduleHeaders", scheduleDaysHeader);
+		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
 		mav.addObject("minHour", MIN_HOUR);
 		mav.addObject("maxHour", MAX_HOUR);
 		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-		mav.addObject("schedule", schedule);
+		mav.addObject("schedule", es.convertEventListToSchedule(es.findCurrentEventsInPitch(id), MIN_HOUR, MAX_HOUR, DAY_LIMIT));
+		mav.addObject("currentDate", LocalDate.now());
+		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+		mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
+		
 		return mav;
 	}
 

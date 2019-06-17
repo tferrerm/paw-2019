@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +85,8 @@ public class AdminController extends BaseController {
         mav.addObject("totalEventQty", totalEventQty);
 		mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+        mav.addObject("currentDate", LocalDate.now());
+        mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
         
 		return mav;
 	}

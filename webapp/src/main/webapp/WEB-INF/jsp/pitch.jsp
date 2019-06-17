@@ -94,7 +94,7 @@
                                 <div class="form-field flex-space-between">
                                     <div class="form-field-horizontal">
                                         <form:label path="date"><spring:message code="new_event_date"/> *</form:label>
-                                        <form:input cssClass="form-control date-input" type="date" path="date"/>
+                                        <form:input cssClass="form-control date-input" type="date" path="date" min="${currentDate}" max="${aWeekFromNow}"/>
                                         <form:errors path="date" cssClass="form-error" element="span"/>
                                         <c:if test="${invalid_date_format == true}">
                                             <span class="form-error">
@@ -142,7 +142,7 @@
                                 </div>
                                 <div>
                                     <form:label path="inscriptionEndDate"><spring:message code="end_date"/> *</form:label>
-                                    <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate"/>
+                                    <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate" min="${currentDateTime}"/>
                                     <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
                                     <c:if test="${inscription_date_in_past}">
                                         <span class="form-error">
