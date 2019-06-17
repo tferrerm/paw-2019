@@ -83,11 +83,15 @@ public class AdminTournamentController extends BaseController {
 	
 	@RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
-    		@RequestParam(value = "round", defaultValue = "1") final int roundPage, // VER SI SE PUEDE PONER FECHA ACTUAL DEFAULT
+    		@RequestParam(value = "round", required = false) final Integer roundPage, // VER SI SE PUEDE PONER FECHA ACTUAL DEFAULT
 			@ModelAttribute("tournamentResultForm") final TournamentResultForm form) 
     		throws TournamentNotFoundException {
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		
+		if(roundPage == null) {
+			retrieveTournament(tournamentid, ts.getCurrentRound(tournament), form);
+		}
 		
 		if(ts.inscriptionEnded(tournament)) { // SEPARAR EN DOS URL?
 			ModelAndView mav = new ModelAndView("admin/tournament");
@@ -140,14 +144,14 @@ public class AdminTournamentController extends BaseController {
     		errors.rejectValue("secondResult", "wrong_int_format");
 		
 		if(errors.hasErrors()) {
-    		return retrieveTournament(tournamentid, 1, form); // IR A LA DEFAULT
+    		return retrieveTournament(tournamentid, null, form); // IR A LA DEFAULT
     	}
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		try {
 			ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
 		} catch (EventHasNotEndedException e) {
-			ModelAndView mav = retrieveTournament(tournamentid, 1, form);
+			ModelAndView mav = retrieveTournament(tournamentid, null, form);
     		mav.addObject("event_has_not_ended", true);
     		return mav;
 		}

@@ -69,5 +69,7 @@ public interface TournamentService {
 	public Optional<TournamentEvent> findTournamentEventById(final long eventid);
 
 	public List<User> findTeamMembers(final TournamentTeam team);
+
+	public int getCurrentRound(final Tournament tournament);
 	
 }
