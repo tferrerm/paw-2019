@@ -151,6 +151,27 @@ div.background-dodgerblue {
   width: 60%;
 }
 
+.club-detail-container {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    align-items: flex-start;
+    align-self: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    justify-content: center;
+    width: 80%;
+}
+
+.club-pitches-list {
+  width: 100%;
+}
+
+.club-table-size {
+    min-width: 75%;
+}
+
 .color-dodgerblue {
   color: dodgerblue;
 }
@@ -616,6 +637,14 @@ a.logo-admin {
     margin-right: 10px;
 }
 
+.minw-100 {
+  min-width: 100px;
+}
+
+.minw-300 {
+  min-width: 300px;
+}
+
 .my-events-tbl-sub {
     padding-top: 10px;
 }
@@ -630,6 +659,10 @@ a.logo-admin {
 .notice {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 25px;
+}
+
+.no-margin {
+  margin: 0;
 }
 
 .participant-item {
@@ -980,29 +1013,4 @@ ul.pitch-item {
 
 .w-100 {
     width: 100%;
-}
-
-.club-table-size {
-    min-width: 75%;
-}
-
-.club-pitches-list {
-    width: 100%;
-}
-
-.club-detail-container {
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-    align-items: flex-start;
-    align-self: center;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
-    justify-content: center;
-    width: 80%;
-}
-
-.no-margin {
-  margin: 0;
 }
