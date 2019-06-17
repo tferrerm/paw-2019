@@ -37,6 +37,7 @@ public class EmailServiceImpl implements EmailService {
 	private static final String YOU_WERE_KICKED_TEMPLATE = "youWereKicked";
 	private static final String TOURNAMENT_KICKED_TEMPLATE = "tournamentKicked";
 	private static final String TOURNAMENT_STARTED_TEMPLATE = "tournamentStarted";
+	private static final String TOURNAMENT_CANCELLED_TEMPLATE = "tournamentCancelled";
 
 	void sendMail(final User user, final Locale locale, String titleMessage, Context ctx, String  template, Object[] titleParams) {
 
@@ -99,5 +100,15 @@ public class EmailServiceImpl implements EmailService {
 		sendMail(user, locale, "tournament_started_title", ctx, TOURNAMENT_STARTED_TEMPLATE, new Object[]{tournamentName});
 	}
 
+	public void tournamentCancelled(final User user, final Tournament tournament, final Locale locale) {
+		final Context ctx = new Context(locale);
+		String tournamentName = tournament.getName();
+		String userName = user.getFirstname() + " " + user.getLastname();
+		ctx.setVariable("tournament_name", tournamentName);
+		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{userName, tournamentName}, locale));
 
+		sendMail(user, locale, "tournament_cancelled_title", ctx, TOURNAMENT_CANCELLED_TEMPLATE, new Object[]{tournamentName});
+	}
+
+	
 }
