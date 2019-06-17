@@ -143,6 +143,14 @@ div.background-dodgerblue {
   word-break: break-word;
 }
 
+.club-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 60%;
+}
+
 .color-dodgerblue {
   color: dodgerblue;
 }
