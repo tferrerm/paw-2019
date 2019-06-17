@@ -65,6 +65,4 @@ public interface ClubService {
 	public int[][] convertEventListToSchedule(final List<Event> clubEvents, final int minHour, final int maxHour,
 			final int dayAmount);
 
-	public void checkTournamentInscriptions() throws InterruptedException;
-
 }

@@ -51,6 +51,9 @@ public class Tournament {
 	@Column(name = "inscription_ends_at", nullable = false)
 	private Instant endsInscriptionAt;
 	
+	@Column(name = "inscription_success", nullable = false)
+	private boolean inscriptionSuccess;
+	
 	@Convert(converter = InstantTimestampConverter.class)
 	@Column(name = "tournament_created_at", nullable = false)
 	private Instant createdAt;
@@ -116,6 +119,10 @@ public class Tournament {
 
 	public Instant getEndsInscriptionAt() {
 		return endsInscriptionAt;
+	}
+	
+	public boolean getInscriptionSuccess() {
+		return inscriptionSuccess;
 	}
 
 	public Instant getCreatedAt() {

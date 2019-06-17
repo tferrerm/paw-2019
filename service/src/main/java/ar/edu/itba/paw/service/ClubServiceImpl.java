@@ -10,6 +10,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,6 @@ import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 @Service
-//@EnableAsync
-@EnableScheduling
 public class ClubServiceImpl implements ClubService {
 	
 	@Autowired
@@ -221,14 +221,6 @@ public class ClubServiceImpl implements ClubService {
 			}
 		}
 		return DAYS_OF_WEEK_NUM;
-	}
-	
-	//@Async
-	@Scheduled(fixedDelay = 1000)
-	@Override
-	public void checkTournamentInscriptions() throws InterruptedException {
-		//Thread.sleep(4000);
-		//System.out.println("HOLA");
 	}
 
 }
