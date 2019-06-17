@@ -108,7 +108,7 @@ public interface EventDao {
 	public int countParticipants(final long eventid);
 
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
-			final int maxParticipants, final Instant startsAt, final Instant endsAt)
+			final int maxParticipants, final Instant startsAt, final Instant endsAt, final Instant inscriptionEndDate)
 					throws EventOverlapException;
 
 	public void joinEvent(final User user, final Event event)

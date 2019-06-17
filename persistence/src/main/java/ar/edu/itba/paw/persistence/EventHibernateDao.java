@@ -321,7 +321,7 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public Event create(String name, User owner, Pitch pitch, String description, 
-			int maxParticipants, Instant startsAt, Instant endsAt) throws EventOverlapException {
+			int maxParticipants, Instant startsAt, Instant endsAt, final Instant inscriptionEndDate) throws EventOverlapException {
 		
 		String eventOverlapQueryString = "SELECT count(*) FROM Event AS e "
 				+ " WHERE e.pitch.pitchid = :pitchid "
@@ -337,7 +337,7 @@ public class EventHibernateDao implements EventDao {
 		if(eventOverlapQueryResult > 0)
 			throw new EventOverlapException("Pitch is already taken in the chosen time period");
 		
-		final Event event = new Event(name, owner, pitch, description, maxParticipants, startsAt, endsAt);
+		final Event event = new Event(name, owner, pitch, description, maxParticipants, startsAt, endsAt, inscriptionEndDate);
 		em.persist(event);
 		return event;
 	}

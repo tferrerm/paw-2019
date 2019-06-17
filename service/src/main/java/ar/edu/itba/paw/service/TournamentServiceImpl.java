@@ -344,7 +344,7 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 	
 	@Async
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 1800000) /* Runs every half hour */
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void checkTournamentInscriptions() {

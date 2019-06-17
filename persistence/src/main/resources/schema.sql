@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS events(
   eventname VARCHAR(100) NOT NULL,
   description VARCHAR(500),
   max_participants INTEGER NOT NULL,
+  inscription_ends_at TIMESTAMP,
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
   event_created_at TIMESTAMP NOT NULL,

@@ -11,6 +11,8 @@ import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionDateExceededException;
+import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -123,9 +125,9 @@ public interface EventService {
 
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
 			final int maxParticipants, final Instant date, final int startsAtHour,
-			final int endsAtHour) throws DateInPastException, 
+			final int endsAtHour, final Instant inscriptionEndDate) throws DateInPastException, 
 											MaximumDateExceededException, EndsBeforeStartsException, 
-											EventOverlapException, HourOutOfRangeException;
+											EventOverlapException, HourOutOfRangeException, InscriptionDateExceededException, InscriptionDateInPastException;
 
 	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException, DateInPastException;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -47,6 +48,10 @@ public class Event {
 	@Column(name = "max_participants", nullable = false)
 	private int maxParticipants;
 	
+	@Convert(converter = InstantTimestampConverter.class)
+	@Column(name = "inscription_ends_at", nullable = true)
+	private Instant endsInscriptionAt;
+	
 	@Column(name = "starts_at", nullable = false)
 	private Instant startsAt;
 	
@@ -69,7 +74,7 @@ public class Event {
 	}
 	
 	public Event(String name, Pitch pitch, String description,
-			int maxParticipants, Instant startsAt, Instant endsAt) {
+			int maxParticipants, Instant startsAt, Instant endsAt, Instant inscriptionEndDate) {
 		super();
 		this.name = name;
 		this.pitch = pitch;
@@ -77,27 +82,14 @@ public class Event {
 		this.maxParticipants = maxParticipants;
 		this.startsAt = startsAt;
 		this.endsAt = endsAt;
+		this.endsInscriptionAt = inscriptionEndDate;
 	}
 	
 	public Event(String name, User owner, Pitch pitch, String description,
-	int maxParticipants, Instant startsAt, Instant endsAt) {
+	int maxParticipants, Instant startsAt, Instant endsAt, Instant inscriptionEndDate) {
 		this(name, pitch, description,
-			maxParticipants, startsAt, endsAt);
+			maxParticipants, startsAt, endsAt, inscriptionEndDate);
 		this.owner = owner;
-	}
-	
-	public Event(String name, User owner, Pitch pitch, String description, 
-			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
-		this(name, owner, pitch, description, maxParticipants, startsAt,
-			endsAt);
-		this.createdAt = createdAt;
-	}
-	
-	public Event(String name, Pitch pitch, String description, 
-			int maxParticipants, Instant startsAt, Instant endsAt, Instant createdAt) {
-		this(name, pitch, description, maxParticipants, startsAt,
-			endsAt);
-		this.createdAt = createdAt;
 	}
 	
 	public Event(String name, User owner, Pitch pitch, int maxParticipants, Instant startsAt, 
@@ -137,6 +129,10 @@ public class Event {
 	
 	public int getMaxParticipants() {
 		return maxParticipants;
+	}
+
+	public Instant getEndsInscriptionAt() {
+		return endsInscriptionAt;
 	}
 
 	public Instant getStartsAt() {
