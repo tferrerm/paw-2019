@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
@@ -115,7 +116,7 @@ public class AdminController extends BaseController {
 	
 	@RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
 	public ModelAndView deleteEvent(@PathVariable final long id)
-			throws EventNotFoundException {
+			throws EventNotFoundException, DateInPastException {
 		es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		es.deleteEvent(id);
 		LOGGER.debug("Deleted event with id {}", id);

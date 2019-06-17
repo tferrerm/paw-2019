@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +36,7 @@ public class TournamentTeam {
 	@Column(name = "teamscore", nullable = false)
 	private int teamScore;
 	
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournamentTeam")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournamentTeam")
 	private List<Inscription> inscriptions;
 	
 	/*package*/ TournamentTeam() {

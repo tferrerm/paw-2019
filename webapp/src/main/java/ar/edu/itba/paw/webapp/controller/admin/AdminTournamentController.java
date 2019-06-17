@@ -272,6 +272,16 @@ public class AdminTournamentController extends BaseController {
     }
     
     
+    @RequestMapping(value = "/tournament/{tournamentId}/delete", method = { RequestMethod.POST })
+	public ModelAndView deleteEvent(@PathVariable("tournamentId") final long tournamentid)
+			throws TournamentNotFoundException, InscriptionDateInPastException {
+    	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		ts.deleteTournament(tournamentid);
+		LOGGER.debug("Deleted tournament with id {}", tournamentid);
+		return new ModelAndView("redirect:/admin/tournaments/1");
+	}
+    
+    
     @RequestMapping(value = "/tournament/{tournamentId}/kick-user/{userId}", method = { RequestMethod.POST })
     public ModelAndView kickUserFromTournament(
     		@PathVariable("tournamentId") long tournamentid, @PathVariable("userId") long kickedUserId) 

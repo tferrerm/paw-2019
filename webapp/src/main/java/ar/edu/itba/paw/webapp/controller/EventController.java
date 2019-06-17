@@ -181,7 +181,7 @@ public class EventController extends BaseController {
     
     @RequestMapping(value = "/event/{id}/join", method = { RequestMethod.POST })
     public ModelAndView joinEvent(@PathVariable long id)
-    	throws EventNotFoundException {
+    	throws EventNotFoundException, DateInPastException {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 	    ModelAndView mav = new ModelAndView("redirect:/event/" + id);
 	    try {
@@ -204,7 +204,7 @@ public class EventController extends BaseController {
 
     
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
-    public ModelAndView leaveEvent(@PathVariable long id) {
+    public ModelAndView leaveEvent(@PathVariable long id) throws DateInPastException {
 	    es.leaveEvent(id, loggedUser().getUserid());
         return new ModelAndView("redirect:/event/" + id);
     }
@@ -214,7 +214,7 @@ public class EventController extends BaseController {
     public ModelAndView kickUserFromEvent(
     		@PathVariable("eventId") long eventid,
     		@PathVariable("userId") long kickedUserId)
-    		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException {
+    		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException, DateInPastException {
     	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
     	es.kickFromEvent(loggedUser(), kickedUserId, event);

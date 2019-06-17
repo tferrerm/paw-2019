@@ -359,4 +359,14 @@ public class TournamentHibernateDao implements TournamentDao {
 		return pageCount;
 	}
 
+	@Override
+	public void deleteTournament(final long tournamentid) {
+		Tournament tournament = em.find(Tournament.class, tournamentid);
+		/*for(TournamentTeam team : tournament.getTeams())
+			em.createQuery("DELETE FROM Inscription i WHERE i.tournamentTeam.teamid = :teamid").setParameter("teamid", team.getTeamid()).executeUpdate();
+		em.createQuery("DELETE FROM TournamentEvent te WHERE te.tournament.tournamentid = :tournamentid").setParameter("tournamentid", tournamentid).executeUpdate();
+		em.createQuery("DELETE FROM TournamentTeam tt WHERE tt.tournament.tournamentid = :tournamentid").setParameter("tournamentid", tournamentid).executeUpdate();
+		em.remove(tournament);*/
+	}
+
 }
