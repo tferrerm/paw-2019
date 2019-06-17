@@ -38,20 +38,16 @@ public class EmailServiceImpl implements EmailService {
 	private static final String YOU_WERE_KICKED_TEMPLATE = "youWereKicked";
 	private static final String TOURNAMENT_STARTED_TEMPLATE = "tournamentStarted";
 
-	@Override
-	public void userRegistered(final User user, final Locale locale) {
-		final Context ctx = new Context(locale);
-		String username = user.getFirstname() + " " + user.getLastname();
-		ctx.setVariable("email_body", ems.getMessage("user_registered_body", new Object[]{username}, locale));
+	void sendMail(final User user, final Locale locale, String titleMessage, Context ctx, String  template, Object[] titleParams) {
 
 		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
 		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
 		try {
-			message.setSubject(ems.getMessage("user_registered_title", null, locale));
+			message.setSubject(ems.getMessage(titleMessage, titleParams, locale));
 			message.setFrom("SportMatcher");
 			message.setTo(user.getUsername());
 
-			final String htmlContent = this.htmlTemplateEngine.process(USER_REGISTERED_TEMPLATE, ctx);
+			final String htmlContent = this.htmlTemplateEngine.process(template, ctx);
 			message.setText(htmlContent, true);
 		} catch (Exception e) {
 			//LOGGER.error("Message sending exception", e);
@@ -59,6 +55,16 @@ public class EmailServiceImpl implements EmailService {
 
 
 		this.mailSender.send(mimeMessage);
+	}
+
+	@Override
+	public void userRegistered(final User user, final Locale locale) {
+
+		final Context ctx = new Context(locale);
+		String username = user.getFirstname() + " " + user.getLastname();
+		ctx.setVariable("email_body", ems.getMessage("user_registered_body", new Object[]{username}, locale));
+
+		sendMail(user,locale,"user_registered_title",ctx,USER_REGISTERED_TEMPLATE,null);
 	}
 	
 	@Override
@@ -69,22 +75,8 @@ public class EmailServiceImpl implements EmailService {
 		String joinedUserName = joinedUser.getFirstname() + " " + joinedUser.getLastname();
 		ctx.setVariable("event_name", eventName);
 		ctx.setVariable("email_body", ems.getMessage("someone_joined_body", new Object[] {ownerName, eventName, joinedUserName}, locale));
-		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
-		
-		try {
-			message.setSubject(ems.getMessage("someone_joined_title", new Object[]{eventName}, locale));
-			message.setFrom("nosotros");
-			message.setTo(event.getOwner().getUsername());
 
-			final String htmlContent = this.htmlTemplateEngine.process(SOMEONE_JOINED_YOUR_EVENT_TEMPLATE, ctx);
-			message.setText(htmlContent, true);
-		} catch (Exception e) {
-			//LOGGER.error("Message sending exception", e);
-		}
-
-
-		this.mailSender.send(mimeMessage);
+		sendMail(joinedUser,locale,"someone_joined_title",ctx,SOMEONE_JOINED_YOUR_EVENT_TEMPLATE, new Object[]{eventName});
 	}
 
 	@Override
@@ -95,21 +87,8 @@ public class EmailServiceImpl implements EmailService {
 		String kickedUserName = kickedUser.getFirstname() + " " + kickedUser.getLastname();
 		ctx.setVariable("event_name", eventName);
 		ctx.setVariable("email_body", ems.getMessage("user_kicked_body", new Object[]{ownerName, eventName, kickedUserName}, locale));
-		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
-		
-		try {
-			message.setSubject(ems.getMessage("user_kicked_title", new Object[]{eventName}, locale));
-			message.setFrom("SportMatcher");
-			message.setTo(kickedUser.getUsername());
 
-			final String htmlContent = this.htmlTemplateEngine.process(YOU_WERE_KICKED_TEMPLATE, ctx);
-			message.setText(htmlContent, true);
-		} catch (Exception e) {
-			//LOGGER.error("Message sending exception", e);
-		}
-
-		this.mailSender.send(mimeMessage);
+		sendMail(kickedUser, locale, "user_kicked_title",ctx, YOU_WERE_KICKED_TEMPLATE, new Object[]{eventName});
 	}
 
 	@Override
@@ -123,21 +102,8 @@ public class EmailServiceImpl implements EmailService {
 		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("tournament_name", tournamentName);
 		ctx.setVariable("email_body", ems.getMessage("tournament_started_body", new Object[]{userName, tournamentName}, locale));
-		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
 
-		try {
-			message.setSubject(ems.getMessage("tournament_started_title", new Object[]{userName, tournamentName}, locale));
-			message.setFrom("SportMatcher");
-			message.setTo(user.getUsername());
-
-			final String htmlContent = this.htmlTemplateEngine.process(TOURNAMENT_STARTED_TEMPLATE, ctx);
-			message.setText(htmlContent, true);
-		} catch (Exception e) {
-			//LOGGER.error("Message sending exception", e);
-		}
-
-		this.mailSender.send(mimeMessage);
+		sendMail(user, locale, "tournament_started_title", ctx, TOURNAMENT_STARTED_TEMPLATE, new Object[]{tournamentName});
 	}
 
 
