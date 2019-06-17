@@ -40,7 +40,7 @@
 	                  <div>${tournament.tournamentClub.name}</div>
 	                  <div><spring:message code="${tournament.sport}"/></div>
 	                  <div>
-	                      <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+	                      <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_tournament"/></button></a>
 	                  </div>
 	              </div>
 	          </c:forEach>

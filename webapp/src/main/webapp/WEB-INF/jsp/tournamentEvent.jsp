@@ -17,6 +17,7 @@
 		<div class="main-container">
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
+				<a class="link-text detail-box-data w-100" href="<c:url value="/tournament/${tournament.tournamentid}" /> "><spring:message code="go_to_tournament"/></a>
 				<div class="profile-title">
                     <h2>${tournamentEvent.name}</h2>
                 </div>
@@ -29,7 +30,7 @@
 						<div class="detail-box-data"><spring:message code="tournament"/>: ${tournament.name}</div>
 						<div class="detail-box-data"><spring:message code="club"/> - <spring:message code="pitch"/>: ${tournament.tournamentClub.name} - ${tournamentEvent.pitch.name}</div>
 						<div class="detail-box-data">
-							<spring:message code="start"/> - <spring:message code="end"/>: 
+							<spring:message code="start"/> - <spring:message code="end"/>:
 							<fmt:timeZone value="AR">
                   <fmt:parseDate value="${tournamentEvent.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                   <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
