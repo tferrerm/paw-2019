@@ -29,9 +29,10 @@
     			<div class="tbl">
     				<div class="table-header">
                         <div class="table-titles flex-space-around">
-                        	<span><spring:message code="event_name" /></span>
-                        	<span><spring:message code="club" /></span>
-                        	<span><spring:message code="sport" /></span>
+                        	<span class="justify-center flex-1"><spring:message code="event_name" /></span>
+                        	<span class="justify-center flex-1"><spring:message code="club" /></span>
+                        	<span class="justify-center flex-1"><spring:message code="sport" /></span>
+													<span class="justify-center flex-1" />
                         </div>
                     </div>
                     <c:forEach var="tournament" items="${tournaments}">
