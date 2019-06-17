@@ -52,6 +52,9 @@ public class Event {
 	@Column(name = "inscription_ends_at", nullable = true)
 	private Instant endsInscriptionAt;
 	
+	@Column(name = "inscription_success", nullable = true)
+	private boolean inscriptionSuccess;
+	
 	@Column(name = "starts_at", nullable = false)
 	private Instant startsAt;
 	

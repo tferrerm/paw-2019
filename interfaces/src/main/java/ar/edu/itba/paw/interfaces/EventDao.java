@@ -161,4 +161,8 @@ public interface EventDao {
 
 	public int countEventPages(final int totalEventQty);
 
+	public List<Event> getEndedInscriptionProcessingEvents();
+
+	public void setInscriptionSuccess(final Event event);
+
 }
