@@ -20,7 +20,7 @@
 			<div class="profile-title">
 				<h2>${tournament.name}</h2>
 			</div>
-			<div class="detail-container">
+			<div class="detail-container minw-300">
 				<div class="w-100 flex flex-grow justify-center">
 					<h3><spring:message code="teams"/></h3>
 				</div>
@@ -28,7 +28,7 @@
 					<cr:forEach begin="0" end="${tournament.maxTeams - 1}" step="2" var="teamIndex">
 						<div>
 							<div class="flex">
-							<div class="team-description w-100">
+							<div class="team-description minw-100 w-100">
 								<span class="event-info-label">${teams[teamIndex].teamName}</span>
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
@@ -45,7 +45,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="team-description w-100">
+							<div class="team-description minw-100 w-100">
 								<span class="event-info-label">${teams[teamIndex + 1].teamName}</span>
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<form method="POST" action="<c:url value="/admin/tournament/${tournament.tournamentid}/delete"/>">
-			<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_event"/></button>
+			<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_tournament"/></button>
 		</form>
 	</div>
 
