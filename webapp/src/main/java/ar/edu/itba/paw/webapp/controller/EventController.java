@@ -250,7 +250,6 @@ public class EventController extends BaseController {
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());
-        mav.addObject("lastPageNum", es.countFutureEventPages());
         
         List<Event> events = es.findBy(true, Optional.ofNullable(name), 
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
@@ -263,7 +262,7 @@ public class EventController extends BaseController {
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst));
         mav.addObject("totalEventQty", totalEventQty);
-        
+        mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         
         return mav;
