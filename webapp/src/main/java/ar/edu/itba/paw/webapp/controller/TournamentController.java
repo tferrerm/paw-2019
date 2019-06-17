@@ -82,6 +82,7 @@ public class TournamentController extends BaseController {
 		    mav.addObject("teams", teams);
 		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
+		    mav.addObject("roundsAmount", tournament.getRounds());
 		    mav.addObject("userJoined", ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent());
 		    return mav;
 		}

@@ -31,6 +31,17 @@
 						</fmt:timeZone>
 					</span>
 				</div>
+				<span>
+					<spring:message code="event_description" />:
+					<spring:message code="tournament_description_one" />
+					${roundsAmount}
+					<spring:message code="tournament_description_two" />
+					<fmt:timeZone value="AR">
+						<fmt:parseDate value="${tournament.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+						<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+					</fmt:timeZone>
+					<spring:message code="tournament_description_three" />
+				</span>
 			</div>
 			<div class="detail-container minw-300">
 				<div class="w-100 flex flex-grow justify-center">
