@@ -54,6 +54,7 @@ public class TournamentController extends BaseController {
 		if(ts.inscriptionEnded(tournament)) {
 			ModelAndView mav = new ModelAndView("tournament");
 			mav.addObject("tournament",  tournament);
+			mav.addObject("club", tournament.getTournamentClub());
 			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
 			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
 			mav.addObject("roundEvents", roundEvents);
@@ -68,6 +69,7 @@ public class TournamentController extends BaseController {
 		} else {
 			ModelAndView mav = new ModelAndView("tournamentInscription");
 			mav.addObject("tournament",  tournament);
+			mav.addObject("club", tournament.getTournamentClub());
 		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
 			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
 			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {

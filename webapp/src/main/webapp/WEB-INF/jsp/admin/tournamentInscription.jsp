@@ -20,6 +20,18 @@
 			<div class="profile-title">
 				<h2>${tournament.name}</h2>
 			</div>
+			<div class="w-50 mv-10">
+				<span><spring:message code="club" />: ${club.name}</span>
+				<div>
+					<span><spring:message code="end_date"/>: <span>
+					<span>
+						<fmt:timeZone value="AR">
+							<fmt:parseDate value="${tournament.endsInscriptionAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+							<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+						</fmt:timeZone>
+					</span>
+				</div>
+			</div>
 			<div class="detail-container minw-300">
 				<div class="w-100 flex flex-grow justify-center">
 					<h3><spring:message code="teams"/></h3>
