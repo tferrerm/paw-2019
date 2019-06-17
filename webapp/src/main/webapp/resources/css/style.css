@@ -563,6 +563,10 @@ a.logo-admin {
     height: 100%;
 }
 
+.mb-10 {
+  margin-bottom: 10px;
+}
+
 .ml-5 {
     margin-left: 5px;
 }
