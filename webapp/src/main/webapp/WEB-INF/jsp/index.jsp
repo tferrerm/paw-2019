@@ -17,14 +17,14 @@
 		</title>
 	</head>
 	<body>
-	<%@include file="header.jsp" %>
 	<div class="main-container">
 		<div class="registration-container bgd-field-image">
 			<div class="registration-form-container maxw-600">
+				<h1><spring:message code="sport_matcher" /></h1>
 				<span class="registration-intro-title"><spring:message code="registration_intro_title" /></span>
 				<div class="comment-profile-row">
 					<span class="registration-intro-text"><spring:message code="registration_intro_text" /></span>
-					<img src="https://findaplayer.com/img/athletes/tennis-player.png" width="200" height="300" />
+					<img class="registration-image" src="https://findaplayer.com/img/athletes/tennis-player.png" width="200" height="300" />
 				</div>
 			</div>
 			<div class="registration-form-container">
