@@ -17,11 +17,13 @@
 		<div class="main-container">
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
-				<a class="link-text detail-box-data w-100" href="<c:url value="/tournament/${tournament.tournamentid}" /> "><spring:message code="go_to_tournament"/></a>
+				<div class="back-link background-dodgerblue">
+					<a class="color-white" href="<c:url value="/tournament/${tournament.tournamentid}" /> "> <<< <spring:message code="go_to_tournament"/></a>
+				</div>
 				<div class="profile-title">
-                    <h2>${tournamentEvent.name}</h2>
-                </div>
-                <span class="help-message notice"><spring:message code="event_completed_description"/></span>
+          <h2>${tournamentEvent.name}</h2>
+        </div>
+        <span class="help-message notice"><spring:message code="event_completed_description"/></span>
 				<div class="detail-box">
 					<div class="event-detail background-dodgerblue">
 						<div class="color-white event-info-label"><spring:message code="event_detail"/></div>
@@ -58,7 +60,7 @@
 					<div class="flex-grow w-100">
 						<div class=" flex-grow flex-column right-border w-50">
 							<div class="score">
-								${tournamentEvent.firstTeamScore}
+								${tournamentEvent.firstTeamScore ? tournamentEvent.firstTeamScore : " - "}
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
@@ -69,8 +71,8 @@
 							</div>
 						</div>
 						<div class="flex-grow flex-column w-50">
-						    <div class="score">
-								${tournamentEvent.secondTeamScore}
+							<div class="score">
+								${tournamentEvent.secondTeamScore ? tournamentEvent.secondTeamScore : " - "}
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">

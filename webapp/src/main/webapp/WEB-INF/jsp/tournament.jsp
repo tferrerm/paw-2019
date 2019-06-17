@@ -90,7 +90,7 @@
 																</button>
 														</a>
 												</div>
-                        <span class="flex"><spring:message code="showing_pages"/> ${currRoundPage} <spring:message code="of"/> ${maxRoundPage}</span>
+                        <span class="flex create-event"><spring:message code="showing_pages"/> ${currRoundPage} <spring:message code="of"/> ${maxRoundPage}</span>
                         <c:if test="${currRoundPage != maxRoundPage}">
                             <div>
                                 <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage+1}' />">
