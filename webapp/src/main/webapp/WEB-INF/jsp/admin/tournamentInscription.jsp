@@ -68,7 +68,7 @@
 			</div>
 		</div>
 
-			<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_event"/></button>
+			<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_tournament"/></button>
 	</div>
 
 	</body>

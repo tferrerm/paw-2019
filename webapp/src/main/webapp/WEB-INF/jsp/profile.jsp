@@ -82,16 +82,19 @@
 				</form:form>
 			</c:if>
 			<c:forEach var="cmt" items="${comments}">
-                    <div class="comment-row">
-                        <div class="home-header">${cmt.commenter.firstname} ${cmt.commenter.lastname}</div>
-                        <div class="home-header">${cmt.comment}</div>
-                        <div>
-							<fmt:timeZone value="AR">
-								<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
-								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-							</fmt:timeZone>
-                        </div>
+									<div class="comment-container">
+                    <div class="comment-profile-row">
+											<img src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
+                      <a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> ">${cmt.commenter.firstname} ${cmt.commenter.lastname}</a>
+										</div>
+                    <span class="comment-text ml-10 mt-10">${cmt.comment}</span>
+                    <div class="comment-date ml-10 mt-10">
+											<fmt:timeZone value="AR">
+												<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
+												<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+											</fmt:timeZone>
                     </div>
+									</div>
                 </c:forEach>
 				<div class="table-navigator">
                     <c:choose>

@@ -159,6 +159,34 @@ div.background-dodgerblue {
   color: white;
 }
 
+.comment-container {
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-left: 40px;
+  border-bottom: 1px lightgrey solid;
+}
+
+.comment-container:last-child {
+    border-bottom: none;
+}
+
+.comment-profile-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.comment-date {
+  color: grey;
+  font-size: 16px;
+}
+
+.comment-text {
+  font-size: 22px;
+}
+
+
 .comments_form {
   width: 100%;
 }
@@ -577,6 +605,10 @@ a.logo-admin {
 
 .ml-5 {
     margin-left: 5px;
+}
+
+.ml-10 {
+  margin-left: 10px;
 }
 
 .mr-5 {
