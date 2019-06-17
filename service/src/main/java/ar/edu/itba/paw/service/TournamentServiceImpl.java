@@ -107,6 +107,7 @@ public class TournamentServiceImpl implements TournamentService {
 		
     	Instant firstRoundStartsAt = firstRoundDate.plus(startsAtHour, ChronoUnit.HOURS);
     	Instant firstRoundEndsAt = firstRoundDate.plus(endsAtHour, ChronoUnit.HOURS);
+    	System.out.println();
     	
     	if(maxTeams < MIN_TEAMS || maxTeams > MAX_TEAMS)
     		throw new InvalidTeamAmountException();
@@ -114,9 +115,9 @@ public class TournamentServiceImpl implements TournamentService {
     		throw new UnevenTeamAmountException();
     	if(teamSize < MIN_TEAM_SIZE || teamSize > MAX_TEAM_SIZE)
     		throw new InvalidTeamSizeException();
-    	if(firstRoundDate.isBefore(now()))
+    	if(firstRoundStartsAt.isBefore(now()))
     		throw new DateInPastException();
-    	if(firstRoundDate.compareTo(aWeeksTime()) > 0)
+    	if(firstRoundStartsAt.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
@@ -124,7 +125,7 @@ public class TournamentServiceImpl implements TournamentService {
     		throw new HourOutOfRangeException();
     	if(inscriptionEndDate.isBefore(now()))
     		throw new InscriptionDateInPastException();
-    	if(inscriptionEndDate.compareTo(firstRoundDate.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS)) > 0)
+    	if(inscriptionEndDate.compareTo(firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS)) > 0)
     		throw new InscriptionDateExceededException();
     	
     	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), sport, 
@@ -151,7 +152,7 @@ public class TournamentServiceImpl implements TournamentService {
 			TeamAlreadyFilledException, UserAlreadyJoinedException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		} // YA SE UNIO
+		}
 		
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		
@@ -289,6 +290,11 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public List<User> findTeamMembers(final TournamentTeam team) {
 		return td.findTeamMembers(team);
+	}
+
+	@Override
+	public int getCurrentRound(Tournament tournament) {
+		return 1;
 	}
 
 }
