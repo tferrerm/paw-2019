@@ -86,14 +86,17 @@ public class EventController extends BaseController {
 		ModelAndView mav = new ModelAndView("home");
 		
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
-		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
-		
-		mav.addObject("myEvents", myEvents);
-		mav.addObject("scheduleHeaders", scheduleDaysHeader);
-		
-		boolean noParticipations = upcomingEvents.isEmpty();
-		mav.addObject("noParticipations", noParticipations);
+		if(loggedUser() != null) {
+			List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
+			Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents,
+					DAY_LIMIT, MAX_EVENTS_PER_DAY);
+			
+			mav.addObject("myEvents", myEvents);
+			mav.addObject("scheduleHeaders", scheduleDaysHeader);
+			
+			boolean noParticipations = upcomingEvents.isEmpty();
+			mav.addObject("noParticipations", noParticipations);
+		}
 
 	    return mav;
 	}
@@ -398,19 +401,19 @@ public class EventController extends BaseController {
 	    StringBuilder strBuilder = new StringBuilder();
 	    strBuilder.append("?");
 	    if(name != null && !name.isEmpty()) {
-        	strBuilder.append("name=").append(name).append("&");
+        	strBuilder.append("name=").append(encodeUriString(name)).append("&");
         }
         if(establishment != null && !establishment.isEmpty()) {
-        	strBuilder.append("establishment=").append(establishment).append("&");
+        	strBuilder.append("establishment=").append(encodeUriString(establishment)).append("&");
         }
         if(sport != null && !sport.isEmpty()) {
-        	strBuilder.append("sport=").append(sport).append("&");
+        	strBuilder.append("sport=").append(encodeUriString(sport)).append("&");
         }
         if(vacancies != null && !vacancies.isEmpty()) {
-        	strBuilder.append("vacancies=").append(vacancies).append("&");
+        	strBuilder.append("vacancies=").append(encodeUriString(vacancies)).append("&");
         }
         if(date != null && !date.isEmpty()) {
-        	strBuilder.append("date=").append(date);
+        	strBuilder.append("date=").append(encodeUriString(date));
         } else {
         	strBuilder.deleteCharAt(strBuilder.length()-1);
         }

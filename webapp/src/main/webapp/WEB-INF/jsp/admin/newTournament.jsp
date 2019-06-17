@@ -18,6 +18,7 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="create_tournament"/></h2>
+			<span class="help-message notice"><spring:message code="new_tournament_description" /></span>
 			<div class="form-container-tournament">
 				<table class="schedule-table flex">
                     <tr>
@@ -79,7 +80,7 @@
 					</div>
 					<div class="form-field flex-space-between">
                         <div class="form-field-horizontal">
-                            <form:label path="firstRoundDate"><spring:message code="new_event_date"/> *</form:label>
+                            <form:label path="firstRoundDate"><spring:message code="start_date"/> *</form:label>
                             <form:input cssClass="form-control date-input" type="date" path="firstRoundDate" min="${currentDate}" max="${aWeekFromNowDate}"/>
                             <form:errors path="firstRoundDate" cssClass="form-error" element="span"/>
                             <c:if test="${event_in_past}">

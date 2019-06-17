@@ -129,6 +129,8 @@ public class AdminTournamentController extends BaseController {
 			};
 			Collections.sort(teams, cmp);
 		    mav.addObject("teams", teams);
+		    mav.addObject("roundsAmount", tournament.getRounds());
+		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
 		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
 		    return mav;

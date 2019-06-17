@@ -80,7 +80,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").access("hasRole('ROLE_USER')")
                 .antMatchers("/login").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/home").access("hasRole('ROLE_USER')")
                 .antMatchers("/event/*/join", "/event/*/leave", "/event/*/upvote", "/event/*/downvote",
                 		"/event/*/kick-user/*", "/event/*/delete").access("hasRole('ROLE_USER')")
                 .antMatchers("/event/**", "/events/**").permitAll()
@@ -91,7 +90,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/tournament/*/team/*/join", 
                 		"/tournament/*/leave").access("hasRole('ROLE_USER')")
                 .antMatchers("/tournament/**", "/tournaments/**").permitAll()
+                .antMatchers("/home").permitAll()
                 .antMatchers("/","/index").permitAll()
+                // POST method restricted unless overridden above, like /user/create/
                 .antMatchers(HttpMethod.POST).access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
                 .and().formLogin()
                 .usernameParameter("login_username")
