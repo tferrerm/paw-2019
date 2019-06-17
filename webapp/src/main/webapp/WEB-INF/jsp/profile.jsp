@@ -31,9 +31,7 @@
 		</c:choose>
 		<div class="tbl profile-cont">
 			<div class="profile-top">
-				<div class="profile-pic-container">
-					<img src="<c:url value='/user/${user.userid}/picture'/>"/>
-				</div>
+				<img class="profile-pic" src="<c:url value='/user/${user.userid}/picture'/>"/>
 				<div class="stats">
 					<div class="notice" style="padding: 5px 0">
 						<spring:message code="curr_event_participant"/>
@@ -83,11 +81,11 @@
 			</c:if>
 			<c:forEach var="cmt" items="${comments}">
 									<div class="comment-container">
-                    <div class="comment-profile-row">
-											<img src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
+                    <div class="comment-profile-row mv-10">
+											<img class="comment-image" src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
                       <a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> ">${cmt.commenter.firstname} ${cmt.commenter.lastname}</a>
 										</div>
-                    <span class="comment-text ml-10 mt-10">${cmt.comment}</span>
+                    <span class="comment-text ml-10">${cmt.comment}</span>
                     <div class="comment-date ml-10 mt-10">
 											<fmt:timeZone value="AR">
 												<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />

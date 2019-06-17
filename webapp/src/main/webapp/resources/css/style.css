@@ -182,31 +182,16 @@ div.background-dodgerblue {
   font-size: 16px;
 }
 
+.comment-image {
+  border-radius: 50%;
+}
+
 .comment-text {
   font-size: 22px;
 }
 
-
 .comments_form {
   width: 100%;
-}
-
-.comment-row {
-    border-bottom: 1px lightgrey solid;
-    height: 50px;
-    word-break: break-word;
-    padding: 10px;
-}
-
-.comment-row:last-child {
-    border-bottom: none;
-}
-
-.comment-row div {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    width: 30%;
 }
 
 .content-container {
@@ -603,6 +588,10 @@ a.logo-admin {
   margin-bottom: 10px;
 }
 
+.mb-35 {
+  margin-bottom: 35px;
+}
+
 .ml-5 {
     margin-left: 5px;
 }
@@ -617,6 +606,10 @@ a.logo-admin {
 
 .mt-10 {
   margin-top: 10px;
+}
+
+.mv-10 {
+  margin: 10px 0;
 }
 
 .margin-right {
@@ -729,8 +722,10 @@ ul.pitch-item {
     width: 100%;
 }
 
-.profile-pic-container {
+.profile-pic {
   margin: 15px;
+  max-height: 200px;
+  max-width: 200px;
 }
 
 .progress-bar-completion {
