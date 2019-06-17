@@ -24,7 +24,7 @@
 				<span class="registration-intro-title"><spring:message code="registration_intro_title" /></span>
 				<div class="comment-profile-row">
 					<span class="registration-intro-text"><spring:message code="registration_intro_text" /></span>
-					<img class="registration-image" src="https://findaplayer.com/img/athletes/tennis-player.png" width="200" height="300" />
+					<img class="registration-image" src="<c:url value='/resources/css/img/tennis-player.png' />" width="200" height="300" />
 				</div>
 			</div>
 			<div class="registration-form-container">
