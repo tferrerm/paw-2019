@@ -13,7 +13,7 @@
 </head>
 <body>
 <%@include file="header.jsp" %>
-<div class="main-container">
+<div class="main-container bgd-field-image">
   <div class="content-container">
     <div class="profile-title">
       <h2><spring:message code="login"/></h2>
