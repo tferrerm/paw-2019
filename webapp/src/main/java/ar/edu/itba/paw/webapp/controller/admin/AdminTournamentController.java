@@ -93,7 +93,7 @@ public class AdminTournamentController extends BaseController {
 			return retrieveTournament(tournamentid, ts.getMinRoundForResultInput(tournament), form);
 		}
 		
-		if(ts.inscriptionEnded(tournament)) {
+		if(tournament.getInscriptionSuccess()) {
 			ModelAndView mav = new ModelAndView("admin/tournament");
 			mav.addObject("tournament",  tournament);
 			mav.addObject("club", tournament.getTournamentClub());

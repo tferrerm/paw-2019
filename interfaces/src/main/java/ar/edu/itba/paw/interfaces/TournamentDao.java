@@ -57,4 +57,10 @@ public interface TournamentDao {
 
 	public void deleteTournament(final long tournamentid);
 
+	public List<Tournament> getInscriptionProcessTournaments();
+
+	public void setInscriptionSuccess(final Tournament t);
+
+	public int tournamentUserInscriptionCount(final Tournament t);
+
 }

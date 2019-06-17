@@ -51,7 +51,7 @@ public class TournamentController extends BaseController {
 			return retrieveTournament(tournamentid, ts.getCurrentRound(tournament));
 		}
 		
-		if(ts.inscriptionEnded(tournament)) {
+		if(tournament.getInscriptionSuccess()) {
 			ModelAndView mav = new ModelAndView("tournament");
 			mav.addObject("tournament",  tournament);
 			mav.addObject("club", tournament.getTournamentClub());

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -185,7 +184,7 @@ public class TournamentHibernateDao implements TournamentDao {
 						+ tournamentEvent.getEventId());
 			}
 		}
-		
+		System.out.println(tournamentUserInscriptionCount(tournament));
 	}
 	
 	public void deleteTournamentInscriptions(final TournamentTeam team, final User user) {
@@ -377,4 +376,32 @@ public class TournamentHibernateDao implements TournamentDao {
 		em.createQuery("DELETE FROM Tournament t WHERE t.tournamentid = :tournamentid").setParameter("tournamentid", tournament.getTournamentid()).executeUpdate();
 	}
 
+	@Override
+	public List<Tournament> getInscriptionProcessTournaments() {
+		String queryString = "FROM Tournament t WHERE t.inscriptionSuccess = false AND t.endsInscriptionAt < :now ";
+		
+		TypedQuery<Tournament> query = em.createQuery(queryString, Tournament.class);
+		query.setParameter("now", Instant.now());
+		/* For caution */
+		//query.setMaxResults(tournament.getRounds());
+		
+		return query.getResultList();
+	}
+
+	@Override
+	public void setInscriptionSuccess(Tournament t) {
+		Query query = em.createQuery("UPDATE Tournament t SET t.inscriptionSuccess = true WHERE t.tournamentid = :tournamentid, ");
+		query.setParameter("tournamentid", t.getTournamentid());
+		query.executeUpdate();
+	}
+
+	@Override
+	public int tournamentUserInscriptionCount(Tournament t) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		Root<Inscription> from = cq.from(Inscription.class);
+		return em.createQuery(
+				cq.select(cb.countDistinct(from.get("inscriptedUser"))).where(from.get("tournamentTeam").in(t.getTeams()))).getSingleResult().intValue();
+	}
+	
 }

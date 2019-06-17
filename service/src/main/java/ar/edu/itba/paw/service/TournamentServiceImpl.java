@@ -15,6 +15,10 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +48,8 @@ import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 
+@EnableAsync
+@EnableScheduling
 @Service
 public class TournamentServiceImpl implements TournamentService {
 	
@@ -335,6 +341,21 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new InscriptionDateInPastException();
 		}
 		td.deleteTournament(tournamentid);
+	}
+	
+	@Async
+	@Scheduled(fixedDelay = 10000)
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void checkTournamentInscriptions() {
+		List<Tournament> inscriptionTournaments = td.getInscriptionProcessTournaments();
+		for(Tournament t : inscriptionTournaments) {
+			if(td.tournamentUserInscriptionCount(t) == t.getTeamSize() * t.getMaxTeams()) {
+				td.setInscriptionSuccess(t);
+			} else {
+				td.deleteTournament(t.getTournamentid());
+			}
+		}
 	}
 
 }

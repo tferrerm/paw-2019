@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS tournaments(
   max_teams INTEGER NOT NULL,
   team_size INTEGER NOT NULL,
   inscription_ends_at TIMESTAMP NOT NULL,
-  teams_filled BOOLEAN NOT NULL DEFAULT FALSE,
+  inscription_success BOOLEAN NOT NULL DEFAULT FALSE,
   tournament_created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (clubid) REFERENCES clubs ON DELETE CASCADE
 );

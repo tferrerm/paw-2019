@@ -82,4 +82,6 @@ public interface TournamentService {
 
 	public void deleteTournament(final long tournamentid) throws InscriptionDateInPastException;
 	
+	public void checkTournamentInscriptions();
+	
 }
