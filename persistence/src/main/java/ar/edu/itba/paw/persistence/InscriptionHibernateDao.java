@@ -73,7 +73,7 @@ public class InscriptionHibernateDao implements InscriptionDao {
 	public void deleteInscription(final long eventid, final long userid) {
 		Inscription inscription = findByIds(eventid, userid)
 				.orElseThrow(NoSuchElementException::new);
-		em.remove(inscription);
+		em.createQuery("DELETE FROM Inscription i WHERE i = :inscription").setParameter("inscription", inscription).executeUpdate();
 	}
 
 	@Override

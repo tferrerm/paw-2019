@@ -38,7 +38,7 @@ import ar.edu.itba.paw.model.User;
 @Repository
 public class EventHibernateDao implements EventDao {
 	
-	private static final int MAX_ROWS = 10;
+	private static final int MAX_ROWS = 1;
 	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
@@ -178,14 +178,14 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public List<Event> findBy(final Optional<String> eventName, 
+	public List<Event> findBy(final boolean onlyJoinable, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies, 
 			final Optional<Instant> date, final int pageNum) {
 		
 		Map<String, Object> paramsMap = new HashMap<>();
 		StringBuilder idQueryString = new StringBuilder("SELECT eventid ");
-		idQueryString.append(getFilterQueryEndString(paramsMap, eventName, clubName, 
+		idQueryString.append(getFilterQueryEndString(paramsMap, onlyJoinable, eventName, clubName, 
 				sport, organizer, vacancies, date));
 		idQueryString.append(" ORDER BY t.starts_at ASC, t.eventid ASC ");
 		
@@ -217,14 +217,14 @@ public class EventHibernateDao implements EventDao {
 	}
 
 	@Override
-	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+	public Integer countFilteredEvents(final boolean onlyJoinable, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies, 
 			final Optional<Instant> date) {
 		
 		Map<String, Object> paramsMap = new HashMap<>();
 		StringBuilder idQueryString = new StringBuilder("SELECT count(eventid) ");
-		idQueryString.append(getFilterQueryEndString(paramsMap, eventName, clubName, 
+		idQueryString.append(getFilterQueryEndString(paramsMap, onlyJoinable, eventName, clubName, 
 				sport, organizer, vacancies, date));
 		
 		Query idQuery = em.createNativeQuery(idQueryString.toString());
@@ -236,7 +236,7 @@ public class EventHibernateDao implements EventDao {
 	}
 	
 	private String getFilterQueryEndString(Map<String, Object> paramsMap,
-			final Optional<String> eventName, final Optional<String> clubName, 
+			final boolean onlyJoinable, final Optional<String> eventName, final Optional<String> clubName, 
 			final Optional<String> sport, final Optional<String> organizer, 
 			final Optional<Integer> vacancies, final Optional<Instant> date) {
 		
@@ -257,7 +257,6 @@ public class EventHibernateDao implements EventDao {
 		int paramNum = 0;
 		for(Filter param : params) {
 			if(param.getValue().isPresent()) {
-				paramNum = paramsMap.size();
 				switch(param.getName()) {
 				case "customVacanciesFilter":
 					queryString.append(buildPrefix(paramNum));
@@ -277,7 +276,16 @@ public class EventHibernateDao implements EventDao {
 					break;
 				}
 				paramsMap.put(Filter.getParamName() + paramNum, param.getValue().get());
+				paramNum = paramsMap.size();
 			}
+		}
+		if(onlyJoinable) {
+			queryString.append(buildPrefix(paramNum));
+			queryString.append(" inscription_ends_at > :now ");
+			paramsMap.put("now", Timestamp.from(Instant.now()));
+			paramNum++;
+			queryString.append(buildPrefix(paramNum));
+			queryString.append("0 != max_participants - (SELECT count(*) FROM events_users WHERE eventid = t.eventid) ");
 		}
 		
 		return queryString.toString();
@@ -437,6 +445,15 @@ public class EventHibernateDao implements EventDao {
 		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;
+		return pageCount;
+	}
+
+	@Override
+	public int countEventPages(final int totalEventQty) {
+		int pageCount = totalEventQty / MAX_ROWS;
+		if(totalEventQty % MAX_ROWS != 0)
+			pageCount += 1;
+		
 		return pageCount;
 	}
 

@@ -111,7 +111,7 @@ div.background-dodgerblue {
 }
 
 .bgd-field-image {
-  background-image: url("https://images.all-free-download.com/images/graphiclarge/green_grass_02_hd_picture_166104.jpg");
+  background-image: url("img/background.jpg");
 }
 
 .bottom-home-container {
@@ -187,6 +187,10 @@ div.background-dodgerblue {
 
 .club-table-size {
     min-width: 75%;
+}
+
+.color-black {
+  color: black;
 }
 
 .color-dodgerblue {
@@ -652,6 +656,10 @@ a.logo-admin {
 
 .mt-10 {
   margin-top: 10px;
+}
+
+.mt-30 {
+  margin-top: 30px;
 }
 
 .mv-10 {

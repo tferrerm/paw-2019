@@ -14,10 +14,8 @@
 <body>
 <div class="main-container bgd-field-image">
   <div class="content-container">
-    <div class="profile-title">
-      <h2 class="color-white"><spring:message code="login"/></h2>
-    </div>
-    <div class="form-container">
+    <div class="form-container mt-30">
+    <h1 class="event-info-label color-black justify-center mt-30"><spring:message code="sport_matcher" /></h1>
     <c:url value="/login" var="loginUrl"/>
     <form action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
       <div>
@@ -40,8 +38,8 @@
       </c:if>
     </form>
     <div class="bottom-message mb-10">
-      <span><spring:message code="already_have_account"/></span>
-      <a class="link-text" href="<c:url value='/' />"><spring:message code="register"/></a>
+      <span><spring:message code="not_account"/></span>
+      <a class="link-text" href="<c:url value='/' />"><spring:message code="create_account"/></a>
     </div>
   </body>
 </html>
