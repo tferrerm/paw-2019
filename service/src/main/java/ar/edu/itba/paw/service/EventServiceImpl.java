@@ -26,6 +26,8 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionDateExceededException;
+import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -60,6 +62,7 @@ public class EventServiceImpl implements EventService {
 			"day_fri", "day_sat", "day_sun"};
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
+	private static final int INSCRIPTION_END_FROM_EVENT_DAY_DIFFERENCE = 1;
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 
@@ -243,10 +246,10 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Event create(final String name, final User owner, final Pitch pitch,
 			final String description, final int maxParticipants, final Instant date, 
-			final int startsAtHour, final int endsAtHour) 
+			final int startsAtHour, final int endsAtHour, final Instant inscriptionEndDate) 
 					throws 	DateInPastException,
 							MaximumDateExceededException, EndsBeforeStartsException, 
-							EventOverlapException, HourOutOfRangeException {
+							EventOverlapException, HourOutOfRangeException, InscriptionDateExceededException, InscriptionDateInPastException {
 		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
 		
     	if(startsAtDate.isBefore(Instant.now()))
@@ -257,9 +260,13 @@ public class EventServiceImpl implements EventService {
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException();
+    	if(inscriptionEndDate.isBefore(Instant.now()))
+    		throw new InscriptionDateInPastException();
+    	if(inscriptionEndDate.isAfter((startsAtDate.minus(INSCRIPTION_END_FROM_EVENT_DAY_DIFFERENCE, ChronoUnit.DAYS))))
+    		throw new InscriptionDateExceededException();
 
 		return ed.create(name, owner, pitch, description, maxParticipants, 
-				startsAtDate, date.plus(endsAtHour, ChronoUnit.HOURS));
+				startsAtDate, date.plus(endsAtHour, ChronoUnit.HOURS), inscriptionEndDate);
 	}
 	
 	private Instant today() {

@@ -27,6 +27,8 @@ import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionDateExceededException;
+import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -297,6 +299,7 @@ public class EventController extends BaseController {
     	Integer sa = tryInteger(form.getStartsAtHour());
     	Integer ea = tryInteger(form.getEndsAtHour());
     	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);System.out.println(form.getDate());System.out.println(date);
+    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	if(mp == null)
     		errors.rejectValue("maxParticipants", "wrong_int_format");
     	if(sa == null)
@@ -305,6 +308,8 @@ public class EventController extends BaseController {
     		errors.rejectValue("endsAtHour", "wrong_int_format");
     	if(date == null)
     		errors.rejectValue("date", "wrong_date_format");
+    	if(inscriptionEndDate == null)
+    		errors.rejectValue("inscriptionEndDate", "wrong_date_format");
 
     	if(errors.hasErrors()) {
     		return seePitch(pitchId, form);
@@ -314,7 +319,7 @@ public class EventController extends BaseController {
     	Event ev = null;
     	try {
 	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-	    			mp, date, sa, ea);
+	    			mp, date, sa, ea, inscriptionEndDate);
     	} catch(EndsBeforeStartsException e) {
     		return eventCreationError("ends_before_starts", pitchId, form);
     	} catch(DateInPastException e) {
@@ -325,6 +330,10 @@ public class EventController extends BaseController {
     		return eventCreationError("event_overlap", pitchId, form);
     	} catch(HourOutOfRangeException e) {
     		return eventCreationError("hour_out_of_range", pitchId, form);
+    	} catch(InscriptionDateInPastException e) {
+    		return eventCreationError("inscription_date_in_past", pitchId, form);
+    	} catch(InscriptionDateExceededException e) {
+    		return eventCreationError("inscription_date_exceeded", pitchId, form);
     	}
     	return new ModelAndView("redirect:/event/" + ev.getEventId());
     }

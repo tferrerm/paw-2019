@@ -28,6 +28,9 @@ public class NewEventForm {
 	@NotBlank
 	@Pattern(regexp = "[0-9]?[0-9]")
 	private String endsAtHour;
+	
+	@NotBlank
+	private String inscriptionEndDate;
 
 	public String getName() {
 		return name;
@@ -75,6 +78,14 @@ public class NewEventForm {
 
 	public void setEndsAtHour(String endsAtHour) {
 		this.endsAtHour = endsAtHour;
+	}
+
+	public String getInscriptionEndDate() {
+		return inscriptionEndDate;
+	}
+
+	public void setInscriptionEndDate(String inscriptionEndDate) {
+		this.inscriptionEndDate = inscriptionEndDate;
 	}
 	
 }

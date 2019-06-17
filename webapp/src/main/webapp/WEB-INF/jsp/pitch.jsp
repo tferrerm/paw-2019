@@ -140,6 +140,21 @@
                                         <form:errors path="endsAtHour" cssClass="form-error" element="span"/>
                                     </div>
                                 </div>
+                                <div>
+                                    <form:label path="inscriptionEndDate"><spring:message code="end_date"/> *</form:label>
+                                    <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate"/>
+                                    <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
+                                    <c:if test="${inscription_date_in_past}">
+                                        <span class="form-error">
+                                            <spring:message code="inscription_date_in_past"/>
+                                        </span>
+                                    </c:if>
+                                    <c:if test="${inscription_date_exceeded}">
+                                        <span class="form-error">
+                                            <spring:message code="inscription_date_exceeded"/>
+                                        </span>
+                                    </c:if>
+                                </div>
                                 <div class="submit-container">
                                     <button type="submit" class="btn btn-primary submit-btn"><spring:message code="create"/></button>
                                 </div>
