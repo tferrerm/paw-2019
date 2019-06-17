@@ -295,13 +295,12 @@ public class EventHibernateDao implements EventDao {
 
 	@Override
 	public int countFutureEventPages() {
-		String queryString = "SELECT count(e) FROM Event AS e "
-				+ " WHERE e.startsAt > :now";
-		 
-		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
-		query.setParameter("now", Instant.now());
+		String queryString = "SELECT count(eventid) FROM events WHERE starts_at > :now";
 		
-		int rows = query.getSingleResult().intValue();
+		Query query = em.createNativeQuery(queryString);
+		query.setParameter("now", Timestamp.from(Instant.now()));
+
+		int rows = ((BigInteger) query.getSingleResult()).intValue();
 		int pageCount = rows / MAX_ROWS;
 		if(rows % MAX_ROWS != 0)
 			pageCount += 1;

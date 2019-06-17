@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
-import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
@@ -35,6 +35,7 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
+import sun.security.jca.GetInstance.Instance;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -242,9 +243,11 @@ public class EventServiceImpl implements EventService {
 					throws 	DateInPastException,
 							MaximumDateExceededException, EndsBeforeStartsException, 
 							EventOverlapException, HourOutOfRangeException {
-    	if(date.isBefore(Instant.now().atZone(ZoneId.of(TIME_ZONE)).toInstant()))
+		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
+		
+    	if(startsAtDate.isBefore(Instant.now()))
     		throw new DateInPastException();
-    	if(date.compareTo(aWeeksTime()) > 0)
+    	if(startsAtDate.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
@@ -252,7 +255,7 @@ public class EventServiceImpl implements EventService {
     		throw new HourOutOfRangeException();
 
 		return ed.create(name, owner, pitch, description, maxParticipants, 
-				date.plus(startsAtHour, ChronoUnit.HOURS), date.plus(endsAtHour, ChronoUnit.HOURS));
+				startsAtDate, date.plus(endsAtHour, ChronoUnit.HOURS));
 	}
 	
 	private Instant today() {

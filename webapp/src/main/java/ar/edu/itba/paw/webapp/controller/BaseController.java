@@ -52,7 +52,7 @@ public class BaseController {
     	return i;
     }
     
-    public Instant tryInstant(String str, String timezone) {
+    public Instant tryInstantStartOfDay(String str, String timezone) {
     	if(str == null || timezone == null)
     		return null;
     	Instant i = null;

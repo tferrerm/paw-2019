@@ -107,7 +107,6 @@ public class TournamentServiceImpl implements TournamentService {
 		
     	Instant firstRoundStartsAt = firstRoundDate.plus(startsAtHour, ChronoUnit.HOURS);
     	Instant firstRoundEndsAt = firstRoundDate.plus(endsAtHour, ChronoUnit.HOURS);
-    	System.out.println();
     	
     	if(maxTeams < MIN_TEAMS || maxTeams > MAX_TEAMS)
     		throw new InvalidTeamAmountException();

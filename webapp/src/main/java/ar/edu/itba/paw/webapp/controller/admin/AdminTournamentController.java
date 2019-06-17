@@ -207,7 +207,7 @@ public class AdminTournamentController extends BaseController {
     	
     	Integer maxTeams = tryInteger(form.getMaxTeams());
     	Integer teamSize = tryInteger(form.getTeamSize());
-    	Instant firstRoundDate = tryInstant(form.getFirstRoundDate(), TIME_ZONE);
+    	Instant firstRoundDate = tryInstantStartOfDay(form.getFirstRoundDate(), TIME_ZONE);
     	Integer startsAt = tryInteger(form.getStartsAtHour());
     	Integer endsAt = tryInteger(form.getEndsAtHour());
     	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
