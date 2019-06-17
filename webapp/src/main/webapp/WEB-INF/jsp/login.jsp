@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="main-container bgd-field-image">
-  <div class="content-container">
+  <div class="content-container justify-center">
     <div class="form-container mt-30">
     <h1 class="event-info-label color-black justify-center mt-30"><spring:message code="sport_matcher" /></h1>
     <c:url value="/login" var="loginUrl"/>
