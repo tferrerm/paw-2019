@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -362,11 +363,18 @@ public class TournamentHibernateDao implements TournamentDao {
 	@Override
 	public void deleteTournament(final long tournamentid) {
 		Tournament tournament = em.find(Tournament.class, tournamentid);
-		/*for(TournamentTeam team : tournament.getTeams())
-			em.createQuery("DELETE FROM Inscription i WHERE i.tournamentTeam.teamid = :teamid").setParameter("teamid", team.getTeamid()).executeUpdate();
-		em.createQuery("DELETE FROM TournamentEvent te WHERE te.tournament.tournamentid = :tournamentid").setParameter("tournamentid", tournamentid).executeUpdate();
-		em.createQuery("DELETE FROM TournamentTeam tt WHERE tt.tournament.tournamentid = :tournamentid").setParameter("tournamentid", tournamentid).executeUpdate();
-		em.remove(tournament);*/
+		
+		/* Delete associated Inscriptions */
+		em.createQuery("DELETE FROM Inscription i WHERE i.tournamentTeam IN :teams").setParameter("teams", tournament.getTeams()).executeUpdate();
+		
+		/* Delete associated TournamentEvents */
+		em.createQuery("DELETE FROM TournamentEvent te WHERE te.firstTeam IN :teams").setParameter("teams", tournament.getTeams()).executeUpdate();
+		
+		/* Delete associated TournamentTeams */
+		em.createQuery("DELETE FROM TournamentTeam tt WHERE tt.tournament.tournamentid = :tournamentid").setParameter("tournamentid", tournament.getTournamentid()).executeUpdate();
+		
+		/* Delete Tournament */
+		em.createQuery("DELETE FROM Tournament t WHERE t.tournamentid = :tournamentid").setParameter("tournamentid", tournament.getTournamentid()).executeUpdate();
 	}
 
 }

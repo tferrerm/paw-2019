@@ -13,6 +13,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +41,8 @@ import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 @Service
+@EnableAsync
+@EnableScheduling
 public class EventServiceImpl implements EventService {
 
 	@Autowired
@@ -411,6 +417,14 @@ public class EventServiceImpl implements EventService {
 		if(userid <= 0)
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		return ed.countUserOwnedPages(onlyFuture, userid);
+	}
+	
+	@Async
+	@Scheduled(fixedDelay = 1000)
+	@Override
+	public void checkUncompletedEvents() {
+		//Thread.sleep(4000);
+		//System.out.println("HOLA");
 	}
 
 }

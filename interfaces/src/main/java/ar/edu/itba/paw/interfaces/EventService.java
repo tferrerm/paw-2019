@@ -210,4 +210,6 @@ public interface EventService {
 	public void cancelEvent(final Event event, final long userid) 
 			throws UserNotAuthorizedException, DateInPastException;
 
+	public void checkUncompletedEvents();
+
 }
