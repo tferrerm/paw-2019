@@ -55,29 +55,25 @@
 						</div>
 					</c:forEach>
 				</div>
-				<div class="table-navigator">
+				<div class="table-navigator w-100 justify-center">
 					<c:choose>
-	                    <c:when test="${clubQty > 0}">
-							<c:if test="${pageNum != 1}">
-								<div>
-									<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-									<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
-								</div>
-							</c:if>
+            <c:when test="${clubQty > 0}">
+							<div class="${pageNum != 1 ? "" : "hidden"}">
+								<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
+								<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+							</div>
 							<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
-	                    	<c:if test="${pageNum != lastPageNum}">
-								<div>
-									<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
-									<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
-								</div>
-							</c:if>
+							<div class="${pageNum != lastPageNum ? "" : "hidden"}">
+								<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
+								<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
+							</div>
 						</c:when>
-	                    <c:otherwise>
-	                        <div class="notice">
-	                            <spring:message code="no_results"/>
-	                        </div>
-	                    </c:otherwise>
-	                </c:choose>
+            <c:otherwise>
+                <div class="notice">
+                    <spring:message code="no_results"/>
+                </div>
+            </c:otherwise>
+        </c:choose>
 				</div>
 			</div>
 		</div>

@@ -75,39 +75,35 @@
                         </div>
                     </c:forEach>
     			</div>
-    			<div class="table-navigator">
-                    <c:choose>
-                        <c:when test="${pitchQty > 0}">
-                            <c:if test="${pageNum != 1}">
-                				<div>
-                                    <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-                                    <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
-                                </div>
-                            </c:if>
-                            <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchQty}</span>
-                            <c:if test="${pageNum != lastPageNum}">
-                				<div>
-                                    <a href="<c:url value='/pitches/${page+1}${queryString}' />">
-                                        <button type="button" class="btn btn-secondary">
-                                            <spring:message code="next"/>
-                                        </button>
-                                    </a>
-                                    <a href="<c:url value='/pitches/${lastPageNum}${queryString}' />">
-                                        <button type="button" class="btn btn-secondary">
-                                            <spring:message code="last"/>
-                                        </button>
-                                    </a>
-                                </div>
-                            </c:if>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="notice">
-                                <spring:message code="no_results"/>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
+    			<div class="table-navigator w-100 justify-center">
+            <c:choose>
+                <c:when test="${pitchQty > 0}">
+    								<div class="${pageNum != 1 ? "" : "hidden"}">
+                        <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
+                        <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+                    </div>
+                    <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchQty}</span>
+    								<div class="${pageNum != lastPageNum ? "" : "hidden"}">
+                      <a href="<c:url value='/pitches/${page+1}${queryString}' />">
+                        <button type="button" class="btn btn-secondary">
+                          <spring:message code="next"/>
+                        </button>
+                      </a>
+                      <a href="<c:url value='/pitches/${lastPageNum}${queryString}' />">
+                        <button type="button" class="btn btn-secondary">
+                            <spring:message code="last"/>
+                        </button>
+                      </a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="notice">
+                        <spring:message code="no_results"/>
+                    </div>
+                </c:otherwise>
+            </c:choose>
     			</div>
-            </div>
         </div>
-    </body>
+    </div>
+  </body>
 </html>

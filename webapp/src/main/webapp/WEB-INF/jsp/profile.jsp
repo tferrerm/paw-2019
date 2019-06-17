@@ -94,41 +94,37 @@
                     </div>
 									</div>
                 </c:forEach>
-				<div class="table-navigator">
-                    <c:choose>
-                        <c:when test="${commentQty > 0}">
-                            <c:if test="${currCommentPage != 1}">
-                				<div>
-                                    <a href="<c:url value='/user/${userid}?cmt=1' />">
-                                        <button type="button" class="btn btn-secondary">
-                                            <spring:message code="first"/>
-                                        </button>
-                                    </a>
-                                    <a href="<c:url value='/user/${userid}?cmt=${currCommentPage-1}' />">
-                                        <button type="button" class="btn btn-secondary">
-                                            <spring:message code="back"/>
-                                        </button>
-                                    </a>
-                                </div>
-                            </c:if>
-                            <span class="flex"><spring:message code="showing_items"/> ${commentsPageInitIndex}-${commentsPageInitIndex + commentQty - 1} <spring:message code="of"/> ${totalCommentQty}</span>
-                            <c:if test="${currCommentPage != maxCommentPage}">
-                				<div>
-                                    <a href="<c:url value='/user/${userid}?cmt=${currCommentPage+1}' />">
-                                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-                                    </a>
-                                    <a href="<c:url value='/user/${userid}?cmt=${maxCommentPage}' />">
-                                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-                                    </a>
-                                </div>
-                            </c:if>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="notice">
-                                <spring:message code="no_comments"/>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
+				<div class="table-navigator w-100 justify-center">
+            <c:choose>
+                <c:when test="${commentQty > 0}">
+    								<div class="${currCommentPage != 1 ? "" : "hidden"}">
+                        <a href="<c:url value='/user/${userid}?cmt=1' />">
+                            <button type="button" class="btn btn-secondary">
+                                <spring:message code="first"/>
+                            </button>
+                        </a>
+                        <a href="<c:url value='/user/${userid}?cmt=${currCommentPage-1}' />">
+                            <button type="button" class="btn btn-secondary">
+                                <spring:message code="back"/>
+                            </button>
+                        </a>
+                    </div>
+                    <span class="flex"><spring:message code="showing_items"/> ${commentsPageInitIndex}-${commentsPageInitIndex + commentQty - 1} <spring:message code="of"/> ${totalCommentQty}</span>
+    								<div class="${currCommentPage != maxCommentPage ? "" : "hidden"}">
+                        <a href="<c:url value='/user/${userid}?cmt=${currCommentPage+1}' />">
+                            <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                        </a>
+                        <a href="<c:url value='/user/${userid}?cmt=${maxCommentPage}' />">
+                            <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                        </a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="notice">
+                        <spring:message code="no_comments"/>
+                    </div>
+                </c:otherwise>
+            </c:choose>
     			</div>
 			</div>
 		</div>
