@@ -20,6 +20,7 @@
 			<div class="profile-title">
 				<h2>${tournament.name}</h2>
 			</div>
+			<span class="help-message notice"><spring:message code="tournament_inscription"/></span>
 			<div class="w-50 mv-10">
 				<div class="comment-profile-row">
 					<span class="event-info-label"><spring:message code="club" /></span>
