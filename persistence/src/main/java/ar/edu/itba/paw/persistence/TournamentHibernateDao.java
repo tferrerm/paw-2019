@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -363,36 +364,16 @@ public class TournamentHibernateDao implements TournamentDao {
 	public void deleteTournament(final long tournamentid) {
 		Tournament tournament = em.find(Tournament.class, tournamentid);
 		
-		String queryString = "FROM Inscription AS i "
-				+ " WHERE i.tournamentTeam.teamid = :teamid";
+		/* Delete associated Inscriptions */
+		em.createQuery("DELETE FROM Inscription i WHERE i.tournamentTeam IN :teams").setParameter("teams", tournament.getTeams()).executeUpdate();
 		
-		for(TournamentTeam team : tournament.getTeams()) {
-			TypedQuery<Inscription> query = em.createQuery(queryString, Inscription.class);
-			query.setParameter("teamid", team.getTeamid());
-			for(Inscription i : query.getResultList())
-				em.remove(i);
-		}
+		/* Delete associated TournamentEvents */
+		em.createQuery("DELETE FROM TournamentEvent te WHERE te.firstTeam IN :teams").setParameter("teams", tournament.getTeams()).executeUpdate();
 		
-		List<Long> teamIds = new ArrayList<>();
-		for(TournamentTeam t : tournament.getTeams())
-			teamIds.add(t.getTeamid());
+		/* Delete associated TournamentTeams */
+		em.createQuery("DELETE FROM TournamentTeam tt WHERE tt.tournament.tournamentid = :tournamentid").setParameter("tournamentid", tournament.getTournamentid()).executeUpdate();
 		
-				CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TournamentEvent> cq = cb.createQuery(TournamentEvent.class);
-		Root<TournamentEvent> from = cq.from(TournamentEvent.class);
-		final TypedQuery<TournamentEvent> query = em.createQuery(
-				cq.select(from).where(from.get("firstTeam").in(tournament.getTeams()))
-			);
-		
-		List<TournamentEvent> events = query.getResultList();System.out.println(events);
-		List<Long> eventIds = new ArrayList<>();
-		for(TournamentEvent te : events)
-			eventIds.add(te.getEventId());
-		
-		em.createQuery("DELETE FROM TournamentEvent te WHERE te.eventid IN :ids").setParameter("ids", eventIds).executeUpdate();
-		
-		em.createQuery("DELETE FROM TournamentTeam tt WHERE tt.teamid IN :ids").setParameter("ids", teamIds).executeUpdate();
-		
+		/* Delete Tournament */
 		em.createQuery("DELETE FROM Tournament t WHERE t.tournamentid = :tournamentid").setParameter("tournamentid", tournament.getTournamentid()).executeUpdate();
 	}
 
