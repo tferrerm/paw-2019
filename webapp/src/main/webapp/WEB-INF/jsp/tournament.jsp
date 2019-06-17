@@ -27,11 +27,11 @@
                 <div class="profile-title">
                     <h2>${tournament.name}</h2>
                 </div>
-                <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
+                <span class="help-message notice"><spring:message code="tournament_description"/></span>
     			<div class="tbl">
 						<div class="background-dodgerblue table-header">
-                <span class="justify-center flex-1 color-white mt-10"><spring:message code="teams" /></span>
-                <span class="justify-center flex-1 color-white mt-10"><spring:message code="score" /></span>
+                <span class="justify-center flex-1 color-white mt-10 event-info-label"><spring:message code="teams" /></span>
+                <span class="justify-center flex-1 color-white mt-10 event-info-label"><spring:message code="score" /></span>
             </div>
             <c:forEach var="teamEntry" items="${teamsScoresMap}">
                 <div class="custom-row">
@@ -41,7 +41,7 @@
             </c:forEach>
     			</div>
                 <div class="tbl profile-cont">
-                    <span><spring:message code="round" /> ${currRoundPage}</span>
+                    <span class="event-info-label notice"><spring:message code="round" /> ${currRoundPage}</span>
                     <fmt:timeZone value="AR">
                         <fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                         <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
@@ -72,7 +72,7 @@
                             <span>${event.name}</span>
                         </div>
                         <div>
-                            <a href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                            <a href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_tournament"/></button></a>
                         </div>
                     </c:forEach>
                     <div class="table-navigator">
