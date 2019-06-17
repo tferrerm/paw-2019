@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS events(
   description VARCHAR(500),
   max_participants INTEGER NOT NULL,
   inscription_ends_at TIMESTAMP,
+  inscription_success BOOLEAN DEFAULT FALSE,
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
   event_created_at TIMESTAMP NOT NULL,

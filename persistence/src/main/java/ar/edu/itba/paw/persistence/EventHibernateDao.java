@@ -457,4 +457,32 @@ public class EventHibernateDao implements EventDao {
 		return pageCount;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> getEndedInscriptionProcessingEvents() {
+		String queryString = "SELECT eventid FROM events WHERE inscription_success = false AND inscription_ends_at < :now ";
+		Query idQuery = em.createNativeQuery(queryString);
+		idQuery.setParameter("now", Timestamp.from(Instant.now()));
+		List<Long> eventIds = idQuery.getResultList();
+		
+		if(eventIds.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(eventIds)).distinct(true)
+			);
+		
+		return query.getResultList();
+	}
+
+	@Override
+	public void setInscriptionSuccess(Event event) {
+		Query query = em.createQuery("UPDATE Event e SET e.inscriptionSuccess = true WHERE e.eventid = :eventid, ");
+		query.setParameter("eventid", event.getEventId());
+		query.executeUpdate();
+	}
+
 }

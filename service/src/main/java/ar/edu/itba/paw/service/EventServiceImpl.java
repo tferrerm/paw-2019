@@ -427,11 +427,18 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Async
-	@Scheduled(fixedDelay = 1000)
+	@Scheduled(fixedDelay = 1800000) /* Runs every half hour */
+	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void checkUncompletedEvents() {
-		//Thread.sleep(4000);
-		//System.out.println("HOLA");
+		List<Event> inscriptionEvents = ed.getEndedInscriptionProcessingEvents();
+		for(Event event : inscriptionEvents) {
+			if(event.getInscriptions().size() == event.getMaxParticipants()) {
+				ed.setInscriptionSuccess(event);
+			} else {
+				ed.deleteEvent(event.getEventId());
+			}
+		}
 	}
 
 	@Override
