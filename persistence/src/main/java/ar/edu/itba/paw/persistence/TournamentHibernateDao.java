@@ -336,4 +336,27 @@ public class TournamentHibernateDao implements TournamentDao {
 			).getSingleResult());
 	}
 
+	@Override
+	public int getPageInitialTournamentIndex(int pageNum) {
+		return (pageNum - 1) * MAX_ROWS + 1;
+	}
+
+	@Override
+	public int countTournamentTotal() {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		Root<Tournament> from = cq.from(Tournament.class);
+		return em.createQuery(
+				cq.select(cb.count(from.get("tournamentid")))).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countTotalTournamentPages() {
+		int rows = countTournamentTotal();
+		int pageCount = rows / MAX_ROWS;
+		if(rows % MAX_ROWS != 0)
+			pageCount += 1;
+		return pageCount;
+	}
+
 }

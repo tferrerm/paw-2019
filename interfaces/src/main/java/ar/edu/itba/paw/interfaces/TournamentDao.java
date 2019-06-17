@@ -49,4 +49,10 @@ public interface TournamentDao {
 
 	public Optional<Integer> getCurrentRound(final Tournament tournament);
 
+	public int getPageInitialTournamentIndex(final int pageNum);
+
+	public int countTournamentTotal();
+
+	public int countTotalTournamentPages();
+
 }

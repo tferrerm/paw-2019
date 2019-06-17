@@ -80,6 +80,7 @@ public class TournamentController extends BaseController {
 		    mav.addObject("teams", teams);
 		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
 		    mav.addObject("teamsUsers", teamsUsers);
+		    mav.addObject("userJoined", ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent());
 		    return mav;
 		}
     }
@@ -90,25 +91,14 @@ public class TournamentController extends BaseController {
 			@PathVariable("pageNum") final int pageNum) {
 
         ModelAndView mav = new ModelAndView("tournamentList");
-//
-//        try {
-	        List<Tournament> tournaments = ts.findBy(pageNum);
-
-	        mav.addObject("tournaments", tournaments);
-//	        mav.addObject("eventQty", events.size());
-//
-//	        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name),
-//	        		Optional.ofNullable(establishment), Optional.ofNullable(sport), Optional.empty(),
-//	        		Optional.ofNullable(vacancies), Optional.ofNullable(date));
-//	        mav.addObject("totalEventQty", totalEventQty);
-//        } catch(InvalidDateFormatException e) {
-//        	mav.addObject("invalid_date_format", true);
-//        	return mav;
-//        } catch(InvalidVacancyNumberException e) {
-//        	mav.addObject("invalid_number_format", true);
-//        	return mav;
-//        }
-//
+        
+	    List<Tournament> tournaments = ts.findBy(pageNum);
+	    mav.addObject("tournaments", tournaments);
+	    mav.addObject("tournamentQty", tournaments.size());
+		mav.addObject("page", pageNum);
+		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
+		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
+		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
         
         return mav;
     }
