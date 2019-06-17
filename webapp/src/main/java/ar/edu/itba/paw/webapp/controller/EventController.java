@@ -88,9 +88,6 @@ public class EventController extends BaseController {
 		boolean noParticipations = upcomingEvents.isEmpty();
 		mav.addObject("noParticipations", noParticipations);
 
-		Tournament test = new Tournament("Tournament", Sport.SOCCER,new Club("C","A",null),8,11,null);
-		ems.youWereKicked(us.findById(1).get(),test, LocaleContextHolder.getLocale());
-
 	    return mav;
 	}
 
