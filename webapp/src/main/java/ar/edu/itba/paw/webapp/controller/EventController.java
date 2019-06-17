@@ -247,12 +247,12 @@ public class EventController extends BaseController {
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
 
         mav.addObject("events", events);
-        mav.addObject("eventQty", events.size());
+        mav.addObject("eventQty", events.size());System.out.println(events.size());
         
         Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name), 
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst));
-        mav.addObject("totalEventQty", totalEventQty);
+        mav.addObject("totalEventQty", totalEventQty);System.out.println(totalEventQty);
         
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         

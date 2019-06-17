@@ -73,5 +73,11 @@ public interface TournamentService {
 	public int getMinRoundForResultInput(final Tournament tournament);
 
 	public int getCurrentRound(final Tournament tournament);
+
+	public int getPageInitialTournamentIndex(final int pageNum);
+
+	public int countTournamentTotal();
+
+	public int countTotalTournamentPages();
 	
 }

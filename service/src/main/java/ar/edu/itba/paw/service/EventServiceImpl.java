@@ -327,6 +327,9 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public int getPageInitialEventIndex(final int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
 		return ed.getPageInitialEventIndex(pageNum);
 	}
 	

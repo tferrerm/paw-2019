@@ -45,6 +45,59 @@
                       </div>
                   </c:forEach>
     					</div>
+    			<div class="tbl">
+    				<div class="table-header">
+                        <span><spring:message code="event_name" /></span>
+                        <span><spring:message code="club" /></span>
+                        <span><spring:message code="sport" /></span>
+                    </div>
+                    <c:forEach var="tournament" items="${tournaments}">
+                        <div class="custom-row">
+                            <div>${tournament.name}</div>
+                            <div>${tournament.tournamentClub.name}</div>
+                            <div><spring:message code="${tournament.sport}"/></div>
+                            <div>
+                                <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                            </div>
+                        </div>
+                    </c:forEach>
+    			</div>
+                <div class="table-navigator">
+                    <c:choose>
+                        <c:when test="${tournamentQty > 0}">
+                            <c:if test="${page != 1}">
+                                <div>
+                                    <a href="<c:url value='/tournaments/1' />">
+                                        <button type="button" class="btn btn-secondary">
+                                            <spring:message code="first"/>
+                                        </button>
+                                    </a>
+                                    <a href="<c:url value='/tournaments/${page-1}' />">
+                                        <button type="button" class="btn btn-secondary">
+                                            <spring:message code="back"/>
+                                        </button>
+                                    </a>
+                                </div>
+                            </c:if>
+                            <span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + tournamentQty - 1} <spring:message code="of"/> ${totalTournamentQty}</span>
+                            <c:if test="${page != lastPageNum}">
+                                <div>
+                                    <a href="<c:url value='/tournaments/${page+1}' />">
+                                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                                    </a>
+                                    <a href="<c:url value='/tournaments/${lastPageNum}' />">
+                                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                                    </a>
+                                </div>
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="notice">
+                                <spring:message code="no_results"/>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </div>
 	</body>

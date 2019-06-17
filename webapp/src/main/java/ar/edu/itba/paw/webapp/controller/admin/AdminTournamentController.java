@@ -167,6 +167,11 @@ public class AdminTournamentController extends BaseController {
 		
 		List<Tournament> tournaments = ts.findBy(pageNum);
 		mav.addObject("tournaments", tournaments);
+		mav.addObject("tournamentQty", tournaments.size());
+		mav.addObject("page", pageNum);
+		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
+		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
+		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
 		
 		return mav;
 	}

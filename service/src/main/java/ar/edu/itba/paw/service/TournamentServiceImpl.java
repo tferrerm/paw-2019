@@ -309,4 +309,22 @@ public class TournamentServiceImpl implements TournamentService {
 		return td.getCurrentRound(tournament).orElse(tournament.getRounds());
 	}
 
+	@Override
+	public int getPageInitialTournamentIndex(int pageNum) {
+		if(pageNum <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+		}
+		return td.getPageInitialTournamentIndex(pageNum);
+	}
+
+	@Override
+	public int countTournamentTotal() {
+		return td.countTournamentTotal();
+	}
+
+	@Override
+	public int countTotalTournamentPages() {
+		return td.countTotalTournamentPages();
+	}
+
 }
