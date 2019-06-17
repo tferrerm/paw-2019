@@ -22,21 +22,22 @@
                 </div>
                 <span class="help-message notice"><spring:message code="event_completed_description"/></span>
 				<div class="detail-box">
-					<div class="event-detail">
-						<div><spring:message code="event_detail"/></div>
+					<div class="event-detail background-dodgerblue">
+						<div class="color-white event-info-label"><spring:message code="event_detail"/></div>
 					</div>
 					<div>
-						<div class="detail-box-data">${tournament.name}</div>
-						<div class="detail-box-data"><span>${tournament.tournamentClub.name} - ${tournamentEvent.pitch.name}</span></div>
+						<div class="detail-box-data"><spring:message code="tournament"/>: ${tournament.name}</div>
+						<div class="detail-box-data"><spring:message code="club"/> - <spring:message code="pitch"/>: ${tournament.tournamentClub.name} - ${tournamentEvent.pitch.name}</div>
 						<div class="detail-box-data">
+							<spring:message code="start"/> - <spring:message code="end"/>: 
 							<fmt:timeZone value="AR">
-		                        <fmt:parseDate value="${tournamentEvent.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-		                        <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-		                    </fmt:timeZone>
-		                    <fmt:timeZone value="AR">
-		                        <fmt:parseDate value="${tournamentEvent.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-		                        <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-		                    </fmt:timeZone>
+                  <fmt:parseDate value="${tournamentEvent.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                  <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+              </fmt:timeZone>
+              <fmt:timeZone value="AR">
+                  <fmt:parseDate value="${tournamentEvent.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                  <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+              </fmt:timeZone>
 						</div>
 					</div>
 				</div>

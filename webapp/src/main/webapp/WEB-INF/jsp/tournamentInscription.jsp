@@ -86,9 +86,11 @@
 					</cr:forEach>
 				</div>
 			</div>
-			<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
-				<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
-			</form>
+			<c:if test="${userJoined}">
+				<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
+					<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
+				</form>
+			</c:if>
 		</div>
 	</div>
 
