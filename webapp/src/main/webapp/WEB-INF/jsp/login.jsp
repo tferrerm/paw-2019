@@ -12,11 +12,10 @@
   </title>
 </head>
 <body>
-<%@include file="header.jsp" %>
 <div class="main-container bgd-field-image">
   <div class="content-container">
     <div class="profile-title">
-      <h2><spring:message code="login"/></h2>
+      <h2 class="color-white"><spring:message code="login"/></h2>
     </div>
     <div class="form-container">
     <c:url value="/login" var="loginUrl"/>
@@ -40,5 +39,9 @@
         <div class="form-error login-error"><spring:message code="login_error"/></div>
       </c:if>
     </form>
+    <div class="bottom-message mb-10">
+      <span><spring:message code="already_have_account"/></span>
+      <a class="link-text" href="<c:url value='/' />"><spring:message code="register"/></a>
+    </div>
   </body>
 </html>

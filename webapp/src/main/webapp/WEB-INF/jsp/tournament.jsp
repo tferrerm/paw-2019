@@ -29,16 +29,16 @@
                 </div>
                 <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
     			<div class="tbl">
-    				<div class="table-header">
-                        <span><spring:message code="teams" /></span>
-                        <span><spring:message code="score" /></span>
-                    </div>
-                    <c:forEach var="teamEntry" items="${teamsScoresMap}">
-                        <div class="custom-row">
-                            <div>${teamEntry.key.teamName}</div>
-                            <div>${teamEntry.value}</div>
-                        </div>
-                    </c:forEach>
+						<div class="background-dodgerblue table-header">
+                <span class="justify-center flex-1 color-white mt-10"><spring:message code="teams" /></span>
+                <span class="justify-center flex-1 color-white mt-10"><spring:message code="score" /></span>
+            </div>
+            <c:forEach var="teamEntry" items="${teamsScoresMap}">
+                <div class="custom-row">
+                    <div class="justify-center flex-1">${teamEntry.key.teamName}</div>
+                    <div class="justify-center flex-1">${teamEntry.value}</div>
+                </div>
+            </c:forEach>
     			</div>
                 <div class="tbl profile-cont">
                     <span><spring:message code="round" /> ${currRoundPage}</span>
