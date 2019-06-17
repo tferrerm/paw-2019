@@ -23,28 +23,28 @@
     	<div class="main-container">
     		<%@ include file="sidebar.jsp" %>
     		<div class="content-container">
-                <div class="profile-title">
-                    <h2><spring:message code="choose_tournament"/></h2>
-                </div>
-                <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
-    						<div class="tbl">
-    							<div class="background-dodgerblue table-header">
-                      <span class="justify-center flex-1 color-white mt-10"><spring:message code="event_name" /></span>
-                      <span class="justify-center flex-1 color-white mt-10"><spring:message code="club" /></span>
-                      <span class="justify-center flex-1 color-white mt-10"><spring:message code="sport" /></span>
-											<span class="justify-center flex-1" />
-                  </div>
-                  <c:forEach var="tournament" items="${tournaments}">
-                      <div class="custom-row">
-                          <div>${tournament.name}</div>
-                          <div>${tournament.tournamentClub.name}</div>
-                          <div><spring:message code="${tournament.sport}"/></div>
-                          <div>
-                              <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
-                          </div>
-                      </div>
-                  </c:forEach>
-    					</div>
+	        <div class="profile-title">
+	            <h2><spring:message code="choose_tournament"/></h2>
+	        </div>
+	        <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
+					<div class="tbl">
+						<div class="background-dodgerblue table-header">
+	              <span class="justify-center flex-1 color-white mt-10"><spring:message code="event_name" /></span>
+	              <span class="justify-center flex-1 color-white mt-10"><spring:message code="club" /></span>
+	              <span class="justify-center flex-1 color-white mt-10"><spring:message code="sport" /></span>
+								<span class="justify-center flex-1" />
+	          </div>
+	          <c:forEach var="tournament" items="${tournaments}">
+	              <div class="custom-row">
+	                  <div>${tournament.name}</div>
+	                  <div>${tournament.tournamentClub.name}</div>
+	                  <div><spring:message code="${tournament.sport}"/></div>
+	                  <div>
+	                      <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+	                  </div>
+	              </div>
+	          </c:forEach>
+				</div>
                 <div class="table-navigator">
                     <c:choose>
                         <c:when test="${tournamentQty > 0}">
