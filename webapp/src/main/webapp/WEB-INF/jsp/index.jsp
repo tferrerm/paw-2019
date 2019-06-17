@@ -19,18 +19,12 @@
 	<body>
 	<div class="main-container">
 		<div class="registration-container bgd-field-image">
-			<div class="registration-form-container maxw-600">
-				<h1><spring:message code="sport_matcher" /></h1>
+			<div class="registration-form-container maxw-600 mt-30 registration-intro-container">
+				<h1 class="event-info-label registration-sport-matcher justify-center mt-30"><spring:message code="sport_matcher" /></h1>
 				<span class="registration-intro-title"><spring:message code="registration_intro_title" /></span>
-				<div class="comment-profile-row">
-					<span class="registration-intro-text"><spring:message code="registration_intro_text" /></span>
-					<img class="registration-image" src="<c:url value='/resources/css/img/tennis-player.png' />" width="200" height="300" />
-				</div>
+				<span class="registration-intro-text"><spring:message code="registration_intro_text" /></span>
 			</div>
-			<div class="registration-form-container">
-				<div class="profile-title">
-	  			<h2 class="color-white"><spring:message code="register"/></h2>
-	  		</div>
+			<div class="registration-form-container mt-30">
 				<div class="form-container">
 					<c:url value="/user/create" var="postPath"/>
 					<form:form modelAttribute="signupForm" action="${postPath}"	method="post" enctype="multipart/form-data">

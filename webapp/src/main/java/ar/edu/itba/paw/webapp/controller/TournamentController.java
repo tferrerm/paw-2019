@@ -108,7 +108,7 @@ public class TournamentController extends BaseController {
     }
 
     
-    @RequestMapping(value = "tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
+    @RequestMapping(value = "/tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
     public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
     		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
     	
@@ -136,7 +136,7 @@ public class TournamentController extends BaseController {
     }
     
     
-    @RequestMapping(value = "tournament/{tournamentId}/leave", method = { RequestMethod.POST })
+    @RequestMapping(value = "/tournament/{tournamentId}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveTournament(@PathVariable("tournamentId") long tournamentid) 
     		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
     	
@@ -152,7 +152,7 @@ public class TournamentController extends BaseController {
     }
 
     
-    @RequestMapping(value = "tournament/{tournamentId}/event/{eventId}")
+    @RequestMapping(value = "/tournament/{tournamentId}/event/{eventId}")
     public ModelAndView retrieveTournamentEvent(@PathVariable("tournamentId") long tournamentid,
     		@PathVariable("eventId") long eventid) 
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
