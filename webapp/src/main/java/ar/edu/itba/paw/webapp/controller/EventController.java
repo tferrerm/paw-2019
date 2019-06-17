@@ -87,7 +87,7 @@ public class EventController extends BaseController {
 		mav.addObject("noParticipations", noParticipations);
 
 		Tournament test = new Tournament("Tournament", Sport.SOCCER,new Club("C","A",null),8,11,null);
-		ems.tournamentStarted(us.findById(1).get(),test, LocaleContextHolder.getLocale());
+		ems.youWereKicked(us.findById(1).get(),test, LocaleContextHolder.getLocale());
 
 	    return mav;
 	}
@@ -197,7 +197,6 @@ public class EventController extends BaseController {
 	    	mav.addObject("userBusyError", true);
 	    	return mav;
 	    }
-	    ems.someoneJoinedYourEvent(loggedUser(), event, LocaleContextHolder.getLocale());
         return mav;
     }
 

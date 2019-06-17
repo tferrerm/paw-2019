@@ -34,8 +34,8 @@ public class EmailServiceImpl implements EmailService {
 	private MessageSource ems;
 
 	private static final String USER_REGISTERED_TEMPLATE = "userRegistered";
-	private static final String SOMEONE_JOINED_YOUR_EVENT_TEMPLATE = "someoneJoinedYourEvent";
 	private static final String YOU_WERE_KICKED_TEMPLATE = "youWereKicked";
+	private static final String TOURNAMENT_KICKED_TEMPLATE = "tournamentKicked";
 	private static final String TOURNAMENT_STARTED_TEMPLATE = "tournamentStarted";
 
 	void sendMail(final User user, final Locale locale, String titleMessage, Context ctx, String  template, Object[] titleParams) {
@@ -64,36 +64,29 @@ public class EmailServiceImpl implements EmailService {
 		String username = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("email_body", ems.getMessage("user_registered_body", new Object[]{username}, locale));
 
-		sendMail(user,locale,"user_registered_title",ctx,USER_REGISTERED_TEMPLATE,null);
-	}
-	
-	@Override
-	public void someoneJoinedYourEvent(final User joinedUser, final Event event, final Locale locale) {
-		final Context ctx = new Context(locale);
-		String ownerName = event.getOwner().getFirstname() + " " + event.getOwner().getLastname();
-		String eventName = event.getName();
-		String joinedUserName = joinedUser.getFirstname() + " " + joinedUser.getLastname();
-		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("someone_joined_body", new Object[] {ownerName, eventName, joinedUserName}, locale));
-
-		sendMail(joinedUser,locale,"someone_joined_title",ctx,SOMEONE_JOINED_YOUR_EVENT_TEMPLATE, new Object[]{eventName});
+		sendMail(user,locale,"user_registered_title", ctx, USER_REGISTERED_TEMPLATE,null);
 	}
 
 	@Override
 	public void youWereKicked(User kickedUser, Event event, final Locale locale) {
 		final Context ctx = new Context(locale);
-		String ownerName = event.getOwner().getFirstname() + " " + event.getOwner().getLastname();
 		String eventName = event.getName();
 		String kickedUserName = kickedUser.getFirstname() + " " + kickedUser.getLastname();
 		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("user_kicked_body", new Object[]{ownerName, eventName, kickedUserName}, locale));
+		ctx.setVariable("email_body", ems.getMessage("user_kicked_body", new Object[]{kickedUserName, eventName}, locale));
 
 		sendMail(kickedUser, locale, "user_kicked_title",ctx, YOU_WERE_KICKED_TEMPLATE, new Object[]{eventName});
 	}
 
 	@Override
 	public void youWereKicked(User kickedUser, Tournament tournament, Locale locale) {
-		// HACER!
+		final Context ctx = new Context(locale);
+		String tournamentName = tournament.getName();
+		String userName = kickedUser.getFirstname() + " " + kickedUser.getLastname();
+		ctx.setVariable("tournament_name", tournamentName);
+		ctx.setVariable("email_body", ems.getMessage("tour_kicked_body", new Object[]{userName, tournamentName}, locale));
+
+		sendMail(kickedUser, locale, "tour_kicked_title", ctx, TOURNAMENT_KICKED_TEMPLATE, new Object[]{tournamentName});
 	}
 
 	public void tournamentStarted(final User user, final Tournament tournament, final Locale locale) {
