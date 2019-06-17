@@ -28,16 +28,20 @@
 					</div>
 					<div>
 						<div class="detail-box-data"><spring:message code="tournament"/>: ${tournament.name}</div>
-						<div class="detail-box-data"><spring:message code="club"/> - <spring:message code="pitch"/>: ${tournament.tournamentClub.name} - ${tournamentEvent.pitch.name}</div>
+						<div class="detail-box-data"><spring:message code="club"/>: ${tournament.tournamentClub.name}</div>
+						<div class="detail-box-data"><spring:message code="pitch"/>: ${tournamentEvent.pitch.name}</div>
 						<div class="detail-box-data">
-							<spring:message code="start"/> - <spring:message code="end"/>:
+							<spring:message code="start"/>:
 							<fmt:timeZone value="AR">
                   <fmt:parseDate value="${tournamentEvent.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                   <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
               </fmt:timeZone>
+						</div>
+						<div class="detail-box-data">
+							<spring:message code="end"/>:
               <fmt:timeZone value="AR">
                   <fmt:parseDate value="${tournamentEvent.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-                  <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+                  <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
               </fmt:timeZone>
 						</div>
 					</div>

@@ -498,6 +498,10 @@ a.event-link {
   margin-bottom: 10px;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .home-event {
   background-color: dodgerblue;
   width: 80%;

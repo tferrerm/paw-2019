@@ -43,7 +43,7 @@
                 <div class="tbl profile-cont">
                     <span class="event-info-label notice"><spring:message code="round" /> ${currRoundPage}</span>
 										<span>
-											<spring:message code="date" />: 
+											<spring:message code="date" />:
 		                  <fmt:timeZone value="AR">
 		                      <fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
 		                      <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
@@ -77,21 +77,19 @@
                             <a href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
                         </div>
                     </c:forEach>
-                    <div class="table-navigator">
-                        <c:if test="${currRoundPage != 1}">
-                            <div>
-                                <a href="<c:url value='/tournament/${tournament.tournamentid}?round=1' />">
-                                    <button type="button" class="btn btn-secondary">
-                                        <spring:message code="first"/>
-                                    </button>
-                                </a>
-                                <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage-1}' />">
-                                    <button type="button" class="btn btn-secondary">
-                                        <spring:message code="back"/>
-                                    </button>
-                                </a>
-                            </div>
-                        </c:if>
+                    <div class="table-navigator w-100 justify-center">
+												<div class="${currRoundPage != 1 ? "" : "hidden"}">
+														<a href="<c:url value='/tournament/${tournament.tournamentid}?round=1' />">
+																<button type="button" class="btn btn-secondary">
+																		<spring:message code="first"/>
+																</button>
+														</a>
+														<a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage-1}' />">
+																<button type="button" class="btn btn-secondary">
+																		<spring:message code="back"/>
+																</button>
+														</a>
+												</div>
                         <span class="flex"><spring:message code="showing_pages"/> ${currRoundPage} <spring:message code="of"/> ${maxRoundPage}</span>
                         <c:if test="${currRoundPage != maxRoundPage}">
                             <div>
