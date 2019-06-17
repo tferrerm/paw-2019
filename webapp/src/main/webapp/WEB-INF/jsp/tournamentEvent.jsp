@@ -17,27 +17,33 @@
 		<div class="main-container">
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
-				<a class="link-text detail-box-data w-100" href="<c:url value="/tournament/${tournament.tournamentid}" /> "><spring:message code="go_to_tournament"/></a>
+				<div class="back-link background-dodgerblue">
+					<a class="color-white" href="<c:url value="/tournament/${tournament.tournamentid}" /> "> <<< <spring:message code="go_to_tournament"/></a>
+				</div>
 				<div class="profile-title">
-                    <h2>${tournamentEvent.name}</h2>
-                </div>
-                <span class="help-message notice"><spring:message code="event_completed_description"/></span>
+          <h2>${tournamentEvent.name}</h2>
+        </div>
+        <span class="help-message notice"><spring:message code="event_completed_description"/></span>
 				<div class="detail-box">
 					<div class="event-detail background-dodgerblue">
 						<div class="color-white event-info-label"><spring:message code="event_detail"/></div>
 					</div>
 					<div>
 						<div class="detail-box-data"><spring:message code="tournament"/>: ${tournament.name}</div>
-						<div class="detail-box-data"><spring:message code="club"/> - <spring:message code="pitch"/>: ${tournament.tournamentClub.name} - ${tournamentEvent.pitch.name}</div>
+						<div class="detail-box-data"><spring:message code="club"/>: ${tournament.tournamentClub.name}</div>
+						<div class="detail-box-data"><spring:message code="pitch"/>: ${tournamentEvent.pitch.name}</div>
 						<div class="detail-box-data">
-							<spring:message code="start"/> - <spring:message code="end"/>:
+							<spring:message code="start"/>:
 							<fmt:timeZone value="AR">
                   <fmt:parseDate value="${tournamentEvent.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                   <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
               </fmt:timeZone>
+						</div>
+						<div class="detail-box-data">
+							<spring:message code="end"/>:
               <fmt:timeZone value="AR">
                   <fmt:parseDate value="${tournamentEvent.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-                  <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+                  <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
               </fmt:timeZone>
 						</div>
 					</div>
@@ -54,7 +60,7 @@
 					<div class="flex-grow w-100">
 						<div class=" flex-grow flex-column right-border w-50">
 							<div class="score">
-								${tournamentEvent.firstTeamScore}
+								${tournamentEvent.firstTeamScore != null ? tournamentEvent.firstTeamScore : " - "}
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
@@ -65,8 +71,8 @@
 							</div>
 						</div>
 						<div class="flex-grow flex-column w-50">
-						    <div class="score">
-								${tournamentEvent.secondTeamScore}
+							<div class="score">
+								${tournamentEvent.secondTeamScore != null ? tournamentEvent.secondTeamScore : " - "}
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">

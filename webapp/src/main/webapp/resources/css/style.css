@@ -56,6 +56,10 @@ a.link-text{
     text-decoration: underline;
 }
 
+a.color-white {
+  color: white;
+}
+
 .align-start {
     align-items: flex-start;
 }
@@ -75,6 +79,15 @@ a.link-text{
 
 .average-min-width {
   min-width: 60%
+}
+
+.back-link {
+  display: flex;
+  align-self: flex-start;
+  margin: 20px 30px 0;
+  padding: 10px 20px;
+  border-radius: 10px;
+  flex-direction: row;
 }
 
 .background-dodgerblue {
@@ -498,6 +511,10 @@ a.event-link {
   margin-bottom: 10px;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .home-event {
   background-color: dodgerblue;
   width: 80%;
@@ -844,6 +861,12 @@ ul.pitch-item {
     font-size: 40px;
     color: #444444;
     font-weight: bold;
+}
+
+.score-tournament {
+  flex-direction: row;
+  justify-content: space-around;
+  min-width: 100px;
 }
 
 .sidebar {
