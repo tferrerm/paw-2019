@@ -15,5 +15,7 @@ public interface EmailService {
 	public void youWereKicked(final User kickedUser, final Event event, final Locale locale);
 
 	public void youWereKicked(final User kickedUser, final Tournament tournament, final Locale locale);
+
+	public void tournamentStarted(final User user, final Event event, final Locale locale);
 	
 }

@@ -36,6 +36,7 @@ public class EmailServiceImpl implements EmailService {
 	private static final String USER_REGISTERED_TEMPLATE = "userRegistered";
 	private static final String SOMEONE_JOINED_YOUR_EVENT_TEMPLATE = "someoneJoinedYourEvent";
 	private static final String YOU_WERE_KICKED_TEMPLATE = "youWereKicked";
+	private static final String TOURNAMENT_STARTED = "tournamentStarted";
 
 	@Override
 	public void userRegistered(final User user, final Locale locale) {
@@ -115,5 +116,30 @@ public class EmailServiceImpl implements EmailService {
 	public void youWereKicked(User kickedUser, Tournament tournament, Locale locale) {
 		// HACER!
 	}
+
+	public void tournamentStarted(final User user, final Event event, final Locale locale) {
+		final Context ctx = new Context(locale);
+		String ownerName = event.getOwner().getFirstname() + " " + event.getOwner().getLastname();
+		String eventName = event.getName();
+		String kickedUserName = user.getFirstname() + " " + user.getLastname();
+		ctx.setVariable("event_name", eventName);
+		ctx.setVariable("email_body", ems.getMessage("tournament_started_body", new Object[]{ownerName, eventName, kickedUserName}, locale));
+		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+		try {
+			message.setSubject(ems.getMessage("tournament_started_title", new Object[]{eventName}, locale));
+			message.setFrom("SportMatcher");
+			message.setTo(user.getUsername());
+
+			final String htmlContent = this.htmlTemplateEngine.process(TOURNAMENT_STARTED, ctx);
+			message.setText(htmlContent, true);
+		} catch (Exception e) {
+			//LOGGER.error("Message sending exception", e);
+		}
+
+		this.mailSender.send(mimeMessage);
+	}
+
 
 }
