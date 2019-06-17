@@ -77,6 +77,14 @@ a.link-text{
   min-width: 60%
 }
 
+.background-dodgerblue {
+  background-color: dodgerblue;
+}
+
+div.background-dodgerblue {
+  background-color: dodgerblue;
+}
+
 .background-red {
     background: red;
 }
@@ -133,6 +141,14 @@ a.link-text{
   margin: 10px;
   padding: 10px;
   word-break: break-word;
+}
+
+.color-dodgerblue {
+  color: dodgerblue;
+}
+
+.color-white {
+  color: white;
 }
 
 .comments_form {
@@ -553,6 +569,10 @@ a.logo-admin {
 
 .mr-5 {
     margin-right: 5px;
+}
+
+.mt-10 {
+  margin-top: 10px;
 }
 
 .margin-right {
