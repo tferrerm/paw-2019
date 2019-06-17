@@ -14,7 +14,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
 		<title>
-			<spring:message code="sport_matcher" /> - <spring:message code="events" />
+			<spring:message code="sport_matcher" /> - <spring:message code="tournaments" />
 		</title>
 	</head>
 
@@ -45,23 +45,6 @@
                       </div>
                   </c:forEach>
     					</div>
-    			<div class="tbl">
-    				<div class="table-header">
-                        <span><spring:message code="event_name" /></span>
-                        <span><spring:message code="club" /></span>
-                        <span><spring:message code="sport" /></span>
-                    </div>
-                    <c:forEach var="tournament" items="${tournaments}">
-                        <div class="custom-row">
-                            <div>${tournament.name}</div>
-                            <div>${tournament.tournamentClub.name}</div>
-                            <div><spring:message code="${tournament.sport}"/></div>
-                            <div>
-                                <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
-                            </div>
-                        </div>
-                    </c:forEach>
-    			</div>
                 <div class="table-navigator">
                     <c:choose>
                         <c:when test="${tournamentQty > 0}">

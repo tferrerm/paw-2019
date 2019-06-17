@@ -9,7 +9,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
 		<title>
-			<spring:message code="sport_matcher" /> - <spring:message code="new_club" />
+			<spring:message code="sport_matcher" /> - <spring:message code="new_tournament" />
 		</title>
 	</head>
 	<body>
