@@ -37,7 +37,6 @@ import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
@@ -114,17 +113,17 @@ public class TournamentServiceImpl implements TournamentService {
     		throw new UnevenTeamAmountException();
     	if(teamSize < MIN_TEAM_SIZE || teamSize > MAX_TEAM_SIZE)
     		throw new InvalidTeamSizeException();
-    	if(firstRoundStartsAt.isBefore(now()))
-    		throw new DateInPastException();
+    	if(firstRoundStartsAt.isBefore(Instant.now()))
+    		throw new DateInPastException("Tournament start date is in the past");
     	if(firstRoundStartsAt.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException();
-    	if(inscriptionEndDate.isBefore(now()))
+    	if(inscriptionEndDate.isBefore(Instant.now()))
     		throw new InscriptionDateInPastException();
-    	if(inscriptionEndDate.compareTo(firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS)) > 0)
+    	if(inscriptionEndDate.isAfter((firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS))))
     		throw new InscriptionDateExceededException();
     	
     	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), sport, 
@@ -160,14 +159,13 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new InscriptionDateInPastException();
 		}
 		
-		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
-		if(team.getInscriptions().size() == tournament.getTeamSize()) {
-			throw new TeamAlreadyFilledException();
+		if(td.findUserTeam(tournament, user).isPresent()) {
+			throw new UserAlreadyJoinedException("User has already joined tournament");
 		}
-		for(Inscription inscription : team.getInscriptions()) {
-			if(inscription.getInscriptedUser().getUserid() == user.getUserid()) {
-				throw new UserAlreadyJoinedException("User " + user.getUserid() + " has already joined Tournament " + tournament.getTournamentid());
-			}
+		
+		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		if(team.getInscriptions().size() == tournament.getTeamSize() * tournament.getRounds()) {
+			throw new TeamAlreadyFilledException();
 		}
 		
 		td.joinTournament(tournament, team, user);

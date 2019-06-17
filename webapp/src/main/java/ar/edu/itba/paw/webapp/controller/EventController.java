@@ -75,6 +75,7 @@ public class EventController extends BaseController {
     @Autowired
     private TournamentService ts;
 
+    
 	@RequestMapping("/home")
 	public ModelAndView home()	{
 		ModelAndView mav = new ModelAndView("home");
@@ -92,6 +93,7 @@ public class EventController extends BaseController {
 	    return mav;
 	}
 
+	
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
@@ -112,6 +114,7 @@ public class EventController extends BaseController {
 	    return mav;
 	}
 
+	
 	@RequestMapping("/history/{page}")
 	public ModelAndView historyList(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("history");
@@ -129,6 +132,7 @@ public class EventController extends BaseController {
 		return mav;
 	}
 
+	
     @RequestMapping(value = "/event/{id}")
     public ModelAndView retrieveElement(@PathVariable long id,
     		@RequestParam(value = "eventFullError", required = false) boolean eventFullError,
@@ -174,6 +178,7 @@ public class EventController extends BaseController {
         return mav;
     }
 
+    
     @RequestMapping(value = "/event/{id}/join", method = { RequestMethod.POST })
     public ModelAndView joinEvent(@PathVariable long id)
     	throws EventNotFoundException {
@@ -197,12 +202,14 @@ public class EventController extends BaseController {
         return mav;
     }
 
+    
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveEvent(@PathVariable long id) {
 	    es.leaveEvent(id, loggedUser().getUserid());
         return new ModelAndView("redirect:/event/" + id);
     }
 
+    
     @RequestMapping(value = "/event/{eventId}/kick-user/{userId}", method = { RequestMethod.POST })
     public ModelAndView kickUserFromEvent(
     		@PathVariable("eventId") long eventid,
@@ -215,6 +222,7 @@ public class EventController extends BaseController {
     	return new ModelAndView("redirect:/event/" + eventid);
     }
 
+    
     @RequestMapping(value = "/events/{pageNum}")
     public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
                                      @PathVariable("pageNum") final int pageNum,
@@ -259,6 +267,7 @@ public class EventController extends BaseController {
         return mav;
     }
 
+    
 	@RequestMapping("/pitch/{pitchId}")
 	public ModelAndView seePitch(
 			@PathVariable("pitchId") long id,
@@ -276,6 +285,7 @@ public class EventController extends BaseController {
 		return mav;
 	}
 
+	
     @RequestMapping(value = "/pitch/{pitchId}/event/create", method = { RequestMethod.POST })
     public ModelAndView createEvent(
     		@PathVariable("pitchId") long pitchId,
@@ -319,13 +329,25 @@ public class EventController extends BaseController {
     	return new ModelAndView("redirect:/event/" + ev.getEventId());
     }
 
+    
     private ModelAndView eventCreationError(String error, long pitchId, NewEventForm form)
     	throws PitchNotFoundException {
     	ModelAndView mav = seePitch(pitchId, form);
 		mav.addObject(error, true);
 		return mav;
     }
+    
+    
+    @RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
+	public ModelAndView deleteEvent(@PathVariable final long id)
+			throws EventNotFoundException, UserNotAuthorizedException, DateInPastException {
+		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		es.cancelEvent(event, loggedUser().getUserid());
+		LOGGER.debug("Deleted event with id {}", id);
+		return new ModelAndView("redirect:/events/1");
+	}
 
+    
     @RequestMapping(value = "/events/filter")
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
     	String name = form.getName();
@@ -337,6 +359,7 @@ public class EventController extends BaseController {
         return new ModelAndView("redirect:/events/1" + queryString);
     }
     
+    
     @RequestMapping(value = "/event/{eventId}/upvote", method = { RequestMethod.POST })
     public ModelAndView upvote(@PathVariable("eventId") final long eventid) 
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
@@ -344,6 +367,7 @@ public class EventController extends BaseController {
     	es.vote(true, ev, loggedUser().getUserid());
     	return new ModelAndView("redirect:/event/" + eventid);
     }
+    
     
     @RequestMapping(value = "/event/{eventId}/downvote", method = { RequestMethod.POST })
     public ModelAndView downvote(@PathVariable("eventId") final long eventid) 
@@ -353,6 +377,7 @@ public class EventController extends BaseController {
     	return new ModelAndView("redirect:/event/" + eventid);
     }
 
+    
     private String buildQueryString(final String name, final String establishment, final String sport,
                                     final String vacancies, final String date){
 	    StringBuilder strBuilder = new StringBuilder();
@@ -377,20 +402,24 @@ public class EventController extends BaseController {
         return strBuilder.toString();
     }
 
+    
 	@ExceptionHandler({ EventNotFoundException.class })
 	private ModelAndView eventNotFound() {
 		return new ModelAndView("404");
 	}
 
+	
 	@ExceptionHandler({ PitchNotFoundException.class })
 	private ModelAndView pitchNotFound() {
 		return new ModelAndView("404");
 	}
 	
+	
 	@ExceptionHandler({ EventNotFinishedException.class })
 	private ModelAndView eventNotFinished() {
 		return new ModelAndView("404");
 	}
+	
 	
 	@ExceptionHandler({ UserNotFoundException.class })
 	private ModelAndView userNotFound() {

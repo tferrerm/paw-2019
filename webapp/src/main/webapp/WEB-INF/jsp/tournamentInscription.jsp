@@ -42,7 +42,7 @@
 									</div>
 								</div>
 								<div class="flex flex-grow justify-center">
-									<c:if test="${!userJoined}">
+									<c:if test="${!userJoined && (tournament.teamSize > fn:length(teamsUsers[teamid]))}">
 										<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex].teamid}/join"/>">
 											<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
 										</form>
@@ -63,7 +63,7 @@
 									</div>
 								</div>
 								<div class="flex flex-grow justify-center">
-									<c:if test="${!userJoined}">
+									<c:if test="${!userJoined && (tournament.teamSize > fn:length(teamsUsers[teamid]))}">
 										<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex + 1].teamid}/join"/>">
 											<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
 										</form>

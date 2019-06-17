@@ -35,7 +35,6 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
-import sun.security.jca.GetInstance.Instance;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -246,7 +245,7 @@ public class EventServiceImpl implements EventService {
 		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
 		
     	if(startsAtDate.isBefore(Instant.now()))
-    		throw new DateInPastException();
+    		throw new DateInPastException("Event start date is in the past");
     	if(startsAtDate.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
     	if(endsAtHour <= startsAtHour)
@@ -343,6 +342,22 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		ed.deleteEvent(eventid);
+	}
+	
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void cancelEvent(final Event event, final long userid) 
+			throws UserNotAuthorizedException, DateInPastException {
+		if(event.getEventId() <= 0 || userid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		if(event.getOwner().getUserid() != userid) {
+			throw new UserNotAuthorizedException("Cannot cancel an event if now the owner");
+		}
+		if(event.getStartsAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Event has already started");
+		}
+		ed.deleteEvent(event.getEventId());
 	}
 
 	@Override
