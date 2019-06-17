@@ -324,4 +324,17 @@ public class TournamentServiceImpl implements TournamentService {
 		return td.countTotalTournamentPages();
 	}
 
+	@Transactional(rollbackFor = { Exception.class })
+	@Override
+	public void deleteTournament(final long tournamentid) throws InscriptionDateInPastException {
+		if(tournamentid <= 0) {
+			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		Tournament tournament = findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		if(tournament.getEndsInscriptionAt().isBefore(Instant.now())) {
+			throw new InscriptionDateInPastException();
+		}
+		td.deleteTournament(tournamentid);
+	}
+
 }

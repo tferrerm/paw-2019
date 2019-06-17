@@ -79,8 +79,9 @@
 				</div>
 			</div>
 		</div>
-
+		<form method="POST" action="<c:url value="/admin/tournament/${tournament.tournamentid}/delete"/>">
 			<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_tournament"/></button>
+		</form>
 	</div>
 
 	</body>

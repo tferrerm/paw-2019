@@ -128,12 +128,12 @@ public interface EventService {
 											EventOverlapException, HourOutOfRangeException;
 
 	public void joinEvent(final long userid, final long eventid)
-			throws UserAlreadyJoinedException, EventFullException, UserBusyException;
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException, DateInPastException;
 
-	public void leaveEvent(final long eventid, final long userid);
+	public void leaveEvent(final long eventid, final long userid) throws DateInPastException;
 
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
-			throws UserNotAuthorizedException;
+			throws UserNotAuthorizedException, DateInPastException;
 
 	public String[] getScheduleDaysHeader();
 
@@ -163,8 +163,9 @@ public interface EventService {
 	/**
 	 * Deletes an Event from database along with all User related participations.
 	 * @param	eventid		The Event's id.
+	 * @throws DateInPastException 
 	 */
-	public void deleteEvent(long eventid);
+	public void deleteEvent(long eventid) throws DateInPastException;
 	
 	/**
 	 * Gets the sum of User votes for an Event.

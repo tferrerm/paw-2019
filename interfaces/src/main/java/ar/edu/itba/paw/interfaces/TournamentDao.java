@@ -55,4 +55,6 @@ public interface TournamentDao {
 
 	public int countTotalTournamentPages();
 
+	public void deleteTournament(final long tournamentid);
+
 }

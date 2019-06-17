@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import java.time.Instant;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -54,10 +55,10 @@ public class Tournament {
 	@Column(name = "tournament_created_at", nullable = false)
 	private Instant createdAt;
 	
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournament")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournament")
 	private Set<TournamentTeam> teams;
 	
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournament")
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "tournament")
 	private Set<TournamentEvent> tournamentEvents;
 	
 	@PrePersist

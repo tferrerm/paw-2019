@@ -79,5 +79,7 @@ public interface TournamentService {
 	public int countTournamentTotal();
 
 	public int countTotalTournamentPages();
+
+	public void deleteTournament(final long tournamentid) throws InscriptionDateInPastException;
 	
 }

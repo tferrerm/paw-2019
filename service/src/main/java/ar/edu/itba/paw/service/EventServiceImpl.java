@@ -205,7 +205,6 @@ public class EventServiceImpl implements EventService {
 		return ed.countByUserInscriptions(futureEvents, userid);
 	}
 	
-	@Transactional
 	@Override
 	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, 
@@ -268,13 +267,17 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void joinEvent(final long userid, final long eventid)
-			throws UserAlreadyJoinedException, EventFullException, UserBusyException {
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException, DateInPastException {
 
 		if(userid <= 0 || eventid <= 0)
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		
+		if(event.getStartsAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot join event if it has already started");
+		}
 		
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
 			throw new EventFullException();
@@ -285,18 +288,27 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void leaveEvent(final long eventid, final long userid) {
+	public void leaveEvent(final long eventid, final long userid) throws DateInPastException {
+		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
+		ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		if(event.getStartsAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot leave event if it has already started");
+		}
 		idao.deleteInscription(eventid, userid);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
-		throws UserNotAuthorizedException {
+		throws UserNotAuthorizedException, DateInPastException {
+		ud.findById(kickedUserId).orElseThrow(NoSuchElementException::new);
 		if(owner.getUserid() != event.getOwner().getUserid())
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		if(owner.getUserid() == kickedUserId)
 			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
+		if(event.getStartsAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot kick from event if it has already started");
+		}
 		idao.deleteInscription(event.getEventId(), kickedUserId);
 	}
 
@@ -337,9 +349,13 @@ public class EventServiceImpl implements EventService {
 	
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void deleteEvent(long eventid) {
+	public void deleteEvent(long eventid) throws DateInPastException {
 		if(eventid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+		}
+		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
+		if(event.getStartsAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot delete event if it has already started");
 		}
 		ed.deleteEvent(eventid);
 	}
