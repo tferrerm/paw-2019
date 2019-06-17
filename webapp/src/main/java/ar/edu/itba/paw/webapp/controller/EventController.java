@@ -2,11 +2,13 @@ package ar.edu.itba.paw.webapp.controller;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import ar.edu.itba.paw.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +38,6 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Inscription;
-import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.model.TournamentEvent;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
@@ -89,7 +85,10 @@ public class EventController extends BaseController {
 		
 		boolean noParticipations = upcomingEvents.isEmpty();
 		mav.addObject("noParticipations", noParticipations);
-		
+
+		Tournament test = new Tournament("Tournament", Sport.SOCCER,new Club("C","A",null),8,11,null);
+		ems.tournamentStarted(us.findById(1).get(),test, LocaleContextHolder.getLocale());
+
 	    return mav;
 	}
 
