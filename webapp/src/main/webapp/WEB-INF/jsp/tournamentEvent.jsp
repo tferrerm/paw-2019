@@ -60,7 +60,7 @@
 					<div class="flex-grow w-100">
 						<div class=" flex-grow flex-column right-border w-50">
 							<div class="score">
-								${tournamentEvent.firstTeamScore ? tournamentEvent.firstTeamScore : " - "}
+								${tournamentEvent.firstTeamScore != null ? tournamentEvent.firstTeamScore : " - "}
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
@@ -72,7 +72,7 @@
 						</div>
 						<div class="flex-grow flex-column w-50">
 							<div class="score">
-								${tournamentEvent.secondTeamScore ? tournamentEvent.secondTeamScore : " - "}
+								${tournamentEvent.secondTeamScore != null ? tournamentEvent.secondTeamScore : " - "}
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
