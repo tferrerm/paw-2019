@@ -214,4 +214,6 @@ public interface EventService {
 
 	public void checkUncompletedEvents();
 
+	public int countEventPages(final int totalEventQty);
+
 }

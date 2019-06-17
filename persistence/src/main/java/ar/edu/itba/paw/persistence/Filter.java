@@ -12,19 +12,19 @@ public class Filter {
 		this.value = value;
 	}
 	
-	public String queryAsString(int paramNum) {
+	protected String queryAsString(int paramNum) {
 		return " LOWER(" + name.toString() + ") LIKE '%' || LOWER(:" + getParamName() + paramNum + ") || '%' ";
 	}
 	
-	public String queryAsInteger() {
+	protected String queryAsInteger() {
 		return " " + name.toString() + " = ? ";
 	}
 	
-	/*public String queryAsGreaterInteger(boolean alsoEquals) {
+	/*protected String queryAsGreaterInteger(boolean alsoEquals) {
 		return " " + name.toString() + " >" + ((alsoEquals) ? "= ?" : " ?");
 	}*/
 	
-	public String queryAsDateRange(int paramNum, boolean onlyAtDate) {
+	protected String queryAsDateRange(int paramNum, boolean onlyAtDate) {
 		return " CAST( " + name.toString() + " AS DATE) " + ((onlyAtDate)? "" : ">") + 
 				"= CAST(:" + getParamName() + paramNum + " AS DATE) ";
 	}
@@ -37,7 +37,7 @@ public class Filter {
 		return value;
 	}
 	
-	public static String getParamName() {
+	protected static String getParamName() {
 		return "param_";
 	}
 

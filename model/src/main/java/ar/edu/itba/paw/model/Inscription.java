@@ -88,9 +88,7 @@ public class Inscription {
 			return false;
 		Inscription other = (Inscription) o;
 		return this.getInscriptionEvent().equals(other.getInscriptionEvent()) 
-				&& this.getInscriptedUser().equals(other.getInscriptedUser())
-				&& this.getTournamentTeam().equals(other.getTournamentTeam())
-				&& this.getVote().equals(other.getVote());
+				&& this.getInscriptedUser().equals(other.getInscriptedUser());
 	}
 	
 	@Override

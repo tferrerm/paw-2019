@@ -79,14 +79,17 @@ public class EventController extends BaseController {
 		ModelAndView mav = new ModelAndView("home");
 		
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
-		Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents, DAY_LIMIT, MAX_EVENTS_PER_DAY);
-		
-		mav.addObject("myEvents", myEvents);
-		mav.addObject("scheduleHeaders", scheduleDaysHeader);
-		
-		boolean noParticipations = upcomingEvents.isEmpty();
-		mav.addObject("noParticipations", noParticipations);
+		if(loggedUser() != null) {
+			List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
+			Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents,
+					DAY_LIMIT, MAX_EVENTS_PER_DAY);
+			
+			mav.addObject("myEvents", myEvents);
+			mav.addObject("scheduleHeaders", scheduleDaysHeader);
+			
+			boolean noParticipations = upcomingEvents.isEmpty();
+			mav.addObject("noParticipations", noParticipations);
+		}
 
 	    return mav;
 	}
@@ -245,7 +248,6 @@ public class EventController extends BaseController {
         mav.addObject("page", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());
-        mav.addObject("lastPageNum", es.countFutureEventPages());
         
         List<Event> events = es.findBy(true, Optional.ofNullable(name), 
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
@@ -258,7 +260,7 @@ public class EventController extends BaseController {
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst));
         mav.addObject("totalEventQty", totalEventQty);
-        
+        mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         
         return mav;
