@@ -68,21 +68,20 @@ public class AdminController extends BaseController {
 		mav.addObject("page", pageNum);
 		mav.addObject("queryString", queryString);
 		mav.addObject("sports", Sport.values());
-		mav.addObject("lastPageNum", es.countFutureEventPages());
 		
-		List<Event> events = es.findBy(true, Optional.empty(), Optional.ofNullable(clubName), 
+		List<Event> events = es.findBy(false, Optional.empty(), Optional.ofNullable(clubName), 
         		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
 		mav.addObject("events", events);
 		mav.addObject("eventQty", events.size());
 		
-		Integer totalEventQty = es.countFilteredEvents(true, Optional.empty(), 
+		Integer totalEventQty = es.countFilteredEvents(false, Optional.empty(), 
 				Optional.ofNullable(clubName), Optional.ofNullable(sport), 
 				Optional.ofNullable(organizer), Optional.ofNullable(vac),
 				Optional.ofNullable(dateInst));
 		
         mav.addObject("totalEventQty", totalEventQty);
-        
+		mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
         
 		return mav;

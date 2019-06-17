@@ -215,25 +215,25 @@ public class EventServiceImpl implements EventService {
 	}
 	
 	@Override
-	public List<Event> findBy(boolean onlyFuture, Optional<String> eventName, Optional<String> clubName,
+	public List<Event> findBy(boolean onlyJoinable, Optional<String> eventName, Optional<String> clubName,
 			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, 
 			Optional<Instant> date, int pageNum) {
 		if(pageNum <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
 		}
 
-		List<Event> events = ed.findBy(eventName, clubName, sport.map(Sport::toString), organizer,
+		List<Event> events = ed.findBy(onlyJoinable, eventName, clubName, sport.map(Sport::toString), organizer,
 				vacancies, date, pageNum);
 		
 		return events;
 	}
 	
 	@Override
-	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+	public Integer countFilteredEvents(final boolean onlyJoinable, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<Sport> sport, final Optional<String> organizer,
 			final Optional<Integer> vacancies, Optional<Instant> date) {
 		
-		return ed.countFilteredEvents(onlyFuture, eventName, clubName, 
+		return ed.countFilteredEvents(onlyJoinable, eventName, clubName, 
 				sport.map(Sport::toString), organizer, vacancies, date);
 	}
 
@@ -288,8 +288,8 @@ public class EventServiceImpl implements EventService {
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		
-		if(event.getStartsAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot join event if it has already started");
+		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot join event if inscription is closed");
 		}
 		
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
@@ -304,8 +304,8 @@ public class EventServiceImpl implements EventService {
 	public void leaveEvent(final long eventid, final long userid) throws DateInPastException {
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		ud.findById(userid).orElseThrow(NoSuchElementException::new);
-		if(event.getStartsAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot leave event if it has already started");
+		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot leave event if inscription is closed");
 		}
 		idao.deleteInscription(eventid, userid);
 	}
@@ -319,8 +319,8 @@ public class EventServiceImpl implements EventService {
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		if(owner.getUserid() == kickedUserId)
 			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
-		if(event.getStartsAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot kick from event if it has already started");
+		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot kick from event if inscription is closed");
 		}
 		idao.deleteInscription(event.getEventId(), kickedUserId);
 	}
@@ -381,10 +381,10 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		if(event.getOwner().getUserid() != userid) {
-			throw new UserNotAuthorizedException("Cannot cancel an event if now the owner");
+			throw new UserNotAuthorizedException("Cannot cancel event if now the owner");
 		}
-		if(event.getStartsAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Event has already started");
+		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
+			throw new DateInPastException("Cannot cancel event if inscription is closed");
 		}
 		ed.deleteEvent(event.getEventId());
 	}
@@ -432,6 +432,11 @@ public class EventServiceImpl implements EventService {
 	public void checkUncompletedEvents() {
 		//Thread.sleep(4000);
 		//System.out.println("HOLA");
+	}
+
+	@Override
+	public int countEventPages(final int totalEventQty) {
+		return ed.countEventPages(totalEventQty);
 	}
 
 }

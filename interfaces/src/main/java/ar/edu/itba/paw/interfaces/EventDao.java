@@ -67,6 +67,7 @@ public interface EventDao {
 
 	/**
 	 * Returns a list of Events matching present filters.
+	 * @param onlyJoinable 
 	 * @param eventName			String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
@@ -75,13 +76,13 @@ public interface EventDao {
 	 * @param pageNum			Page number.
 	 * @return a list of Events that matched given filters.
 	 */
-	public List<Event> findBy(final Optional<String> eventName, final Optional<String> clubName, 
+	public List<Event> findBy(final boolean onlyJoinable, final Optional<String> eventName, final Optional<String> clubName, 
 			final Optional<String> sport, final Optional<String> organizer,
 			final Optional<Integer> vacancies, final Optional<Instant> date, final int pageNum);
 	
 	/**
 	 * Returns the amount of Events matching present filters.
-	 * @param onlyFuture		Search only future Events (true) or any Events (false).
+	 * @param onlyJoinable		
 	 * @param name				String to match an Event's name with.
 	 * @param establishment		String to match an Event's club name with.
 	 * @param sport				String to match an Event's Sport with.
@@ -89,13 +90,14 @@ public interface EventDao {
 	 * @param vacancies			Minimum vacancies for an Event.
 	 * @return the amount of Events that matched given filters.
 	 */
-	public Integer countFilteredEvents(final boolean onlyFuture, final Optional<String> eventName, 
+	public Integer countFilteredEvents(final boolean onlyJoinable, final Optional<String> eventName, 
 			final Optional<String> clubName, final Optional<String> sport, 
 			final Optional<String> organizer, final Optional<Integer> vacancies,
 			final Optional<Instant> date);
 
 	/**
 	 * Gets the amount of pages all future Events occupy
+	 * @param onlyJoinable 
 	 * @return the amount of future Event pages
 	 */
 	public int countFutureEventPages();
@@ -156,5 +158,7 @@ public interface EventDao {
 	 * @return The amount of pages.
 	 */
 	public int countUserOwnedPages(final boolean onlyFuture, final long userid);
+
+	public int countEventPages(final int totalEventQty);
 
 }
