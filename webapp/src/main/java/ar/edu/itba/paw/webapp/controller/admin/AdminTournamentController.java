@@ -83,17 +83,17 @@ public class AdminTournamentController extends BaseController {
 	
 	@RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
-    		@RequestParam(value = "round", required = false) final Integer roundPage, // VER SI SE PUEDE PONER FECHA ACTUAL DEFAULT
+    		@RequestParam(value = "round", required = false) final Integer roundPage,
 			@ModelAttribute("tournamentResultForm") final TournamentResultForm form) 
     		throws TournamentNotFoundException {
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		
 		if(roundPage == null) {
-			retrieveTournament(tournamentid, ts.getCurrentRound(tournament), form);
+			return retrieveTournament(tournamentid, ts.getMinRoundForResultInput(tournament), form);
 		}
 		
-		if(ts.inscriptionEnded(tournament)) { // SEPARAR EN DOS URL?
+		if(ts.inscriptionEnded(tournament)) {
 			ModelAndView mav = new ModelAndView("admin/tournament");
 			mav.addObject("tournament",  tournament);
 			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
@@ -144,7 +144,7 @@ public class AdminTournamentController extends BaseController {
     		errors.rejectValue("secondResult", "wrong_int_format");
 		
 		if(errors.hasErrors()) {
-    		return retrieveTournament(tournamentid, null, form); // IR A LA DEFAULT
+    		return retrieveTournament(tournamentid, null, form);
     	}
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -239,8 +239,6 @@ public class AdminTournamentController extends BaseController {
     		return tournamentCreationError("ends_before_starts", clubId, form);
     	} catch(HourOutOfRangeException e) {
     		return tournamentCreationError("hour_out_of_range", clubId, form);
-    	/*} catch(EventOverlapException e) {
-    		return tournamentCreationError("event_overlap", clubId, form);*/
     	} catch(InvalidTeamAmountException e) {
     		return tournamentCreationError("invalid_team_amount", clubId, form);
     	} catch(UnevenTeamAmountException e) {

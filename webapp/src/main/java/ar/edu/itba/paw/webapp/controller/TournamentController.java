@@ -42,10 +42,14 @@ public class TournamentController extends BaseController {
 	
     @RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
-    		@RequestParam(value = "round", defaultValue = "1") final int roundPage) 
+    		@RequestParam(value = "round", required = false) final Integer roundPage) 
     		throws TournamentNotFoundException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	
+    	if(roundPage == null) {
+			return retrieveTournament(tournamentid, ts.getCurrentRound(tournament));
+		}
 		
 		if(ts.inscriptionEnded(tournament)) {
 			ModelAndView mav = new ModelAndView("tournament");
@@ -132,7 +136,7 @@ public class TournamentController extends BaseController {
     
     private ModelAndView joinTournamentError(String error, long tournamentid) 
     		throws TournamentNotFoundException {
-    	ModelAndView mav = retrieveTournament(tournamentid, 1);
+    	ModelAndView mav = retrieveTournament(tournamentid, null);
 		mav.addObject(error, true);
 		return mav;
     }
@@ -145,7 +149,7 @@ public class TournamentController extends BaseController {
         try {
 			ts.leaveTournament(tournamentid, loggedUser().getUserid());
 		} catch (InscriptionDateInPastException e) {
-			ModelAndView mav = retrieveTournament(tournamentid, 1);
+			ModelAndView mav = retrieveTournament(tournamentid, null);
 			mav.addObject("tournament_already_started", true);
 			return mav;
 		}

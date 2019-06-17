@@ -277,14 +277,6 @@ public class TournamentHibernateDao implements TournamentDao {
 		
 		int result = (firstResult > secondResult)? WON : ((firstResult < secondResult)? LOST : DRAW);
 		
-		/*CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
-		Root<TournamentEvent> from = cq.from(TournamentEvent.class);
-		final TypedQuery<Integer> query = em.createQuery(
-				cq.select(from.get("firstTeamScore")).where(cb.equal(from.get("eventid"), event.getEventid()))
-			);
-		Optional<Integer> prevFirstScore = query.getResultList().stream().findFirst();*/
-		
 		if(event.getFirstTeamScore() != null) {
 			int prevResult = (event.getFirstTeamScore() > event.getSecondTeamScore())? WON : 
 				((event.getFirstTeamScore() < event.getSecondTeamScore())? LOST : DRAW);
@@ -331,6 +323,17 @@ public class TournamentHibernateDao implements TournamentDao {
 			);
 		
 		return query.getResultList().stream().findFirst();
+	}
+
+	@Override
+	public Optional<Integer> getCurrentRound(final Tournament tournament) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+		Root<TournamentEvent> from = cq.from(TournamentEvent.class);
+		return Optional.ofNullable(em.createQuery(
+				cq.select(cb.min(from.get("round"))).where(cb.and(cb.equal(from.get("tournament"), tournament),
+						cb.greaterThan(from.get("endsAt"), Instant.now())))
+			).getSingleResult());
 	}
 
 }
