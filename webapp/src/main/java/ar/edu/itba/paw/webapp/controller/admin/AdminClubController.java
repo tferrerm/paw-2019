@@ -100,10 +100,10 @@ public class AdminClubController extends BaseController {
 	    StringBuilder strBuilder = new StringBuilder();
 	    strBuilder.append("?");
 	    if(name != null && !name.isEmpty()) {
-        	strBuilder.append("name=").append(encodeString(name)).append("&");
+        	strBuilder.append("name=").append(encodeUriString(name)).append("&");
         }
         if(location != null && !location.isEmpty()) {
-        	strBuilder.append("location=").append(encodeString(location));
+        	strBuilder.append("location=").append(encodeUriString(location));
         } else {
         	strBuilder.deleteCharAt(strBuilder.length()-1);
         }

@@ -77,7 +77,7 @@ public class BaseController {
     	return i;
     }
     
-    public String encodeString(String str) {
+    public String encodeUriString(String str) {
     	return UriComponentsBuilder.fromPath(str).build().encode().toString();
     }
 	

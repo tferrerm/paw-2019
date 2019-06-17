@@ -91,16 +91,16 @@ public class PitchController extends BaseController {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("?");
 		if(name != null && !name.isEmpty()) {
-			strBuilder.append("name=").append(encodeString(name)).append("&");
+			strBuilder.append("name=").append(encodeUriString(name)).append("&");
 		}
 		if(sport != null && !sport.isEmpty()) {
-			strBuilder.append("sport=").append(encodeString(sport)).append("&");
+			strBuilder.append("sport=").append(encodeUriString(sport)).append("&");
 		}
 		if(location != null && !location.isEmpty()) {
-			strBuilder.append("location=").append(encodeString(location)).append("&");
+			strBuilder.append("location=").append(encodeUriString(location)).append("&");
 		}
 		if(clubName != null && !clubName.isEmpty()) {
-			strBuilder.append("clubname=").append(encodeString(clubName));
+			strBuilder.append("clubname=").append(encodeUriString(clubName));
 		} else {
 			strBuilder.deleteCharAt(strBuilder.length()-1);
 		}

@@ -128,19 +128,19 @@ public class AdminController extends BaseController {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("?");
 		if(establishment != null && !establishment.isEmpty()) {
-			strBuilder.append("establishment=").append(encodeString(establishment)).append("&");
+			strBuilder.append("establishment=").append(encodeUriString(establishment)).append("&");
 		}
 		if(sport != null && !sport.isEmpty()) {
-			strBuilder.append("sport=").append(encodeString(sport)).append("&");
+			strBuilder.append("sport=").append(encodeUriString(sport)).append("&");
 		}
 		if(organizer != null && !organizer.isEmpty()) {
-			strBuilder.append("organizer=").append(encodeString(organizer)).append("&");
+			strBuilder.append("organizer=").append(encodeUriString(organizer)).append("&");
 		}
 		if(vacancies != null && !vacancies.isEmpty()) {
-			strBuilder.append("vacancies=").append(encodeString(vacancies)).append("&");
+			strBuilder.append("vacancies=").append(encodeUriString(vacancies)).append("&");
 		}
 		if(date != null && !date.isEmpty()) {
-			strBuilder.append("date=").append(encodeString(date));
+			strBuilder.append("date=").append(encodeUriString(date));
 		}
 		else {
 			strBuilder.deleteCharAt(strBuilder.length()-1);
