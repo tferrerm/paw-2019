@@ -37,8 +37,8 @@
             </div>
             <c:forEach var="tournament" items="${tournaments}">
                 <div class="custom-row flex-space-around">
-                    <div>${tournament.name}</div>
-                    <div>${tournament.tournamentClub.name}</div>
+                    <div><c:out value="${tournament.name}" /></div>
+                    <div><c:out value="${tournament.tournamentClub.name}" /></div>
                     <div><spring:message code="${tournament.sport}"/></div>
                     <div>
                         <a href="<c:url value="/admin/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_tournament"/></button></a>
@@ -61,7 +61,7 @@
                         </button>
                       </a>
                     </div>
-                    <span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + tournamentQty - 1} <spring:message code="of"/> ${totalTournamentQty}</span>
+                    <span class="flex"><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + tournamentQty - 1}"/> <spring:message code="of"/> <c:out value="${totalTournamentQty}"/></span>
                     <div class="${page != lastPageNum ? "" : "hidden"}">
                       <a href="<c:url value='/admin/tournaments/${page+1}' />">
                           <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>

@@ -48,8 +48,8 @@
 		            </div>
 					<c:forEach var="club" items="${clubs}">
 						<div class="custom-row flex-space-around">
-							<div>${club.name}</div>
-							<div>${club.location}</div>
+							<div><c:out value="${club.name}" /></div>
+							<div><c:out value="${club.location}" /></div>
 							<div>
 								<a href="<c:url value="/admin/club/${club.clubid}"/>"> <button type="button" class="btn btn-primary view-club"><spring:message code="view_club"/></button></a>
 							</div>
@@ -63,7 +63,7 @@
 								<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
 								<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
 							</div>
-							<span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + clubQty - 1} <spring:message code="of"/> ${totalClubQty}</span>
+							<span><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}" />-<c:out value="${pageInitialIndex + clubQty - 1}" /> <spring:message code="of"/> <c:out value="${totalClubQty}" /></span>
 							<div class="${pageNum != lastPageNum ? "" : "hidden"}">
 								<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
 								<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
