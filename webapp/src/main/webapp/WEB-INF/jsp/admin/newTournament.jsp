@@ -54,19 +54,49 @@
 					</div>
 					<div>
 						<form:label path="maxTeams"><spring:message code="team_number"/> * </form:label>
-						<form:input  cssClass="form-control" type="number" maxlength="100" path="maxTeams"/>
+						<form:input  cssClass="form-control" type="number" min="4" max="10" path="maxTeams"/>
 						<form:errors path="maxTeams" cssClass="form-error" element="span"/>
+                        <c:if test="${invalid_team_amount}">
+                            <span class="form-error">
+                                <spring:message code="invalid_team_amount"/>
+                            </span>
+                        </c:if>
+                        <c:if test="${uneven_team_amount}">
+                            <span class="form-error">
+                                <spring:message code="uneven_team_amount"/>
+                            </span>
+                        </c:if>
 					</div>
 					<div>
 						<form:label path="teamSize"><spring:message code="team_size"/> * </form:label>
-						<form:input  cssClass="form-control" type="number" maxlength="100" path="teamSize"/>
+						<form:input  cssClass="form-control" type="number" min="3" max="11" path="teamSize"/>
 						<form:errors path="teamSize" cssClass="form-error" element="span"/>
+                        <c:if test="${invalid_team_size}">
+                            <span class="form-error">
+                                <spring:message code="invalid_team_size"/>
+                            </span>
+                        </c:if>
 					</div>
 					<div class="form-field flex-space-between">
                         <div class="form-field-horizontal">
                             <form:label path="firstRoundDate"><spring:message code="new_event_date"/> *</form:label>
                             <form:input cssClass="form-control date-input" type="date" path="firstRoundDate"/>
                             <form:errors path="firstRoundDate" cssClass="form-error" element="span"/>
+                            <c:if test="${event_in_past}">
+                                <span class="form-error">
+                                    <spring:message code="event_in_past"/>
+                                </span>
+                            </c:if>
+                            <c:if test="${date_exceeded}">
+                                <span class="form-error">
+                                    <spring:message code="date_exceeded"/>
+                                </span>
+                            </c:if>
+                            <c:if test="${insufficient_pitches}">
+                                <span class="form-error">
+                                    <spring:message code="insufficient_pitches"/>
+                                </span>
+                            </c:if>
                         </div>
                         <div>
                             <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
@@ -78,6 +108,11 @@
                                 </c:forEach>
                             </form:select>
                             <form:errors path="startsAtHour" cssClass="form-error" element="span"/>
+                            <c:if test="${ends_before_starts}">
+                                <span class="form-error">
+                                    <spring:message code="ends_before_starts"/>
+                                </span>
+                            </c:if>
                         </div>
                         <div>
                             <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
@@ -95,6 +130,16 @@
                         <form:label path="inscriptionEndDate"><spring:message code="end_date"/> *</form:label>
                         <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate"/>
                         <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
+                        <c:if test="${inscription_date_in_past}">
+                            <span class="form-error">
+                                <spring:message code="inscription_date_in_past"/>
+                            </span>
+                        </c:if>
+                        <c:if test="${inscription_date_exceeded}">
+                            <span class="form-error">
+                                <spring:message code="inscription_date_exceeded"/>
+                            </span>
+                        </c:if>
                     </div>
 					<div class="submit-container">
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>

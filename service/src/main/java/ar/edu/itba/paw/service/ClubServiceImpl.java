@@ -10,6 +10,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,8 @@ import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
 @Service
+//@EnableAsync
+@EnableScheduling
 public class ClubServiceImpl implements ClubService {
 	
 	@Autowired
@@ -37,8 +43,6 @@ public class ClubServiceImpl implements ClubService {
 	private InscriptionDao idao;
 	
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
-	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
-			"day_fri", "day_sat", "day_sun"};
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
 	private static final String TIME_ZONE = "America/Buenos_Aires";
@@ -219,6 +223,14 @@ public class ClubServiceImpl implements ClubService {
 			}
 		}
 		return DAYS_OF_WEEK_NUM;
+	}
+	
+	//@Async
+	@Scheduled(fixedDelay = 1000)
+	@Override
+	public void checkTournamentInscriptions() throws InterruptedException {
+		//Thread.sleep(4000);
+		//System.out.println("HOLA");
 	}
 
 }

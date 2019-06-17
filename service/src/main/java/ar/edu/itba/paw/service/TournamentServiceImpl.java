@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.service;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -20,6 +18,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.DateInPastException;
+import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EventHasNotEndedException;
+import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionDateExceededException;
+import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InsufficientPitchesException;
+import ar.edu.itba.paw.exception.InvalidTeamAmountException;
+import ar.edu.itba.paw.exception.InvalidTeamSizeException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
+import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
+import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.ClubDao;
@@ -27,6 +37,7 @@ import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
@@ -46,10 +57,17 @@ public class TournamentServiceImpl implements TournamentService {
 	@Autowired
 	private UserDao ud;
 	
-	private static final String TIME_ZONE = "America/Buenos_Aires";
-	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
+	private static final String TIME_ZONE = "America/Buenos_Aires";
+	private static final int MIN_HOUR = 9;
+	private static final int MAX_HOUR = 23;
+
+	private static final int MIN_TEAMS = 4;
+	private static final int MAX_TEAMS = 10;
+	private static final int MIN_TEAM_SIZE = 3;
+	private static final int MAX_TEAM_SIZE = 11;
+	private static final int INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE = 1;
 	
 	@Override
 	public Optional<Tournament> findById(final long tournamentid) {
@@ -79,52 +97,90 @@ public class TournamentServiceImpl implements TournamentService {
 	
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public Tournament create(final String name, final Sport sport, final Club club, final String maxTeams,
-			final String teamSize, final String firstRoundDate, final String startsAtHour,
-			final String endsAtHour, final String inscriptionEndDate, final User user) {
+	public Tournament create(final String name, final Sport sport, final Club club, final Integer maxTeams,
+			final Integer teamSize, final Instant firstRoundDate, final Integer startsAtHour,
+			final Integer endsAtHour, final Instant inscriptionEndDate, final User user) 
+					throws DateInPastException, MaximumDateExceededException, EndsBeforeStartsException,
+					HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException,
+					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException,
+					InscriptionDateExceededException {
 		
-		int mt = Integer.parseInt(maxTeams);
-		int ts = Integer.parseInt(teamSize);
-		int startsAt = Integer.parseInt(startsAtHour);
-    	int endsAt = Integer.parseInt(endsAtHour);
-    	Instant firstRoundInstant = LocalDate.parse(firstRoundDate)
-    			.atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
-    	Instant inscriptionEndInstant = LocalDateTime.parse(inscriptionEndDate)
-    			.atZone(ZoneId.of(TIME_ZONE)).toInstant();
-    	Instant firstRoundStartsAt = firstRoundInstant.plus(startsAt, ChronoUnit.HOURS);
-    	Instant firstRoundEndsAt = firstRoundInstant.plus(endsAt, ChronoUnit.HOURS);
+    	Instant firstRoundStartsAt = firstRoundDate.plus(startsAtHour, ChronoUnit.HOURS);
+    	Instant firstRoundEndsAt = firstRoundDate.plus(endsAtHour, ChronoUnit.HOURS);
     	
-    	// CHEQUEOS
+    	if(maxTeams < MIN_TEAMS || maxTeams > MAX_TEAMS)
+    		throw new InvalidTeamAmountException();
+    	if(maxTeams % 2 != 0)
+    		throw new UnevenTeamAmountException();
+    	if(teamSize < MIN_TEAM_SIZE || teamSize > MAX_TEAM_SIZE)
+    		throw new InvalidTeamSizeException();
+    	if(firstRoundDate.isBefore(now()))
+    		throw new DateInPastException();
+    	if(firstRoundDate.compareTo(aWeeksTime()) > 0)
+    		throw new MaximumDateExceededException();
+    	if(endsAtHour <= startsAtHour)
+    		throw new EndsBeforeStartsException();
+    	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
+    		throw new HourOutOfRangeException();
+    	if(inscriptionEndDate.isBefore(now()))
+    		throw new InscriptionDateInPastException();
+    	if(inscriptionEndDate.compareTo(firstRoundDate.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS)) > 0)
+    		throw new InscriptionDateExceededException();
     	
-    	// VALIDAR QUE HAYA SUFICIENTES CANCHAS (IF SIZE < MT/2...)
     	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), sport, 
-    			firstRoundStartsAt, firstRoundEndsAt, mt/2);
-    	
-    	return td.create(name, sport, club, availablePitches, mt, ts, firstRoundStartsAt,
-    			firstRoundEndsAt, inscriptionEndInstant, user);
-    	
-    	
+    			firstRoundStartsAt, firstRoundEndsAt, maxTeams/2);
+    	if(availablePitches.size() < maxTeams / 2)
+    		throw new InsufficientPitchesException();
+    		
+    	return td.create(name, sport, club, availablePitches, maxTeams, teamSize, firstRoundStartsAt,
+    			firstRoundEndsAt, inscriptionEndDate, user);
+	}
+	
+	private Instant now() {
+    	return Instant.now().atZone(ZoneId.of(TIME_ZONE)).toInstant();
+    }
+	
+	private Instant aWeeksTime() {
+		return now().plus(7, ChronoUnit.DAYS);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void joinTournament(long tournamentid, long teamid, final long userid) 
-			throws UserBusyException, UserAlreadyJoinedException {
+			throws UserBusyException, UserAlreadyJoinedException, InscriptionDateInPastException,
+			TeamAlreadyFilledException, UserAlreadyJoinedException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		} // IF NO ARRANCO, IF TEAM NO LLENO
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
-		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		} // YA SE UNIO
+		
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		
+		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
+			throw new InscriptionDateInPastException();
+		}
+		
+		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		if(team.getInscriptions().size() == tournament.getTeamSize()) {
+			throw new TeamAlreadyFilledException();
+		}
+		for(Inscription inscription : team.getInscriptions()) {
+			if(inscription.getInscriptedUser().getUserid() == user.getUserid()) {
+				throw new UserAlreadyJoinedException("User " + user.getUserid() + " has already joined Tournament " + tournament.getTournamentid());
+			}
+		}
 		
 		td.joinTournament(tournament, team, user);
 	}
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void leaveTournament(final long tournamentid, final long userid) {
-		// IF NO ARRANCO
+	public void leaveTournament(final long tournamentid, final long userid) 
+			throws InscriptionDateInPastException {
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
+			throw new InscriptionDateInPastException();
+		}
 		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
 		td.deleteTournamentInscriptions(team, user);
@@ -198,7 +254,7 @@ public class TournamentServiceImpl implements TournamentService {
 		Collections.sort(events, new Comparator<TournamentEvent>() {
 			@Override
 			public int compare(TournamentEvent event1, TournamentEvent event2) {
-				return ((Long) event1.getEventid()).compareTo(event2.getEventid());
+				return ((Long) event1.getEventId()).compareTo(event2.getEventId());
 			}
 		});
 		return events;
@@ -206,14 +262,17 @@ public class TournamentServiceImpl implements TournamentService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult, // IF YA TERMINO
-			final Integer secondResult) {
+	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult,
+			final Integer secondResult) throws EventHasNotEndedException {
 		if(eventid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		TournamentEvent event = td.findTournamentEventById(eventid).orElseThrow(NoSuchElementException::new);
 		if(!event.getTournament().equals(tournament)) {
 			throw new IllegalArgumentException("Event " + eventid + " does not belong to tournament " + tournament.getTournamentid());
+		}
+		if(event.getEndsAt().compareTo(Instant.now()) > 0) {
+			throw new EventHasNotEndedException();
 		}
 		td.postTournamentEventResult(tournament, event, firstResult, secondResult);
 	}

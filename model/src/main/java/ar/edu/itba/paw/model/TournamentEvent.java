@@ -1,30 +1,21 @@
 package ar.edu.itba.paw.model;
 
+import java.time.Instant;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "tournament_events")
-public class TournamentEvent {
-	
-	@Id
-	private Long eventid;
+public class TournamentEvent extends Event {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "tournamentid")
 	private Tournament tournament;
-	
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
-	@MapsId("eventid")
-	@JoinColumn(name = "eventid")
-	private Event event;
 	
 	@Column(name = "round", nullable = false)
 	private int round;
@@ -47,16 +38,14 @@ public class TournamentEvent {
 		
 	}
 	
-	public TournamentEvent(Tournament tournament, Event event, int round,
+	public TournamentEvent(String name, User owner, Pitch pitch,
+			int maxParticipants, Instant startsAt, Instant endsAt, Tournament tournament, int round,
 			TournamentTeam firstTeam, TournamentTeam secondTeam) {
-		this.eventid = event.getEventId(); // ?
+		super(name, owner, pitch, maxParticipants, startsAt, endsAt);
 		this.tournament = tournament;
-		this.event = event;
 		this.round = round;
 		this.firstTeam = firstTeam;
 		this.secondTeam = secondTeam;
-		//this.firstTeamScore = null;
-		//this.secondTeamScore = null;
 	}
 	
 	@Override
@@ -66,19 +55,11 @@ public class TournamentEvent {
 		if(!(o instanceof TournamentEvent))
 			return false;
 		TournamentEvent other = (TournamentEvent) o;
-		return this.getEventid() == other.getEventid();
-	}
-	
-	public long getEventid() {
-		return eventid;
+		return this.getEventId() == other.getEventId();
 	}
 
 	public Tournament getTournament() {
 		return tournament;
-	}
-
-	public Event getEvent() {
-		return event;
 	}
 
 	public int getRound() {

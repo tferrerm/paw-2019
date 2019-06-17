@@ -1,17 +1,17 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 public class TournamentResultForm {
 
 	@NotBlank
-	@Size(max=3)
+	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
 	private String firstResult;
 	
 	@NotBlank
-	@Size(max=3)
+	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
 	private String secondResult;
 
 	public String getFirstResult() {

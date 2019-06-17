@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventFullException;
-import ar.edu.itba.paw.exception.EventInPastException;
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
@@ -123,7 +123,7 @@ public interface EventService {
 
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
 			final int maxParticipants, final Instant date, final int startsAtHour,
-			final int endsAtHour) throws EventInPastException, 
+			final int endsAtHour) throws DateInPastException, 
 											MaximumDateExceededException, EndsBeforeStartsException, 
 											EventOverlapException, HourOutOfRangeException;
 
