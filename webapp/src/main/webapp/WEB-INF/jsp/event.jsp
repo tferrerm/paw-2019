@@ -158,7 +158,9 @@
 					</c:otherwise>
 				</c:choose>
 				<c:if test="${isOwner}">
-					<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_event"/></button>
+					<form method="POST" action="<c:url value="/event/${event.eventId}/delete"/>">
+						<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_event"/></button>
+					</form>
 				</c:if>
 			</c:if>
 		</div>

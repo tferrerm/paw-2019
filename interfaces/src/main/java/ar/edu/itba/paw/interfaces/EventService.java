@@ -206,4 +206,7 @@ public interface EventService {
 	 */
 	public int countUserOwnedPages(final boolean onlyFuture, final long userid);
 
+	public void cancelEvent(final Event event, final long userid) 
+			throws UserNotAuthorizedException, DateInPastException;
+
 }
