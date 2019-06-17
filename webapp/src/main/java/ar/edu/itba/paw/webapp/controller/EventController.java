@@ -231,7 +231,7 @@ public class EventController extends BaseController {
         ModelAndView mav = new ModelAndView("list");
     	
         Integer vac = tryInteger(vacancies);
-    	Instant dateInst = tryInstant(date, TIME_ZONE);
+    	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
     	if(vac == null && vacancies != null && !vacancies.isEmpty())
     		mav.addObject("invalid_number_format", true);
     	if(dateInst == null && date != null && !date.isEmpty())
@@ -286,7 +286,7 @@ public class EventController extends BaseController {
     	Integer mp = tryInteger(form.getMaxParticipants());
     	Integer sa = tryInteger(form.getStartsAtHour());
     	Integer ea = tryInteger(form.getEndsAtHour());
-    	Instant date = tryInstant(form.getDate(), TIME_ZONE);
+    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);System.out.println(form.getDate());System.out.println(date);
     	if(mp == null)
     		errors.rejectValue("maxParticipants", "wrong_int_format");
     	if(sa == null)

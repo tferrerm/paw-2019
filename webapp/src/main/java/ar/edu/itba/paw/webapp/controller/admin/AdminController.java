@@ -58,7 +58,7 @@ public class AdminController extends BaseController {
 		ModelAndView mav = new ModelAndView("admin/index");
 		
 	   	Integer vac = tryInteger(vacancies);
-    	Instant dateInst = tryInstant(date, TIME_ZONE);
+    	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
     	if(vac == null && vacancies != null && !vacancies.isEmpty())
     		mav.addObject("invalid_number_format", true);
     	if(dateInst == null && date != null && !date.isEmpty())
