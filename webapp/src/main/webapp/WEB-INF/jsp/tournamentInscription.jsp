@@ -20,15 +20,32 @@
 			<div class="profile-title">
 				<h2>${tournament.name}</h2>
 			</div>
+			<span class="help-message notice"><spring:message code="tournament_inscription"/></span>
 			<div class="w-50 mv-10">
-				<span><spring:message code="club" />: ${club.name}</span>
+				<div class="comment-profile-row">
+					<span class="event-info-label"><spring:message code="club" /></span>
+					<span>: ${club.name}</span>
+				</div>
 				<div>
-					<span><spring:message code="end_date"/>: <span>
+					<span class="event-info-label"><spring:message code="end_date"/><span>
 					<span>
-						<fmt:timeZone value="AR">
+						: <fmt:timeZone value="AR">
 							<fmt:parseDate value="${tournament.endsInscriptionAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
 							<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
 						</fmt:timeZone>
+					</span>
+				</div>
+				<div class="comment-profile-row">
+					<span class="event-info-label"><spring:message code="event_description" /></span>
+					<span>
+						: <spring:message code="tournament_description_one" />
+						${roundsAmount}
+						<spring:message code="tournament_description_two" />
+						<fmt:timeZone value="AR">
+							<fmt:parseDate value="${startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+							<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+						</fmt:timeZone>
+						<spring:message code="tournament_description_three" />
 					</span>
 				</div>
 			</div>

@@ -142,27 +142,29 @@
 					<spring:message code="user_busy_error"/>
 				</span>
 			</c:if>
-			<c:if test="${!has_started}">
-				<c:choose>
-					<c:when test="${is_participant}">
-						<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
-							<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
-						</form>
-					</c:when>
-					<c:otherwise>
-						<c:if test="${participant_count < event.maxParticipants}">
-							<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
-								<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
+			<div class="club-buttons">
+				<c:if test="${!has_started}">
+					<c:choose>
+						<c:when test="${is_participant}">
+							<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
+								<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
 							</form>
-						</c:if>
-					</c:otherwise>
-				</c:choose>
-				<c:if test="${isOwner}">
-					<form method="POST" action="<c:url value="/event/${event.eventId}/delete"/>">
-						<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_event"/></button>
-					</form>
+						</c:when>
+						<c:otherwise>
+							<c:if test="${participant_count < event.maxParticipants}">
+								<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
+									<button type="submit" class="btn btn-success join-button"><spring:message code="join"/></button>
+								</form>
+							</c:if>
+						</c:otherwise>
+					</c:choose>
+					<c:if test="${isOwner}">
+						<form method="POST" action="<c:url value="/event/${event.eventId}/delete"/>">
+							<button type="submit" class="btn btn-danger join-button mb-10"><spring:message code="cancel_event"/></button>
+						</form>
+					</c:if>
 				</c:if>
-			</c:if>
+			</div>
 		</div>
 	</div>
 

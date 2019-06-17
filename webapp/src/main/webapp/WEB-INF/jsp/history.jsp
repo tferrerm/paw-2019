@@ -18,11 +18,11 @@
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
 				<div class="profile-title">
-                    <h2><spring:message code="myParticipations" /></h2>
-                </div>
-                <span class="help-message notice"><spring:message code="history_help"/></span>
+            <h2><spring:message code="myParticipations" /></h2>
+        </div>
+        <span class="help-message notice"><spring:message code="history_help"/></span>
 				<c:choose>
-           			<c:when test="${eventQty > 0}">
+          <c:when test="${eventQty > 0}">
 						<div class="tbl">
 							<div class="table-header">
 								<div class="flex-grow justify-center my-events-tbl-sub">
@@ -54,42 +54,38 @@
 									</div>
 								</div>
 							</div>
-							<div class="table-navigator">
-					            <c:if test="${page != 1}">
-									<div>
-					                    <a href="<c:url value='/history/1' />">
-					                        <button type="button" class="btn btn-secondary">
-					                            <spring:message code="first"/>
-					                        </button>
-					                    </a>
-					                    <a href="<c:url value='/history/${page-1}' />">
-					                        <button type="button" class="btn btn-secondary">
-					                            <spring:message code="back"/>
-					                        </button>
-					                    </a>
-					                </div>
-					            </c:if>
-				        		<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
-				            	<c:if test="${page != lastPageNum}">
-									<div>
-					                    <a href="<c:url value='/history/${page+1}' />">
-					                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-					                    </a>
-					                    <a href="<c:url value='/history/${lastPageNum}' />">
-					                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-					                    </a>
-					                </div>
-					            </c:if>
-			            	</div>
-			            </div>
-		           	</c:when>
-	                <c:otherwise>
-	                    <div class="notice">
-	                        <spring:message code="no_results"/>
-	                    </div>
-	                </c:otherwise>
-	            </c:choose>
+
+							<div class="table-navigator w-100 justify-center">
+									<div class="${page != 1 ? "" : "hidden"}">
+	                    <a href="<c:url value='/history/1' />">
+	                        <button type="button" class="btn btn-secondary">
+	                            <spring:message code="first"/>
+	                        </button>
+	                    </a>
+	                    <a href="<c:url value='/history/${page-1}' />">
+	                        <button type="button" class="btn btn-secondary">
+	                            <spring:message code="back"/>
+	                        </button>
+	                    </a>
+	                </div>
+			        		<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+									<div class="${page != lastPageNum ? "" : "hidden"}">
+	                    <a href="<c:url value='/history/${page+1}' />">
+	                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+	                    </a>
+	                    <a href="<c:url value='/history/${lastPageNum}' />">
+	                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+	                    </a>
+	                </div>
+	            	</div>
+           	</c:when>
+              <c:otherwise>
+                  <div class="notice">
+                      <spring:message code="no_results"/>
+                  </div>
+              </c:otherwise>
+          </c:choose>
+				</div>
 			</div>
-		</div>
 	</body>
 </html>

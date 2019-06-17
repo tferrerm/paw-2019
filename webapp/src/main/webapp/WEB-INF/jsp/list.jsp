@@ -98,41 +98,37 @@
                         </div>
                     </c:forEach>
     			</div>
-    			<div class="table-navigator">
-                    <c:choose>
-                        <c:when test="${eventQty > 0}">
-                            <c:if test="${page != 1}">
-                				<div>
-                                    <a href="<c:url value='/events/1${queryString}' />">
-                                        <button type="button" class="btn btn-secondary">
-                                            <spring:message code="first"/>
-                                        </button>
-                                    </a>
-                                    <a href="<c:url value='/events/${page-1}${queryString}' />">
-                                        <button type="button" class="btn btn-secondary">
-                                            <spring:message code="back"/>
-                                        </button>
-                                    </a>
-                                </div>
-                            </c:if>
-                            <span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
-                            <c:if test="${page != lastPageNum}">
-                				<div>
-                                    <a href="<c:url value='/events/${page+1}${queryString}' />">
-                                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-                                    </a>
-                                    <a href="<c:url value='/events/${lastPageNum}${queryString}' />">
-                                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-                                    </a>
-                                </div>
-                            </c:if>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="notice">
-                                <spring:message code="no_results"/>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
+    			<div class="table-navigator w-100 justify-center">
+            <c:choose>
+                <c:when test="${eventQty > 0}">
+          				<div class="${page != 1 ? "" : "hidden"}">
+                      <a href="<c:url value='/events/1${queryString}' />">
+                          <button type="button" class="btn btn-secondary">
+                              <spring:message code="first"/>
+                          </button>
+                      </a>
+                      <a href="<c:url value='/events/${page-1}${queryString}' />">
+                          <button type="button" class="btn btn-secondary">
+                              <spring:message code="back"/>
+                          </button>
+                      </a>
+                  </div>
+                  <span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+          				<div class="${page != lastPageNum ? "" : "hidden"}">
+                    <a href="<c:url value='/events/${page+1}${queryString}' />">
+                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                    </a>
+                    <a href="<c:url value='/events/${lastPageNum}${queryString}' />">
+                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                    </a>
+                  </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="notice">
+                        <spring:message code="no_results"/>
+                    </div>
+                </c:otherwise>
+            </c:choose>
     			</div>
             </div>
         </div>
