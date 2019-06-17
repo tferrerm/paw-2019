@@ -443,7 +443,7 @@ a.event-link {
     display:flex;
     justify-content: space-between;
     padding: 10px;
-
+    min-width: 700px;
 }
 
 .form-error {
