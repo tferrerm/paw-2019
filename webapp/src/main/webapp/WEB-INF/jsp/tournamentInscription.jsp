@@ -34,7 +34,7 @@
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex].teamid}"/>
 										<cr:forEach begin="1" end="${fn:length(teamsUsers[teamid])}" step="1" var="userIndex">
-											<span>${teamsUsers[teamid][userIndex-1].firstname} ${teamsUsers[teamid][userIndex-1].lastname}</span>
+											<a class="link-text" href="<c:url value="/user/${teamsUsers[teamid][userIndex-1].userid}" /> ">${teamsUsers[teamid][userIndex-1].firstname} ${teamsUsers[teamid][userIndex-1].lastname}</a>
 										</cr:forEach>
 										<cr:forEach begin="1" end="${tournament.teamSize - fn:length(teamsUsers[teamid])}" step="1">
 											<span>-</span>
@@ -55,7 +55,7 @@
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex + 1].teamid}"/>
 										<cr:forEach begin="1" end="${fn:length(teamsUsers[teamid])}" step="1" var="userIndex">
-											<span>${teamsUsers[teamid][userIndex-1].firstname} ${teamsUsers[teamid][userIndex-1].lastname}</span>
+											<a class="link-text" href="<c:url value="/user/${teamsUsers[teamid][userIndex-1].userid}" /> ">${teamsUsers[teamid][userIndex-1].firstname} ${teamsUsers[teamid][userIndex-1].lastname}</a>
 										</cr:forEach>
 										<cr:forEach begin="1" end="${tournament.teamSize - fn:length(teamsUsers[teamid])}" step="1">
 											<span>-</span>
@@ -74,7 +74,7 @@
 					</cr:forEach>
 				</div>
 			</div>
-			<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
+			<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
 				<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
 			</form>
 		</div>
