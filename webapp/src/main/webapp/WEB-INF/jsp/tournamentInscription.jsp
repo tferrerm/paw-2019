@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
-		<title><spring:message code="sport_matcher" /> - <spring:message code="event" /></title>
+		<title><spring:message code="sport_matcher" /> - <spring:message code="tournaments" /></title>
 	</head>
 	<body>
 	<%@ include file="header.jsp" %>
@@ -42,9 +42,11 @@
 									</div>
 								</div>
 								<div class="flex flex-grow justify-center">
-									<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex].teamid}/join"/>">
-										<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
-									</form>
+									<c:if test="${!userJoined}">
+										<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex].teamid}/join"/>">
+											<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
+										</form>
+									</c:if>
 								</div>
 							</div>
 							<div class="team-description w-100">
@@ -61,9 +63,11 @@
 									</div>
 								</div>
 								<div class="flex flex-grow justify-center">
-									<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex + 1].teamid}/join"/>">
-										<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
-									</form>
+									<c:if test="${!userJoined}">
+										<form method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/team/${teams[teamIndex + 1].teamid}/join"/>">
+											<button type="submit" class="btn btn-primary view-event"><spring:message code="join_team"/></button>
+										</form>
+									</c:if>
 								</div>
 							</div>
 						</div>
