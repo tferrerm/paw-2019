@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -107,6 +108,7 @@ public class TournamentController extends BaseController {
 		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
 		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
 		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
+		mav.addObject("now", Instant.now());
         
         return mav;
     }
