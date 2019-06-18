@@ -19,9 +19,11 @@ public interface EmailService {
 	public void eventStarted(final User user, final Event tournament, final Locale locale);
 
 	public void tournamentCancelled(final User user, final Tournament tournament, final Locale locale);
+	
+	public void tournamentCancelled(final User user, final String tournamentName, final Locale locale);
 
-	public void eventCancelled(User kickedUser, Event event, final Locale locale);
+	public void eventCancelled(final User kickedUser, final Event event, final Locale locale);
 
-
+	public void eventCancelled(final User user, final String eventName, final Locale locale);
 
 }

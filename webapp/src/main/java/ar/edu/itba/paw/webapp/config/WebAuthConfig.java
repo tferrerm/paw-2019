@@ -83,8 +83,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/event/*/join", "/event/*/leave", "/event/*/upvote", "/event/*/downvote",
                 		"/event/*/kick-user/*", "/event/*/delete").access("hasRole('ROLE_USER')")
                 .antMatchers("/event/**", "/events/**").permitAll()
-                .antMatchers("/club/**", "/clubs/**").access("hasRole('ROLE_USER')")
-                .antMatchers("/pitch/**", "/pitches/**").access("hasRole('ROLE_USER')")
+                .antMatchers("/club/*/comment").access("hasRole('ROLE_USER')")
+                .antMatchers("/club/**", "/clubs/**").permitAll()
+                .antMatchers("/pitch/*/event/create").access("hasRole('ROLE_USER')")
+                .antMatchers("/pitch/**", "/pitches/**").permitAll()
                 .antMatchers("/my-events/**").access("hasRole('ROLE_USER')")
                 .antMatchers("/history/**").access("hasRole('ROLE_USER')")
                 .antMatchers("/tournament/*/team/*/join", 
