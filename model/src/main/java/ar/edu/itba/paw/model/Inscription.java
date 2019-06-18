@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -61,7 +59,22 @@ public class Inscription {
 	
 	@Override
 	public String toString() {
-		return "Inscription: Eventid = " + inscriptionEvent + " Userid = " + inscriptedUser;
+		return "Inscription: Event = " + inscriptionEvent + " User = " + inscriptedUser;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof Inscription))
+			return false;
+		Inscription other = (Inscription) o;
+		return this.id.equals(other.id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.inscriptedUser.hashCode();
 	}
 
 	public Event getInscriptionEvent() {
@@ -78,23 +91,6 @@ public class Inscription {
 
 	public Integer getVote() {
 		return vote;
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		if(o == this)
-			return true;
-		if(!(o instanceof Inscription))
-			return false;
-		Inscription other = (Inscription) o;
-		return this.getInscriptionEvent().equals(other.getInscriptionEvent()) 
-				&& this.getInscriptedUser().equals(other.getInscriptedUser());
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(this.getInscriptionEvent(), this.getInscriptedUser(),
-				this.getTournamentTeam(), this.vote);
 	}
 	
 }

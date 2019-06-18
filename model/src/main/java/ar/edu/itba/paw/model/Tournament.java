@@ -92,6 +92,11 @@ public class Tournament {
 		Tournament other = (Tournament) o;
 		return this.getTournamentid() == other.getTournamentid();
 	}
+	
+	@Override
+	public int hashCode() {
+		return ((Long) this.getTournamentid()).hashCode();
+	}
 
 	public long getTournamentid() {
 		return tournamentid;
