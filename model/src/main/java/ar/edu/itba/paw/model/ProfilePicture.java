@@ -21,7 +21,7 @@ public class ProfilePicture {
 	@Column(name = "profile_picture_id")
 	private long profilePictureId;
 	
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	private User addedBy;
 	
