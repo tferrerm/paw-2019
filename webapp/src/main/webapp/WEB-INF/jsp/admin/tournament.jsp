@@ -65,21 +65,21 @@
 																	<span class="event-info-label"><c:out value="${event.firstTeam.teamName}" /></span>
                                   <c:choose>
 	                                  <c:when test="${eventsHaveResult[eventid]}">
-																			<div class="column-flex mh-10">
+																			<div class="maxw-100 mh-10">
 	                                      <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
-	                                      <form:errors path="firstResult" cssClass="form-error" element="span"/>
 																			</div>
-																			<div class="column-flex mh-10">
+																			<div class="maxw-100 mh-10">
 	                                      <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
-	                                      <form:errors path="secondResult" cssClass="form-error" element="span"/>
 																			</div>
 	                                  </c:when>
 	                                  <c:otherwise>
-																			<div class="column-flex mh-10">
+																			<div class="column-flex mh-10 maxw-100">
 	                                      <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3"/>
+																				<div class="maxw-100">
 	                                      <form:errors path="firstResult" cssClass="form-error" element="span"/>
+																				</div>
 																			</div>
-																			<div class="column-flex mh-10">
+																			<div class="column-flex mh-10 maxw-100">
 	                                      <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3"/>
 	                                      <form:errors path="secondResult" cssClass="form-error" element="span"/>
 																			</div>
