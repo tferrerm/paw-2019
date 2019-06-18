@@ -179,6 +179,7 @@ public class AdminTournamentController extends BaseController {
 		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
 		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
 		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
+		mav.addObject("now", Instant.now());
 		
 		return mav;
 	}

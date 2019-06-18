@@ -21,7 +21,7 @@ public class PitchPicture {
 	@Column(name = "pitch_picture_id")
 	private long pitchPictureId;
 	
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "pitchid")
 	private Pitch belongsTo;
 	

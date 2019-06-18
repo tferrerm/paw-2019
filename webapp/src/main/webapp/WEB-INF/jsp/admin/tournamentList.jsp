@@ -30,6 +30,7 @@
     				<div class="background-dodgerblue table-header">
               <div class="table-titles flex-space-around">
               	<span class="justify-center flex-1 color-white mt-10"><spring:message code="event_name" /></span>
+                <span class="justify-center flex-1 color-white mt-10"><spring:message code="state" /></span>
               	<span class="justify-center flex-1 color-white mt-10"><spring:message code="club" /></span>
               	<span class="justify-center flex-1 color-white mt-10"><spring:message code="sport" /></span>
 								<span class="justify-center flex-1" />
@@ -38,6 +39,19 @@
             <c:forEach var="tournament" items="${tournaments}">
                 <div class="custom-row flex-space-around">
                     <div><c:out value="${tournament.name}" /></div>
+                    <div>
+                      <c:choose>
+                        <c:when test="${tournament.endsInscriptionAt > now}">
+                          <spring:message code="inscription"/>
+                        </c:when>
+                        <c:when test="${(tournament.endsInscriptionAt <= now) && !tournament.inscriptionSuccess}">
+                          <spring:message code="pending_approval"/>
+                        </c:when>
+                        <c:otherwise>
+                          <spring:message code="started"/>
+                        </c:otherwise>
+                      </c:choose>
+                    </div>
                     <div><c:out value="${tournament.tournamentClub.name}" /></div>
                     <div><spring:message code="${tournament.sport}"/></div>
                     <div>

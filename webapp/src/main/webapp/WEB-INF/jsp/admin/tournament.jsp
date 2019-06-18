@@ -40,7 +40,7 @@
             </div>
             <c:forEach var="teamEntry" items="${teamsScoresMap}">
                 <div class="custom-row">
-                    <div class="justify-center flex-1"><c:out value="${teamEntry.key.teamName}" /></div>
+                    <div class="justify-center flex-1"><spring:message code="${teamEntry.key.teamName}"/></div>
                     <div class="justify-center flex-1"><c:out value="${teamEntry.value}" /></div>
                 </div>
             </c:forEach>
@@ -67,7 +67,7 @@
                             <div class="w-100 justify-center mt-10 column-flex">
 															<span class="event-info-label"><c:out value="${event.pitch.name}" />: </span>
 																<div class="tournament-admin-row pitch-item">
-																	<span class="event-info-label"><c:out value="${event.firstTeam.teamName}" /></span>
+																	<span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
                                   <c:choose>
 	                                  <c:when test="${eventsHaveResult[eventid]}">
 																			<div class="maxw-100 mh-10">
@@ -90,7 +90,7 @@
 																			</div>
 	                                  </c:otherwise>
                                 	</c:choose>
-                                  <span class="event-info-label"><c:out value="${event.secondTeam.teamName}" /></span>
+                                  <span class="event-info-label"><spring:message code="${event.secondTeam.teamName}"/><c:out value="${}" /></span>
 																</div>
 																<div class="justify-center">
 																	<button type="submit" class="btn btn-primary minw-150 btn-primary"><spring:message code="upload_score"/></button>
@@ -102,12 +102,12 @@
                           <div class="w-100 justify-center mt-10">
 															<span class="event-info-label"><c:out value="${event.pitch.name}" />: </span>
 															<div class="flex pitch-item">
-	                              <span class="event-info-label"><c:out value="${event.firstTeam.teamName}" /></span>
+	                              <span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
 																<div class="score score-tournament">
 	                                  <span>-</span>
 	                                  <span>-</span>
 	                              </div>
-	                              <span class="event-info-label"><c:out value="${event.secondTeam.teamName}" /></span>
+	                              <span class="event-info-label"><spring:message code="${event.secondTeam.teamName}"/></span>
 															</div>
                           </div>
                       </c:otherwise>

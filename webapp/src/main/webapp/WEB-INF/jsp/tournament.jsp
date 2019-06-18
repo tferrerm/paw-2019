@@ -40,7 +40,7 @@
             </div>
             <c:forEach var="teamEntry" items="${teamsScoresMap}">
                 <div class="custom-row">
-                    <div class="justify-center flex-1"><c:out value="${teamEntry.key.teamName}"/></div>
+                    <div class="justify-center flex-1"><spring:message code="${teamEntry.key.teamName}"/></div>
                     <div class="justify-center flex-1"><c:out value="${teamEntry.value}"/></div>
                 </div>
             </c:forEach>
@@ -61,7 +61,7 @@
               <c:forEach var="event" items="${roundEvents}">
                   <cr:set var="eventid" scope="page" value="${event.eventId}"/>
                   <div class="flex pitch-item w-100 justify-center">
-                      <span class="event-info-label"><c:out value="${event.firstTeam.teamName}"/></span>
+                      <span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
                       <c:choose>
                           <c:when test="${eventsHaveResult[eventid]}">
                               <div class="score score-tournament">
@@ -77,7 +77,7 @@
                           </c:otherwise>
                       </c:choose>
                       <span class="event-info-label"><c:out value="${event.secondTeam.teamName}"/></span>
-											                      <a class="ml-30" href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                      <a class="ml-30" href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
                   </div>
               </c:forEach>
               <div class="table-navigator w-100 justify-center">

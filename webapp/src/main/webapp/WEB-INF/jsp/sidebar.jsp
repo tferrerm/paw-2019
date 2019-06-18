@@ -17,7 +17,9 @@
             <li class="minh-25"><a href="<c:url value='/clubs/1' />"><spring:message code="clubs"/></a></li>
             <li class="minh-25"><a href="<c:url value='/pitches/1' />"><spring:message code="pitches"/></a></li>
             <li class="minh-25"><a href="<c:url value='/tournaments/1' />"><spring:message code="tournaments"/></a></li>
-            <li class="minh-25"><a href="<c:url value='/user/${loggedUser.userid}' />"><spring:message code="profile"/></a></li>
+            <c:if test="${loggedUser != null}">
+                <li class="minh-25"><a href="<c:url value='/user/${loggedUser.userid}' />"><spring:message code="profile"/></a></li>
+            </c:if>
         </ul>
     </div>
 </body>

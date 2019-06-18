@@ -2,6 +2,7 @@
 <%@	taglib	prefix="form"	uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
@@ -59,6 +60,7 @@
 											<a href="<c:url value="/event/${event.eventId}" /> ">
 												<div class="my-event-item">
 													<span class="flex flex-1 justify-center home-header"><c:out value="${event.name}"/></span>
+													<div><c:out value="${fn:length(event.inscriptions)}"/>/<c:out value="${event.maxParticipants}"/></div>
 													<span class="flex flex-1 justify-center home-header"><spring:message code="${event.pitch.sport}"/></span>
 													<div class="flex flex-1 justify-center home-header">
 														<fmt:timeZone value="AR">

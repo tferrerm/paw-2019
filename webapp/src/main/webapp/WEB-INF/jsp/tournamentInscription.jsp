@@ -54,7 +54,7 @@
 						<div>
 							<div class="flex">
 							<div class="team-description minw-100 w-100">
-								<span class="event-info-label"><c:out value="${teams[teamIndex].teamName}"/></span>
+								<span class="event-info-label"><spring:message code="${teams[teamIndex].teamName}"/></span>
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex].teamid}"/>
@@ -75,7 +75,7 @@
 								</div>
 							</div>
 							<div class="team-description minw-100 w-100">
-								<span class="event-info-label"><c:out value="${teams[teamIndex + 1].teamName}"/></span>
+								<span class="event-info-label"><spring:message code="${teams[teamIndex + 1].teamName}"/></span>
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex + 1].teamid}"/>
@@ -99,6 +99,11 @@
 					</cr:forEach>
 				</div>
 			</div>
+			<c:if test="${userBusyError == true}">
+				<span class="form-error notice">
+					<spring:message code="user_busy_error"/>
+				</span>
+			</c:if>
 			<c:if test="${userJoined}">
 				<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
 					<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
