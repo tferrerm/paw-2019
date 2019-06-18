@@ -60,7 +60,14 @@
 					<div class="flex-grow w-100">
 						<div class=" flex-grow flex-column right-border w-50">
 							<div class="score">
-								<c:out value="${tournamentEvent.firstTeamScore != null ? tournamentEvent.firstTeamScore : " - "}"/>
+								<c:choose>
+									<c:when test="${tournamentEvent.firstTeamScore != null}">
+										<c:out value="${tournamentEvent.firstTeamScore}"/>
+									</c:when>
+									<c:otherwise>
+										-
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
@@ -72,7 +79,14 @@
 						</div>
 						<div class="flex-grow flex-column w-50">
 							<div class="score">
-								<c:out value="${tournamentEvent.secondTeamScore != null ? tournamentEvent.secondTeamScore : " - "}"/>
+								<c:choose>
+									<c:when test="${tournamentEvent.secondTeamScore != null}">
+										<c:out value="${tournamentEvent.secondTeamScore}"/>
+									</c:when>
+									<c:otherwise>
+										-
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
