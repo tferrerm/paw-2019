@@ -35,7 +35,7 @@
 										<c:forEach var="event" items="${row}">
 											<c:choose>
 												<c:when test = "${event.name != null}">
-													<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link">${event.name}</span></a>
+													<a class="event-link" href="<c:url value='/event/${event.eventId}' />"><span class="event-link"><c:out value="${event.name}"/></span></a>
 												</c:when>
 											</c:choose>
 										</c:forEach>

@@ -25,7 +25,7 @@
     		<%@ include file="sidebar.jsp" %>
     		<div class="content-container">
                 <div class="profile-title">
-                    <h2>${tournament.name}</h2>
+                    <h2><c:out value="${tournament.name}"/></h2>
                 </div>
                 <span class="help-message notice"><spring:message code="tournament_description"/></span>
     			<div class="tbl">
@@ -35,74 +35,74 @@
             </div>
             <c:forEach var="teamEntry" items="${teamsScoresMap}">
                 <div class="custom-row">
-                    <div class="justify-center flex-1">${teamEntry.key.teamName}</div>
-                    <div class="justify-center flex-1">${teamEntry.value}</div>
+                    <div class="justify-center flex-1"><c:out value="${teamEntry.key.teamName}"/></div>
+                    <div class="justify-center flex-1"><c:out value="${teamEntry.value}"/></div>
                 </div>
             </c:forEach>
     			</div>
-                <div class="tbl profile-cont">
-                    <span class="event-info-label notice"><spring:message code="round" /> ${currRoundPage}</span>
-										<span>
-											<spring:message code="date" />:
-		                  <fmt:timeZone value="AR">
-		                      <fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-		                      <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-		                  </fmt:timeZone>
-		                  <fmt:timeZone value="AR">
-		                      <fmt:parseDate value="${roundEvents[0].endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-		                      <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-		                  </fmt:timeZone>
-										</span>
-                    <c:forEach var="event" items="${roundEvents}">
-                        <cr:set var="eventid" scope="page" value="${event.eventId}"/>
-                        <div class="flex pitch-item w-100 justify-center">
-                            <span class="event-info-label">${event.firstTeam.teamName}</span>
-                            <c:choose>
-                                <c:when test="${eventsHaveResult[eventid]}">
-                                    <div class="score score-tournament">
-                                        <span>${event.firstTeamScore}</span>
-                                        <span>${event.secondTeamScore}</span>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="score score-tournament">
-                                        <span>-</span>
-                                        <span>-</span>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-                            <span class="event-info-label">${event.secondTeam.teamName}</span>
-                        </div>
-                        <div class="w-100 justify-center">
-                            <a href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
-                        </div>
-                    </c:forEach>
-                    <div class="table-navigator w-100 justify-center">
-												<div class="${currRoundPage != 1 ? "" : "hidden"}">
-														<a href="<c:url value='/tournament/${tournament.tournamentid}?round=1' />">
-																<button type="button" class="btn btn-secondary">
-																		<spring:message code="first"/>
-																</button>
-														</a>
-														<a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage-1}' />">
-																<button type="button" class="btn btn-secondary">
-																		<spring:message code="back"/>
-																</button>
-														</a>
-												</div>
-                        <span class="flex create-event"><spring:message code="showing_pages"/> ${currRoundPage} <spring:message code="of"/> ${maxRoundPage}</span>
-                        <c:if test="${currRoundPage != maxRoundPage}">
-                            <div>
-                                <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage+1}' />">
-                                    <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-                                </a>
-                                <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${maxRoundPage}' />">
-                                    <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-                                </a>
-                            </div>
-                        </c:if>
-                    </div>
-                </div>
+          <div class="tbl profile-cont">
+              <span class="event-info-label notice"><spring:message code="round" /> <c:out value="${currRoundPage}"/></span>
+							<span>
+								<spring:message code="date" />:
+                <fmt:timeZone value="AR">
+                    <fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                    <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+                </fmt:timeZone>
+                <fmt:timeZone value="AR">
+                    <fmt:parseDate value="${roundEvents[0].endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+                    <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+                </fmt:timeZone>
+							</span>
+              <c:forEach var="event" items="${roundEvents}">
+                  <cr:set var="eventid" scope="page" value="${event.eventId}"/>
+                  <div class="flex pitch-item w-100 justify-center">
+                      <span class="event-info-label"><c:out value="${event.firstTeam.teamName}"/></span>
+                      <c:choose>
+                          <c:when test="${eventsHaveResult[eventid]}">
+                              <div class="score score-tournament">
+                                  <span><c:out value="${event.firstTeamScore}"/></span>
+                                  <span><c:out value="${event.secondTeamScore}"/></span>
+                              </div>
+                          </c:when>
+                          <c:otherwise>
+                              <div class="score score-tournament">
+                                  <span>-</span>
+                                  <span>-</span>
+                              </div>
+                          </c:otherwise>
+                      </c:choose>
+                      <span class="event-info-label"><c:out value="${event.secondTeam.teamName}"/></span>
+                  </div>
+                  <div class="w-100 justify-center">
+                      <a href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                  </div>
+              </c:forEach>
+              <div class="table-navigator w-100 justify-center">
+									<div class="${currRoundPage != 1 ? "" : "hidden"}">
+											<a href="<c:url value='/tournament/${tournament.tournamentid}?round=1' />">
+													<button type="button" class="btn btn-secondary">
+															<spring:message code="first"/>
+													</button>
+											</a>
+											<a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage-1}' />">
+													<button type="button" class="btn btn-secondary">
+															<spring:message code="back"/>
+													</button>
+											</a>
+									</div>
+                  <span class="flex create-event"><spring:message code="showing_pages"/> <c:out value="${currRoundPage}"/> <spring:message code="of"/> <c:out value="${maxRoundPage}"/></span>
+                  <c:if test="${currRoundPage != maxRoundPage}">
+                      <div>
+                          <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage+1}' />">
+                              <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                          </a>
+                          <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${maxRoundPage}' />">
+                              <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                          </a>
+                      </div>
+                  </c:if>
+              </div>
+          </div>
             </div>
         </div>
 	</body>

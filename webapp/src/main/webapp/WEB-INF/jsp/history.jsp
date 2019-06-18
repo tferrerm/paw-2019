@@ -40,8 +40,8 @@
 								    <c:forEach var="event" items="${past_participations}">
 											<a href="<c:url value="/event/${event.eventId}" /> ">
 												<div class="my-event-item">
-													<span class="flex flex-1 justify-center home-header">${event.name}</span>
-													<span class="flex flex-1 justify-center home-header">${event.pitch.club.location}</span>
+													<span class="flex flex-1 justify-center home-header"><c:out value="${event.name}"/></span>
+													<span class="flex flex-1 justify-center home-header"><c:out value="${event.pitch.club.location}"/></span>
 													<div class="flex flex-1 justify-center home-header">
 														<fmt:timeZone value="AR">
 															<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
@@ -68,7 +68,7 @@
 	                        </button>
 	                    </a>
 	                </div>
-			        		<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+			        		<span class="flex"><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + eventQty - 1}"/> <spring:message code="of"/> <c:out value="${totalEventQty}"/></span>
 									<div class="${page != lastPageNum ? "" : "hidden"}">
 	                    <a href="<c:url value='/history/${page+1}' />">
 	                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
