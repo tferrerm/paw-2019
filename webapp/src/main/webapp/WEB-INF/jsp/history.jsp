@@ -24,15 +24,15 @@
 				<c:choose>
           <c:when test="${eventQty > 0}">
 						<div class="tbl">
-							<div class="table-header">
+							<div class="table-header background-dodgerblue">
 								<div class="flex-grow justify-center my-events-tbl-sub">
-									<spring:message code="event_name" />
+									<span class="event-info-label color-white"><spring:message code="event_name" /></span>
 								</div>
 								<div class="flex-grow justify-center my-events-tbl-sub">
-									<spring:message code="event_location" />
+									<span class="event-info-label color-white"><spring:message code="event_location" /></span>
 								</div>
 								<div class="flex-grow justify-center my-events-tbl-sub">
-									<spring:message code="event_startsAt" />
+									<span class="event-info-label color-white"><spring:message code="event_startsAt" /></span>
 								</div>
 							</div>
 							<div class="flex-grow w-100">
