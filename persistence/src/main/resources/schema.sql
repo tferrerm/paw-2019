@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS events_users(
   teamid INTEGER,
   vote INTEGER,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
-  FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
   FOREIGN KEY (teamid) REFERENCES tournament_teams ON DELETE CASCADE,
   PRIMARY KEY (userid, eventid)
 );
@@ -109,14 +108,13 @@ CREATE TABLE IF NOT EXISTS tournament_events(
   ends_at TIMESTAMP,
   event_created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
-  FOREIGN KEY (pitchid) REFERENCES pitches ON DELETE CASCADE
+  FOREIGN KEY (pitchid) REFERENCES pitches ON DELETE CASCADE,
   tournamentid INTEGER NOT NULL,
   round INTEGER NOT NULL,
   first_teamid INTEGER NOT NULL,
   second_teamid INTEGER NOT NULL,
   first_team_score INTEGER,
   second_team_score INTEGER,
-  FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
   FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE,
   FOREIGN KEY (first_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE,
   FOREIGN KEY (second_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE
