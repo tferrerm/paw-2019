@@ -356,7 +356,8 @@ public class TournamentServiceImpl implements TournamentService {
 		List<Tournament> inscriptionTournaments = td.getInscriptionProcessTournaments();
 		for(Tournament t : inscriptionTournaments) {
 			Map<Long, List<User>> teamsMap = mapTeamMembers(t.getTournamentid());
-			if(td.tournamentUserInscriptionCount(t) == t.getTeamSize() * t.getMaxTeams()) {
+			Optional<Integer> inscriptionCount = td.tournamentUserInscriptionCount(t);
+			if(inscriptionCount.isPresent() && inscriptionCount.get() == t.getTeamSize() * t.getMaxTeams()) {
 				td.setInscriptionSuccess(t);
 				for(List<User> teamMembers : teamsMap.values()) {
 					for(User user : teamMembers) {

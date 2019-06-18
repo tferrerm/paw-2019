@@ -25,7 +25,7 @@ import ar.edu.itba.paw.model.Sport;
 @Repository
 public class PitchHibernateDao implements PitchDao {
 	
-	private static final int MAX_ROWS = 10;
+	private static final int MAX_ROWS = 1;
 	
 	@PersistenceContext
 	private EntityManager em;

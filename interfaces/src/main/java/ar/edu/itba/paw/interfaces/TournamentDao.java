@@ -61,6 +61,6 @@ public interface TournamentDao {
 
 	public void setInscriptionSuccess(final Tournament t);
 
-	public int tournamentUserInscriptionCount(final Tournament t);
+	public Optional<Integer> tournamentUserInscriptionCount(final Tournament t);
 
 }

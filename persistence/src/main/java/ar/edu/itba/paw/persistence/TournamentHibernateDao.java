@@ -396,12 +396,13 @@ public class TournamentHibernateDao implements TournamentDao {
 	}
 
 	@Override
-	public int tournamentUserInscriptionCount(Tournament t) {
+	public Optional<Integer> tournamentUserInscriptionCount(Tournament t) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 		Root<Inscription> from = cq.from(Inscription.class);
-		return em.createQuery(
-				cq.select(cb.countDistinct(from.get("inscriptedUser"))).where(from.get("tournamentTeam").in(t.getTeams()))).getSingleResult().intValue();
+		Optional<Long> queryResult = em.createQuery(
+				cq.select(cb.countDistinct(from.get("inscriptedUser"))).where(from.get("tournamentTeam").in(t.getTeams()))).getResultList().stream().findFirst();
+		return queryResult.map(Long::intValue);
 	}
 	
 }
