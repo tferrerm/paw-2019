@@ -3,6 +3,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="<c:url  value="/css/style.css"/>"  />
+    <title><spring:message code="sport_matcher" /> - <spring:message code="oops" /></title>
   </head>
   <body>
     <%@ include file="header.jsp" %>

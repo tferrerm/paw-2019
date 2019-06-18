@@ -24,10 +24,15 @@
     	<div class="main-container">
     		<%@ include file="sidebar.jsp" %>
     		<div class="content-container">
-                <div class="profile-title">
-                    <h2><c:out value="${tournament.name}" /></h2>
-                </div>
-                <span class="help-message notice w-70 justify-center"><spring:message code="tournament_list_help"/></span>
+          <div class="profile-title">
+              <h2><c:out value="${tournament.name}" /></h2>
+          </div>
+          <span class="help-message notice w-70 justify-center"><spring:message code="tournament_list_help"/></span>
+					<c:if test="${currentRound != null}">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${currentRound * 100 / maxRoundPage}%; background-color: ${currentRound == maxRoundPage ? "green" : "dodgerblue"};" aria-valuenow="${currentRound}" aria-valuemin="0" aria-valuemax="${maxRoundPage}"></div>
+						</div>
+					</c:if>
     			<div class="tbl">
     				<div class="background-dodgerblue table-header">
                 <span class="justify-center flex-1 color-white mt-10 event-info-label"><spring:message code="teams" /></span>
@@ -59,29 +64,37 @@
                       <c:when test="${roundInPast}">
                           <c:url value="/admin/tournament/${tournament.tournamentid}/event/${eventid}/result" var="postPath"/>
                           <form:form id="tournamentResultForm" modelAttribute="tournamentResultForm" action="${postPath}" class="comments_form">
-                              <div>
-                                  <span><c:out value="${event.firstTeam.teamName}" /></span>
+                            <div class="w-100 justify-center mt-10 column-flex">
+															<span class="event-info-label"><c:out value="${event.pitch.name}" />: </span>
+																<div class="tournament-admin-row pitch-item">
+																	<span class="event-info-label"><c:out value="${event.firstTeam.teamName}" /></span>
                                   <c:choose>
-                                      <c:when test="${eventsHaveResult[eventid]}">
-                                          <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
-                                          <form:errors path="firstResult" cssClass="form-error" element="span"/>
-
-                                          <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
-                                          <form:errors path="secondResult" cssClass="form-error" element="span"/>
-                                      </c:when>
-                                      <c:otherwise>
-                                          <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3"/>
-                                          <form:errors path="firstResult" cssClass="form-error" element="span"/>
-
-                                          <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3"/>
-                                          <form:errors path="secondResult" cssClass="form-error" element="span"/>
-                                      </c:otherwise>
-                                  </c:choose>
-                                  <span><c:out value="${event.secondTeam.teamName}" /></span>
-                                  <span><c:out value="${event.pitch.name}" /></span>
-                              </div>
-                              <div class="submit-container">
-                                  <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
+	                                  <c:when test="${eventsHaveResult[eventid]}">
+																			<div class="maxw-100 mh-10">
+	                                      <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
+																			</div>
+																			<div class="maxw-100 mh-10">
+	                                      <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
+																			</div>
+	                                  </c:when>
+	                                  <c:otherwise>
+																			<div class="column-flex mh-10 maxw-100">
+	                                      <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3"/>
+																				<div class="maxw-100">
+	                                      <form:errors path="firstResult" cssClass="form-error" element="span"/>
+																				</div>
+																			</div>
+																			<div class="column-flex mh-10 maxw-100">
+	                                      <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3"/>
+	                                      <form:errors path="secondResult" cssClass="form-error" element="span"/>
+																			</div>
+	                                  </c:otherwise>
+                                	</c:choose>
+                                  <span class="event-info-label"><c:out value="${event.secondTeam.teamName}" /></span>
+																</div>
+																<div class="justify-center">
+																	<button type="submit" class="btn btn-primary minw-150 btn-primary"><spring:message code="upload_score"/></button>
+																</div>
                               </div>
                           </form:form>
                       </c:when>

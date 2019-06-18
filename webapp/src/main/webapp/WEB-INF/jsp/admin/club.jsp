@@ -70,7 +70,7 @@
 									<button type="button" class="btn btn-secondary"  onclick="document.getElementById('pitchPictureButton').click()"><spring:message code="choose_file"/></button>
 									<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
 								</div>
-								<div class="submit-container">
+								<div class="justify-center">
 									<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 								</div>
 							</form:form>
