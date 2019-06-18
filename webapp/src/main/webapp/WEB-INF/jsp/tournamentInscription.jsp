@@ -20,8 +20,8 @@
 			<div class="profile-title">
 				<h2><c:out value="${tournament.name}"/></h2>
 			</div>
-			<span class="help-message notice"><spring:message code="tournament_inscription"/></span>
-			<span class="help-message notice">
+			<span class="help-message notice w-70 justify-center"><spring:message code="tournament_inscription"/></span>
+			<span class="help-message notice w-70 justify-center">
 				<spring:message code="tournament_description_one" />
 				<c:out value="${roundsAmount}"/>
 				<spring:message code="tournament_description_two" />

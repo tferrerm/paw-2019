@@ -18,9 +18,9 @@
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
 				<div class="profile-title">
-                    <h2><spring:message code="myEvents" /></h2>
-                </div>
-                <span class="help-message notice"><spring:message code="my_events_help"/></span>
+            <h2><spring:message code="myEvents" /></h2>
+        </div>
+        <span class="help-message notice w-70 justify-center"><spring:message code="my_events_help"/></span>
 				<c:choose>
 					<c:when test="${empty past_events && empty future_events}">
 						<div class="notice">

@@ -26,7 +26,7 @@
 	        <div class="profile-title">
 	            <h2><spring:message code="choose_tournament"/></h2>
 	        </div>
-	        <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
+	        <span class="help-message notice w-70 justify-center"><spring:message code="tournament_list_help"/></span>
 					<div class="tbl">
 						<div class="background-dodgerblue table-header">
 	              <span class="justify-center flex-1 color-white mt-10"><spring:message code="event_name" /></span>

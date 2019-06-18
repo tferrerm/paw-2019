@@ -27,29 +27,32 @@
                 <div class="profile-title">
                     <h2><c:out value="${tournament.name}" /></h2>
                 </div>
-                <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
+                <span class="help-message notice w-70 justify-center"><spring:message code="tournament_list_help"/></span>
     			<div class="tbl">
-    				<div class="table-header">
-                <span><spring:message code="teams" /></span>
-                <span><spring:message code="score" /></span>
+    				<div class="background-dodgerblue table-header">
+                <span class="justify-center flex-1 color-white mt-10 event-info-label"><spring:message code="teams" /></span>
+                <span class="justify-center flex-1 color-white mt-10 event-info-label"><spring:message code="score" /></span>
             </div>
             <c:forEach var="teamEntry" items="${teamsScoresMap}">
                 <div class="custom-row">
-                    <div><c:out value="${teamEntry.key.teamName}" /></div>
-                    <div><c:out value="${teamEntry.value}" /></div>
+                    <div class="justify-center flex-1"><c:out value="${teamEntry.key.teamName}" /></div>
+                    <div class="justify-center flex-1"><c:out value="${teamEntry.value}" /></div>
                 </div>
             </c:forEach>
     			</div>
           <div class="tbl profile-cont">
-              <span><spring:message code="round" /> <c:out value="${currRoundPage}" /></span>
-              <fmt:timeZone value="AR">
+              <span class="event-info-label notice"><spring:message code="round" /> <c:out value="${currRoundPage}" /></span>
+              <span>
+								<spring:message code="date" />:
+								<fmt:timeZone value="AR">
                   <fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                   <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-              </fmt:timeZone>
-              <fmt:timeZone value="AR">
+	              </fmt:timeZone>
+	              <fmt:timeZone value="AR">
                   <fmt:parseDate value="${roundEvents[0].endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
                   <fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-              </fmt:timeZone>
+	              </fmt:timeZone>
+							</span>
               <c:forEach var="event" items="${roundEvents}">
                   <cr:set var="eventid" scope="page" value="${event.eventId}"/>
                   <c:choose>
@@ -83,12 +86,16 @@
                           </form:form>
                       </c:when>
                       <c:otherwise>
-                          <div>
-                              <span><c:out value="${event.firstTeam.teamName}" /></span>
-                              <span>-</span>
-                              <span>-</span>
-                              <span><c:out value="${event.secondTeam.teamName}" /></span>
-                              <span><c:out value="${event.pitch.name}" /></span>
+                          <div class="w-100 justify-center mt-10">
+															<span class="event-info-label"><c:out value="${event.pitch.name}" />: </span>
+															<div class="flex pitch-item">
+	                              <span class="event-info-label"><c:out value="${event.firstTeam.teamName}" /></span>
+																<div class="score score-tournament">
+	                                  <span>-</span>
+	                                  <span>-</span>
+	                              </div>
+	                              <span class="event-info-label"><c:out value="${event.secondTeam.teamName}" /></span>
+															</div>
                           </div>
                       </c:otherwise>
                   </c:choose>

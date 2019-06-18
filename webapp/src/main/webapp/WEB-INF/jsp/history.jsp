@@ -20,7 +20,7 @@
 				<div class="profile-title">
             <h2><spring:message code="myParticipations" /></h2>
         </div>
-        <span class="help-message notice"><spring:message code="history_help"/></span>
+        <span class="help-message notice w-70 justify-center"><spring:message code="history_help"/></span>
 				<c:choose>
           <c:when test="${eventQty > 0}">
 						<div class="tbl">

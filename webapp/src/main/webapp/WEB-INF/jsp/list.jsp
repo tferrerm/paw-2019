@@ -27,7 +27,7 @@
                 <div class="profile-title">
                     <h2><spring:message code="choose_event"/></h2>
                 </div>
-                <span class="help-message notice"><spring:message code="event_list_help"/></span>
+                <span class="help-message notice w-70 justify-center"><spring:message code="event_list_help"/></span>
     			<div class="tbl">
     				<div class="table-header">
                         <c:url value='/events/filter' var="postPath"/>

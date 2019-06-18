@@ -512,7 +512,7 @@ a.event-link {
 }
 
 .help-message {
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
 .hidden {
@@ -1106,6 +1106,10 @@ ul.pitch-item {
 
 .w-50 {
     width: 50%;
+}
+
+.w-70 {
+  width: 70%;
 }
 
 .w-100 {
