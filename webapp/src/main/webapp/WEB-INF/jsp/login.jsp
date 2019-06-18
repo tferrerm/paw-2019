@@ -41,5 +41,9 @@
       <span><spring:message code="not_account"/></span>
       <a class="link-text" href="<c:url value='/' />"><spring:message code="create_account"/></a>
     </div>
+    <div class="bottom-message mb-10">
+      <span><spring:message code="skip_login"/></span>
+      <a class="link-text" href="<c:url value='/home' />"><spring:message code="go_to_home"/></a>
+    </div>
   </body>
 </html>

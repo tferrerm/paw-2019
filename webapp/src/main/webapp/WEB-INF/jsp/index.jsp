@@ -77,17 +77,18 @@
 						<div class="justify-center">
 							<button type="submit" class="btn btn-primary submit-btn"><spring:message code="register"/></button>
 						</div>
-						<div class="bottom-message">
+						<div class="bottom-message mb-10">
 							<span><spring:message code="already_have_account"/></span>
 							<a class="link-text" href="<c:url value='/login' />"><spring:message code="login"/></a>
 						</div>
+						<div class="bottom-message mb-10">
+				      <span><spring:message code="skip_login"/></span>
+				      <a class="link-text" href="<c:url value='/home' />"><spring:message code="go_to_home"/></a>
+				    </div>
 					</form:form>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 	</body>
-
 </html>
