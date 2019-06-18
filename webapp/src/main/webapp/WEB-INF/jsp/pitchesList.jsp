@@ -78,13 +78,13 @@
     			<div class="table-navigator w-100 justify-center">
             <c:choose>
                 <c:when test="${pitchQty > 0}">
-    								<div class="${pageNum != 1 ? "" : "hidden"}">
+    				<div class="${pageNum != 1 ? "" : "hidden"}">
                         <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-                        <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+                        <a href="<c:url value='/pitches/${pageNum-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
                     </div>
                     <span><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + pitchQty - 1}"/> <spring:message code="of"/> <c:out value="${totalPitchQty}"/></span>
     								<div class="${pageNum != lastPageNum ? "" : "hidden"}">
-                      <a href="<c:url value='/pitches/${page+1}${queryString}' />">
+                      <a href="<c:url value='/pitches/${pageNum+1}${queryString}' />">
                         <button type="button" class="btn btn-secondary">
                           <spring:message code="next"/>
                         </button>

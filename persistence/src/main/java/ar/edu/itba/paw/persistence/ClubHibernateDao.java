@@ -166,12 +166,11 @@ public class ClubHibernateDao implements ClubDao {
 	}
 
 	@Override
-	public int countClubPages() {
-		TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Club", Long.class);
-		int rows = query.getSingleResult().intValue();
-		int pageCount = rows / MAX_ROWS;
-		if(rows % MAX_ROWS != 0)
+	public int countClubPages(final int totalClubQty) {
+		int pageCount = totalClubQty / MAX_ROWS;
+		if(totalClubQty % MAX_ROWS != 0)
 			pageCount += 1;
+		
 		return pageCount;
 	}
 

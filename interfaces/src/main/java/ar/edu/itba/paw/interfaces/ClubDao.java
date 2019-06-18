@@ -32,7 +32,7 @@ public interface ClubDao {
 	
 	public void deleteClub(long clubid);
 
-	public int countClubPages();
+	public int countClubPages(final int totalClubQty);
 	
 	/**
 	 * Gets the amount of Events which took place in a Club.

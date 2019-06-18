@@ -57,7 +57,6 @@ public class PitchController extends BaseController {
 		mav.addObject("pageNum", pageNum);
         mav.addObject("queryString", queryString);
         mav.addObject("sports", Sport.values());
-        mav.addObject("lastPageNum", ps.countPitchPages());
         mav.addObject("pageInitialIndex", ps.getPageInitialPitchIndex(pageNum));
         
         List<Pitch> pitches = ps.findBy(
@@ -73,6 +72,7 @@ public class PitchController extends BaseController {
         		Optional.ofNullable(sport), Optional.ofNullable(location), 
         		Optional.ofNullable(clubName));
         mav.addObject("totalPitchQty", totalPitchQty);
+        mav.addObject("lastPageNum", ps.countPitchPages(totalPitchQty));
         
 		return mav;
 	}

@@ -85,8 +85,8 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public int countClubPages() {
-		return cd.countClubPages();
+	public int countClubPages(final int totalClubQty) {
+		return cd.countClubPages(totalClubQty);
 	}
 
 	@Override

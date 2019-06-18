@@ -21,7 +21,7 @@ public interface PitchService {
 			final Optional<Sport> sport, final Optional<String> location, 
 			final Optional<String> clubName);
 	
-	public int countPitchPages();
+	public int countPitchPages(final int totalPitchQty);
 	
 	public Pitch create(Club club, String name, Sport sport, byte[] picture) 
 			throws PictureProcessingException;

@@ -26,8 +26,7 @@ import javax.persistence.Table;
 public class Event {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "events_eventid_seq")
-	@SequenceGenerator(sequenceName = "events_eventid_seq", name = "events_eventid_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "eventid")
 	private long eventid;
 	

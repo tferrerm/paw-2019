@@ -138,12 +138,11 @@ public class PitchHibernateDao implements PitchDao {
 	}
 
 	@Override
-	public int countPitchPages() {
-		TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Pitch", Long.class);
-		int rows = query.getSingleResult().intValue();
-		int pageCount = rows / MAX_ROWS;
-		if(rows % MAX_ROWS != 0)
+	public int countPitchPages(final int totalPitchQty) {
+		int pageCount = totalPitchQty / MAX_ROWS;
+		if(totalPitchQty % MAX_ROWS != 0)
 			pageCount += 1;
+		
 		return pageCount;
 	}
 

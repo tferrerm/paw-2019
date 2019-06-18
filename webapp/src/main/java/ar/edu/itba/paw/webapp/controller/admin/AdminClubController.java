@@ -71,7 +71,6 @@ public class AdminClubController extends BaseController {
 		
 		mav.addObject("pageNum", pageNum);
         mav.addObject("queryString", queryString);
-        mav.addObject("lastPageNum", cs.countClubPages());
         mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
         
         List<Club> clubs = cs.findBy(
@@ -84,6 +83,7 @@ public class AdminClubController extends BaseController {
         Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
         		Optional.ofNullable(location));
         mav.addObject("totalClubQty", totalClubQty);
+        mav.addObject("lastPageNum", cs.countClubPages(totalClubQty));
         
 		return mav;
 	}

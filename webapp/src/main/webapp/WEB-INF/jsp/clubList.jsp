@@ -60,11 +60,11 @@
             <c:when test="${clubQty > 0}">
 							<div class="${pageNum != 1 ? "" : "hidden"}">
 								<a href="<c:url value='/clubs/1' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
-								<a href="<c:url value='/clubs/${page-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
+								<a href="<c:url value='/clubs/${pageNum-1}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
 							</div>
 							<span><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + clubQty - 1}"/> <spring:message code="of"/> <c:out value="${totalClubQty}"/></span>
 							<div class="${pageNum != lastPageNum ? "" : "hidden"}">
-								<a href="<c:url value='/clubs/${page+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
+								<a href="<c:url value='/clubs/${pageNum+1}' />"><button type="button" class="btn btn-secondary"><spring:message code="next"/></button></a>
 								<a href="<c:url value='/clubs/${lastPageNum}' />"><button type="button" class="btn btn-secondary"><spring:message code="last"/></button></a>
 							</div>
 						</c:when>
