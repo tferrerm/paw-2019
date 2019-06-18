@@ -670,6 +670,18 @@ a.logo-admin {
     margin-right: 10px;
 }
 
+.minh-25 {
+  min-height: 25px;
+}
+
+.minh-150 {
+  min-height: 150px;
+}
+
+.minh-500 {
+  min-height: 500px;
+}
+
 .minw-100 {
   min-width: 100px;
 }

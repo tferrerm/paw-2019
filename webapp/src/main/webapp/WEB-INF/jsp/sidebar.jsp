@@ -10,14 +10,14 @@
 <body>
     <div class="sidebar">
         <ul>
-            <li><a href="<c:url value='/home' />"><spring:message code="home"/></a></li>
-            <li><a href="<c:url value='/events/1' />"><spring:message code="allEvents"/></a></li>
-            <li><a href="<c:url value='/my-events/1' />"><spring:message code="myEvents"/></a></li>
-            <li><a href="<c:url value='/history/1' />"><spring:message code="history"/></a></li>
-            <li><a href="<c:url value='/clubs/1' />"><spring:message code="clubs"/></a></li>
-            <li><a href="<c:url value='/pitches/1' />"><spring:message code="pitches"/></a></li>
-            <li><a href="<c:url value='/tournaments/1' />"><spring:message code="tournaments"/></a></li>
-            <li><a href="<c:url value='/user/${loggedUser.userid}' />"><spring:message code="profile"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/home' />"><spring:message code="home"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/events/1' />"><spring:message code="allEvents"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/my-events/1' />"><spring:message code="myEvents"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/history/1' />"><spring:message code="history"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/clubs/1' />"><spring:message code="clubs"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/pitches/1' />"><spring:message code="pitches"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/tournaments/1' />"><spring:message code="tournaments"/></a></li>
+            <li class="minh-25"><a href="<c:url value='/user/${loggedUser.userid}' />"><spring:message code="profile"/></a></li>
         </ul>
     </div>
 </body>

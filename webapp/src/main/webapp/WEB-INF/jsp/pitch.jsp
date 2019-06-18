@@ -19,7 +19,7 @@
                 <div class="profile-title">
                     <h2><c:out value="${pitch.name}"/></h2>
                 </div>
-                <div class="tbl profile-cont">
+                <div class="tbl profile-cont minh-150">
                     <div class="profile-top">
                         <div class="pitch-pic-container">
                             <img class="pitch-pic" src="<c:url value='/pitch/${pitch.pitchid}/picture'/>"/>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tbl-no-flex profile-cont profile-second">
+                <div class="tbl-no-flex profile-cont profile-second minh-500">
                     <c:if test="${event_overlap == true}">
                         <span class="form-error notice">
                             <spring:message code="event_overlap"/>
