@@ -95,7 +95,7 @@
 						<h5 class="pitch-info-label vote-balance"><c:out value="${vote_balance}"/></h5>
 					</div>
 					<div class="voting-buttons">
-						<c:if test="${loggedUser.userid != event.owner.userid}">
+						<c:if test="${loggedUser != null && loggedUser.userid != event.owner.userid}">
 							<c:choose>
 								<c:when test="${user_vote > 0}">
 									<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">

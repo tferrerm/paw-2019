@@ -105,20 +105,21 @@ public class EventController extends BaseController {
 	@RequestMapping("/my-events/{page}")
 	public ModelAndView list(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("myEvents");
-		long userid = loggedUser().getUserid();
-		List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
-		List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
+		if (loggedUser() != null) {
+			long userid = loggedUser().getUserid();
+			List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
+			List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
+			
+			mav.addObject("future_events", futureEvents);
+			mav.addObject("past_events", pastEvents);
+			
+			mav.addObject("page", pageNum);
+			int futureEventQty = es.countByOwner(true, userid);
+			int pastEventQty = es.countByOwner(false, userid);
 		
-		mav.addObject("future_events", futureEvents);
-		mav.addObject("past_events", pastEvents);
-		
-		mav.addObject("page", pageNum);
-		int futureEventQty = es.countByOwner(true, userid);
-		int pastEventQty = es.countByOwner(false, userid);
-		
-		boolean countFutureOwnedPages = (futureEventQty > pastEventQty);
-        mav.addObject("lastPageNum", es.countUserOwnedPages(countFutureOwnedPages, userid));
-        
+			boolean countFutureOwnedPages = (futureEventQty > pastEventQty);
+	        mav.addObject("lastPageNum", es.countUserOwnedPages(countFutureOwnedPages, userid));
+		}
 	    return mav;
 	}
 
@@ -126,17 +127,17 @@ public class EventController extends BaseController {
 	@RequestMapping("/history/{page}")
 	public ModelAndView historyList(@PathVariable("page") final int pageNum)	{
 		ModelAndView mav = new ModelAndView("history");
-		
-		long loggedUserId = loggedUser().getUserid();
-		List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
-		mav.addObject("past_participations", events);
-		mav.addObject("eventQty", events.size());
-		
-		mav.addObject("page", pageNum);
-        mav.addObject("lastPageNum", es.countUserInscriptionPages(false, loggedUserId));
-        mav.addObject("totalEventQty", es.countByUserInscriptions(false, loggedUserId));
-        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
-        
+		if (loggedUser() != null) {
+			long loggedUserId = loggedUser().getUserid();
+			List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
+			mav.addObject("past_participations", events);
+			mav.addObject("eventQty", events.size());
+			
+			mav.addObject("page", pageNum);
+	        mav.addObject("lastPageNum", es.countUserInscriptionPages(false, loggedUserId));
+	        mav.addObject("totalEventQty", es.countByUserInscriptions(false, loggedUserId));
+	        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+		}
 		return mav;
 	}
 
@@ -165,17 +166,21 @@ public class EventController extends BaseController {
         mav.addObject("inscriptions", inscriptions);
         
         boolean isParticipant = false;
-        for(Inscription i : inscriptions) {
-        	if(i.getInscriptedUser().equals(current))
-        		isParticipant = true;
-        }	
+        if (loggedUser() != null) {
+	        for(Inscription i : inscriptions) {
+	        	if(i.getInscriptedUser().equals(current))
+	        		isParticipant = true;
+	        }	
+        }
         mav.addObject("is_participant", isParticipant);
         
         mav.addObject("has_started", Instant.now().isAfter(event.getStartsAt()));
         mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
         
         mav.addObject("vote_balance", es.getVoteBalance(event.getEventId())); // SACAR?
-        mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid())); // SACAR?
+        if (loggedUser() != null) {
+        	mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid())); // SACAR?	
+        }
         
         mav.addObject("eventFullError", eventFullError);
         mav.addObject("alreadyJoinedError", alreadyJoinedError);
@@ -192,19 +197,21 @@ public class EventController extends BaseController {
     	throws EventNotFoundException, DateInPastException {
 	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 	    ModelAndView mav = new ModelAndView("redirect:/event/" + id);
-	    try {
-	    	es.joinEvent(loggedUser().getUserid(), id);
-
-	    } catch(EventFullException e) {
-	    	mav.addObject("eventFullError", true);
-	    	return mav;
-	    } catch(UserAlreadyJoinedException e) {
-	    	LOGGER.debug("User {} tried to join event {}, but had already joined", loggedUser(), event);
-	    	mav.addObject("alreadyJoinedError", true);
-	    	return mav;
-	    } catch(UserBusyException e) {
-	    	mav.addObject("userBusyError", true);
-	    	return mav;
+	    if (loggedUser() != null) {
+		    try {
+		    	es.joinEvent(loggedUser().getUserid(), id);
+	
+		    } catch(EventFullException e) {
+		    	mav.addObject("eventFullError", true);
+		    	return mav;
+		    } catch(UserAlreadyJoinedException e) {
+		    	LOGGER.debug("User {} tried to join event {}, but had already joined", loggedUser(), event);
+		    	mav.addObject("alreadyJoinedError", true);
+		    	return mav;
+		    } catch(UserBusyException e) {
+		    	mav.addObject("userBusyError", true);
+		    	return mav;
+		    }
 	    }
         return mav;
     }
@@ -212,7 +219,9 @@ public class EventController extends BaseController {
     
     @RequestMapping(value = "/event/{id}/leave", method = { RequestMethod.POST })
     public ModelAndView leaveEvent(@PathVariable long id) throws DateInPastException {
-	    es.leaveEvent(id, loggedUser().getUserid());
+    	if (loggedUser() != null) {
+    		es.leaveEvent(id, loggedUser().getUserid());
+    	}
         return new ModelAndView("redirect:/event/" + id);
     }
 
@@ -222,10 +231,12 @@ public class EventController extends BaseController {
     		@PathVariable("eventId") long eventid,
     		@PathVariable("userId") long kickedUserId)
     		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException, DateInPastException {
-    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
-    	es.kickFromEvent(loggedUser(), kickedUserId, event);
-    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
+    	if (loggedUser() != null) {
+	    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+	    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
+	    	es.kickFromEvent(loggedUser(), kickedUserId, event);
+	    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
+    	}
     	return new ModelAndView("redirect:/event/" + eventid);
     }
 
@@ -359,9 +370,11 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
 	public ModelAndView deleteEvent(@PathVariable final long id)
 			throws EventNotFoundException, UserNotAuthorizedException, DateInPastException {
-		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-		es.cancelEvent(event, loggedUser().getUserid());
-		LOGGER.debug("Deleted event with id {}", id);
+    	if (loggedUser() != null) {
+			Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+			es.cancelEvent(event, loggedUser().getUserid());
+			LOGGER.debug("Deleted event with id {}", id);
+    	}
 		return new ModelAndView("redirect:/events/1");
 	}
 
@@ -381,8 +394,10 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/event/{eventId}/upvote", method = { RequestMethod.POST })
     public ModelAndView upvote(@PathVariable("eventId") final long eventid) 
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
-    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-    	es.vote(true, ev, loggedUser().getUserid());
+    	if (loggedUser() != null) {
+	    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+	    	es.vote(true, ev, loggedUser().getUserid());
+    	}
     	return new ModelAndView("redirect:/event/" + eventid);
     }
     
@@ -390,8 +405,10 @@ public class EventController extends BaseController {
     @RequestMapping(value = "/event/{eventId}/downvote", method = { RequestMethod.POST })
     public ModelAndView downvote(@PathVariable("eventId") final long eventid) 
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
-    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-    	es.vote(false, ev, loggedUser().getUserid());
+    	if (loggedUser() != null) {
+	    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+	    	es.vote(false, ev, loggedUser().getUserid());
+    	}
     	return new ModelAndView("redirect:/event/" + eventid);
     }
 

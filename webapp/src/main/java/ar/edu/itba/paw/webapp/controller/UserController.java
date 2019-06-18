@@ -113,7 +113,7 @@ public class UserController extends BaseController {
 		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
 		mav.addObject("votes_received", us.countVotesReceived(userid));
 		
-		mav.addObject("haveRelationship", us.haveRelationship(loggedUser().getUserid(), userid));
+		mav.addObject("haveRelationship", loggedUser() != null ? us.haveRelationship(loggedUser().getUserid(), userid) : false);
 		List<UserComment> comments = us.getCommentsByUser(userid, pageNum);
 		mav.addObject("comments", comments);
 		mav.addObject("commentQty", comments.size());

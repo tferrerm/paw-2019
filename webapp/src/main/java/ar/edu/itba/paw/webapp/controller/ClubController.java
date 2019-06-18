@@ -56,7 +56,8 @@ public class ClubController extends BaseController {
 		
 		mav.addObject("past_events_count", cs.countPastEvents(clubid));
 		
-		mav.addObject("haveRelationship", cs.haveRelationship(loggedUser().getUserid(), clubid));
+		mav.addObject("haveRelationship", loggedUser() != null ? cs.haveRelationship(loggedUser().getUserid(), clubid) : false);
+
 		List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
 		mav.addObject("comments", comments);
 		mav.addObject("commentQty", comments.size());
