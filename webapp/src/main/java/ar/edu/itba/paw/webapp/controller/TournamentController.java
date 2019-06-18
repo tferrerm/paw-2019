@@ -42,16 +42,16 @@ public class TournamentController extends BaseController {
 	
     @RequestMapping(value = "/tournament/{tournamentId}")
     public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
-    		@RequestParam(value = "round", required = false) final Integer roundPage) 
+    		@RequestParam(value = "round", required = false) final Integer roundPage,
+    		@RequestParam(value = "userBusyError", required = false) boolean userBusyError) 
     		throws TournamentNotFoundException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
-    	if(roundPage == null) {
-			return retrieveTournament(tournamentid, ts.getCurrentRound(tournament));
-		}
-		
-		if(tournament.getInscriptionSuccess()) {
+    	if(tournament.getInscriptionSuccess()) {
+			if(roundPage == null) {
+				return retrieveTournament(tournamentid, ts.getCurrentRound(tournament), false);
+			}
 			ModelAndView mav = new ModelAndView("tournament");
 			mav.addObject("tournament",  tournament);
 			mav.addObject("club", tournament.getTournamentClub());
@@ -87,7 +87,7 @@ public class TournamentController extends BaseController {
 		    mav.addObject("teamsUsers", teamsUsers);
 		    mav.addObject("roundsAmount", tournament.getRounds());
 		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
-		    
+		    mav.addObject("userBusyError", userBusyError);
 		    mav.addObject("userJoined", loggedUser() != null ? ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false);
 		    return mav;
 		}
@@ -114,7 +114,7 @@ public class TournamentController extends BaseController {
     
     @RequestMapping(value = "/tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
     public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
-    		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
+    		throws UserAlreadyJoinedException, TournamentNotFoundException {
     	
         try {
 			ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
@@ -124,6 +124,8 @@ public class TournamentController extends BaseController {
 			joinTournamentError("team_already_filled", tournamentid);
 		} catch (UserAlreadyJoinedException e) {
 			joinTournamentError("already_joined_tournament", tournamentid);
+		} catch(UserBusyException e) {
+	    	return retrieveTournament(tournamentid, null, true);
 		}
         
         LOGGER.debug("User {} joined Tournament {}", loggedUser(), tournamentid);
@@ -134,7 +136,7 @@ public class TournamentController extends BaseController {
     
     private ModelAndView joinTournamentError(String error, long tournamentid) 
     		throws TournamentNotFoundException {
-    	ModelAndView mav = retrieveTournament(tournamentid, null);
+    	ModelAndView mav = new ModelAndView("redirect:/tournament/" + tournamentid);
 		mav.addObject(error, true);
 		return mav;
     }
@@ -147,7 +149,7 @@ public class TournamentController extends BaseController {
         try {
 			ts.leaveTournament(tournamentid, loggedUser().getUserid());
 		} catch (InscriptionDateInPastException e) {
-			ModelAndView mav = retrieveTournament(tournamentid, null);
+			ModelAndView mav = retrieveTournament(tournamentid, null, false);
 			mav.addObject("tournament_already_started", true);
 			return mav;
 		}

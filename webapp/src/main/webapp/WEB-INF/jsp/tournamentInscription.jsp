@@ -99,6 +99,11 @@
 					</cr:forEach>
 				</div>
 			</div>
+			<c:if test="${userBusyError == true}">
+				<span class="form-error notice">
+					<spring:message code="user_busy_error"/>
+				</span>
+			</c:if>
 			<c:if test="${userJoined}">
 				<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
 					<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
