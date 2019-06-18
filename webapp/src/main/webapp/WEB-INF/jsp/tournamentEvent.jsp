@@ -65,7 +65,7 @@
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
 									<c:forEach var="teamMember" items="${firstTeamMembers}">
-										<span><c:out value="${teamMember.firstname}"/> <c:out value="${teamMember.lastname}"/></span>
+										<a class="link-text" href="<c:url value="/user/${teamMember.userid}" /> "><c:out value="${teamMember.firstname}"/> <c:out value="${teamMember.lastname}"/></a>
 									</c:forEach>
 								</div>
 							</div>
@@ -77,7 +77,7 @@
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
 									<c:forEach var="teamMember" items="${secondTeamMembers}">
-										<span><c:out value="${teamMember.firstname}"/> <c:out value="${teamMember.lastname}"/></span>
+										<a class="link-text" href="<c:url value="/user/${teamMember.userid}" /> "><c:out value="${teamMember.firstname}"/> <c:out value="${teamMember.lastname}"/></a>
 									</c:forEach>
 								</div>
 							</div>

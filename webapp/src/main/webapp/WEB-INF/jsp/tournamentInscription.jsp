@@ -29,7 +29,6 @@
 					<fmt:parseDate value="${startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
 					<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
 				</fmt:timeZone>
-				<spring:message code="tournament_description_three" />
 			</span>
 			<div class="w-50 mv-10">
 				<div class="comment-profile-row">
