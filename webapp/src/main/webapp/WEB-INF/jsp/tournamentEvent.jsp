@@ -23,7 +23,7 @@
 				<div class="profile-title">
           <h2><c:out value="${tournamentEvent.name}"/></h2>
         </div>
-        <span class="help-message notice"><spring:message code="event_completed_description"/></span>
+        <span class="help-message notice w-70 justify-center"><spring:message code="event_completed_description"/></span>
 				<div class="detail-box">
 					<div class="event-detail background-dodgerblue">
 						<div class="color-white event-info-label"><spring:message code="event_detail"/></div>

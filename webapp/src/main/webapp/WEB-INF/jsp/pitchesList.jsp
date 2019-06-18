@@ -25,7 +25,7 @@
                 <div class="profile-title">
                     <h2><spring:message code="choosePitch" /></h2>
                 </div>
-                <span class="help-message notice"><spring:message code="pitch_list_help"/></span>
+                <span class="help-message notice w-70 justify-center"><spring:message code="pitch_list_help"/></span>
     			<div class="tbl">
     				<div class="table-header">
                         <c:url value='/pitches/filter' var="postPath"/>

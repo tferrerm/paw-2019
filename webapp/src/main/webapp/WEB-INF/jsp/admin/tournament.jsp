@@ -27,7 +27,7 @@
                 <div class="profile-title">
                     <h2><c:out value="${tournament.name}" /></h2>
                 </div>
-                <span class="help-message notice"><spring:message code="tournament_list_help"/></span>
+                <span class="help-message notice w-70 justify-center"><spring:message code="tournament_list_help"/></span>
     			<div class="tbl">
     				<div class="table-header">
                 <span><spring:message code="teams" /></span>

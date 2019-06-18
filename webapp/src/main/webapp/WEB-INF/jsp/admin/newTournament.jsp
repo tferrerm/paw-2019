@@ -18,7 +18,7 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="create_tournament"/></h2>
-			<span class="help-message notice"><spring:message code="new_tournament_description" /></span>
+			<span class="help-message notice w-70 justify-center"><spring:message code="new_tournament_description" /></span>
 			<div class="form-container-tournament">
 				<table class="schedule-table flex">
                     <tr>

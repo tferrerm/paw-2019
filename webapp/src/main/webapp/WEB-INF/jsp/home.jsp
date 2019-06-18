@@ -21,7 +21,7 @@
 					<h3 class="home-title"><spring:message code="upcomingParticipations"/></h3>
 					<c:choose>
 						<c:when test="${!noParticipations}">
-							<span class="help-message notice"><spring:message code="home_help"/></span>
+							<span class="help-message notice w-70 justify-center"><spring:message code="home_help"/></span>
 							<div class="home-evs-container">
 								<div class="home-evs-group flex">
 									<c:forEach var="dayMessage" items="${scheduleHeaders}">

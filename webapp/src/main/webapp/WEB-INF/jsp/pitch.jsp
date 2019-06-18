@@ -40,6 +40,7 @@
                         </div>
                     </div>
                 </div>
+                <span class="help-message notice w-70 justify-center"><spring:message code="event_creation_description" /></span>
                 <div class="tbl-no-flex profile-cont profile-second minh-500">
                     <c:if test="${event_overlap == true}">
                         <span class="form-error notice">
