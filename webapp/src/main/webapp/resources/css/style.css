@@ -201,6 +201,11 @@ div.background-dodgerblue {
   color: white;
 }
 
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}
+
 .comment-container {
   width: 80%;
   display: flex;
@@ -642,6 +647,10 @@ a.logo-admin {
   margin-bottom: 35px;
 }
 
+.mh-10 {
+  margin: 0 10px;
+}
+
 .ml-5 {
     margin-left: 5px;
 }
@@ -684,6 +693,10 @@ a.logo-admin {
 
 .minw-100 {
   min-width: 100px;
+}
+
+.minw-150 {
+  min-width: 150px;
 }
 
 .minw-300 {
@@ -964,11 +977,6 @@ ul.pitch-item {
     min-width: 150px;
 }
 
-.submit-container {
-    display: flex;
-    justify-content: center;
-}
-
 .table-header {
     background-color: white;
     border-bottom: 1px grey solid;
@@ -1071,6 +1079,12 @@ ul.pitch-item {
     margin: 10px 10px 10px 10px;
     padding: 10px;
     word-break: break-word;
+}
+
+.tournament-admin-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .username {

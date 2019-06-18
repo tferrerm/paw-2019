@@ -59,29 +59,37 @@
                       <c:when test="${roundInPast}">
                           <c:url value="/admin/tournament/${tournament.tournamentid}/event/${eventid}/result" var="postPath"/>
                           <form:form id="tournamentResultForm" modelAttribute="tournamentResultForm" action="${postPath}" class="comments_form">
-                              <div>
-                                  <span><c:out value="${event.firstTeam.teamName}" /></span>
+                            <div class="w-100 justify-center mt-10 column-flex">
+															<span class="event-info-label"><c:out value="${event.pitch.name}" />: </span>
+																<div class="tournament-admin-row pitch-item">
+																	<span class="event-info-label"><c:out value="${event.firstTeam.teamName}" /></span>
                                   <c:choose>
-                                      <c:when test="${eventsHaveResult[eventid]}">
-                                          <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
-                                          <form:errors path="firstResult" cssClass="form-error" element="span"/>
-
-                                          <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
-                                          <form:errors path="secondResult" cssClass="form-error" element="span"/>
-                                      </c:when>
-                                      <c:otherwise>
-                                          <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3"/>
-                                          <form:errors path="firstResult" cssClass="form-error" element="span"/>
-
-                                          <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3"/>
-                                          <form:errors path="secondResult" cssClass="form-error" element="span"/>
-                                      </c:otherwise>
-                                  </c:choose>
-                                  <span><c:out value="${event.secondTeam.teamName}" /></span>
-                                  <span><c:out value="${event.pitch.name}" /></span>
-                              </div>
-                              <div class="submit-container">
-                                  <button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
+	                                  <c:when test="${eventsHaveResult[eventid]}">
+																			<div class="column-flex mh-10">
+	                                      <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3" value="${event.firstTeamScore}"/>
+	                                      <form:errors path="firstResult" cssClass="form-error" element="span"/>
+																			</div>
+																			<div class="column-flex mh-10">
+	                                      <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3" value="${event.secondTeamScore}"/>
+	                                      <form:errors path="secondResult" cssClass="form-error" element="span"/>
+																			</div>
+	                                  </c:when>
+	                                  <c:otherwise>
+																			<div class="column-flex mh-10">
+	                                      <form:input class="form-control" type="number" min="0" path="firstResult" maxlength="3"/>
+	                                      <form:errors path="firstResult" cssClass="form-error" element="span"/>
+																			</div>
+																			<div class="column-flex mh-10">
+	                                      <form:input class="form-control" type="number" min="0" path="secondResult" maxlength="3"/>
+	                                      <form:errors path="secondResult" cssClass="form-error" element="span"/>
+																			</div>
+	                                  </c:otherwise>
+                                	</c:choose>
+                                  <span class="event-info-label"><c:out value="${event.secondTeam.teamName}" /></span>
+																</div>
+																<div class="justify-center">
+																	<button type="submit" class="btn btn-primary minw-150 btn-primary"><spring:message code="upload_score"/></button>
+																</div>
                               </div>
                           </form:form>
                       </c:when>

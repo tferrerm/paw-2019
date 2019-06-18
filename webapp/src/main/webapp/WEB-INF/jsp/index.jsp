@@ -74,7 +74,7 @@
 								<c:out value="${fileErrorMessage}" />
 							</div>
 						</c:if>
-						<div class="submit-container">
+						<div class="justify-center">
 							<button type="submit" class="btn btn-primary submit-btn"><spring:message code="register"/></button>
 						</div>
 						<div class="bottom-message">

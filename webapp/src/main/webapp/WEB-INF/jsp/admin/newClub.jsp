@@ -31,7 +31,7 @@
 						<form:input  cssClass="form-control" type="text" maxlength="100" path="location"/>
 						<form:errors path="location" cssClass="form-error" element="span"/>
 					</div>
-					<div class="submit-container">
+					<div class="justify-center">
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>
 				</form:form>

@@ -142,7 +142,7 @@
                             </span>
                         </c:if>
                     </div>
-					<div class="submit-container">
+					<div class="justify-center">
 						<button type="submit" class="btn btn-primary submit-btn btn-success"><spring:message code="create"/></button>
 					</div>
 				</form:form>

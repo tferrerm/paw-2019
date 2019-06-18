@@ -30,7 +30,7 @@
         <input type="checkbox" value="" id="defaultCheck1" name="login_remember_me"/>
         <label class="form-check-label" for="defaultCheck1"><spring:message code="remember_me"/></label>
       </div>
-      <div class="submit-container">
+      <div class="justify-center">
         <button type="submit" class="btn btn-primary submit-btn"><spring:message code="login"/></button>
       </div>
       <c:if test="${error == true}">
