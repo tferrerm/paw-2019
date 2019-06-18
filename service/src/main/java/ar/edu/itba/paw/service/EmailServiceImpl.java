@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
 	private static final String EVENT_CANCELLED_TEMPLATE = "eventCancelled";
 
 
-	void sendMail(final User user, final Locale locale, String titleMessage, Context ctx, String  template, Object[] titleParams) {
+	private void sendMail(final User user, final Locale locale, String titleMessage, Context ctx, String  template, Object[] titleParams) {
 
 		final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
 		final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
