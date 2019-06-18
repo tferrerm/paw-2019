@@ -117,23 +117,30 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void tournamentCancelled(final User user, final Tournament tournament, final Locale locale) {
+		tournamentCancelled(user, tournament.getName(), locale);
+	}
+	
+	@Override
+	public void tournamentCancelled(User user, String tournamentName, Locale locale) {
 		final Context ctx = new Context(locale);
-		String tournamentName = tournament.getName();
 		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("tournament_name", tournamentName);
-		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{userName, tournamentName}, locale));
+		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{userName}, locale));
 
 		sendMail(user, locale, "tournament_cancelled_title", ctx, TOURNAMENT_CANCELLED_TEMPLATE, new Object[]{tournamentName});
 	}
 
 	@Override
 	public void eventCancelled(User user, Event event, final Locale locale) {
+		tournamentCancelled(user, event.getName(), locale);
+	}
+
+	@Override
+	public void eventCancelled(User user, String eventName, Locale locale) {
 		final Context ctx = new Context(locale);
-		String eventName = event.getName();
 		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{userName, eventName}, locale));
-
+		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{userName}, locale));
 		sendMail(user, locale, "event_cancelled_title",ctx, EVENT_CANCELLED_TEMPLATE, new Object[]{eventName});
 	}
 

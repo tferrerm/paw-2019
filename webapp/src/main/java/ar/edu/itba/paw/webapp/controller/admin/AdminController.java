@@ -5,10 +5,12 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.DateInPastException;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
@@ -35,6 +39,9 @@ public class AdminController extends BaseController {
 
 	@Autowired
 	private EventService es;
+	
+	@Autowired
+    private EmailService ems;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
@@ -120,8 +127,17 @@ public class AdminController extends BaseController {
 	@RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
 	public ModelAndView deleteEvent(@PathVariable final long id)
 			throws EventNotFoundException, DateInPastException {
-		es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		
+		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
 		es.deleteEvent(id);
+		for(User inscriptedUser : inscriptedUsers) {
+			ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
+		}
+		if(!inscriptedUsers.contains(event.getOwner())) {
+			ems.eventCancelled(event.getOwner(), event, LocaleContextHolder.getLocale());
+		}
+		
 		LOGGER.debug("Deleted event with id {}", id);
 		return new ModelAndView("redirect:/admin/events/1");
 	}

@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -32,6 +34,7 @@ import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.InscriptionDao;
@@ -55,6 +58,9 @@ public class EventServiceImpl implements EventService {
 	
 	@Autowired
 	private InscriptionDao idao;
+	
+	@Autowired
+	private EmailService ems;
 
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
@@ -433,10 +439,22 @@ public class EventServiceImpl implements EventService {
 	public void checkUncompletedEvents() {
 		List<Event> inscriptionEvents = ed.getEndedInscriptionProcessingEvents();
 		for(Event event : inscriptionEvents) {
+			List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
 			if(event.getInscriptions().size() == event.getMaxParticipants()) {
 				ed.setInscriptionSuccess(event);
+				for(User user : inscriptedUsers) {
+					ems.eventStarted(user, event, LocaleContextHolder.getLocale());
+				}
+				if(!inscriptedUsers.contains(event.getOwner()))
+					ems.eventStarted(event.getOwner(), event, LocaleContextHolder.getLocale());
 			} else {
+				String eventName = new String(event.getName());
 				ed.deleteEvent(event.getEventId());
+				for(User user : inscriptedUsers) {
+					ems.eventCancelled(user, eventName, LocaleContextHolder.getLocale());
+				}
+				if(!inscriptedUsers.contains(event.getOwner()))
+					ems.eventCancelled(event.getOwner(), eventName, LocaleContextHolder.getLocale());
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -37,6 +38,7 @@ import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.ClubDao;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserDao;
@@ -61,6 +63,9 @@ public class TournamentServiceImpl implements TournamentService {
 	
 	@Autowired
 	private UserDao ud;
+	
+	@Autowired
+    private EmailService ems;
 	
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
@@ -350,10 +355,22 @@ public class TournamentServiceImpl implements TournamentService {
 	public void checkTournamentInscriptions() {
 		List<Tournament> inscriptionTournaments = td.getInscriptionProcessTournaments();
 		for(Tournament t : inscriptionTournaments) {
+			Map<Long, List<User>> teamsMap = mapTeamMembers(t.getTournamentid());
 			if(td.tournamentUserInscriptionCount(t) == t.getTeamSize() * t.getMaxTeams()) {
 				td.setInscriptionSuccess(t);
+				for(List<User> teamMembers : teamsMap.values()) {
+					for(User user : teamMembers) {
+						ems.tournamentStarted(user, t, LocaleContextHolder.getLocale());
+					}
+				}
 			} else {
+				String tournamentName = new String(t.getName());
 				td.deleteTournament(t.getTournamentid());
+				for(List<User> teamMembers : teamsMap.values()) {
+					for(User user : teamMembers) {
+						ems.tournamentCancelled(user, tournamentName, LocaleContextHolder.getLocale());
+					}
+				}
 			}
 		}
 	}

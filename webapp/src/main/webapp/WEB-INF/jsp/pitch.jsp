@@ -142,7 +142,7 @@
                                 </div>
                                 <div>
                                     <form:label path="inscriptionEndDate"><spring:message code="end_date"/> *</form:label>
-                                    <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate" min="${currentDateTime}"/>
+                                    <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate" min="${currentDateTime}" max="${aWeekFromNowDateTime}"/>
                                     <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
                                     <c:if test="${inscription_date_in_past}">
                                         <span class="form-error">

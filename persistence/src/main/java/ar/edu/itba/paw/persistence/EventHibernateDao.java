@@ -38,7 +38,7 @@ import ar.edu.itba.paw.model.User;
 @Repository
 public class EventHibernateDao implements EventDao {
 	
-	private static final int MAX_ROWS = 1;
+	private static final int MAX_ROWS = 10;
 	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	

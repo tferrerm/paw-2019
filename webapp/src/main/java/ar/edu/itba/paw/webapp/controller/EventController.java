@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -292,6 +293,7 @@ public class EventController extends BaseController {
 		mav.addObject("currentDate", LocalDate.now());
 		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 		mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
+		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
 		
 		return mav;
 	}
@@ -360,7 +362,12 @@ public class EventController extends BaseController {
 	public ModelAndView deleteEvent(@PathVariable final long id)
 			throws EventNotFoundException, UserNotAuthorizedException, DateInPastException {
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
 		es.cancelEvent(event, loggedUser().getUserid());
+		for(User inscriptedUser : inscriptedUsers) {
+			if(inscriptedUser != event.getOwner())
+				ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
+		}
 		LOGGER.debug("Deleted event with id {}", id);
 		return new ModelAndView("redirect:/events/1");
 	}
