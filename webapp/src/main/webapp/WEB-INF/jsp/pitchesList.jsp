@@ -65,10 +65,10 @@
                     </div>
                     <c:forEach var="pitch" items="${pitches}">
                         <div class="custom-row">
-                            <div class="home-header">${pitch.name}</div>
+                            <div class="home-header"><c:out value="${pitch.name}"/></div>
                             <div><spring:message code="${pitch.sport}"/></div>
-                            <div class="home-header">${pitch.club.location}</div>
-                            <div class="home-header">${pitch.club.name}</div>
+                            <div class="home-header"><c:out value="${pitch.club.location}"/></div>
+                            <div class="home-header"><c:out value="${pitch.club.name}"/></div>
                             <div>
                                 <a href="<c:url value="/pitch/${pitch.pitchid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_pitch"/></button></a>
                             </div>
@@ -82,7 +82,7 @@
                         <a href="<c:url value='/pitches/1${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="first"/></button></a>
                         <a href="<c:url value='/pitches/${page-1}${queryString}' />"><button type="button" class="btn btn-secondary"><spring:message code="back"/></button></a>
                     </div>
-                    <span><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + pitchQty - 1} <spring:message code="of"/> ${totalPitchQty}</span>
+                    <span><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + pitchQty - 1}"/> <spring:message code="of"/> <c:out value="${totalPitchQty}"/></span>
     								<div class="${pageNum != lastPageNum ? "" : "hidden"}">
                       <a href="<c:url value='/pitches/${page+1}${queryString}' />">
                         <button type="button" class="btn btn-secondary">

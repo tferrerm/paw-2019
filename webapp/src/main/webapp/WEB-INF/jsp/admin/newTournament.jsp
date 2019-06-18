@@ -34,10 +34,10 @@
                             <c:forEach var="column" items="${row}">
                             	<c:choose>
                                     <c:when test="${(pitchQty - column) == 0}">
-                                        <td class="schedule-table background-red schedule-table-cell-size">${pitchQty - column}</td>
+                                        <td class="schedule-table background-red schedule-table-cell-size"><c:out value="${pitchQty - column}" /></td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td class="schedule-table background-yellow schedule-table-cell-size">${pitchQty - column}</td>
+                                        <td class="schedule-table background-yellow schedule-table-cell-size"><c:out value="${pitchQty - column}" /></td>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -120,7 +120,7 @@
                             <form:select path="endsAtHour" cssClass="form-control">
                                 <c:forEach var="hourEntry" items="${availableHours}">
                                     <c:if test="${hourEntry.key > minHour}">
-                                        <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                        <form:option value="${hourEntry.key}"><c:out value="${hourEntry.value}" /></form:option>
                                     </c:if>
                                 </c:forEach>
                             </form:select>

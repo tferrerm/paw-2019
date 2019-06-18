@@ -18,7 +18,7 @@
 			<%@include file="sidebar.jsp" %>
 			<div class="content-container">
 				<div class="profile-title">
-					<h2>${event.name}</h2>
+					<h2><c:out value="${event.name}" /></h2>
 				</div>
 				<div class="detail-container">
 					<div class="status">
@@ -33,13 +33,13 @@
 						<div class="progress">
 							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 						</div>
-						<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
+						<h4 class="progress-bar-completion"><c:out value="${participant_count}" />/<c:out value="${event.maxParticipants}" /></h4>
 					</div>
 					<div class="description-body">
 						<div class="margin-right">
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="organizer"/> </span>
-								<a href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
+								<a href="<c:url value="/user/${event.owner.userid}" /> "><c:out value="${event.owner.firstname}" /> <c:out value="${event.owner.lastname}" /></a>
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="sport"/></span>
@@ -47,7 +47,7 @@
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="club"/></span>
-								<span>${event.pitch.name}</span>
+								<span><c:out value="${event.pitch.name}" /></span>
 							</div>
 							<div class="double-box">
 								<div class="description-item">
@@ -66,7 +66,7 @@
 								</div>
 								<div class="description-item">
 									<span class="event-info-label"><spring:message code="vacancies"/></span>
-									<span>${event.maxParticipants - participant_count}</span>
+									<span><c:out value="${event.maxParticipants - participant_count}" /></span>
 								</div>
 
 							</div>
@@ -74,10 +74,10 @@
 						<div class="participants-list">
 							<span class="event-info-label"><spring:message code="participants"/></span>
 							<ul>
-							    <c:forEach var="i" items="${inscriptions}">
-					              	<p class="event-participants">${i.inscriptedUser.firstname} ${i.inscriptedUser.lastname}</p>
-					            </c:forEach>
-				          	</ul>
+						    <c:forEach var="i" items="${inscriptions}">
+		              	<p class="event-participants"><c:out value="${i.inscriptedUser.firstname}" /> <c:out value="${i.inscriptedUser.lastname}" /></p>
+		            </c:forEach>
+	          	</ul>
 						</div>
 					</div>
 				</div>

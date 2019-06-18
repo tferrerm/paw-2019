@@ -22,7 +22,7 @@
 			<%@include file="sidebar.jsp" %>
 			<div class="content-container">
 				<div class="profile-title">
-					<h2 class="no-margin">${club.name}</h2>
+					<h2 class="no-margin"><c:out value="${club.name}" /></h2>
 				</div>
 				<div class="detail-container">
 					<div class="description-body">
@@ -31,19 +31,19 @@
 							<ul class="pitch-item">
 								<c:forEach var="pitch" items="${pitches}">
 									<div class="custom-row flex-space-between pitch-item">
-										<span class="flex-1">${pitch.name}</span>
+										<span class="flex-1"><c:out value="${pitch.name}" /></span>
 										<div class="flex-1"><spring:message code="${pitch.sport}"/></div>
 										<form method="POST" class="no-margin" action="<c:url value="/admin/pitch/${pitch.pitchid}/delete"/>" >
 											<button type="submit" class="btn btn-primary btn-danger"><spring:message code="delete_pitch"/></button>
 										</form>
-										<a  > </a>
+										<a> </a>
 									</div>
 								</c:forEach>
 							</ul>
 						</div>
 						<div class="club-address">
 							<span class="event-info-label"><spring:message code="address"/></span>
-							<p>${club.location}</p>
+							<p><c:out value="${club.location}" /></p>
 						</div>
 					</div>
 					<div class="status no-margin">

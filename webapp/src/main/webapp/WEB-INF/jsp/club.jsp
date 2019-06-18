@@ -16,7 +16,7 @@
 			<%@ include file="sidebar.jsp" %>
 			<div class="content-container">
 				<div class="profile-title">
-					<h2>${club.name}</h2>
+					<h2><c:out value="${club.name}"/></h2>
 				</div>
 				<div class="club-detail-container">
 					<div class="description-body">
@@ -24,10 +24,10 @@
 							<div class="flex">
 								<div class="h4 pitch-info-label">
 									<spring:message code="club_location"/>
-									<span class="h4"> ${club.location}</span>
+									<span class="h4"> <c:out value="${club.location}"/></span>
 								</div>
-                            </div>
-							<h4><spring:message code="hosted"/> ${past_events_count} <spring:message code="event_s"/></h4>
+							</div>
+							<h4><spring:message code="hosted"/> <c:out value="${past_events_count}"/> <spring:message code="event_s"/></h4>
 						</div>
 					</div>
 					<div class="description-item">
@@ -40,7 +40,7 @@
 								<ul>
 									<c:forEach var="pitch" items="${pitches}">
 										<div class="custom-row flex-space-around club-pitches-list">
-											<div>${pitch.name}</div>
+											<div><c:out value="${pitch.name}" /></div>
 											<div><spring:message code="${pitch.sport}"/></div>
 											<div>
 												<a href="<c:url value="/pitch/${pitch.pitchid}" /> "> <button type="button" class="btn btn-primary view-club"><spring:message code="view_pitch"/></button></a>
@@ -69,9 +69,9 @@
 						<div class="comment-container">
 							<div class="comment-profile-row mv-10">
 								<img class="comment-image" src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
-								<a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> ">${cmt.commenter.firstname} ${cmt.commenter.lastname}</a>
+								<a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> "><c:out value="${cmt.commenter.firstname}"/> <c:out value="${cmt.commenter.lastname}"/></a>
 							</div>
-							<span class="comment-text ml-10">${cmt.comment}</span>
+							<span class="comment-text ml-10"><c:out value="${cmt.comment}"/></span>
 							<div class="comment-date ml-10 mt-10">
 								<fmt:timeZone value="AR">
 									<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
@@ -81,43 +81,43 @@
 						</div>
           </c:forEach>
 					<div class="table-navigator">
-	                    <c:choose>
-	                        <c:when test="${commentQty > 0}">
-	                            <c:if test="${currCommentPage != 1}">
-	                				<div>
-	                                    <a href="<c:url value='/club/${clubid}?cmt=1' />">
-	                                        <button type="button" class="btn btn-secondary">
-	                                            <spring:message code="first"/>
-	                                        </button>
-	                                    </a>
-	                                    <a href="<c:url value='/club/${clubid}?cmt=${currCommentPage-1}' />">
-	                                        <button type="button" class="btn btn-secondary">
-	                                            <spring:message code="back"/>
-	                                        </button>
-	                                    </a>
-	                                </div>
-	                            </c:if>
-	                            <span class="flex"><spring:message code="showing_items"/> ${commentsPageInitIndex}-${commentsPageInitIndex + commentQty - 1} <spring:message code="of"/> ${totalCommentQty}</span>
-	                            <c:if test="${currCommentPage != maxCommentPage}">
-	                				<div>
-	                                    <a href="<c:url value='/club/${clubid}?cmt=${currCommentPage+1}' />">
-	                                        <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-	                                    </a>
-	                                    <a href="<c:url value='/club/${clubid}?cmt=${maxCommentPage}' />">
-	                                        <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-	                                    </a>
-	                                </div>
-	                            </c:if>
-	                        </c:when>
-	                        <c:otherwise>
-	                            <div class="notice">
-	                                <spring:message code="no_comments"/>
-	                            </div>
-	                        </c:otherwise>
-	                    </c:choose>
-	    			</div>
-				</div>
+            <c:choose>
+              <c:when test="${commentQty > 0}">
+                <c:if test="${currCommentPage != 1}">
+          				<div>
+                      <a href="<c:url value='/club/${clubid}?cmt=1' />">
+                          <button type="button" class="btn btn-secondary">
+                              <spring:message code="first"/>
+                          </button>
+                      </a>
+                      <a href="<c:url value='/club/${clubid}?cmt=${currCommentPage-1}' />">
+                          <button type="button" class="btn btn-secondary">
+                              <spring:message code="back"/>
+                          </button>
+                      </a>
+                  </div>
+                </c:if>
+                <span class="flex"><spring:message code="showing_items"/> <c:out value="${commentsPageInitIndex}"/>-<c:out value="${commentsPageInitIndex + commentQty - 1}"/> <spring:message code="of"/> <c:out value="${totalCommentQty}"/></span>
+                <c:if test="${currCommentPage != maxCommentPage}">
+          				<div>
+                      <a href="<c:url value='/club/${clubid}?cmt=${currCommentPage+1}' />">
+                          <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                      </a>
+                      <a href="<c:url value='/club/${clubid}?cmt=${maxCommentPage}' />">
+                          <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                      </a>
+                  </div>
+                </c:if>
+              </c:when>
+              <c:otherwise>
+                  <div class="notice">
+                      <spring:message code="no_comments"/>
+                  </div>
+              </c:otherwise>
+          </c:choose>
+  			</div>
 			</div>
 		</div>
-	</body>
+	</div>
+</body>
 </html>

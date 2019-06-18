@@ -20,12 +20,12 @@
 		<c:choose>
    			<c:when test="${user.userid == loggedUser.userid}">
    				<div class="profile-title">
-                    <h2><spring:message code="user.greeting" arguments="${user.firstname} ${user.lastname}"/></h2>
-                </div>
+              <h2><spring:message code="user.greeting" arguments="${user.firstname} ${user.lastname}"/></h2>
+          </div>
 			</c:when>
 			<c:otherwise>
 				<div class="profile-title">
-	                <h2>${user.firstname} ${user.lastname}</h2>
+	                <h2><c:out value="${user.firstname}"/> <c:out value="${user.lastname}"/></h2>
 	            </div>
 			</c:otherwise>
 		</c:choose>
@@ -35,17 +35,17 @@
 				<div class="stats">
 					<div class="notice" style="padding: 5px 0">
 						<spring:message code="curr_event_participant"/>
-						<span class="notice"> ${currEventsParticipant} </span>
+						<span class="notice"> <c:out value="${currEventsParticipant}"/> </span>
 						<spring:message code="event_s"/>
 					</div>
 					<div class="notice" style="padding: 5px 0">
 						<spring:message code="curr_events_owned"/>
-						<span class="notice"> ${currEventsOwned} </span>
+						<span class="notice"> <c:out value="${currEventsOwned}"/> </span>
 						<spring:message code="event_s"/>
 					</div>
 					<div class="notice" style="padding: 5px 0">
 						<spring:message code="past_events_participant"/>
-						<span class="notice"> ${pastEventsParticipant} </span>
+						<span class="notice"> <c:out value="${pastEventsParticipant}"/> </span>
 						<spring:message code="event_s"/>
 					</div>
 					<c:if test="${favoriteSport != null}">
@@ -57,12 +57,12 @@
 					<c:if test="${mainClub != null}">
 						<div class="notice" style="padding: 5px 0">
 							<spring:message code="main_club" />
-							<span class="notice"> ${mainClub.name}</span>
+							<span class="notice"> <c:out value="${mainClub.name}"/></span>
 						</div>
 					</c:if>
 					<div class="notice" style="padding: 5px 0">
 						<spring:message code="user_vote_balance"/>
-						<span class="notice"> ${votes_received} </span>
+						<span class="notice"> <c:out value="${votes_received}"/> </span>
 					</div>
 				</div>
 			</div>
@@ -83,9 +83,9 @@
 									<div class="comment-container">
                     <div class="comment-profile-row mv-10">
 											<img class="comment-image" src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
-                      <a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> ">${cmt.commenter.firstname} ${cmt.commenter.lastname}</a>
+                      <a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> "><c:out value="${cmt.commenter.firstname}"/> <c:out value="${cmt.commenter.lastname}"/></a>
 										</div>
-                    <span class="comment-text ml-10">${cmt.comment}</span>
+                    <span class="comment-text ml-10"><c:out value="${cmt.comment}"/></span>
                     <div class="comment-date ml-10 mt-10">
 											<fmt:timeZone value="AR">
 												<fmt:parseDate value="${cmt.createdAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" />
@@ -109,7 +109,7 @@
                             </button>
                         </a>
                     </div>
-                    <span class="flex"><spring:message code="showing_items"/> ${commentsPageInitIndex}-${commentsPageInitIndex + commentQty - 1} <spring:message code="of"/> ${totalCommentQty}</span>
+                    <span class="flex"><spring:message code="showing_items"/> <c:out value="${commentsPageInitIndex}"/>-<c:out value="${commentsPageInitIndex + commentQty - 1}"/> <spring:message code="of"/> <c:out value="${totalCommentQty}"/></span>
     								<div class="${currCommentPage != maxCommentPage ? "" : "hidden"}">
                         <a href="<c:url value='/user/${userid}?cmt=${currCommentPage+1}' />">
                             <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>

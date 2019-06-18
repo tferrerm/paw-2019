@@ -16,7 +16,7 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<div class="profile-title">
-				<h2>${event.name}</h2>
+				<h2><c:out value="${event.name}"/></h2>
 			</div>
 			<div class="detail-container average-min-width">
 				<c:if test="${!has_ended}">
@@ -32,18 +32,18 @@
 						<div class="progress">
 							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>
 						</div>
-						<h4 class="progress-bar-completion">${participant_count}/${event.maxParticipants}</h4>
+						<h4 class="progress-bar-completion"><c:out value="${participant_count}"/>/<c:out value="${event.maxParticipants}"/></h4>
 					</div>
 				</c:if>
 				<div class="description-body">
 					<div class="margin-right">
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="organizer"/> </span>
-							<a class="link-text" href="<c:url value="/user/${event.owner.userid}" /> ">${event.owner.firstname} ${event.owner.lastname}</a>
+							<a class="link-text" href="<c:url value="/user/${event.owner.userid}" /> "><c:out value="${event.owner.firstname}"/> <c:out value="${event.owner.lastname}"/></a>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="event_description"/></span>
-							<span>${event.description}</span>
+							<span><c:out value="${event.description}"/></span>
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="sport"/></span>
@@ -51,8 +51,8 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label"><spring:message code="club"/> </span>
-							<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" /> ">${event.pitch.club.name}</a>
-							<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">${event.pitch.name}</a>
+							<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" /> "><c:out value="${event.pitch.club.name}"/></a>
+							<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" /> "><c:out value="${event.pitch.name}"/></a>
 						</div>
 						<div class="double-box">
 							<div class="description-item">
@@ -71,29 +71,28 @@
 							</div>
 							<div class="description-item">
 								<span class="event-info-label"><spring:message code="vacancies"/></span>
-								<span>${event.maxParticipants - participant_count}</span>
+								<span><c:out value="${event.maxParticipants - participant_count}" /></span>
 							</div>
-
 						</div>
 					</div>
 					<div class="participants-list">
 						<span class="event-info-label"><spring:message code="participants"/></span>
 						<ul>
 						    <c:forEach var="i" items="${inscriptions}">
-					              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">
-						              <a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">${i.inscriptedUser.firstname} ${i.inscriptedUser.lastname}</a>
-													<c:if test="${!has_ended && isOwner && i.inscriptedUser.userid != event.owner.userid}">
-						              	<button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
-													</c:if>
-					              </form>
-				            </c:forEach>
-			          	</ul>
+		              <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">
+			              <a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> "><c:out value="${i.inscriptedUser.firstname}"/> <c:out value="${i.inscriptedUser.lastname}"/></a>
+										<c:if test="${!has_ended && isOwner && i.inscriptedUser.userid != event.owner.userid}">
+			              	<button type="submit" class="kick-user-btn"><spring:message code="kick"/></button>
+										</c:if>
+		              </form>
+		            </c:forEach>
+          	</ul>
 					</div>
 				</div>
 				<c:if test="${has_ended && is_participant}">
 					<div class="event-points">
 						<h4 class="pitch-info-label"><spring:message code="event_points"/></h4>
-						<h5 class="pitch-info-label vote-balance">${vote_balance}</h5>
+						<h5 class="pitch-info-label vote-balance"><c:out value="${vote_balance}"/></h5>
 					</div>
 					<div class="voting-buttons">
 						<c:if test="${loggedUser.userid != event.owner.userid}">

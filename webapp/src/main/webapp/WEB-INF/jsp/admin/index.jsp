@@ -77,10 +77,10 @@
 			</div>
 			<c:forEach var="event" items="${events}">
 				<div class="custom-row">
-					<div>${event.pitch.club.name}</div>
+					<div><c:out value="${event.pitch.club.name}" /></div>
 					<div><spring:message code="${event.pitch.sport}"/></div>
-					<div>${event.owner.firstname} ${event.owner.lastname}</div>
-					<div>${event.maxParticipants - fn:length(event.inscriptions)}</div>
+					<div><c:out value="${event.owner.firstname}" /> <c:out value="${event.owner.lastname}" /></div>
+					<div><c:out value="${event.maxParticipants - fn:length(event.inscriptions)}" /></div>
 					<div>
 						<fmt:timeZone value="AR">
 							<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
@@ -108,7 +108,7 @@
                 </button>
               </a>
           </div>
-     			<span class="flex"><spring:message code="showing_items"/> ${pageInitialIndex}-${pageInitialIndex + eventQty - 1} <spring:message code="of"/> ${totalEventQty}</span>
+     			<span class="flex"><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + eventQty - 1}" /> <spring:message code="of"/> <c:out value="${totalEventQty}" /></span>
 					<div class="${page != lastPageNum ? "" : "hidden"}">
               <a href="<c:url value='/admin/events/${page+1}${queryString}' />">
                   <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>

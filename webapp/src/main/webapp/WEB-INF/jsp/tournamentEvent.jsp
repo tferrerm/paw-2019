@@ -21,7 +21,7 @@
 					<a class="color-white" href="<c:url value="/tournament/${tournament.tournamentid}" /> "> <<< <spring:message code="go_to_tournament"/></a>
 				</div>
 				<div class="profile-title">
-          <h2>${tournamentEvent.name}</h2>
+          <h2><c:out value="${tournamentEvent.name}"/></h2>
         </div>
         <span class="help-message notice"><spring:message code="event_completed_description"/></span>
 				<div class="detail-box">
@@ -29,9 +29,9 @@
 						<div class="color-white event-info-label"><spring:message code="event_detail"/></div>
 					</div>
 					<div>
-						<div class="detail-box-data"><spring:message code="tournament"/>: ${tournament.name}</div>
-						<div class="detail-box-data"><spring:message code="club"/>: ${tournament.tournamentClub.name}</div>
-						<div class="detail-box-data"><spring:message code="pitch"/>: ${tournamentEvent.pitch.name}</div>
+						<div class="detail-box-data"><spring:message code="tournament"/>: <c:out value="${tournament.name}"/></div>
+						<div class="detail-box-data"><spring:message code="club"/>: <c:out value="${tournament.tournamentClub.name}"/></div>
+						<div class="detail-box-data"><spring:message code="pitch"/>: <c:out value="${tournamentEvent.pitch.name}"/></div>
 						<div class="detail-box-data">
 							<spring:message code="start"/>:
 							<fmt:timeZone value="AR">
@@ -51,33 +51,47 @@
 				<div class="tbl">
 					<div class="table-header">
 						<div class="flex-grow justify-center my-events-tbl-sub">
-							${tournamentEvent.firstTeam.teamName}
+							<c:out value="${tournamentEvent.firstTeam.teamName}"/>
 						</div>
 						<div class="flex-grow justify-center my-events-tbl-sub">
-							${tournamentEvent.secondTeam.teamName}
+							<c:out value="${tournamentEvent.secondTeam.teamName}"/>
 						</div>
 					</div>
 					<div class="flex-grow w-100">
 						<div class=" flex-grow flex-column right-border w-50">
 							<div class="score">
-								${tournamentEvent.firstTeamScore != null ? tournamentEvent.firstTeamScore : " - "}
+								<c:choose>
+									<c:when test="${tournamentEvent.firstTeamScore != null}">
+										<c:out value="${tournamentEvent.firstTeamScore}"/>
+									</c:when>
+									<c:otherwise>
+										-
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
 									<c:forEach var="teamMember" items="${firstTeamMembers}">
-										<span>${teamMember.firstname} ${teamMember.lastname}</span>
+										<a class="link-text" href="<c:url value="/user/${teamMember.userid}" /> "><c:out value="${teamMember.firstname}"/> <c:out value="${teamMember.lastname}"/></a>
 									</c:forEach>
 								</div>
 							</div>
 						</div>
 						<div class="flex-grow flex-column w-50">
 							<div class="score">
-								${tournamentEvent.secondTeamScore != null ? tournamentEvent.secondTeamScore : " - "}
+								<c:choose>
+									<c:when test="${tournamentEvent.secondTeamScore != null}">
+										<c:out value="${tournamentEvent.secondTeamScore}"/>
+									</c:when>
+									<c:otherwise>
+										-
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="team-description">
 								<div class="flex flex-column align-center w-100">
 									<c:forEach var="teamMember" items="${secondTeamMembers}">
-										<span>${teamMember.firstname} ${teamMember.lastname}</span>
+										<a class="link-text" href="<c:url value="/user/${teamMember.userid}" /> "><c:out value="${teamMember.firstname}"/> <c:out value="${teamMember.lastname}"/></a>
 									</c:forEach>
 								</div>
 							</div>

@@ -17,9 +17,9 @@
             <%@include file="sidebar.jsp" %>
             <div class="content-container">
                 <div class="profile-title">
-                    <h2>${pitch.name}</h2>
+                    <h2><c:out value="${pitch.name}"/></h2>
                 </div>
-                <div class="tbl profile-cont">
+                <div class="tbl profile-cont minh-150">
                     <div class="profile-top">
                         <div class="pitch-pic-container">
                             <img class="pitch-pic" src="<c:url value='/pitch/${pitch.pitchid}/picture'/>"/>
@@ -27,7 +27,7 @@
                         <div class="stats">
                             <div class="h4 pitch-info-label" style="padding: 5px 0">
                                 <spring:message code="pitch_club" />
-                                <a class="h4 link-text" href="<c:url value="/club/${pitch.club.clubid}" /> ">${pitch.club.name}</a>
+                                <a class="h4 link-text" href="<c:url value="/club/${pitch.club.clubid}" /> "><c:out value="${pitch.club.name}"/></a>
                             </div>
                             <div class="h4 pitch-info-label" style="padding: 5px 0">
                                 <spring:message code="pitch_sport"/>
@@ -35,12 +35,12 @@
                             </div>
                             <div class="h4 pitch-info-label" style="padding: 5px 0">
                                 <spring:message code="pitch_location" />
-                                <span class="h4"> ${pitch.club.location}</span>
+                                <span class="h4"> <c:out value="${pitch.club.location}"/></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="tbl-no-flex profile-cont profile-second">
+                <div class="tbl-no-flex profile-cont profile-second minh-500">
                     <c:if test="${event_overlap == true}">
                         <span class="form-error notice">
                             <spring:message code="event_overlap"/>
@@ -117,7 +117,7 @@
                                         <form:select path="startsAtHour" cssClass="form-control">
                                             <c:forEach var="hourEntry" items="${availableHours}">
                                                 <c:if test="${hourEntry.key < maxHour}">
-                                                    <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                                    <form:option value="${hourEntry.key}"><c:out value="${hourEntry.value}"/></form:option>
                                                 </c:if>
                                             </c:forEach>
                                         </form:select>
@@ -133,7 +133,7 @@
                                         <form:select path="endsAtHour" cssClass="form-control">
                                             <c:forEach var="hourEntry" items="${availableHours}">
                                                 <c:if test="${hourEntry.key > minHour}">
-                                                    <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
+                                                    <form:option value="${hourEntry.key}"><c:out value="${hourEntry.value}"/></form:option>
                                                 </c:if>
                                             </c:forEach>
                                         </form:select>
