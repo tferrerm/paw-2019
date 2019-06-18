@@ -65,6 +65,9 @@ public class TournamentController extends BaseController {
 			mav.addObject("eventsHaveResult", eventsHaveResult);
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
+			
+			int currentRound = ts.getCurrentRound(tournament);
+			mav.addObject("currentRound", currentRound);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("tournamentInscription");
