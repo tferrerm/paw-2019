@@ -39,6 +39,7 @@
             <c:forEach var="tournament" items="${tournaments}">
                 <div class="custom-row flex-space-around">
                     <div><c:out value="${tournament.name}" /></div>
+                    
                     <div><c:out value="${tournament.tournamentClub.name}" /></div>
                     <div><spring:message code="${tournament.sport}"/></div>
                     <div>

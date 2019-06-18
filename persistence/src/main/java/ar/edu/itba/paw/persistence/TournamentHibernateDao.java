@@ -107,7 +107,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		/* Creation of teams */
 		List<TournamentTeam> teams = new ArrayList<>();
 		for(int i = 1; i <= maxTeams; i++) {
-			StringBuilder teamName = new StringBuilder("Team ").append(i); // INTERNACIONALIZACION
+			StringBuilder teamName = new StringBuilder("team_").append(i);
 			TournamentTeam team = new TournamentTeam(teamName.toString(), tournament);
 			teams.add(team);
 			em.persist(team);

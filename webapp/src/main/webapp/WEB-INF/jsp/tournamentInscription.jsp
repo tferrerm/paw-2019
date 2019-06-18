@@ -54,7 +54,7 @@
 						<div>
 							<div class="flex">
 							<div class="team-description minw-100 w-100">
-								<span class="event-info-label"><c:out value="${teams[teamIndex].teamName}"/></span>
+								<span class="event-info-label"><spring:message code="${teams[teamIndex].teamName}"/></span>
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex].teamid}"/>
@@ -75,7 +75,7 @@
 								</div>
 							</div>
 							<div class="team-description minw-100 w-100">
-								<span class="event-info-label"><c:out value="${teams[teamIndex + 1].teamName}"/></span>
+								<span class="event-info-label"><spring:message code="${teams[teamIndex + 1].teamName}"/></span>
 								<div class="flex w-100">
 									<div class="flex flex-column align-center w-100">
 										<cr:set var="teamid" scope="page" value="${teams[teamIndex + 1].teamid}"/>

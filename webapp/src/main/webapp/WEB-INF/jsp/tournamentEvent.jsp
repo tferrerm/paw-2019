@@ -51,10 +51,10 @@
 				<div class="tbl">
 					<div class="table-header">
 						<div class="flex-grow justify-center my-events-tbl-sub">
-							<c:out value="${tournamentEvent.firstTeam.teamName}"/>
+							<spring:message code="${tournamentEvent.firstTeam.teamName}"/>
 						</div>
 						<div class="flex-grow justify-center my-events-tbl-sub">
-							<c:out value="${tournamentEvent.secondTeam.teamName}"/>
+							<spring:message code="${tournamentEvent.secondTeam.teamName}"/>
 						</div>
 					</div>
 					<div class="flex-grow w-100">
