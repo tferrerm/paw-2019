@@ -68,15 +68,12 @@ public class UserComment {
 		if(!(o instanceof UserComment))
 			return false;
 		UserComment other = (UserComment) o;
-		return this.getCommenter().equals(other.getCommenter()) 
-				&& this.getReceiver().equals(other.getReceiver())
-				&& this.getComment().equals(other.getComment())
-				&& this.getCreatedAt().equals(other.getCreatedAt());
+		return this.commentid == other.commentid;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.getCommenter(), this.getReceiver(), this.getComment(), this.getCreatedAt());
+		return Objects.hash(this.commentid);
 	}
 
 	public User getCommenter() {

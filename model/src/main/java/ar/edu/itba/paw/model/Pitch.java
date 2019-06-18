@@ -85,8 +85,12 @@ public class Pitch {
 		if(!(o instanceof Pitch))
 			return false;
 		Pitch other = (Pitch) o;
-		return pitchid == other.getPitchid() && club.equals(other.getClub()) && name.equals(other.getName())
-				&& sport.equals(other.sport);
+		return pitchid == other.getPitchid();
+	}
+	
+	@Override
+	public int hashCode() {
+		return ((Long)this.pitchid).hashCode();
 	}
 
 	public long getPitchid() {

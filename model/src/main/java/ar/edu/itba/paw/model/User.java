@@ -85,17 +85,6 @@ public class User {
 		this.userid = userid;
 	}
 	
-//	public User(long userid, String username, String firstname, String lastname, 
-//			String password, Role role) {
-//		super();
-//		this.userid = userid;
-//		this.username = username;
-//		this.firstname = firstname;
-//		this.lastname = lastname;
-//		this.password = password;
-//		this.role = role;
-//	}
-	
 	@Override
 	public String toString() {
 		return "Userid: " + userid + " Username: " + username;
@@ -113,7 +102,7 @@ public class User {
 	
 	@Override
 	public int hashCode() {
-		return this.getUsername().hashCode() * 83;
+		return this.getUsername().hashCode();
 	}
 
 	public long getUserid() {

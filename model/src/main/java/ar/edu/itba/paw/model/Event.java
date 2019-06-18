@@ -110,6 +110,21 @@ public class Event {
 		return "Eventid: " + eventid + " Name: " + name;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this)
+			return true;
+		if(!(o instanceof Event))
+			return false;
+		Event other = (Event) o;
+		return this.eventid == other.eventid;
+	}
+	
+	@Override
+	public int hashCode() {
+		return ((Long)this.eventid).hashCode();
+	}
+	
 	public long getEventId() {
 		return eventid;
 	}

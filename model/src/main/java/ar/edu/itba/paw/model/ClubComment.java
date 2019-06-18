@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.model;
 
 import java.time.Instant;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,15 +67,12 @@ public class ClubComment {
 		if(!(o instanceof ClubComment))
 			return false;
 		ClubComment other = (ClubComment) o;
-		return this.getCommenter().equals(other.getCommenter()) 
-				&& this.getClub().equals(other.getClub())
-				&& this.getComment().equals(other.getComment())
-				&& this.getCreatedAt().equals(other.getCreatedAt());
+		return this.commentid == other.commentid;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.getCommenter(), this.getClub(), this.getComment(), this.getCreatedAt());
+		return ((Long)this.commentid).hashCode();
 	}
 
 	public User getCommenter() {
