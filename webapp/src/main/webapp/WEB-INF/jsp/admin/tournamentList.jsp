@@ -30,6 +30,7 @@
     				<div class="background-dodgerblue table-header">
               <div class="table-titles flex-space-around">
               	<span class="justify-center flex-1 color-white mt-10"><spring:message code="event_name" /></span>
+                <span class="justify-center flex-1 color-white mt-10"><spring:message code="state" /></span>
               	<span class="justify-center flex-1 color-white mt-10"><spring:message code="club" /></span>
               	<span class="justify-center flex-1 color-white mt-10"><spring:message code="sport" /></span>
 								<span class="justify-center flex-1" />
