@@ -65,7 +65,7 @@
                                 </div>
                                 <div>
                                     <form:label path="date"><spring:message code="date" /></form:label>
-                                    <form:input class="form-control" type="date" path="date"/>
+                                    <form:input class="form-control" type="date" path="date" min="${currentDate}" max="${aWeekFromNow}"/>
                                     <form:errors path="date" cssClass="form-error" element="p"/>
                                     <c:if test="${invalid_date_format == true}">
                                         <span class="form-error">

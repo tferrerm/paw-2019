@@ -81,7 +81,7 @@
 					<div class="form-field flex-space-between">
                         <div class="form-field-horizontal">
                             <form:label path="firstRoundDate"><spring:message code="start_date"/> *</form:label>
-                            <form:input cssClass="form-control date-input" type="date" path="firstRoundDate"/>
+                            <form:input cssClass="form-control date-input" type="date" path="firstRoundDate" min="${currentDate}" max="${aWeekFromNowDate}"/>
                             <form:errors path="firstRoundDate" cssClass="form-error" element="span"/>
                             <c:if test="${event_in_past}">
                                 <span class="form-error">
@@ -129,7 +129,7 @@
                     </div>
                     <div>
                         <form:label path="inscriptionEndDate"><spring:message code="end_date"/> *</form:label>
-                        <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate"/>
+                        <form:input cssClass="form-control w-100" type="datetime-local" path="inscriptionEndDate" min="${currentDateTime}" max="${aWeekFromNowDateTime}"/>
                         <form:errors path="inscriptionEndDate" cssClass="form-error" element="span"/>
                         <c:if test="${inscription_date_in_past}">
                             <span class="form-error">

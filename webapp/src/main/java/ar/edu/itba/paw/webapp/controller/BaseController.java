@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
@@ -74,6 +75,10 @@ public class BaseController {
     		return null;
     	}
     	return i;
+    }
+    
+    public String encodeUriString(String str) {
+    	return UriComponentsBuilder.fromPath(str).build().encode().toString();
     }
 	
 	/*@ExceptionHandler({ IllegalArgumentException.class })

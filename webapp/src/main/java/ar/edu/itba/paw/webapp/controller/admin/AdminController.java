@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +85,8 @@ public class AdminController extends BaseController {
         mav.addObject("totalEventQty", totalEventQty);
 		mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
         mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+        mav.addObject("currentDate", LocalDate.now());
+        mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
         
 		return mav;
 	}
@@ -128,19 +132,19 @@ public class AdminController extends BaseController {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("?");
 		if(establishment != null && !establishment.isEmpty()) {
-			strBuilder.append("establishment=").append(establishment).append("&");
+			strBuilder.append("establishment=").append(encodeUriString(establishment)).append("&");
 		}
 		if(sport != null && !sport.isEmpty()) {
-			strBuilder.append("sport=").append(sport).append("&");
+			strBuilder.append("sport=").append(encodeUriString(sport)).append("&");
 		}
 		if(organizer != null && !organizer.isEmpty()) {
-			strBuilder.append("organizer=").append(organizer).append("&");
+			strBuilder.append("organizer=").append(encodeUriString(organizer)).append("&");
 		}
 		if(vacancies != null && !vacancies.isEmpty()) {
-			strBuilder.append("vacancies=").append(vacancies).append("&");
+			strBuilder.append("vacancies=").append(encodeUriString(vacancies)).append("&");
 		}
 		if(date != null && !date.isEmpty()) {
-			strBuilder.append("date=").append(date);
+			strBuilder.append("date=").append(encodeUriString(date));
 		}
 		else {
 			strBuilder.deleteCharAt(strBuilder.length()-1);
