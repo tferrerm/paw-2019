@@ -117,7 +117,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		Instant startsAt = firstRoundStartsAt;
 		Instant endsAt = firstRoundEndsAt;
 		for(int i = 0; i < tournament.getRounds(); i++) {
-			StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1); // INTERNACIONALIZACION
+			StringBuilder eventName = new StringBuilder(name).append(" - R").append(i+1);
 			for(int j = 0; j < maxTeams/2; j++) {
 				TournamentEvent tournamentEvent = new TournamentEvent(eventName.toString(), user, availablePitches.get(j), 
 						teamSize * 2, startsAt, endsAt, tournament, i + 1, teams.get(j), teams.get(j + maxTeams/2));
