@@ -151,7 +151,7 @@
 				</span>
 			</c:if>
 			<div class="club-buttons">
-				<c:if test="${!has_started}">
+				<c:if test="${!(event.endsInscriptionAt < now)}">
 					<c:choose>
 						<c:when test="${is_participant}">
 							<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">

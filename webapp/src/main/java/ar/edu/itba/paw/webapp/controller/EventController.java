@@ -175,7 +175,6 @@ public class EventController extends BaseController {
         }
         mav.addObject("is_participant", isParticipant);
 
-        mav.addObject("has_started", Instant.now().isAfter(event.getStartsAt()));
         mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
 
         mav.addObject("vote_balance", es.getVoteBalance(event.getEventId())); // SACAR?
@@ -188,6 +187,7 @@ public class EventController extends BaseController {
         mav.addObject("userBusyError", userBusyError);
 
         mav.addObject("isOwner", loggedUser() != null ? event.getOwner().getUserid() == loggedUser().getUserid() : false);
+        mav.addObject("now", Instant.now());
 
         return mav;
     }
