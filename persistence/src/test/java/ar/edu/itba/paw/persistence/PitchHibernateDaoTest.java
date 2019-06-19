@@ -145,11 +145,6 @@ public class PitchHibernateDaoTest {
 		Assert.assertEquals(0, count);
 	}
 	
-	@Test
-	public void testCountPages() {
-		Assert.assertEquals(1, pd.countPitchPages());
-	}
-	
 	@Rollback
 	@Test
 	public void testDeletePitch() {
