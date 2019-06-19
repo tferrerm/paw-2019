@@ -86,8 +86,6 @@ public class EventController extends BaseController {
 	public ModelAndView home()	{
 		ModelAndView mav = new ModelAndView("home");
 
-		ems.userRegistered(us.findById(1).get(),LocaleContextHolder.getLocale());
-
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
 		if(loggedUser() != null) {
 			List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
