@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,11 +182,18 @@ public class ClubServiceImpl implements ClubService {
 	}
 	
 	@Override
-	public int[][] convertEventListToSchedule(final List<Event> clubEvents, final int minHour, final int maxHour,
+	public List<List<Integer>> convertEventListToSchedule(final List<Event> clubEvents, final int minHour, final int maxHour,
 			final int dayAmount) {
 		if(maxHour - minHour <= 0)
 			return null;
-		int[][] schedule = new int[maxHour - minHour][dayAmount];
+		
+		List<List<Integer>> schedule = new ArrayList<>();
+		for(int i = 0; i < maxHour - minHour; i++) {
+			schedule.add(new ArrayList<Integer>());
+			for(int j = 0; j < dayAmount; j++) {
+				schedule.get(i).add(0);
+			}
+		}
 
 		for(Event event : clubEvents) {
 			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
@@ -204,7 +212,7 @@ public class ClubServiceImpl implements ClubService {
 					.toLocalDateTime().getHour() - minHour;
 
 			for(int i = initialHourIndex; i < finalHourIndex; i++) {
-				schedule[i][dayIndex] += 1;
+				schedule.get(i).set(dayIndex, schedule.get(i).get(dayIndex) + 1);
 			}
 		}
 		return schedule;

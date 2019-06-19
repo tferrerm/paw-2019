@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -66,6 +67,7 @@ public class EventServiceImpl implements EventService {
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
 	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
 			"day_fri", "day_sat", "day_sun"};
+	private static final int DAY_LIMIT = 7;
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final int INSCRIPTION_END_FROM_EVENT_DAY_DIFFERENCE = 1;
@@ -123,12 +125,14 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
-			int maxHour, int dayAmount) {
-		if(maxHour - minHour <= 0)
-			return null;
-		boolean[][] schedule = new boolean[maxHour - minHour][dayAmount];
-
+	public List<List<Boolean>> convertEventListToBooleanSchedule(List<Event> events) {
+		List<List<Boolean>> booleanSchedule = new ArrayList<>();
+		for(int i = 0; i < MAX_HOUR - MIN_HOUR; i++) {
+			booleanSchedule.add(new ArrayList<Boolean>());
+			for(int j = 0; j < DAY_LIMIT; j++) {
+				booleanSchedule.get(i).add(false);
+			}
+		}
 		for(Event event : events) {
 			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
 					.toLocalDate().getDayOfWeek();
@@ -141,21 +145,27 @@ public class EventServiceImpl implements EventService {
 				dayIndex += 7;
 
 			int initialHourIndex = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDateTime().getHour() - minHour;
+					.toLocalDateTime().getHour() - MIN_HOUR;
 			int finalHourIndex = event.getEndsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDateTime().getHour() - minHour;
+					.toLocalDateTime().getHour() - MIN_HOUR;
 
 			for(int i = initialHourIndex; i < finalHourIndex; i++) {
-				schedule[i][dayIndex] = true;
+				booleanSchedule.get(i).set(dayIndex, true);
 			}
 		}
-		return schedule;
+		return booleanSchedule;
 	}
 
 	@Override
-	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents) {
-		Event[][] schedule = new Event[dayAmount][maxAmountOfEvents];
-		int[] indexes = new int [dayAmount];
+	public List<List<Event>> convertEventListToSchedule(List<Event> events) {
+		List<List<Event>> schedule = new ArrayList<>();
+		for(int i = 0; i < DAY_LIMIT; i++) {
+			schedule.add(new ArrayList<Event>());
+			for(int j = 0; j < MAX_HOUR - MIN_HOUR; j++) {
+				schedule.get(i).add(null);
+			}
+		}
+		int[] indexes = new int [DAY_LIMIT];
 		int i = 0;
 		for(Event event : events) {
 			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
@@ -169,7 +179,7 @@ public class EventServiceImpl implements EventService {
 				dayIndex += 7;
 			
 			i = indexes[dayIndex];
-			schedule[dayIndex][i] = event;
+			schedule.get(dayIndex).set(i, event);
 			indexes[dayIndex]++;
 		}
 		

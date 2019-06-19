@@ -109,10 +109,9 @@ public interface EventService {
 			final Optional<String> clubName, final Optional<Sport> sport, Optional<String> organizer, 
 			final Optional<Integer> vacancies, final Optional<Instant> date);
 
-	public boolean[][] convertEventListToSchedule(List<Event> events, int minHour,
-			int maxHour, int dayAmount);
+	public List<List<Boolean>> convertEventListToBooleanSchedule(List<Event> events);
 	
-	public Event[][] convertEventListToSchedule(List<Event> events, int dayAmount, int maxAmountOfEvents);
+	public List<List<Event>> convertEventListToSchedule(List<Event> events);
 
 	public int countFutureEventPages();
 

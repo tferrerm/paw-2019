@@ -89,8 +89,7 @@ public class EventController extends BaseController {
 		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
 		if(loggedUser() != null) {
 			List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
-			Event[][] myEvents = es.convertEventListToSchedule(upcomingEvents,
-					DAY_LIMIT, MAX_EVENTS_PER_DAY);
+			List<List<Event>> myEvents = es.convertEventListToSchedule(upcomingEvents);
 
 			mav.addObject("myEvents", myEvents);
 			mav.addObject("scheduleHeaders", scheduleDaysHeader);
@@ -300,7 +299,7 @@ public class EventController extends BaseController {
 		mav.addObject("minHour", MIN_HOUR);
 		mav.addObject("maxHour", MAX_HOUR);
 		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-		mav.addObject("schedule", es.convertEventListToSchedule(es.findCurrentEventsInPitch(id), MIN_HOUR, MAX_HOUR, DAY_LIMIT));
+		mav.addObject("schedule", es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id)));
 		mav.addObject("currentDate", LocalDate.now());
 		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 		mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
