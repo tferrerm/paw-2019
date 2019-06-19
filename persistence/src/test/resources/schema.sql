@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS club_comments(
 CREATE TABLE IF NOT EXISTS tournaments(
   tournamentid IDENTITY PRIMARY KEY,
   tournamentname VARCHAR(100) NOT NULL,
-  tournament_sport VARCHAR(100) NOT NULL,
+  sport VARCHAR(100) NOT NULL,
   clubid INTEGER NOT NULL,
   max_teams INTEGER NOT NULL,
   team_size INTEGER NOT NULL,
@@ -130,11 +130,17 @@ VALUES (2, 'other_user@name.com', 'second', 'fastlast', '87654321', 'ROLE_USER',
 INSERT INTO users (userid, username, firstname, lastname, password, role, created_at)
 VALUES (3, 'dummy@dummy.com', 'dummy', 'dummy', 'dummy', 'ROLE_USER', '2015-02-14 00:00:00');
 
+INSERT INTO users (userid, username, firstname, lastname, password, role, created_at)
+VALUES (4, 'admin@admin.admin', 'admin', 'admin', 'admin', 'ROLE_ADMIN', '2015-02-14 00:00:00');
+
 INSERT INTO clubs (clubid, clubname, location, club_created_at) 
 VALUES (1, 'club', 'location', '2010-01-15 10:01:40');
 
 INSERT INTO pitches (pitchid, clubid, pitchname, sport, pitch_created_at) 
 VALUES (1, 1, 'pitch', 'SOCCER', '2011-03-15 08:10:10');
+
+INSERT INTO pitches (pitchid, clubid, pitchname, sport, pitch_created_at) 
+VALUES (2, 1, 'pitch_2', 'SOCCER', '2011-03-15 08:10:10');
 
 INSERT INTO events (eventid, userid, pitchid, eventname, description, max_participants, starts_at, ends_at, event_created_at, inscription_ends_at, inscription_success) 
 VALUES (2, 1, 1, 'event', 'description', 2, '2030-05-20 10:00:00', '2030-05-20 11:00:00', '2019-05-15 11:00:00', '2030-05-18 11:00:00', false);
@@ -156,3 +162,45 @@ VALUES (2, 1, -1);
 
 INSERT INTO user_comments (commentid, commenter_id, dest_userid, comment, created_at)
 VALUES (1, 1, 2, 'Comment', '2019-01-22 10:54:00');
+
+INSERT INTO tournaments ( tournamentid,   tournamentname,   sport,    clubid, max_teams,  team_size,  inscription_ends_at,    inscription_success,  tournament_created_at) 
+VALUES (                  1,              'tournament',     'SOCCER', 1,      4,          3,          '2030-01-20 11:00:00',  false,                '2030-01-15 11:00:00');
+
+INSERT INTO tournament_teams  (teamid,  tournamentid,   teamname,   teamscore)
+VALUES                        (1,       1,              'team_1',   0);
+
+INSERT INTO tournament_teams  (teamid,  tournamentid,   teamname,   teamscore)
+VALUES                        (2,       1,              'team_2',   0);
+
+INSERT INTO tournament_teams  (teamid,  tournamentid,   teamname,   teamscore)
+VALUES                        (3,       1,              'team_3',   0);
+
+INSERT INTO tournament_teams  (teamid,  tournamentid,   teamname,   teamscore)
+VALUES                        (4,       1,              'team_4',   0);
+
+INSERT INTO tournament_events (eventid, userid, pitchid,  eventname,        max_participants, starts_at,              ends_at,                event_created_at,       tournamentid, round,  first_teamid, second_teamid,  first_team_score, second_team_score)
+VALUES (                        3,      4,      1,        'tournament R1',  6,                '2019-01-22 11:00:00',  '2019-01-22 12:00:00',  '2019-01-20 11:00:00',  1,            1,      1,            3,              null,             null);
+
+INSERT INTO tournament_events (eventid, userid, pitchid,  eventname,        max_participants, starts_at,              ends_at,                event_created_at,       tournamentid, round,  first_teamid, second_teamid,  first_team_score, second_team_score)
+VALUES (                        4,      4,      2,        'tournament R1',  6,                '2019-01-22 11:00:00',  '2019-01-22 12:00:00',  '2019-01-20 11:00:00',  1,            1,      2,            4,              null,             null);
+
+INSERT INTO tournament_events (eventid, userid, pitchid,  eventname,        max_participants, starts_at,              ends_at,                event_created_at,       tournamentid, round,  first_teamid, second_teamid,  first_team_score, second_team_score)
+VALUES (                        5,      4,      1,        'tournament R2',  6,                '2019-01-29 11:00:00',  '2019-01-29 12:00:00',  '2019-01-20 11:00:00',  1,            2,      1,            4,              null,             null);
+
+INSERT INTO tournament_events (eventid, userid, pitchid,  eventname,        max_participants, starts_at,              ends_at,                event_created_at,       tournamentid, round,  first_teamid, second_teamid,  first_team_score, second_team_score)
+VALUES (                        6,      4,      2,        'tournament R2',  6,                '2019-01-29 11:00:00',  '2019-01-29 12:00:00',  '2019-01-20 11:00:00',  1,            2,      3,            2,              null,             null);
+
+INSERT INTO tournament_events (eventid, userid, pitchid,  eventname,        max_participants, starts_at,              ends_at,                event_created_at,       tournamentid, round,  first_teamid, second_teamid,  first_team_score, second_team_score)
+VALUES (                        7,      4,      1,        'tournament R3',  6,                '2019-02-05 11:00:00',  '2019-02-05 12:00:00',  '2019-01-20 11:00:00',  1,            3,      1,            2,              null,             null);
+
+INSERT INTO tournament_events (eventid, userid, pitchid,  eventname,        max_participants, starts_at,              ends_at,                event_created_at,       tournamentid, round,  first_teamid, second_teamid,  first_team_score, second_team_score)
+VALUES (                        8,      4,      2,        'tournament R3',  6,                '2019-02-05 11:00:00',  '2019-02-05 12:00:00',  '2019-01-20 11:00:00',  1,            3,      4,            3,              null,             null);
+
+INSERT INTO events_users (userid, eventid, teamid) 
+VALUES (2, 4, 4);
+
+INSERT INTO events_users (userid, eventid, teamid) 
+VALUES (2, 5, 4);
+
+INSERT INTO events_users (userid, eventid, teamid) 
+VALUES (2, 8, 4);

@@ -34,7 +34,7 @@ public class Tournament {
 	private String name;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(length = 50, nullable = false)
+	@Column(name = "sport", length = 50, nullable = false)
 	private Sport sport;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)

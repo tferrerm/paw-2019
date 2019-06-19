@@ -320,7 +320,7 @@ public class EventController extends BaseController {
     	Integer mp = tryInteger(form.getMaxParticipants());
     	Integer sa = tryInteger(form.getStartsAtHour());
     	Integer ea = tryInteger(form.getEndsAtHour());
-    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);System.out.println(form.getDate());System.out.println(date);
+    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
     	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	if(mp == null)
     		errors.rejectValue("maxParticipants", "wrong_int_format");

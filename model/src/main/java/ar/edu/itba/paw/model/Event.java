@@ -53,11 +53,11 @@ public class Event {
 	private Instant endsInscriptionAt;
 	
 	@Column(name = "inscription_success", nullable = true)
-	private boolean inscriptionSuccess;
+	private Boolean inscriptionSuccess;
 	
 	@Column(name = "starts_at", nullable = false)
 	private Instant startsAt;
-	
+
 	@Column(name = "ends_at", nullable = false)
 	private Instant endsAt;
 	
@@ -151,6 +151,10 @@ public class Event {
 
 	public Instant getEndsInscriptionAt() {
 		return endsInscriptionAt;
+	}
+	
+	public Boolean getInscriptionSuccess() {
+		return inscriptionSuccess;
 	}
 
 	public Instant getStartsAt() {

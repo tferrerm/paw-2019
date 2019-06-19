@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS club_comments(
 CREATE TABLE IF NOT EXISTS tournaments(
   tournamentid SERIAL PRIMARY KEY,
   tournamentname VARCHAR(100) NOT NULL,
-  tournament_sport VARCHAR(100) NOT NULL,
+  sport VARCHAR(100) NOT NULL,
   clubid INTEGER NOT NULL,
   max_teams INTEGER NOT NULL,
   team_size INTEGER NOT NULL,

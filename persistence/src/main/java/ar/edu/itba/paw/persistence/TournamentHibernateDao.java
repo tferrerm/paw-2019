@@ -184,7 +184,6 @@ public class TournamentHibernateDao implements TournamentDao {
 						+ tournamentEvent.getEventId());
 			}
 		}
-		System.out.println(tournamentUserInscriptionCount(tournament));
 	}
 	
 	public void deleteTournamentInscriptions(final TournamentTeam team, final User user) {
@@ -202,7 +201,7 @@ public class TournamentHibernateDao implements TournamentDao {
 	public Optional<TournamentTeam> findUserTeam(final Tournament tournament, final User user) {
 		String queryString = "FROM TournamentTeam AS tt "
 				+ " WHERE tt.tournament.tournamentid = :tournamentid "
-				+ " AND EXISTS (SELECT i FROM Inscription AS i WHERE i.inscriptedUser.userid = :userid "
+				+ " AND EXISTS (FROM Inscription AS i WHERE i.inscriptedUser.userid = :userid "
 				+ " AND i.tournamentTeam.teamid = tt.teamid)";
 		TypedQuery<TournamentTeam> query = em.createQuery(queryString, TournamentTeam.class);
 		query.setParameter("tournamentid", tournament.getTournamentid());
