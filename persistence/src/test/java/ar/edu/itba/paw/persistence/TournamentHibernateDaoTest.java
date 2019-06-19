@@ -84,8 +84,6 @@ public class TournamentHibernateDaoTest {
 	private static final InscriptionId SECOND_USER_THIRD_ROUND_INSCRIPTION_ID = new InscriptionId(SECOND_USER_THIRD_TOURNAMENT_EVENT_ID, SECOND_USERID);
 	
 	private static final long THIRD_TEAM_ID = 3;
-	private static final long LAST_TEAM_ID = 2;
-	private static final long SECOND_TOURNAMENT_SECOND_EVENT_ID = 4;
 	
 	private static final long ADMINID = 4;
 	
@@ -190,26 +188,6 @@ public class TournamentHibernateDaoTest {
 		Assert.assertEquals(THIRD_TEAM_ID, tournamentEvent.get().getSecondTeam().getTeamid());
 		Assert.assertNotNull(tournamentEvent.get().getCreatedAt());
 	}
-	
-//	@Rollback
-//	@Test
-//	public void testDeleteTournament() {
-//		td.deleteTournament(TOURNAMENTID);
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(Inscription.class, SECOND_USER_FIRST_ROUND_INSCRIPTION_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(Inscription.class, SECOND_USER_SECOND_ROUND_INSCRIPTION_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(Inscription.class, SECOND_USER_THIRD_ROUND_INSCRIPTION_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, TEAMID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, LAST_TEAM_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, THIRD_TEAM_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, SECOND_USER_TEAMID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, FIRST_TOURNAMENT_EVENT_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_USER_FIRST_TOURNAMENT_EVENT_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_USER_SECOND_TOURNAMENT_EVENT_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_TOURNAMENT_SECOND_EVENT_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, THIRD_TOURNAMENT_EVENT_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_USER_THIRD_TOURNAMENT_EVENT_ID)));
-//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(td.findById(TOURNAMENTID)));
-//	}
 	
 	@Test
 	public void testTournamentUserInscriptionCount() {

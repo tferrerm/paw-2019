@@ -19,7 +19,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Club;
@@ -27,7 +26,6 @@ import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.InscriptionId;
 import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
@@ -202,30 +200,5 @@ public class EventHibernateDaoTest {
 		ed.deleteEvent(EVENTID);
 		Assert.assertEquals(Optional.empty(), ed.findByEventId(EVENTID));
 	}
-	
-//	@Test
-//	public void testVoteBalance() {
-//		Optional<Integer> balance = ed.getVoteBalance(OLD_EVENTID);
-//		Assert.assertTrue(balance.isPresent());
-//		Assert.assertEquals(0, balance.get().intValue());
-//	}
-//	
-//	@Test
-//	public void testGetUserVote() {
-//		Optional<Integer> vote = ed.getUserVote(OLD_EVENTID, OWNER.getUserid());
-//		Assert.assertTrue(vote.isPresent());
-//		Assert.assertEquals(-1, vote.get().intValue());
-//	}
-//	
-//	@Rollback
-//	@Test
-//	public void testVote() {
-//		int result = ed.vote(true, EVENTID, OWNER.getUserid());
-//		Assert.assertEquals(1, result);
-//		result = ed.vote(false, -1, OWNER.getUserid());
-//		Assert.assertEquals(0, result);
-//		result = ed.vote(true, -1, -1);
-//		Assert.assertEquals(0, result);
-//	}
 
 }

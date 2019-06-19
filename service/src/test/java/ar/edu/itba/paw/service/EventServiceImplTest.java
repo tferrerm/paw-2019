@@ -7,7 +7,6 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -50,8 +49,6 @@ public class EventServiceImplTest {
 	private static final String NAME_1 = "e1";
 	private static final String NAME_2 = "e1";
 	private static final String DESCRIPTION = "d";
-	private static final int MIN_HOUR = 9;
-	private static final int MAX_HOUR = 23;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	private static final Instant STARTS_1 =  today().toInstant().plus(2, ChronoUnit.DAYS);

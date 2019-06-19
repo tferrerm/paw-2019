@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 
-import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
@@ -58,8 +57,6 @@ public class TournamentServiceImplTest {
 	private static final Instant STARTS = today().toInstant().plus(2, ChronoUnit.DAYS)
 			.plus(10, ChronoUnit.HOURS);
 	private static final int STARTS_AT = 10;
-	private static final Instant ENDS = Instant.now().plus(2, ChronoUnit.DAYS)
-			.plus(12, ChronoUnit.HOURS);
 	private static final int ENDS_AT = 12;
 	private static final Instant INSCR_ENDS = Instant.now().plus(5, ChronoUnit.HOURS);
 	private static final User USER = Mockito.mock(User.class);
