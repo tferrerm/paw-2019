@@ -22,7 +22,7 @@
 			<div class="registration-form-container maxw-600 mt-30 registration-intro-container">
 				<h1 class="event-info-label registration-sport-matcher justify-center mt-30"><spring:message code="sport_matcher" /></h1>
 				<span class="registration-intro-title"><spring:message code="registration_intro_title" /></span>
-				<span class="registration-intro-text"><spring:message code="registration_intro_text" /></span>
+				<span class="registration-intro-text home-header"><spring:message code="registration_intro_text" /></span>
 			</div>
 			<div class="registration-form-container mt-30">
 				<div class="form-container">

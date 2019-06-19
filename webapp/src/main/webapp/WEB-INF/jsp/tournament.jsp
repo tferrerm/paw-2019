@@ -94,16 +94,14 @@
 											</a>
 									</div>
                   <span class="flex create-event"><spring:message code="showing_pages"/> <c:out value="${currRoundPage}"/> <spring:message code="of"/> <c:out value="${maxRoundPage}"/></span>
-                  <c:if test="${currRoundPage != maxRoundPage}">
-                      <div>
-                          <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage+1}' />">
-                              <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-                          </a>
-                          <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${maxRoundPage}' />">
-                              <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-                          </a>
-                      </div>
-                  </c:if>
+                  <div class="${currRoundPage != maxRoundPage ? "" : "hidden"}">
+                      <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${currRoundPage+1}' />">
+                          <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+                      </a>
+                      <a href="<c:url value='/tournament/${tournament.tournamentid}?round=${maxRoundPage}' />">
+                          <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+                      </a>
+                  </div>
               </div>
           </div>
             </div>

@@ -51,7 +51,7 @@
 						</div>
 						<div>
 							<form:label path="vacancies"><spring:message code="vacancies" /></form:label>
-							<form:input class="form-control" type="text" path="vacancies" maxlength="3"/>
+							<form:input class="form-control" min="0" max="99" type="number" path="vacancies" maxlength="3"/>
 							<form:errors path="vacancies" cssClass="form-error" element="p"/>
 							<c:if test="${invalid_number_format == true}">
 				                <span class="form-error">

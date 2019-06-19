@@ -557,14 +557,18 @@ a.event-link {
   width: 100%;
   flex-direction: column;
   align-items: center;
-  border: 1px solid dodgerblue;
   word-break: break-word;
+  margin: 5px;
+  margin-top: 0px;
+  background-color: white;
+  border: 1px solid black;
 }
 
 .home-ev-title {
   justify-content: center;
-  border: 1px solid dodgerblue;
-  background-color: white;
+  background-color: dodgerblue;
+  color: white;
+  margin: 4px;
 }
 
 .home-evs-container {
@@ -702,6 +706,10 @@ a.logo-admin {
 
 .minh-500 {
   min-height: 500px;
+}
+
+.minh-550 {
+  min-height: 550px;
 }
 
 .minw-100 {
