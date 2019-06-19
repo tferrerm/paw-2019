@@ -49,7 +49,7 @@
 					</c:choose>
 				</c:when>
 				<c:otherwise>
-					<span class="description-body pitch-item justify-center mt-30">
+					<span class="description-body pitch-item justify-center mt-30 mh-30 w-70">
 						<span class="registration-sport-matcher event-info-label"><spring:message code="sport_matcher"/></span>
 						<span class="mb-10 ml-10 align-self-end comment-text"><spring:message code="introduction"/></span>
 					</span>
