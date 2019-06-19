@@ -125,14 +125,14 @@ public class EmailServiceImpl implements EmailService {
 		final Context ctx = new Context(locale);
 		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("tournament_name", tournamentName);
-		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{userName}, locale));
+		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{userName, tournamentName}, locale));
 
 		sendMail(user, locale, "tournament_cancelled_title", ctx, TOURNAMENT_CANCELLED_TEMPLATE, new Object[]{tournamentName});
 	}
 
 	@Override
 	public void eventCancelled(User user, Event event, final Locale locale) {
-		tournamentCancelled(user, event.getName(), locale);
+		eventCancelled(user, event.getName(), locale);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
 		final Context ctx = new Context(locale);
 		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{userName}, locale));
+		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{userName, eventName}, locale));
 		sendMail(user, locale, "event_cancelled_title",ctx, EVENT_CANCELLED_TEMPLATE, new Object[]{eventName});
 	}
 
