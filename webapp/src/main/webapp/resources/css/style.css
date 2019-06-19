@@ -73,6 +73,11 @@ a.color-white {
     align-items: center;
 }
 
+.align-self-end {
+  display: flex;
+  align-self: flex-end;
+}
+
 .average-min-height {
   min-height: 60%
 }
