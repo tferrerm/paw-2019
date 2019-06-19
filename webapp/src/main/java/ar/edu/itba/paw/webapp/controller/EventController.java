@@ -177,9 +177,9 @@ public class EventController extends BaseController {
 
         mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
 
-        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId())); // SACAR?
+        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId()));
         if (loggedUser() != null) {
-        	mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid())); // SACAR?
+        	mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
         }
 
         mav.addObject("eventFullError", eventFullError);

@@ -306,7 +306,7 @@ public class AdminTournamentController extends BaseController {
     @RequestMapping(value = "/tournament/{tournamentId}/kick-user/{userId}", method = { RequestMethod.POST })
     public ModelAndView kickUserFromTournament(
     		@PathVariable("tournamentId") long tournamentid, @PathVariable("userId") long kickedUserId) 
-    				throws UserNotFoundException, TournamentNotFoundException {
+    				throws UserNotFoundException, TournamentNotFoundException, InscriptionDateInPastException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	User kickedUser = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);

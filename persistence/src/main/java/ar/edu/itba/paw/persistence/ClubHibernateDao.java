@@ -176,7 +176,7 @@ public class ClubHibernateDao implements ClubDao {
 
 	@Override
 	public int countPastEvents(long clubid) {
-		TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Event AS e "
+		TypedQuery<Long> query = em.createQuery("SELECT count(e) FROM Event AS e "
 				+ " WHERE e.endsAt < :now AND e.pitch.club.clubid = :clubid", Long.class);
 		query.setParameter("now", Instant.now());
 		query.setParameter("clubid", clubid);

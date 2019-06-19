@@ -49,7 +49,7 @@ public interface TournamentService {
 	public void leaveTournament(final long tournamentid, final long userid) 
 			throws InscriptionDateInPastException;
 	
-	public void kickFromTournament(final User kickedUser, final Tournament tournament);
+	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionDateInPastException;
 	
 	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
 

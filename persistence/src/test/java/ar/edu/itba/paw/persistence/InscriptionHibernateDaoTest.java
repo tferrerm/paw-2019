@@ -38,12 +38,6 @@ public class InscriptionHibernateDaoTest {
 	private static final Integer VOTE = -1;
 	
 	@Test
-	public void createInscriptionTest() {
-//		final Inscription inscription = em.find(Event.class, EVENTID),
-//				em.find(User.class, USERID));
-	}
-	
-	@Test
 	public void findByIdsTest() {
 		final Optional<Inscription> i = ihd.findByIds(EVENTID, USERID);
 		Assert.assertTrue(i.isPresent());

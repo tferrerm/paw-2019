@@ -3,19 +3,14 @@ package ar.edu.itba.paw.persistence;
 import java.util.List;
 import java.util.Optional;
 
-import javax.sql.DataSource;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.ClubDao;
@@ -28,21 +23,11 @@ import ar.edu.itba.paw.model.Club;
 public class ClubHibernateDaoTest {
 	
 	@Autowired
-	private DataSource ds;
-	
-	@Autowired
 	private ClubDao cd;
-
-	private JdbcTemplate jdbcTemplate;
 	
 	private static final long CLUBID = 1;
 	private static final String LOCATION = "location";
 	private static final String CLUBNAME = "club";
-	
-	@Before
-	public void setUp() {
-		jdbcTemplate = new JdbcTemplate(ds);
-	}
 	
 	@Rollback
 	@Test
@@ -52,7 +37,6 @@ public class ClubHibernateDaoTest {
 		Assert.assertEquals(CLUBNAME, club.getName());
 		Assert.assertEquals(LOCATION, club.getLocation());
 		Assert.assertNotNull(club.getCreatedAt());
-		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clubs"));
 	}
 	
 	@Test
@@ -124,7 +108,7 @@ public class ClubHibernateDaoTest {
 	@Test
 	public void testCountPastEvents() {
 		int count = cd.countPastEvents(CLUBID);
-		Assert.assertEquals(1, count);
+		Assert.assertEquals(7, count);
 	}
 	
 	@Test
@@ -135,16 +119,6 @@ public class ClubHibernateDaoTest {
 		Assert.assertEquals(1, count);
 		count = cd.countFilteredClubs(Optional.of("BADSTRING"), Optional.of(LOCATION));
 		Assert.assertEquals(0, count);
-	}
-	
-	@Rollback
-	@Test
-	public void testDeleteClub() {
-		cd.deleteClub(CLUBID);
-		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clubs"));
-		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "pitches"));
-		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events"));
-		Assert.assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
 	}
 
 }
