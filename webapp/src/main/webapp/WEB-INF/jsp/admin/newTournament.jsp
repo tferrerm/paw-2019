@@ -101,7 +101,7 @@
                         </div>
                         <div>
                             <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
-                            <form:select path="startsAtHour" cssClass="form-control">
+                            <form:select id="eventStartHour" path="startsAtHour" cssClass="form-control">
                                 <c:forEach var="hourEntry" items="${availableHours}">
                                     <c:if test="${hourEntry.key < maxHour}">
                                         <form:option value="${hourEntry.key}">${hourEntry.value}</form:option>
@@ -117,7 +117,7 @@
                         </div>
                         <div>
                             <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
-                            <form:select path="endsAtHour" cssClass="form-control">
+                            <form:select id="eventEndHour" path="endsAtHour" cssClass="form-control">
                                 <c:forEach var="hourEntry" items="${availableHours}">
                                     <c:if test="${hourEntry.key > minHour}">
                                         <form:option value="${hourEntry.key}"><c:out value="${hourEntry.value}" /></form:option>

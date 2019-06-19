@@ -3,7 +3,12 @@
 <%@ taglib  prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
+      <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/style.css' />" >
+      <script
+          src="http://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow" rel="stylesheet">
@@ -117,7 +122,7 @@
                                         </div>
                                         <div>
                                             <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
-                                            <form:select path="startsAtHour" cssClass="form-control">
+                                            <form:select id="eventStartHour" path="startsAtHour" cssClass="form-control">
                                                 <c:forEach var="hourEntry" items="${availableHours}">
                                                     <c:if test="${hourEntry.key < maxHour}">
                                                         <form:option value="${hourEntry.key}"><c:out value="${hourEntry.value}"/></form:option>
@@ -133,7 +138,7 @@
                                         </div>
                                         <div>
                                             <form:label path="endsAtHour"><spring:message code="event_endsAt"/> *</form:label>
-                                            <form:select path="endsAtHour" cssClass="form-control">
+                                            <form:select id="eventEndHour" path="endsAtHour" cssClass="form-control">
                                                 <c:forEach var="hourEntry" items="${availableHours}">
                                                     <c:if test="${hourEntry.key > minHour}">
                                                         <form:option value="${hourEntry.key}"><c:out value="${hourEntry.value}"/></form:option>
