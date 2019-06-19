@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 
@@ -217,6 +219,11 @@ public class ClubServiceImpl implements ClubService {
 			}
 		}
 		return DAYS_OF_WEEK_NUM;
+	}
+
+	@Override
+	public List<Pitch> getAvailablePitches(long clubid, Sport sport, Instant startsAt, Instant endsAt, int amount) {
+		return cd.getAvailablePitches(clubid, sport, startsAt, endsAt, amount);
 	}
 
 }

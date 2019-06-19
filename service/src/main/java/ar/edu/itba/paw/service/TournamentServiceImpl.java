@@ -37,7 +37,7 @@ import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
 import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
-import ar.edu.itba.paw.interfaces.ClubDao;
+import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
@@ -59,7 +59,7 @@ public class TournamentServiceImpl implements TournamentService {
 	private TournamentDao td;
 	
 	@Autowired
-	private ClubDao cd;
+	private ClubService cs;
 	
 	@Autowired
 	private UserDao ud;
@@ -137,7 +137,7 @@ public class TournamentServiceImpl implements TournamentService {
     	if(inscriptionEndDate.isAfter((firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS))))
     		throw new InscriptionDateExceededException();
     	
-    	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), sport, 
+    	List<Pitch> availablePitches = cs.getAvailablePitches(club.getClubid(), sport, 
     			firstRoundStartsAt, firstRoundEndsAt, maxTeams/2);
     	if(availablePitches.size() < maxTeams / 2)
     		throw new InsufficientPitchesException();
