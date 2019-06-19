@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,11 +20,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
-import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.InscriptionId;
 import ar.edu.itba.paw.model.Pitch;
@@ -61,6 +57,7 @@ public class TournamentHibernateDaoTest {
 	
 	private static final long USERID = 1;
 	private static final long FIRST_TOURNAMENT_EVENT_ID = 3;
+	private static final String FIRST_TOURNAMENT_EVENT_NAME = "tournament R1";
 	private static final long SECOND_TOURNAMENT_EVENT_ID = 5;
 	private static final long THIRD_TOURNAMENT_EVENT_ID = 7;
 	private static final Instant FIRST_ROUND_STARTS_AT = Instant.now().plus(5, ChronoUnit.DAYS);
@@ -88,8 +85,9 @@ public class TournamentHibernateDaoTest {
 	
 	private static final long THIRD_TEAM_ID = 3;
 	private static final long LAST_TEAM_ID = 2;
+	private static final long SECOND_TOURNAMENT_SECOND_EVENT_ID = 4;
 	
-	private static final long ADMINID = 3;
+	private static final long ADMINID = 4;
 	
 	@Test
 	public void testFindById() {
@@ -172,28 +170,52 @@ public class TournamentHibernateDaoTest {
 		Assert.assertEquals(eventsByTeam, expectedEventsByTeam);
 	}
 	
-	/*@Test
-	public void testFindTournamentTeams() {
-		List<TournamentTeam> tournamentTeams = td.findTournamentTeams(TOURNAMENTID);
-		List<TournamentTeam> expectedTournamentTeams = new ArrayList<>();
-		expectedTournamentTeams.add(em.find(TournamentTeam.class, TEAMID));
-		expectedTournamentTeams.add(em.find(TournamentTeam.class, SECOND_USER_TEAMID));
-		expectedTournamentTeams.add(em.find(TournamentTeam.class, THIRD_TEAM_ID));
-		expectedTournamentTeams.add(em.find(TournamentTeam.class, LAST_TEAM_ID));
-		Assert.assertEquals(tournamentTeams, expectedTournamentTeams);
-	}*/
+	@Test
+	public void testFindTournamentEventsByRound() {
+		List<TournamentEvent> tournamentEvents = td.findTournamentEventsByRound(em.find(Tournament.class, TOURNAMENTID), 1);
+		List<TournamentEvent> expectedTournamentEvents = new ArrayList<>();
+		expectedTournamentEvents.add(em.find(TournamentEvent.class, FIRST_TOURNAMENT_EVENT_ID));
+		expectedTournamentEvents.add(em.find(TournamentEvent.class, SECOND_USER_FIRST_TOURNAMENT_EVENT_ID));
+		Assert.assertEquals(tournamentEvents, expectedTournamentEvents);
+	}
 	
-	//public List<User> findTeamMembers(TournamentTeam team)
+	@Test
+	public void testFindTournamentEventById() {
+		Optional<TournamentEvent> tournamentEvent = td.findTournamentEventById(FIRST_TOURNAMENT_EVENT_ID);
+		Assert.assertTrue(tournamentEvent.isPresent());
+		Assert.assertEquals(ADMINID, tournamentEvent.get().getOwner().getUserid());
+		Assert.assertEquals(FIRST_PITCHID, tournamentEvent.get().getPitch().getPitchid());
+		Assert.assertEquals(FIRST_TOURNAMENT_EVENT_NAME, tournamentEvent.get().getName());
+		Assert.assertEquals(TEAMID, tournamentEvent.get().getFirstTeam().getTeamid());
+		Assert.assertEquals(THIRD_TEAM_ID, tournamentEvent.get().getSecondTeam().getTeamid());
+		Assert.assertNotNull(tournamentEvent.get().getCreatedAt());
+	}
 	
-	//public List<TournamentEvent> findTournamentEventsByRound(Tournament tournament, int roundPage)
+//	@Rollback
+//	@Test
+//	public void testDeleteTournament() {
+//		td.deleteTournament(TOURNAMENTID);
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(Inscription.class, SECOND_USER_FIRST_ROUND_INSCRIPTION_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(Inscription.class, SECOND_USER_SECOND_ROUND_INSCRIPTION_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(Inscription.class, SECOND_USER_THIRD_ROUND_INSCRIPTION_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, TEAMID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, LAST_TEAM_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, THIRD_TEAM_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentTeam.class, SECOND_USER_TEAMID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, FIRST_TOURNAMENT_EVENT_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_USER_FIRST_TOURNAMENT_EVENT_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_USER_SECOND_TOURNAMENT_EVENT_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_TOURNAMENT_SECOND_EVENT_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, THIRD_TOURNAMENT_EVENT_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(em.find(TournamentEvent.class, SECOND_USER_THIRD_TOURNAMENT_EVENT_ID)));
+//		Assert.assertEquals(Optional.empty(), Optional.ofNullable(td.findById(TOURNAMENTID)));
+//	}
 	
-	//public void postTournamentEventResult(final Tournament tournament, final TournamentEvent event,
-	//		final Integer firstResult, final Integer secondResult)
-	
-	//public Optional<TournamentEvent> findTournamentEventById(final long eventid)
-	
-	//public void deleteTournament(final long tournamentid)
-	
-	//public Optional<Integer> tournamentUserInscriptionCount(Tournament t)
+	@Test
+	public void testTournamentUserInscriptionCount() {
+		Optional<Integer> inscriptions = td.tournamentUserInscriptionCount(em.find(Tournament.class, TOURNAMENTID));
+		Assert.assertTrue(inscriptions.isPresent());
+		Assert.assertEquals((Integer) 1, inscriptions.get());
+	}
 
 }

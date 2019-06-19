@@ -28,10 +28,10 @@
               <h2><c:out value="${tournament.name}"/></h2>
           </div>
           <span class="help-message notice w-70 justify-center"><spring:message code="tournament_description"/></span>
-					<c:if test="${currentRound != null}">
+					<c:if test="${currentRound != null}"><div style="width: 60%;margin: 20px 0">
 						<div class="progress">
 							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${currentRound * 100 / maxRoundPage}%; background-color: ${currentRound == maxRoundPage ? "green" : "dodgerblue"};" aria-valuenow="${currentRound}" aria-valuemin="0" aria-valuemax="${maxRoundPage}"></div>
-						</div>
+						</div></div>
 					</c:if>
     			<div class="tbl">
 						<div class="background-dodgerblue table-header">

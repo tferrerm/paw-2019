@@ -216,14 +216,6 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 
 	@Override
-	public List<TournamentTeam> findTournamentTeams(final long tournamentid) {
-		if(tournamentid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
-		}
-		return td.findTournamentTeams(tournamentid);
-	}
-
-	@Override
 	public Map<Long, List<User>> mapTeamMembers(long tournamentid) {
 		if(tournamentid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);

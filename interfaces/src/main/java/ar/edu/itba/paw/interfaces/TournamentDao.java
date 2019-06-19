@@ -36,8 +36,6 @@ public interface TournamentDao {
 	
 	public List<TournamentEvent> findTournamentEventsByTeam(final Tournament tournament, final TournamentTeam team);
 
-	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
-
 	public List<User> findTeamMembers(final TournamentTeam team);
 
 	public List<TournamentEvent> findTournamentEventsByRound(final Tournament tournament, final int roundPage);

@@ -53,8 +53,6 @@ public interface TournamentService {
 	
 	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
 
-	public List<TournamentTeam> findTournamentTeams(final long tournamentid);
-
 	public Map<Long, List<User>> mapTeamMembers(final long tournamentid);
 
 	public boolean inscriptionEnded(final Tournament tournament);

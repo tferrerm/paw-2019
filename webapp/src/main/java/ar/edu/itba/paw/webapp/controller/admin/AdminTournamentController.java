@@ -119,7 +119,6 @@ public class AdminTournamentController extends BaseController {
 			ModelAndView mav = new ModelAndView("admin/tournamentInscription");
 			mav.addObject("tournament",  tournament);
 			mav.addObject("club", tournament.getTournamentClub());
-		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
 			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
 			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
 				@Override

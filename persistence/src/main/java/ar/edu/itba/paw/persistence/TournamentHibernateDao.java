@@ -225,28 +225,6 @@ public class TournamentHibernateDao implements TournamentDao {
 		return query.getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<TournamentTeam> findTournamentTeams(final long tournamentid) {
-		String idQueryString = "SELECT teamid FROM tournament_teams WHERE tournamentid = :tournamentid";
-		Query idQuery = em.createNativeQuery(idQueryString);
-		idQuery.setParameter("tournamentid", tournamentid);
-		List<Long> ids =  idQuery.getResultList();
-		
-		if(ids.isEmpty())
-			return Collections.emptyList();
-		
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<TournamentTeam> cq = cb.createQuery(TournamentTeam.class);
-		Root<TournamentTeam> from = cq.from(TournamentTeam.class);
-		from.fetch("inscriptions");
-		final TypedQuery<TournamentTeam> query = em.createQuery(
-				cq.select(from).where(from.get("teamid").in(ids)).distinct(true)
-			);
-		
-		return query.getResultList();
-	}
-
 	@Override
 	public List<User> findTeamMembers(TournamentTeam team) {
 		String queryString = "SELECT DISTINCT i.inscriptedUser FROM Inscription AS i "

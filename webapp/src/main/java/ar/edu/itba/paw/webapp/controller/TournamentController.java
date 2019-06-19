@@ -74,12 +74,11 @@ public class TournamentController extends BaseController {
 			ModelAndView mav = new ModelAndView("tournamentInscription");
 			mav.addObject("tournament",  tournament);
 			mav.addObject("club", tournament.getTournamentClub());
-		    //mav.addObject("teams",  ts.findTournamentTeams(tournamentid));
 			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
 			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
 				@Override
 				public int compare(TournamentTeam team1, TournamentTeam team2) {
-					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid()); // VER DE SACAR
+					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
 				}
 			};
 			Collections.sort(teams, cmp);

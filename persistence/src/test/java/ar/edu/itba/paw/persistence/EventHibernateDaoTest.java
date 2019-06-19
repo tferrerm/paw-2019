@@ -43,11 +43,8 @@ public class EventHibernateDaoTest {
 	@Autowired
 	private EventDao ed;
 
-	private static final long OLD_EVENTID = 1;
-	private static final String OLD_EVENTNAME = "old_event";
 	private static final long EVENTID = 2;
 	private static final long USERID = 1;
-	private static final String USERNAME = "test@test.test";
 	private static final String EVENTNAME = "event";
 	private static final long CLUBID = 1;
 	private static final Club CLUB = new Club(1, "club", "location", Instant.now());
