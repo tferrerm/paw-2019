@@ -76,10 +76,8 @@
                               </div>
                           </c:otherwise>
                       </c:choose>
-                      <span class="event-info-label"><spring:message code="${event.secondTeam.teamName}"/></span>
-                  </div>
-                  <div class="w-100 justify-center">
-                      <a href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+                      <span class="event-info-label"><c:out value="${event.secondTeam.teamName}"/></span>
+                      <a class="ml-30" href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
                   </div>
               </c:forEach>
               <div class="table-navigator w-100 justify-center">

@@ -74,6 +74,15 @@
 								<span><c:out value="${event.maxParticipants - participant_count}" /></span>
 							</div>
 						</div>
+						<div class="description-item">
+							<span class="event-info-label"><spring:message code="end_date"/></span>
+							<span>
+								<fmt:timeZone value="AR">
+									<fmt:parseDate value="${event.endsInscriptionAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+									<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+								</fmt:timeZone>
+							</span>
+						</div>
 					</div>
 					<div class="participants-list">
 						<span class="event-info-label"><spring:message code="participants"/></span>

@@ -30,12 +30,12 @@
 					</c:when>
 					<c:otherwise>
 						<div class="tbl">
-							<div class="table-header">
+							<div class="table-header background-dodgerblue">
 								<div class="flex-grow justify-center my-events-tbl-sub">
-									<spring:message code="pastEvents" />
+									<span class="event-info-label color-white"><spring:message code="pastEvents" /></span>
 								</div>
 								<div class="flex-grow justify-center my-events-tbl-sub">
-									<spring:message code="upcomingEvents" />
+									<span class="event-info-label color-white"><spring:message code="upcomingEvents" /></span>
 								</div>
 							</div>
 							<div class="flex-grow w-100">
