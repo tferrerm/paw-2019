@@ -63,8 +63,6 @@ public class EventController extends BaseController {
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
-	private static final int DAY_LIMIT = 7;
-	private static final int MAX_EVENTS_PER_DAY = 14;
 
 	@Autowired
 	private EventService es;
