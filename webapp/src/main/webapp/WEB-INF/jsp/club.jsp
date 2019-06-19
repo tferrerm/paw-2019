@@ -85,12 +85,12 @@
               <c:when test="${commentQty > 0}">
                 <c:if test="${currCommentPage != 1}">
           				<div>
-                      <a href="<c:url value='/club/${clubid}?cmt=1' />">
+                      <a href="<c:url value='/club/${club.clubid}?cmt=1' />">
                           <button type="button" class="btn btn-secondary">
                               <spring:message code="first"/>
                           </button>
                       </a>
-                      <a href="<c:url value='/club/${clubid}?cmt=${currCommentPage-1}' />">
+                      <a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage-1}' />">
                           <button type="button" class="btn btn-secondary">
                               <spring:message code="back"/>
                           </button>
@@ -100,10 +100,10 @@
                 <span class="flex"><spring:message code="showing_items"/> <c:out value="${commentsPageInitIndex}"/>-<c:out value="${commentsPageInitIndex + commentQty - 1}"/> <spring:message code="of"/> <c:out value="${totalCommentQty}"/></span>
                 <c:if test="${currCommentPage != maxCommentPage}">
           				<div>
-                      <a href="<c:url value='/club/${clubid}?cmt=${currCommentPage+1}' />">
+                      <a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage+1}' />">
                           <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
                       </a>
-                      <a href="<c:url value='/club/${clubid}?cmt=${maxCommentPage}' />">
+                      <a href="<c:url value='/club/${club.clubid}?cmt=${maxCommentPage}' />">
                           <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
                       </a>
                   </div>
