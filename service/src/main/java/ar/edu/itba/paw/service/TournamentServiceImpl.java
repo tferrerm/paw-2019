@@ -37,11 +37,11 @@ import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
 import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
-import ar.edu.itba.paw.interfaces.ClubDao;
+import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.TournamentDao;
 import ar.edu.itba.paw.interfaces.TournamentService;
-import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -59,10 +59,10 @@ public class TournamentServiceImpl implements TournamentService {
 	private TournamentDao td;
 	
 	@Autowired
-	private ClubDao cd;
+	private ClubService cs;
 	
 	@Autowired
-	private UserDao ud;
+	private UserService us;
 	
 	@Autowired
     private EmailService ems;
@@ -137,7 +137,7 @@ public class TournamentServiceImpl implements TournamentService {
     	if(inscriptionEndDate.isAfter((firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS))))
     		throw new InscriptionDateExceededException();
     	
-    	List<Pitch> availablePitches = cd.getAvailablePitches(club.getClubid(), sport, 
+    	List<Pitch> availablePitches = cs.getAvailablePitches(club.getClubid(), sport, 
     			firstRoundStartsAt, firstRoundEndsAt, maxTeams/2);
     	if(availablePitches.size() < maxTeams / 2)
     		throw new InsufficientPitchesException();
@@ -163,7 +163,7 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		
-		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		final User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
 		
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
@@ -190,7 +190,7 @@ public class TournamentServiceImpl implements TournamentService {
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
 			throw new InscriptionDateInPastException();
 		}
-		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
 		td.deleteTournamentInscriptions(team, user);
 	}
@@ -208,7 +208,7 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
-		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		final User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
 		return td.findUserTeam(tournament, user);
 	}
 
