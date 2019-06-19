@@ -6,25 +6,26 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Inscription;
+import ar.edu.itba.paw.model.InscriptionId;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Sport;
@@ -36,18 +37,11 @@ import ar.edu.itba.paw.model.User;
 @Transactional
 public class EventHibernateDaoTest {
 
-	@Autowired
-	private DataSource ds;
+	@PersistenceContext
+	private EntityManager em;
 
 	@Autowired
 	private EventDao ed;
-
-	private JdbcTemplate jdbcTemplate;
-
-	@Before
-	public void setUp() {
-		jdbcTemplate = new JdbcTemplate(ds);
-	}
 
 	private static final long OLD_EVENTID = 1;
 	private static final String OLD_EVENTNAME = "old_event";
@@ -55,25 +49,26 @@ public class EventHibernateDaoTest {
 	private static final long USERID = 1;
 	private static final String USERNAME = "test@test.test";
 	private static final String EVENTNAME = "event";
-	private static final User OWNER = new User(USERNAME, "first", "last", "12345678", Role.ROLE_USER, Instant.now());
 	private static final long CLUBID = 1;
 	private static final Club CLUB = new Club(1, "club", "location", Instant.now());
+	private static final long PITCHID = 1;
 	private static final Pitch PITCH = new Pitch(1, CLUB, "pitch", Sport.TENNIS, Instant.now());
 	private static final String DESCRIPTION = "description";
 	private static final int MAX_PARTICIPANTS = 2;
-	private static final Instant STARTS_AT = Instant.now();
+	private static final Instant STARTS_AT = Instant.now().plus(2, ChronoUnit.DAYS);
+	private static final Instant INSCRIPTION_ENDS_AT = STARTS_AT.minus(2, ChronoUnit.DAYS);
 	private static final int DURATION = 1;
 	private static final Instant ENDS_AT = STARTS_AT.plus(DURATION, ChronoUnit.HOURS);
-	private static final Event EVENT = new Event(EVENTNAME, OWNER, PITCH, DESCRIPTION, 2, STARTS_AT, ENDS_AT);
 	private static final Timestamp STARTS = Timestamp.valueOf("2030-05-20 10:00:00");
 	private static final Timestamp ENDS = Timestamp.valueOf("2030-05-20 11:00:00");
-
+	private static final Timestamp INSCRIPTION_ENDS = Timestamp.valueOf("2030-05-18 11:00:00");
+	private static final InscriptionId INSCRIPTION_ID = new InscriptionId(EVENTID, USERID);
+	
 	@Rollback
 	@Test
 	public void testCreateEvent() throws Exception {
-		int rowNum = JdbcTestUtils.countRowsInTable(jdbcTemplate, "events");
-		final Event event = ed.create(EVENTNAME, OWNER, PITCH, DESCRIPTION, 
-				MAX_PARTICIPANTS, STARTS_AT, ENDS_AT);
+		final Event event = ed.create(EVENTNAME, em.find(User.class, USERID), em.find(Pitch.class, PITCHID), DESCRIPTION, 
+				MAX_PARTICIPANTS, STARTS_AT, ENDS_AT, INSCRIPTION_ENDS_AT);
 		Assert.assertNotNull(event);
 		Assert.assertEquals(EVENTNAME, event.getName());
 		Assert.assertEquals(PITCH, event.getPitch());
@@ -81,8 +76,8 @@ public class EventHibernateDaoTest {
 		Assert.assertEquals(MAX_PARTICIPANTS, event.getMaxParticipants());
 		Assert.assertEquals(STARTS_AT, event.getStartsAt());
 		Assert.assertEquals(ENDS_AT, event.getEndsAt());
+		Assert.assertEquals(INSCRIPTION_ENDS_AT, event.getEndsInscriptionAt());
 		Assert.assertNotNull(event.getCreatedAt());
-		Assert.assertEquals(rowNum + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events"));
 	}
 
 	@Test
@@ -95,18 +90,19 @@ public class EventHibernateDaoTest {
 		Assert.assertEquals(MAX_PARTICIPANTS, event.get().getMaxParticipants());
 		Assert.assertEquals(STARTS.toInstant(), event.get().getStartsAt());
 		Assert.assertEquals(ENDS.toInstant(), event.get().getEndsAt());
+		Assert.assertEquals(INSCRIPTION_ENDS.toInstant(), event.get().getEndsInscriptionAt());
 		Assert.assertNotNull(event.get().getCreatedAt());
 	}
 	
 	@Test
 	public void testFindByOwnerFuture() {
-		List<Event> events = ed.findByOwner(true, OWNER.getUserid(), 1);
+		List<Event> events = ed.findByOwner(true, USERID, 1);
 		Assert.assertEquals(1, events.size());
 	}
 	
 	@Test
 	public void testFindByOwnerPast() {
-		List<Event> pastEvents = ed.findByOwner(false, OWNER.getUserid(), 1);
+		List<Event> pastEvents = ed.findByOwner(false, USERID, 1);
 		Assert.assertEquals(1, pastEvents.size());
 	}
 	
@@ -117,45 +113,20 @@ public class EventHibernateDaoTest {
 	}
 	
 	@Test
-	public void testFindBy() {
-		List<Event> events = ed.findBy(
-				//true,
+	public void testCountFilteredEvents() {
+		int count = ed.countFilteredEvents(
+				false,
 				Optional.of(EVENTNAME),
 				Optional.of(CLUB.getName()),
-				Optional.of(Sport.SOCCER.toString()),
+				Optional.empty(),
 				Optional.empty(),
 				Optional.of(1),
-				Optional.empty(),
-				1);
-		Assert.assertEquals(1, events.size());
-		Assert.assertEquals(EVENTID, events.get(0).getEventId());
-		Assert.assertEquals(EVENTNAME, events.get(0).getName());
-//		List<Event> includingOldEvents = ed.findBy(
-//				//false,
-//				Optional.of(EVENTNAME), // Name: event, search: '%' || 'event' || '%'
-//				Optional.of(CLUB.getName()),
-//				Optional.of(Sport.SOCCER.toString()),
-//				Optional.empty(),
-//				Optional.of(1),
-//				Optional.empty(),
-//				1);
-//		Assert.assertEquals(2, includingOldEvents.size());
-//		List<Event> oldEvents = ed.findBy(
-//				//false,
-//				Optional.of(OLD_EVENTNAME), // Name: old_event
-//				Optional.of(CLUB.getName()),
-//				Optional.of(Sport.SOCCER.toString()),
-//				Optional.empty(),
-//				Optional.of(1),
-//				Optional.empty(),
-//				1);
-//		Assert.assertEquals(1, oldEvents.size());
-//		Assert.assertEquals(OLD_EVENTID, oldEvents.get(0).getEventId());
-//		Assert.assertEquals(OLD_EVENTNAME, oldEvents.get(0).getName());
+				Optional.empty());
+		Assert.assertEquals(1, count);
 	}
 	
 	@Test
-	public void testCountFilteredEvents() {
+	public void testCountFilteredEventsVarious() {
 		int count = ed.countFilteredEvents(
 				true,
 				Optional.of(EVENTNAME),
@@ -164,18 +135,13 @@ public class EventHibernateDaoTest {
 				Optional.empty(),
 				Optional.of(1),
 				Optional.empty());
-		Assert.assertEquals(1, count);
-		count = ed.countFilteredEvents(
-				false,
-				Optional.of(EVENTNAME),
-				Optional.of(CLUB.getName()),
-				Optional.empty(),
-				Optional.empty(),
-				Optional.of(1),
-				Optional.empty());
-		Assert.assertEquals(2, count);
-		count = ed.countFilteredEvents(
-				false,
+		Assert.assertEquals(0, count);
+	}
+	
+	@Test
+	public void testCountFilteredEventsCurrentDate() {
+		int count = ed.countFilteredEvents(
+				true,
 				Optional.empty(),
 				Optional.empty(),
 				Optional.empty(),
@@ -199,53 +165,36 @@ public class EventHibernateDaoTest {
 	@Test
 	public void testJoinEvent() throws Exception {
 		try {
-			ed.joinEvent(OWNER, EVENT);
+			em.remove(em.find(Inscription.class, INSCRIPTION_ID));
+		} catch(Exception e) {
+			// The inscription did not exist and was not deleted
+		}
+		
+		ed.joinEvent(em.find(User.class, USERID), em.find(Event.class, EVENTID));
+		Assert.assertNotNull(em.find(Inscription.class, INSCRIPTION_ID));
+	}
+	
+	@Rollback
+	@Test
+	public void testUserBusyWhenJoiningEvent() throws Exception {
+		try {
+			ed.joinEvent(em.find(User.class, USERID), em.find(Event.class, EVENTID));
 			Assert.assertTrue(false);
 		} catch(Exception e) {
-			Assert.assertEquals(UserAlreadyJoinedException.class, e.getClass());
+			Assert.assertEquals(UserBusyException.class, e.getClass());
 		}
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "events_users");
-		ed.joinEvent(OWNER, EVENT);
-		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
-	}
-	/*
-	@Rollback
-	@Test
-	public void testLeaveEvent() {
-		ed.leaveEvent(OWNER, EVENT);
-		Assert.assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
-	}
-	
-	@Rollback
-	@Test
-	public void testKickFromEvent() {
-		ed.kickFromEvent(2, 2);
-		Assert.assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events_users"));
-	}
-	
-	@Test
-	public void testCountUserEvents() {
-		int count = ed.countUserEvents(false, OWNER.getUserid());
-		Assert.assertEquals(1, count);
-		count = ed.countUserEvents(true, OWNER.getUserid());
-		Assert.assertEquals(1, count);
-	}
-	
-	@Test
-	public void testCountUserCurrentOwnedEvents() {
-		Assert.assertEquals(1, ed.countUserOwnedCurrEvents(OWNER.getUserid()));
 	}
 	
 	@Test
 	public void testFavoriteSport() {
-		Optional<Sport> fav = ed.getFavoriteSport(OWNER.getUserid());
+		Optional<Sport> fav = ed.getFavoriteSport(USERID);
 		Assert.assertTrue(fav.isPresent());
-		Assert.assertEquals(Sport.SOCCER, fav.get());
+		Assert.assertEquals(Sport.SOCCER.toString(), fav.get());
 	}
 	
 	@Test
 	public void testFavoriteClub() {
-		Optional<Club> club = ed.getFavoriteClub(OWNER.getUserid());
+		Optional<Club> club = ed.getFavoriteClub(USERID);
 		Assert.assertTrue(club.isPresent());
 		Assert.assertEquals(CLUBID, club.get().getClubid());
 	}
@@ -254,32 +203,32 @@ public class EventHibernateDaoTest {
 	@Test
 	public void testDeleteEvent() {
 		ed.deleteEvent(EVENTID);
-		Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "events"));
+		Assert.assertEquals(Optional.empty(), ed.findByEventId(EVENTID));
 	}
 	
-	@Test
-	public void testVoteBalance() {
-		Optional<Integer> balance = ed.getVoteBalance(OLD_EVENTID);
-		Assert.assertTrue(balance.isPresent());
-		Assert.assertEquals(0, balance.get().intValue());
-	}
-	
-	@Test
-	public void testGetUserVote() {
-		Optional<Integer> vote = ed.getUserVote(OLD_EVENTID, OWNER.getUserid());
-		Assert.assertTrue(vote.isPresent());
-		Assert.assertEquals(-1, vote.get().intValue());
-	}
-	
-	@Rollback
-	@Test
-	public void testVote() {
-		int result = ed.vote(true, EVENTID, OWNER.getUserid());
-		Assert.assertEquals(1, result);
-		result = ed.vote(false, -1, OWNER.getUserid());
-		Assert.assertEquals(0, result);
-		result = ed.vote(true, -1, -1);
-		Assert.assertEquals(0, result);
-	}*/
+//	@Test
+//	public void testVoteBalance() {
+//		Optional<Integer> balance = ed.getVoteBalance(OLD_EVENTID);
+//		Assert.assertTrue(balance.isPresent());
+//		Assert.assertEquals(0, balance.get().intValue());
+//	}
+//	
+//	@Test
+//	public void testGetUserVote() {
+//		Optional<Integer> vote = ed.getUserVote(OLD_EVENTID, OWNER.getUserid());
+//		Assert.assertTrue(vote.isPresent());
+//		Assert.assertEquals(-1, vote.get().intValue());
+//	}
+//	
+//	@Rollback
+//	@Test
+//	public void testVote() {
+//		int result = ed.vote(true, EVENTID, OWNER.getUserid());
+//		Assert.assertEquals(1, result);
+//		result = ed.vote(false, -1, OWNER.getUserid());
+//		Assert.assertEquals(0, result);
+//		result = ed.vote(true, -1, -1);
+//		Assert.assertEquals(0, result);
+//	}
 
 }

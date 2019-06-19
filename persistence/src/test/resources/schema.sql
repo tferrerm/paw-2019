@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS events(
   eventname VARCHAR(100) NOT NULL,
   description VARCHAR(500),
   max_participants INTEGER NOT NULL,
+  inscription_ends_at TIMESTAMP,
+  inscription_success BOOLEAN,
   starts_at TIMESTAMP NOT NULL,
   ends_at TIMESTAMP,
   event_created_at TIMESTAMP NOT NULL,
@@ -48,10 +50,75 @@ CREATE TABLE IF NOT EXISTS events(
 CREATE TABLE IF NOT EXISTS events_users(
   userid INTEGER NOT NULL,
   eventid INTEGER NOT NULL,
+  teamid INTEGER, 
   vote INTEGER,
   FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
-  FOREIGN KEY (eventid) REFERENCES events ON DELETE CASCADE,
+  FOREIGN KEY (teamid) REFERENCES tournament_teams ON DELETE CASCADE,
   PRIMARY KEY (userid, eventid)
+);
+
+CREATE TABLE IF NOT EXISTS user_comments(
+  commentid IDENTITY PRIMARY KEY,
+  commenter_id INTEGER NOT NULL,
+  dest_userid INTEGER NOT NULL,
+  comment VARCHAR(500) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (commenter_id) REFERENCES users ON DELETE CASCADE,
+  FOREIGN KEY (dest_userid) REFERENCES users ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS club_comments(
+  commentid IDENTITY PRIMARY KEY,
+  commenter_id INTEGER NOT NULL,
+  dest_clubid INTEGER NOT NULL,
+  comment VARCHAR(500) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (commenter_id) REFERENCES users ON DELETE CASCADE,
+  FOREIGN KEY (dest_clubid) REFERENCES users ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tournaments(
+  tournamentid IDENTITY PRIMARY KEY,
+  tournamentname VARCHAR(100) NOT NULL,
+  tournament_sport VARCHAR(100) NOT NULL,
+  clubid INTEGER NOT NULL,
+  max_teams INTEGER NOT NULL,
+  team_size INTEGER NOT NULL,
+  inscription_ends_at TIMESTAMP NOT NULL,
+  inscription_success BOOLEAN NOT NULL,
+  tournament_created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (clubid) REFERENCES clubs ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tournament_events(
+  eventid IDENTITY PRIMARY KEY,
+  userid INTEGER NOT NULL,
+  pitchid INTEGER NOT NULL,
+  eventname VARCHAR(100) NOT NULL,
+  description VARCHAR(500),
+  max_participants INTEGER NOT NULL,
+  starts_at TIMESTAMP NOT NULL,
+  ends_at TIMESTAMP,
+  event_created_at TIMESTAMP NOT NULL,
+  FOREIGN KEY (userid) REFERENCES users ON DELETE CASCADE,
+  FOREIGN KEY (pitchid) REFERENCES pitches ON DELETE CASCADE,
+  tournamentid INTEGER NOT NULL,
+  round INTEGER NOT NULL,
+  first_teamid INTEGER NOT NULL,
+  second_teamid INTEGER NOT NULL,
+  first_team_score INTEGER,
+  second_team_score INTEGER,
+  FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE,
+  FOREIGN KEY (first_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE,
+  FOREIGN KEY (second_teamid) REFERENCES tournament_teams(teamid) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tournament_teams(
+  teamid IDENTITY PRIMARY KEY,
+  tournamentid INTEGER NOT NULL,
+  teamname VARCHAR(100) NOT NULL,
+  teamscore INTEGER NOT NULL,
+  FOREIGN KEY (tournamentid) REFERENCES tournaments ON DELETE CASCADE
 );
 
 INSERT INTO users (userid, username, firstname, lastname, password, role, created_at) 
@@ -66,11 +133,11 @@ VALUES (1, 'club', 'location', '2010-01-15 10:01:40');
 INSERT INTO pitches (pitchid, clubid, pitchname, sport, pitch_created_at) 
 VALUES (1, 1, 'pitch', 'SOCCER', '2011-03-15 08:10:10');
 
-INSERT INTO events (eventid, userid, pitchid, eventname, description, max_participants, starts_at, ends_at, event_created_at) 
-VALUES (2, 1, 1, 'event', 'description', 2, '2030-05-20 10:00:00', '2030-05-20 11:00:00', '2019-05-15 11:00:00');
+INSERT INTO events (eventid, userid, pitchid, eventname, description, max_participants, starts_at, ends_at, event_created_at, inscription_ends_at, inscription_success) 
+VALUES (2, 1, 1, 'event', 'description', 2, '2030-05-20 10:00:00', '2030-05-20 11:00:00', '2019-05-15 11:00:00', '2030-05-18 11:00:00', false);
 
-INSERT INTO events (eventid, userid, pitchid, eventname, description, max_participants, starts_at, ends_at, event_created_at) 
-VALUES (1, 1, 1, 'old_event', 'old_description', 2, '2019-01-20 10:00:00', '2019-01-20 11:00:00', '2019-01-15 11:00:00');
+INSERT INTO events (eventid, userid, pitchid, eventname, description, max_participants, starts_at, ends_at, event_created_at, inscription_ends_at, inscription_success) 
+VALUES (1, 1, 1, 'old_event', 'old_description', 2, '2019-01-20 10:00:00', '2019-01-20 11:00:00', '2019-01-15 11:00:00', '2019-01-18 11:00:00', false);
 
 INSERT INTO events_users (userid, eventid) 
 VALUES (1, 2);

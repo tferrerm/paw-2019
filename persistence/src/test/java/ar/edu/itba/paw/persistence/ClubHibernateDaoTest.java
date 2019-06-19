@@ -122,12 +122,6 @@ public class ClubHibernateDaoTest {
 	}
 	
 	@Test
-	public void testCountPages() {
-		int count = cd.countClubPages();
-		Assert.assertEquals(1, count);
-	}
-	
-	@Test
 	public void testCountPastEvents() {
 		int count = cd.countPastEvents(CLUBID);
 		Assert.assertEquals(1, count);
