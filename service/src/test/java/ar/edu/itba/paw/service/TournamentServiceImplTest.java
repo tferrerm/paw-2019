@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,9 +19,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 
+import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InsufficientPitchesException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.TournamentDao;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
@@ -40,10 +45,13 @@ public class TournamentServiceImplTest {
 	@Mock
 	private ClubService cd;
 	
+	@Mock
+	private UserService us;
+	
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final String TNAME = "Tournament";
 	private static final Sport SPORT = Sport.SOCCER;
-	private static final Club CLUB = new Club(1, "name", "loc", Instant.now());
+	private static final Club CLUB = Mockito.mock(Club.class);
 	private static final List<Pitch> PITCHES = new ArrayList<>();
 	private static final int MAX_TEAMS = 4;
 	private static final int TEAM_SIZE = 3;
@@ -66,6 +74,12 @@ public class TournamentServiceImplTest {
 		for(int i = 0; i < 3; i++) {
 			PITCHES.add(Mockito.mock(Pitch.class));
 		}
+		Mockito.when(cd.getAvailablePitches(
+				Mockito.anyLong(),
+				Mockito.any(Sport.class),
+				Mockito.any(Instant.class),
+				Mockito.any(Instant.class),
+				Mockito.anyInt())).thenReturn(PITCHES);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -84,12 +98,6 @@ public class TournamentServiceImplTest {
 				Mockito.any(User.class)
 			)
 		).thenReturn(TMOCK);
-		Mockito.when(cd.getAvailablePitches(
-				Mockito.anyLong(),
-				Mockito.any(Sport.class),
-				Mockito.any(Instant.class),
-				Mockito.any(Instant.class),
-				Mockito.anyInt())).thenReturn(PITCHES);
 		final Tournament t = ts.create(
 				TNAME,
 				SPORT,
@@ -106,7 +114,7 @@ public class TournamentServiceImplTest {
 	}
 	
 	@Test
-	public void createWithPastDate() throws Exception {
+	public void createWithPastDateTest() throws Exception {
 		try {
 			ts.create(
 					TNAME,
@@ -120,6 +128,62 @@ public class TournamentServiceImplTest {
 					Instant.now().minus(2, ChronoUnit.DAYS),
 					USER
 			);
+			Assert.assertTrue(false);
+		} catch(Exception e) {
+			Assert.assertEquals(InscriptionDateInPastException.class, e.getClass());
+		}
+	}
+	
+	@Test
+	public void createWithMaximumDateExceededTest() throws Exception {
+		try {
+			ts.create(
+					TNAME,
+					SPORT,
+					CLUB,
+					MAX_TEAMS,
+					TEAM_SIZE,
+					Instant.now().plus(10, ChronoUnit.DAYS),
+					STARTS_AT,
+					ENDS_AT,
+					Instant.now(),
+					USER
+			);
+			Assert.assertTrue(false);
+		} catch(Exception e) {
+			Assert.assertEquals(MaximumDateExceededException.class, e.getClass());
+		}
+	}
+	
+	@Test
+	public void createWithoutPitchesTest() throws Exception {
+		PITCHES.removeAll(PITCHES);
+		try {
+			ts.create(
+					TNAME,
+					SPORT,
+					CLUB,
+					MAX_TEAMS,
+					TEAM_SIZE,
+					STARTS,
+					STARTS_AT,
+					ENDS_AT,
+					INSCR_ENDS,
+					USER
+			);
+			Assert.assertTrue(false);
+		} catch(Exception e) {
+			Assert.assertEquals(InsufficientPitchesException.class, e.getClass());
+		}
+	}
+	
+	@Test
+	public void joinTournamentPreviousInsscrDateTest() {
+		Mockito.when(us.findById(Mockito.anyLong())).thenReturn(Optional.of(USER));
+		Mockito.when(td.findById(Mockito.anyLong())).thenReturn(Optional.of(
+				new Tournament(TNAME, SPORT, CLUB, MAX_TEAMS, TEAM_SIZE, Instant.now())));
+		try {
+			ts.joinTournament(1, 1, 1);
 			Assert.assertTrue(false);
 		} catch(Exception e) {
 			Assert.assertEquals(InscriptionDateInPastException.class, e.getClass());
