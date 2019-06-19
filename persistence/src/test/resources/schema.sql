@@ -127,6 +127,9 @@ VALUES (1, 'user@name.com', 'first', 'last', '12345678', 'ROLE_USER', '2014-02-1
 INSERT INTO users (userid, username, firstname, lastname, password, role, created_at)
 VALUES (2, 'other_user@name.com', 'second', 'fastlast', '87654321', 'ROLE_USER', '2015-02-14 00:00:00');
 
+INSERT INTO users (userid, username, firstname, lastname, password, role, created_at)
+VALUES (3, 'dummy@dummy.com', 'dummy', 'dummy', 'dummy', 'ROLE_USER', '2015-02-14 00:00:00');
+
 INSERT INTO clubs (clubid, clubname, location, club_created_at) 
 VALUES (1, 'club', 'location', '2010-01-15 10:01:40');
 
@@ -149,4 +152,7 @@ INSERT INTO events_users (userid, eventid, vote)
 VALUES (1, 1, -1);
 
 INSERT INTO events_users (userid, eventid, vote)
-VALUES (2, 1, 1);
+VALUES (2, 1, -1);
+
+INSERT INTO user_comments (commentid, commenter_id, dest_userid, comment, created_at)
+VALUES (1, 1, 2, 'Comment', '2019-01-22 10:54:00');
