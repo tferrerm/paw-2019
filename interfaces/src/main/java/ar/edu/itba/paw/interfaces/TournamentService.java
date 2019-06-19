@@ -81,5 +81,7 @@ public interface TournamentService {
 	public void deleteTournament(final long tournamentid) throws InscriptionDateInPastException;
 	
 	public void checkTournamentInscriptions();
+
+	public Object hasFinished(final int rounds, final int currentRound, final List<TournamentEvent> roundEvents);
 	
 }

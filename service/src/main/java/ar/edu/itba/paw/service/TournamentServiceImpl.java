@@ -371,4 +371,19 @@ public class TournamentServiceImpl implements TournamentService {
 		}
 	}
 
+	@Override
+	public Object hasFinished(int rounds, int currentRound, List<TournamentEvent> roundEvents) {
+		boolean hasFinished = false;
+		if(currentRound == rounds) {
+			hasFinished = true;
+			for(TournamentEvent event : roundEvents) {
+				if(event.getFirstTeamScore() == null) {
+					hasFinished = false;
+					break;
+				}
+			}
+		}
+		return hasFinished;
+	}
+
 }

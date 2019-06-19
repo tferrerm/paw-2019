@@ -66,10 +66,12 @@ public class TournamentController extends BaseController {
 			mav.addObject("eventsHaveResult", eventsHaveResult);
 			mav.addObject("currRoundPage", roundPage);
 			mav.addObject("maxRoundPage", tournament.getRounds());
-			
 			int currentRound = ts.getCurrentRound(tournament);
 			mav.addObject("currentRound", currentRound);
+			mav.addObject("hasFinished", ts.hasFinished(tournament.getRounds(), currentRound, roundEvents));
+			
 			return mav;
+			
 		} else {
 			ModelAndView mav = new ModelAndView("tournamentInscription");
 			mav.addObject("tournament",  tournament);
@@ -89,6 +91,7 @@ public class TournamentController extends BaseController {
 		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
 		    mav.addObject("userBusyError", userBusyError);
 		    mav.addObject("userJoined", loggedUser() != null ? ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false);
+		    
 		    return mav;
 		}
     }

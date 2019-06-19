@@ -30,7 +30,7 @@
           <span class="help-message notice w-70 justify-center"><spring:message code="tournament_description"/></span>
 					<c:if test="${currentRound != null}"><div style="width: 60%;margin: 20px 0">
 						<div class="progress">
-							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${currentRound * 100 / maxRoundPage}%; background-color: ${currentRound == maxRoundPage ? "green" : "dodgerblue"};" aria-valuenow="${currentRound}" aria-valuemin="0" aria-valuemax="${maxRoundPage}"></div>
+							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${hasFinished ?100 : ((currentRound-1) * 100 / maxRoundPage)}%; background-color: ${hasFinished ? "green" : "dodgerblue"};"></div>
 						</div></div>
 					</c:if>
     			<div class="tbl">
@@ -61,22 +61,22 @@
               <c:forEach var="event" items="${roundEvents}">
                   <cr:set var="eventid" scope="page" value="${event.eventId}"/>
                   <div class="flex pitch-item w-100 justify-center">
-                      <span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
-                      <c:choose>
-                          <c:when test="${eventsHaveResult[eventid]}">
-                              <div class="score score-tournament">
-                                  <span><c:out value="${event.firstTeamScore}"/></span>
-                                  <span><c:out value="${event.secondTeamScore}"/></span>
-                              </div>
-                          </c:when>
-                          <c:otherwise>
-                              <div class="score score-tournament">
-                                  <span>-</span>
-                                  <span>-</span>
-                              </div>
-                          </c:otherwise>
-                      </c:choose>
-                      <span class="event-info-label"><c:out value="${event.secondTeam.teamName}"/></span>
+                            <span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
+                            <c:choose>
+                                <c:when test="${eventsHaveResult[eventid]}">
+                                    <div class="score score-tournament">
+                                        <span><c:out value="${event.firstTeamScore}"/></span>
+                                        <span><c:out value="${event.secondTeamScore}"/></span>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="score score-tournament">
+                                        <span>-</span>
+                                        <span>-</span>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                            <span class="event-info-label"><spring:message code="${event.secondTeam.teamName}"/></span>
                       <a class="ml-30" href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
                   </div>
               </c:forEach>
