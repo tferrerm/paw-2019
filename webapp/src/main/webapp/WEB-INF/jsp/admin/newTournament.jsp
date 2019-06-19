@@ -18,7 +18,7 @@
 		<%@include file="sidebar.jsp" %>
 		<div class="content-container">
 			<h2><spring:message code="create_tournament"/></h2>
-			<span class="help-message notice w-70 justify-center"><spring:message code="new_tournament_description" /></span>
+			<span class="help-message notice w-70 justify-center home-header"><spring:message code="new_tournament_description" /></span>
 			<div class="form-container-tournament">
 				<table class="schedule-table flex">
                     <tr>
@@ -99,7 +99,7 @@
                                 </span>
                             </c:if>
                         </div>
-                        <div>
+                        <div class="my-events-tbl-sub">
                             <form:label path="startsAtHour"><spring:message code="event_startsAt"/> *</form:label>
                             <form:select id="eventStartHour" path="startsAtHour" cssClass="form-control">
                                 <c:forEach var="hourEntry" items="${availableHours}">
