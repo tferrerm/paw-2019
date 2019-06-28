@@ -209,13 +209,8 @@ public class UserController extends BaseController {
 		}
 	}
 	
-	@ExceptionHandler({UserNotFoundException.class})
+	@ExceptionHandler({ UserNotFoundException.class })
 	private ModelAndView userNotFound() {
-		return new ModelAndView("404");
-	}
-	
-	@ExceptionHandler({UserNotAuthorizedException.class})
-	private ModelAndView userNotAuthorized() {
 		return new ModelAndView("404");
 	}
 
