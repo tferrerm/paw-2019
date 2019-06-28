@@ -458,7 +458,7 @@ public class EventServiceImpl implements EventService {
 				if(!inscriptedUsers.contains(event.getOwner()))
 					ems.eventStarted(event.getOwner(), event, LocaleContextHolder.getLocale());
 			} else {
-				String eventName = new String(event.getName());
+				String eventName = event.getName();
 				ed.deleteEvent(event.getEventId());
 				for(User user : inscriptedUsers) {
 					ems.eventCancelled(user, eventName, LocaleContextHolder.getLocale());

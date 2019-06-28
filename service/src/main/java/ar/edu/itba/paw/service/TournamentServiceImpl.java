@@ -360,7 +360,7 @@ public class TournamentServiceImpl implements TournamentService {
 					}
 				}
 			} else {
-				String tournamentName = new String(t.getName());
+				String tournamentName = t.getName();
 				td.deleteTournament(t.getTournamentid());
 				for(List<User> teamMembers : teamsMap.values()) {
 					for(User user : teamMembers) {
