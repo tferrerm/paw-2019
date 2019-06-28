@@ -372,7 +372,7 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 
 	@Override
-	public Object hasFinished(int rounds, int currentRound, List<TournamentEvent> roundEvents) {
+	public boolean hasFinished(int rounds, int currentRound, List<TournamentEvent> roundEvents) {
 		boolean hasFinished = false;
 		if(currentRound == rounds) {
 			hasFinished = true;

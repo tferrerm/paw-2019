@@ -82,6 +82,6 @@ public interface TournamentService {
 	
 	public void checkTournamentInscriptions();
 
-	public Object hasFinished(final int rounds, final int currentRound, final List<TournamentEvent> roundEvents);
+	public boolean hasFinished(final int rounds, final int currentRound, final List<TournamentEvent> roundEvents);
 	
 }
