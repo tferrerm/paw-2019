@@ -110,81 +110,61 @@ public class TournamentServiceImplTest {
 		Assert.assertEquals(TMOCK, t);
 	}
 	
-	@Test
+	@Test(expected = InscriptionDateInPastException.class)
 	public void createWithPastDateTest() throws Exception {
-		try {
-			ts.create(
-					TNAME,
-					SPORT,
-					CLUB,
-					MAX_TEAMS,
-					TEAM_SIZE,
-					STARTS,
-					STARTS_AT,
-					ENDS_AT,
-					Instant.now().minus(2, ChronoUnit.DAYS),
-					USER
-			);
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(InscriptionDateInPastException.class, e.getClass());
-		}
+		ts.create(
+				TNAME,
+				SPORT,
+				CLUB,
+				MAX_TEAMS,
+				TEAM_SIZE,
+				STARTS,
+				STARTS_AT,
+				ENDS_AT,
+				Instant.now().minus(2, ChronoUnit.DAYS),
+				USER
+		);
 	}
 	
-	@Test
+	@Test(expected = MaximumDateExceededException.class)
 	public void createWithMaximumDateExceededTest() throws Exception {
-		try {
-			ts.create(
-					TNAME,
-					SPORT,
-					CLUB,
-					MAX_TEAMS,
-					TEAM_SIZE,
-					Instant.now().plus(10, ChronoUnit.DAYS),
-					STARTS_AT,
-					ENDS_AT,
-					Instant.now(),
-					USER
-			);
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(MaximumDateExceededException.class, e.getClass());
-		}
+		ts.create(
+				TNAME,
+				SPORT,
+				CLUB,
+				MAX_TEAMS,
+				TEAM_SIZE,
+				Instant.now().plus(10, ChronoUnit.DAYS),
+				STARTS_AT,
+				ENDS_AT,
+				Instant.now(),
+				USER
+		);
 	}
 	
-	@Test
+	@Test(expected = InsufficientPitchesException.class)
 	public void createWithoutPitchesTest() throws Exception {
 		PITCHES.removeAll(PITCHES);
-		try {
-			ts.create(
-					TNAME,
-					SPORT,
-					CLUB,
-					MAX_TEAMS,
-					TEAM_SIZE,
-					STARTS,
-					STARTS_AT,
-					ENDS_AT,
-					INSCR_ENDS,
-					USER
-			);
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(InsufficientPitchesException.class, e.getClass());
-		}
+		ts.create(
+				TNAME,
+				SPORT,
+				CLUB,
+				MAX_TEAMS,
+				TEAM_SIZE,
+				STARTS,
+				STARTS_AT,
+				ENDS_AT,
+				INSCR_ENDS,
+				USER
+		);
 	}
 	
-	@Test
-	public void joinTournamentPreviousInsscrDateTest() {
+	@Test(expected = InscriptionDateInPastException.class)
+	public void joinTournamentPreviousInsscrDateTest() throws Exception {
 		Mockito.when(us.findById(Mockito.anyLong())).thenReturn(Optional.of(USER));
 		Mockito.when(td.findById(Mockito.anyLong())).thenReturn(Optional.of(
-				new Tournament(TNAME, SPORT, CLUB, MAX_TEAMS, TEAM_SIZE, Instant.now())));
-		try {
-			ts.joinTournament(1, 1, 1);
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(InscriptionDateInPastException.class, e.getClass());
-		}
+			new Tournament(TNAME, SPORT, CLUB, MAX_TEAMS, TEAM_SIZE, Instant.now())));
+		ts.joinTournament(1, 1, 1);
 	}
 
 }

@@ -74,14 +74,6 @@ public class EventServiceImplTest {
 	}
 	
 	@Test
-	public void convertEventListToScheduleTest() {
-//		boolean[][] schedule = es.convertEventListToSchedule(EVENT_LIST, MIN_HOUR, MAX_HOUR, 7);
-//		Assert.assertEquals(7, schedule.length);
-//		Assert.assertEquals(7, schedule[0].length);
-		Assert.assertTrue(true);
-	}
-	
-	@Test
 	public void validCreateTest() throws Exception {
 		Mockito.when(ed.create(
 				Mockito.anyString(),
@@ -111,65 +103,39 @@ public class EventServiceImplTest {
 		}
 	}
 	
-	@Test
-	public void createWithInscriptionDateShortDiffTest() {
-		try {
-			es.create(NAME_1, USER, PITCH, DESCRIPTION,
-					1, NOW.plus(2, ChronoUnit.DAYS),
-					10, 11, NOW.plus(2, ChronoUnit.DAYS).minus(1, ChronoUnit.MINUTES));
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(InscriptionDateExceededException.class, e.getClass());
-		}
+	@Test(expected = InscriptionDateExceededException.class)
+	public void createWithInscriptionDateShortDiffTest() throws Exception {
+		es.create(NAME_1, USER, PITCH, DESCRIPTION,
+				1, NOW.plus(2, ChronoUnit.DAYS),
+				10, 11, NOW.plus(2, ChronoUnit.DAYS).minus(1, ChronoUnit.MINUTES));
 	}
 	
-	@Test
+	@Test(expected = MaximumDateExceededException.class)
 	public void createEventInEightDays() throws Exception {
-		try {
-			es.create(NAME_1, USER, PITCH, DESCRIPTION,
-					1, NOW.plus(8, ChronoUnit.DAYS),
-					10, 11, NOW.plus(5, ChronoUnit.DAYS));
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(MaximumDateExceededException.class, e.getClass());
-		}
+		es.create(NAME_1, USER, PITCH, DESCRIPTION,
+				1, NOW.plus(8, ChronoUnit.DAYS),
+				10, 11, NOW.plus(5, ChronoUnit.DAYS));
 	}
 
-	@Test
-	public void createEndsBeforeStartsTest() {
-		try {
-			es.create(NAME_1, USER, PITCH, DESCRIPTION,
-					1, NOW.plus(3, ChronoUnit.DAYS),
-					20, 15, NOW.plus(1, ChronoUnit.DAYS));
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(EndsBeforeStartsException.class, e.getClass());
-		}
+	@Test(expected = EndsBeforeStartsException.class)
+	public void createEndsBeforeStartsTest() throws Exception {
+		es.create(NAME_1, USER, PITCH, DESCRIPTION,
+				1, NOW.plus(3, ChronoUnit.DAYS),
+				20, 15, NOW.plus(1, ChronoUnit.DAYS));
 	}
 	
-	@Test
-	public void createDisrespectsPitchHours() {
-		try {
-			es.create(NAME_1, USER, PITCH, DESCRIPTION,
-					1, NOW.plus(3, ChronoUnit.DAYS),
-					2 /*AM*/, 9 /*AM*/, NOW.plus(1, ChronoUnit.DAYS));
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(HourOutOfRangeException.class, e.getClass());
-		}
+	@Test(expected = HourOutOfRangeException.class)
+	public void createDisrespectsPitchHours() throws Exception {
+		es.create(NAME_1, USER, PITCH, DESCRIPTION,
+				1, NOW.plus(3, ChronoUnit.DAYS),
+				2 /*AM*/, 9 /*AM*/, NOW.plus(1, ChronoUnit.DAYS));
 	}
 	
-	@Test
+	@Test(expected = EventNotFinishedException.class)
 	public void voteTest() throws Exception {
 		Event ev = new Event(NAME_2, PITCH, DESCRIPTION, 2, 
 				NOW.minus(1, ChronoUnit.HOURS), NOW.plus(1, ChronoUnit.HOURS), NOW);
-		try {
-			es.vote(true, ev, 1);
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(EventNotFinishedException.class, e.getClass());
-		}
-		
+		es.vote(true, ev, 1);
 	}
 	
 }

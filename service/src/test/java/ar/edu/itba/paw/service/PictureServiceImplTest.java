@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,14 +13,9 @@ public class PictureServiceImplTest {
 	@InjectMocks
 	private PictureServiceImpl ps;
 	
-	@Test
-	public void invalidPictureTest() {
-		try {
-			ps.convert(new byte[] {0x01, 0x05});
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(IllegalArgumentException.class, e.getClass());
-		}
+	@Test(expected = IllegalArgumentException.class)
+	public void invalidPictureTest() throws Exception {
+		ps.convert(new byte[] {0x01, 0x05});
 	}
 
 }
