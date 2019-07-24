@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -84,7 +85,8 @@ public class UserController extends BaseController {
 	@Autowired
 	private CustomPermissionsHandler cph;
 
-	@RequestMapping(value = "/login", method = {RequestMethod.GET})
+	@GET
+	@Path("/login")
 	public Object login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
 		if(cph.isAuthenticated()) {
 			if(cph.isAdmin())
@@ -96,7 +98,8 @@ public class UserController extends BaseController {
 		return null;//mav;
 	}
 	
-    @RequestMapping(value = "/logout" , method = RequestMethod.GET)
+	@GET
+    @Path("/logout")
     public Object logout(HttpServletRequest request, HttpServletResponse response) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -138,8 +141,9 @@ public class UserController extends BaseController {
 		return Response.status(Status.NOT_FOUND).build();
 	}
 	
-	@RequestMapping(value = "/user/{userId}/comment", method = { RequestMethod.POST })
-    public Object comment(@PathVariable("userId") long userId, 
+    @POST
+	@Path("/{id}/comment")
+    public Object comment(@PathVariable("id") long userId, 
     		@Valid @ModelAttribute("commentForm") final CommentForm form, final BindingResult errors,
 			HttpServletRequest request) throws UserNotAuthorizedException, UserNotFoundException {
 		
@@ -152,7 +156,8 @@ public class UserController extends BaseController {
 	    return null;//new ModelAndView("redirect:/user/" + userId);
 	}
 	
-	@RequestMapping("/")
+    @GET
+	@Path("/")
 	public Object index(@ModelAttribute("signupForm") final NewUserForm form) {
 		if(cph.isAuthenticated()) {
 			if(cph.isAdmin())
@@ -161,8 +166,9 @@ public class UserController extends BaseController {
 		}
 		return null;//new ModelAndView("index");
 	}
-	
-	@RequestMapping(value = "/user/create", method = { RequestMethod.POST })
+    
+    @POST
+	@Path("/create")
 	public Object create(
 			@Valid @ModelAttribute("signupForm") final NewUserForm form,
 			final BindingResult errors,
@@ -203,8 +209,9 @@ public class UserController extends BaseController {
 		return null;//new ModelAndView("redirect:/home");
 	}
 	
-	@RequestMapping("/user/{userId}/picture")
-	public void getUserProfilePicture(@PathVariable("userId") long userid,
+    @GET
+	@Path("/{id}/picture")
+	public void getUserProfilePicture(@PathVariable("id") long userid,
 			HttpServletResponse response) {
 		Optional<ProfilePicture> picOptional = pps.findByUserId(userid);
 		//response.setContentType(MediaType.IMAGE_PNG_VALUE);

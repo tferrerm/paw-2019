@@ -14,12 +14,21 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,8 +68,9 @@ import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.NewTournamentForm;
 import ar.edu.itba.paw.webapp.form.TournamentResultForm;
 
-@RequestMapping("/admin")
-@Controller
+@Path("admin/tournaments")
+@Component
+@Produces(value = { MediaType.APPLICATION_JSON })
 public class AdminTournamentController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminTournamentController.class);
@@ -68,6 +78,9 @@ public class AdminTournamentController extends BaseController {
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
+	
+	@Context
+	private	UriInfo	uriInfo;
 	
 	@Autowired
 	private TournamentService ts;
@@ -84,8 +97,9 @@ public class AdminTournamentController extends BaseController {
 	@Autowired
 	private EmailService ems;
 	
-	@RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
+	@GET
+	@RequestMapping("/{id}")
+    public ModelAndView retrieveTournament(@PathParam("id") long tournamentid,
     		@RequestParam(value = "round", required = false) final Integer roundPage,
 			@ModelAttribute("tournamentResultForm") final TournamentResultForm form) 
     		throws TournamentNotFoundException {
@@ -136,9 +150,9 @@ public class AdminTournamentController extends BaseController {
 		}
     }
 	
-	
-	@RequestMapping(value = "/tournament/{tournamentId}/event/{eventId}/result", method = { RequestMethod.POST })
-    public ModelAndView comment(@PathVariable("tournamentId") long tournamentid, @PathVariable("eventId") long eventid,
+	@POST
+	@Path("/{id}/event/{eventId}/result")
+    public ModelAndView comment(@PathParam("id") long tournamentid, @PathVariable("eventId") long eventid,
     		@Valid @ModelAttribute("tournamentResultForm") final TournamentResultForm form, final BindingResult errors,
 			HttpServletRequest request) throws TournamentNotFoundException {
 		
@@ -165,8 +179,8 @@ public class AdminTournamentController extends BaseController {
 	    return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
 	}
 	
-	
-	@RequestMapping(value = "/tournaments/{pageNum}")
+	@GET
+	@Path("/{pageNum}")
 	public ModelAndView retrieveEvents(@PathVariable("pageNum") final int pageNum) {
 		
 		ModelAndView mav = new ModelAndView("admin/tournamentList");
@@ -183,8 +197,8 @@ public class AdminTournamentController extends BaseController {
 		return mav;
 	}
 	
-	
-	@RequestMapping(value = "/club/{clubId}/tournament/new")
+	@GET
+	@Path("/club/{clubId}/tournament/new")
     public ModelAndView tournamentFormView(@PathVariable("clubId") long clubid,
     		@ModelAttribute("newTournamentForm") final NewTournamentForm form) 
     				throws ClubNotFoundException {
@@ -210,8 +224,8 @@ public class AdminTournamentController extends BaseController {
         return mav;
     }
     
-	
-    @RequestMapping(value = "/club/{clubId}/tournament/create", method = { RequestMethod.POST })
+	@POST
+    @Path("/club/{clubId}/tournament/create")
     public ModelAndView createTournament(@PathVariable("clubId") long clubId,
     		@Valid @ModelAttribute("newTournamentForm") final NewTournamentForm form,
 			final BindingResult errors, HttpServletRequest request) throws ClubNotFoundException {
@@ -282,9 +296,9 @@ public class AdminTournamentController extends BaseController {
 		return mav;
     }
     
-    
-    @RequestMapping(value = "/tournament/{tournamentId}/delete", method = { RequestMethod.POST })
-	public ModelAndView deleteEvent(@PathVariable("tournamentId") final long tournamentid)
+    @DELETE
+    @Path("/{id}")
+	public ModelAndView deleteEvent(@PathParam("id") final long tournamentid)
 			throws TournamentNotFoundException, InscriptionDateInPastException {
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	Map<Long, List<User>> teamsMap = ts.mapTeamMembers(tournamentid);
@@ -301,10 +315,10 @@ public class AdminTournamentController extends BaseController {
 		return new ModelAndView("redirect:/admin/tournaments/1");
 	}
     
-    
-    @RequestMapping(value = "/tournament/{tournamentId}/kick-user/{userId}", method = { RequestMethod.POST })
+    @POST
+    @Path("/{id}/kick-user/{userId}")
     public ModelAndView kickUserFromTournament(
-    		@PathVariable("tournamentId") long tournamentid, @PathVariable("userId") long kickedUserId) 
+    		@PathParam("id") long tournamentid, @PathVariable("userId") long kickedUserId) 
     				throws UserNotFoundException, TournamentNotFoundException, InscriptionDateInPastException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -317,9 +331,9 @@ public class AdminTournamentController extends BaseController {
     }
     
     
-    @ExceptionHandler({ TournamentNotFoundException.class })
-	public ModelAndView tournamentNotFoundHandler() {
-		return new ModelAndView("404");
-	}
+//    @ExceptionHandler({ TournamentNotFoundException.class })
+//	public ModelAndView tournamentNotFoundHandler() {
+//		return new ModelAndView("404");
+//	}
 	
 }

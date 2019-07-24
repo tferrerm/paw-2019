@@ -6,20 +6,26 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -33,11 +39,15 @@ import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
 import ar.edu.itba.paw.webapp.form.NewClubForm;
 import ar.edu.itba.paw.webapp.form.NewPitchForm;
 
-@RequestMapping("/admin")
-@Controller
+@Path("admin/clubs")
+@Component
+@Produces(value = { MediaType.APPLICATION_JSON })
 public class AdminClubController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminClubController.class);
+	
+	@Context
+	private	UriInfo	uriInfo;
 	
 	@Autowired
 	private ClubService cs;
@@ -45,7 +55,8 @@ public class AdminClubController extends BaseController {
 	@Autowired
 	private PitchService ps;
 
-	@RequestMapping("/club/{clubId}")
+	@GET
+	@Path("/{clubId}")
 	public ModelAndView showClub(@PathVariable("clubId") long clubid, @ModelAttribute("newPitchForm") final NewPitchForm form)
 			throws ClubNotFoundException {
 
@@ -59,7 +70,8 @@ public class AdminClubController extends BaseController {
 		return mav;
 	}
 
-	@RequestMapping("/clubs/{pageNum}")
+	@GET
+	@Path("/{pageNum}")
 	public ModelAndView clubs(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
 			@PathVariable("pageNum") int pageNum,
 			@RequestParam(value = "name", required = false) String clubName,
@@ -88,7 +100,8 @@ public class AdminClubController extends BaseController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/clubs/filter")
+	@GET
+	@Path("/filter")
     public ModelAndView applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
     	String name = form.getName();
     	String location = form.getLocation();
@@ -110,12 +123,14 @@ public class AdminClubController extends BaseController {
         return strBuilder.toString();
     }
 	
-	@RequestMapping("/club/new")
+    @GET
+	@Path("/new")
 	public ModelAndView newClub(@ModelAttribute("newClubForm") final NewClubForm form) {
 		return new ModelAndView("admin/newClub");
 	}
 
-	@RequestMapping(value = "/club/create", method = { RequestMethod.POST })
+    @POST
+	@Path("/")
 	public ModelAndView createClub(
 			@Valid @ModelAttribute("newClubForm") final NewClubForm form,
 			final BindingResult errors,
@@ -127,7 +142,8 @@ public class AdminClubController extends BaseController {
 		return new ModelAndView("redirect:/admin/club/" + c.getClubid());
 	}
 
-	@RequestMapping(value = "/club/{clubId}/pitch/create", method = { RequestMethod.POST })
+    @POST
+	@Path("/{clubId}/pitch/create")
 	public ModelAndView createPitch(
 			@Valid @ModelAttribute("newPitchForm") final NewPitchForm form,
 			final BindingResult errors,
@@ -164,17 +180,18 @@ public class AdminClubController extends BaseController {
 		return new ModelAndView("redirect:/admin/club/" + clubId);
 	}
 	
-	@RequestMapping(value = "/club/{clubId}/delete", method = { RequestMethod.POST })
-	public ModelAndView deleteClub(@PathVariable("clubId") final long clubid) 
+    @DELETE
+	@Path("/{id}/")
+	public ModelAndView deleteClub(@PathParam("id") final long clubid) 
 		throws ClubNotFoundException {
 		cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		cs.deleteClub(clubid);
 		return new ModelAndView("redirect:/admin/clubs/1");
 	}
 	
-	@ExceptionHandler({ ClubNotFoundException.class })
-	public ModelAndView clubNotFound() {
-		return new ModelAndView("404");
-	}
+//	@ExceptionHandler({ ClubNotFoundException.class })
+//	public ModelAndView clubNotFound() {
+//		return new ModelAndView("404");
+//	}
 
 }

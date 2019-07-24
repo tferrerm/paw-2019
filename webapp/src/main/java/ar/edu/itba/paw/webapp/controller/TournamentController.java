@@ -8,14 +8,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,18 +39,22 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 
-
-@Controller
+@Path("tournaments")
+@Component
+@Produces(value = { MediaType.APPLICATION_JSON })
 public class TournamentController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TournamentController.class);
 	
+	@Context
+	private	UriInfo	uriInfo;
+	
 	@Autowired
 	private TournamentService ts;
-
 	
-    @RequestMapping(value = "/tournament/{tournamentId}")
-    public ModelAndView retrieveTournament(@PathVariable("tournamentId") long tournamentid,
+	@GET
+    @Path("/{id}")
+    public ModelAndView retrieveTournament(@PathVariable("id") long tournamentid,
     		@RequestParam(value = "round", required = false) final Integer roundPage,
     		@RequestParam(value = "userBusyError", required = false) boolean userBusyError) 
     		throws TournamentNotFoundException {
@@ -96,8 +108,8 @@ public class TournamentController extends BaseController {
 		}
     }
 
-    
-    @RequestMapping(value = "/tournaments/{pageNum}")
+    @GET
+    @Path("/{pageNum}")
     public ModelAndView retrieveTournaments(
 			@PathVariable("pageNum") final int pageNum) {
 
@@ -115,9 +127,9 @@ public class TournamentController extends BaseController {
         return mav;
     }
 
-    
-    @RequestMapping(value = "/tournament/{tournamentId}/team/{teamId}/join", method = { RequestMethod.POST })
-    public ModelAndView joinTeam(@PathVariable("tournamentId") long tournamentid, @PathVariable("teamId") long teamid) 
+    @POST
+    @Path("/{id}/team/{teamId}/join")
+    public ModelAndView joinTeam(@PathVariable("id") long tournamentid, @PathVariable("teamId") long teamid) 
     		throws UserAlreadyJoinedException, TournamentNotFoundException {
     	
         try {
@@ -145,9 +157,9 @@ public class TournamentController extends BaseController {
 		return mav;
     }
     
-    
-    @RequestMapping(value = "/tournament/{tournamentId}/leave", method = { RequestMethod.POST })
-    public ModelAndView leaveTournament(@PathVariable("tournamentId") long tournamentid) 
+    @POST
+    @Path("/{id}/leave")
+    public ModelAndView leaveTournament(@PathParam("id") long tournamentid) 
     		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
     	
         try {
@@ -161,9 +173,9 @@ public class TournamentController extends BaseController {
         return new ModelAndView("redirect:/tournament/" + tournamentid);
     }
 
-    
-    @RequestMapping(value = "/tournament/{tournamentId}/event/{eventId}")
-    public ModelAndView retrieveTournamentEvent(@PathVariable("tournamentId") long tournamentid,
+    @GET
+    @RequestMapping("/{id}/event/{eventId}")
+    public ModelAndView retrieveTournamentEvent(@PathParam("id") long tournamentid,
     		@PathVariable("eventId") long eventid) 
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
         ModelAndView mav = new ModelAndView("tournamentEvent");
@@ -177,9 +189,9 @@ public class TournamentController extends BaseController {
     }
 
     
-	@ExceptionHandler({ TournamentEventNotFoundException.class })
-	private ModelAndView tournamentEventNotFound() {
-		return new ModelAndView("404");
-	}
+//	@ExceptionHandler({ TournamentEventNotFoundException.class })
+//	private ModelAndView tournamentEventNotFound() {
+//		return new ModelAndView("404");
+//	}
 
 }

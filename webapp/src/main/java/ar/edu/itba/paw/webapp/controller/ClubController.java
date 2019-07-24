@@ -5,19 +5,23 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -29,11 +33,16 @@ import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 
-@Controller
+@Path("clubs")
+@Component
+@Produces(value = { MediaType.APPLICATION_JSON })
 public class ClubController extends BaseController {
 	
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClubController.class);
+	
+	@Context
+	private	UriInfo	uriInfo;
 	
 	@Autowired
 	private ClubService cs;
@@ -41,36 +50,38 @@ public class ClubController extends BaseController {
 	@Autowired
 	private PitchService ps;
 	
-	@RequestMapping("/club/{clubId}")
-	public ModelAndView showClub(@PathVariable("clubId") long clubid,
+	@GET
+	@Path("/{id}")
+	public Object showClub(@PathVariable("id") long clubid,
 			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,
 			@ModelAttribute("commentForm") final CommentForm form) throws ClubNotFoundException {
 		
-		ModelAndView mav = new ModelAndView("club");
+		//ModelAndView mav = new ModelAndView("club");
 		
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
-		mav.addObject("club", club);
+		//mav.addObject("club", club);
 		
 		List<Pitch> pitches = ps.findByClubId(clubid, 1);
-		mav.addObject("pitches", pitches);
+		//mav.addObject("pitches", pitches);
 		
-		mav.addObject("past_events_count", cs.countPastEvents(clubid));
+		//mav.addObject("past_events_count", cs.countPastEvents(clubid));
 		
-		mav.addObject("haveRelationship", loggedUser() != null ? cs.haveRelationship(loggedUser().getUserid(), clubid) : false);
+		//mav.addObject("haveRelationship", loggedUser() != null ? cs.haveRelationship(loggedUser().getUserid(), clubid) : false);
 
 		List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
-		mav.addObject("comments", comments);
-		mav.addObject("commentQty", comments.size());
-		mav.addObject("currCommentPage", pageNum);
-		mav.addObject("maxCommentPage", cs.getCommentsMaxPage(clubid));
-		mav.addObject("totalCommentQty", cs.countByClubComments(clubid));
-		mav.addObject("commentsPageInitIndex", cs.getCommentsPageInitIndex(pageNum));
+		//mav.addObject("comments", comments);
+		//mav.addObject("commentQty", comments.size());
+		//mav.addObject("currCommentPage", pageNum);
+		//mav.addObject("maxCommentPage", cs.getCommentsMaxPage(clubid));
+		//mav.addObject("totalCommentQty", cs.countByClubComments(clubid));
+		//mav.addObject("commentsPageInitIndex", cs.getCommentsPageInitIndex(pageNum));
 		
-		return mav;
+		return null;//mav;
 	}
 	
-	@RequestMapping(value = "/club/{clubId}/comment", method = { RequestMethod.POST })
-    public ModelAndView comment(@PathVariable("clubId") long clubId, 
+	@POST
+	@Path("/{id}/comment")
+    public Object comment(@PathVariable("id") long clubId, 
     		@Valid @ModelAttribute("commentForm") final CommentForm form,
     		final BindingResult errors, HttpServletRequest request) 
     				throws UserNotAuthorizedException, ClubNotFoundException {
@@ -81,11 +92,12 @@ public class ClubController extends BaseController {
 		
 		cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
 		
-	    return new ModelAndView("redirect:/club/" + clubId);
+	    return null;//new ModelAndView("redirect:/club/" + clubId);
 	}
 
-	@RequestMapping("/clubs/{pageNum}")
-	public ModelAndView clubs(
+	@GET
+	@Path("/{pageNum}")
+	public Object clubs(
 			@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
 			@PathVariable("pageNum") int pageNum,
 			@RequestParam(value = "name", required = false) String clubName,
@@ -93,33 +105,34 @@ public class ClubController extends BaseController {
 		
 		String queryString = buildQueryString(clubName, location);
 		
-		ModelAndView mav = new ModelAndView("clubList");
+		//ModelAndView mav = new ModelAndView("clubList");
 		
-		mav.addObject("pageNum", pageNum);
-        mav.addObject("queryString", queryString);
-        mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
+		//mav.addObject("pageNum", pageNum);
+        //mav.addObject("queryString", queryString);
+        //mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
         
         List<Club> clubs = cs.findBy(
 				Optional.ofNullable(clubName), 
         		Optional.ofNullable(location),
         		pageNum);
-        mav.addObject("clubs", clubs);
-        mav.addObject("clubQty", clubs.size());
+        //mav.addObject("clubs", clubs);
+        //mav.addObject("clubQty", clubs.size());
         
         Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
         		Optional.ofNullable(location));
-        mav.addObject("totalClubQty", totalClubQty);
-        mav.addObject("lastPageNum", cs.countClubPages(totalClubQty));
+        //mav.addObject("totalClubQty", totalClubQty);
+        //mav.addObject("lastPageNum", cs.countClubPages(totalClubQty));
 
-		return mav;
+		return null;//mav;
 	}
 	
-	@RequestMapping(value = "/clubs/filter")
-    public ModelAndView applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
+	@GET
+	@Path("/filter")
+    public Object applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
     	String name = form.getName();
     	String location = form.getLocation();
         String queryString = buildQueryString(name, location);
-        return new ModelAndView("redirect:/clubs/1" + queryString);
+        return null;//new ModelAndView("redirect:/clubs/1" + queryString);
     }
 
     private String buildQueryString(final String name, final String location){
@@ -136,9 +149,9 @@ public class ClubController extends BaseController {
         return strBuilder.toString();
     }
 	
-	@ExceptionHandler({ ClubNotFoundException.class })
-	public ModelAndView clubNotFound() {
-		return new ModelAndView("404");
-	}
+//	@ExceptionHandler({ ClubNotFoundException.class })
+//	public ModelAndView clubNotFound() {
+//		return new ModelAndView("404");
+//	}
 	
 }

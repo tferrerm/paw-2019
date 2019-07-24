@@ -5,20 +5,24 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
@@ -28,11 +32,16 @@ import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
-@Controller
+@Path("pitches")
+@Component
+@Produces(value = { MediaType.APPLICATION_JSON })
 public class PitchController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PitchController.class);
 	private static final String DEFAULT_PITCH_PICTURE = "pitch_default.png";
+	
+	@Context
+	private	UriInfo	uriInfo;
 	
 	@Autowired
 	private PitchService ps;
@@ -40,7 +49,8 @@ public class PitchController extends BaseController {
 	@Autowired
 	private PitchPictureService pps;
 	
-	@RequestMapping("/pitches/{pageNum}")
+	@GET
+	@Path("/{pageNum}")
 	public ModelAndView listPitches(
 			@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form,
 			@PathVariable("pageNum") int pageNum,
@@ -77,7 +87,8 @@ public class PitchController extends BaseController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/pitches/filter")
+	@GET
+	@Path("/pitches/filter")
     public ModelAndView applyFilter(@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form) {
 		String name = form.getName();
         String sport = form.getSport();
@@ -107,11 +118,12 @@ public class PitchController extends BaseController {
 		return strBuilder.toString();
 	}
 	
-	@RequestMapping("/pitch/{pitchId}/picture")
-	public void getPitchPicture(@PathVariable("pitchId") long pitchid,
+	@GET
+	@Path("/{id}/picture")
+	public void getPitchPicture(@PathVariable("id") long pitchid,
 			HttpServletResponse response) {
 		Optional<PitchPicture> picOptional = pps.findByPitchId(pitchid);
-		response.setContentType(MediaType.IMAGE_PNG_VALUE);
+		//response.setContentType(MediaType.IMAGE_PNG_VALUE);
 		try {
 			if(picOptional.isPresent()) {
 				response.getOutputStream().write(picOptional.get().getData());
@@ -126,9 +138,9 @@ public class PitchController extends BaseController {
 		}
 	}
 	
-	@ExceptionHandler({ PitchNotFoundException.class })
-	private ModelAndView pitchNotFound() {
-		return new ModelAndView("404");
-	}
+//	@ExceptionHandler({ PitchNotFoundException.class })
+//	private ModelAndView pitchNotFound() {
+//		return new ModelAndView("404");
+//	}
 
 }

@@ -7,11 +7,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +39,15 @@ import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.form.FiltersForm;
 
-@RequestMapping("/admin")
-@Controller
+@Path("admin/events")
+@Component
+@Produces(value = { MediaType.APPLICATION_JSON })
 public class AdminController extends BaseController {
 	
 	private static final String TIME_ZONE = "America/Buenos_Aires";
+	
+	@Context
+	private	UriInfo	uriInfo;
 
 	@Autowired
 	private EventService es;
@@ -45,14 +57,14 @@ public class AdminController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
-	
-	@RequestMapping(value = "/")
+	@GET
+	@Path("/")
 	public ModelAndView adminHome() {
 		return new ModelAndView("redirect:/admin/events/1");
 	}
 
-	
-	@RequestMapping(value = "/events/{pageNum}")
+	@GET
+	@Path("/{pageNum}")
 	public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
 									   @PathVariable("pageNum") final int pageNum,
 									   @RequestParam(value = "establishment", required = false) String clubName,
@@ -98,8 +110,8 @@ public class AdminController extends BaseController {
 		return mav;
 	}
 	
-	
-	@RequestMapping(value = "/events/filter")
+	@GET
+	@Path("/events/filter")
     public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
         String establishment = form.getEstablishment();
         String sport = form.getSport();
@@ -110,7 +122,7 @@ public class AdminController extends BaseController {
         return new ModelAndView("redirect:/admin/events/1" + queryString);
     }
 
-	
+	@GET
 	@RequestMapping(value = "/event/{id}")
 	public ModelAndView retrieveElement(@PathVariable long id)
 			throws EventNotFoundException {
@@ -123,7 +135,7 @@ public class AdminController extends BaseController {
 		return mav;
 	}
 
-	
+	@DELETE
 	@RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
 	public ModelAndView deleteEvent(@PathVariable final long id)
 			throws EventNotFoundException, DateInPastException {
@@ -169,9 +181,9 @@ public class AdminController extends BaseController {
 	}
 	
 	
-	@ExceptionHandler({ EventNotFoundException.class })
-	public ModelAndView eventNotFound() {
-		return new ModelAndView("404");
-	}
+//	@ExceptionHandler({ EventNotFoundException.class })
+//	public ModelAndView eventNotFound() {
+//		return new ModelAndView("404");
+//	}
 
 }

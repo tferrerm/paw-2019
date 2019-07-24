@@ -16,7 +16,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -84,19 +83,19 @@ public class BaseController {
     	return UriComponentsBuilder.fromPath(str).build().encode().toString();
     }
 	
-	@ExceptionHandler({ IllegalArgumentException.class })
-	private ModelAndView illegalIdOrPageNumber() {
-		return new ModelAndView("404");
-	}
-	
-	@ExceptionHandler({ UserNotAuthorizedException.class })
-	private ModelAndView illegalActionForUser() {
-		return new ModelAndView("403");
-	}
-	
-    @ExceptionHandler({ Exception.class })
-	private ModelAndView generalExceptionHandler() {
-		return new ModelAndView("oops");
-	}
+//	@ExceptionHandler({ IllegalArgumentException.class })
+//	private ModelAndView illegalIdOrPageNumber() {
+//		return new ModelAndView("404");
+//	}
+//	
+//	@ExceptionHandler({ UserNotAuthorizedException.class })
+//	private ModelAndView illegalActionForUser() {
+//		return new ModelAndView("403");
+//	}
+//	
+//    @ExceptionHandler({ Exception.class })
+//	private ModelAndView generalExceptionHandler() {
+//		return new ModelAndView("oops");
+//	}
 
 }
