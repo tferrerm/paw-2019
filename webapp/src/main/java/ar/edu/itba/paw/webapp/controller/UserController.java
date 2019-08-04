@@ -2,17 +2,20 @@ package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -32,7 +35,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,8 +51,10 @@ import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserComment;
 import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
+import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.NewUserForm;
@@ -140,6 +144,32 @@ public class UserController extends BaseController {
 		
 		return Response.ok(UserDto.ofUser(user)).build();
 	}
+    
+    @GET
+    @Path("/{id}/comment/{commentId}")
+    public Response getComment(@PathParam("id") long userid,
+    						   @PathParam("commentId") long commentId)
+    								   throws UserNotFoundException, CommentNotFoundException {
+    	us.findById(userid).orElseThrow(UserNotFoundException::new);
+    	UserComment comment = us.getComment(commentId).orElseThrow(CommentNotFoundException::new);
+
+    	return Response.ok(UserCommentDto.ofComment(comment)).build();
+    }
+    
+    @GET
+    @Path("/{id}/comments")
+    public Response getComments(@PathParam("id") long userid,
+    			@QueryParam("page") @DefaultValue("1") int pageNum) throws UserNotFoundException {
+    	us.findById(userid).orElseThrow(UserNotFoundException::new);
+    	List<UserComment> comments = us.getCommentsByUser(userid, pageNum);
+    	int totalPages = us.getCommentsMaxPage(userid);
+
+    	return Response.ok(UserCommentCollectionDto.ofComments(
+    			comments.stream().map(UserCommentDto::ofComment).collect(Collectors.toList()),
+    			totalPages)
+    			).build();
+    }
+    
 	
     @POST
 	@Path("/{id}/comment")
@@ -163,26 +193,25 @@ public class UserController extends BaseController {
 	    return Response.created(uri).entity(UserCommentDto.ofComment(comment)).build();
 	}
 	
-    @GET
-	@Path("/")
-	public Object index(@ModelAttribute("signupForm") final NewUserForm form) {
-		if(cph.isAuthenticated()) {
-			if(cph.isAdmin())
-				return null;//new ModelAndView("redirect:/admin/");
-			//return new ModelAndView("redirect:/home");
-		}
-		return null;//new ModelAndView("index");
-	}
+//    @GET
+//	@Path("/")
+//	public Object index(@ModelAttribute("signupForm") final NewUserForm form) {
+//		if(cph.isAuthenticated()) {
+//			if(cph.isAdmin())
+//				return null;//new ModelAndView("redirect:/admin/");
+//			//return new ModelAndView("redirect:/home");
+//		}
+//		return null;//new ModelAndView("index");
+//	}
     
     @POST
 	@Path("/create")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response create(
-			@Valid @FormDataParam("signupForm") final NewUserForm form,
-			final BindingResult errors,
-			HttpServletRequest request) {
+	public Response create(@FormDataParam("signupForm") final NewUserForm form) {
 		
     	// DTOValidator.VALIDATE!!!!!!!!!!!
+    	
+    	// AUTO LOGIN
     	
     	
 //		if(!form.repeatPasswordMatching())
@@ -216,7 +245,7 @@ public class UserController extends BaseController {
 		}
 		
 		ems.userRegistered(user, LocaleContextHolder.getLocale());
-		cph.authenticate(user.getUsername(), user.getPassword(), request);
+		//cph.authenticate(user.getUsername(), user.getPassword(), null);
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
 		return Response.created(uri).entity(UserDto.ofUser(user)).build();
 	}

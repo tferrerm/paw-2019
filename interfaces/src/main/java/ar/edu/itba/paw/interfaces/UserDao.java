@@ -18,6 +18,8 @@ public interface UserDao {
 	
 	public UserComment createComment(final User commenter, final User receiver, final String comment);
 	
+	public Optional<UserComment> getComment(final long id);
+	
 	public List<UserComment> getCommentsByUser(final long userid, final int pageNum);
 	
 	public User create(String username, String firstname, String lastname, 

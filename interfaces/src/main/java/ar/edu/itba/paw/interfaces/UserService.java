@@ -21,6 +21,8 @@ public interface UserService {
 	public UserComment createComment(final long commenterid, final long receiverid, final String comment)
 			throws UserNotAuthorizedException;
 	
+	public Optional<UserComment> getComment(final long id);
+	
 	/**
 	 * Returns true if the commenter and receiver have an Inscription for a common past Event
 	 * or if the commenter has an Inscription for a past Event which was owned by the receiver.

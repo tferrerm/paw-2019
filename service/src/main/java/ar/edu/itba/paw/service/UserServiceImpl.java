@@ -74,6 +74,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public Optional<UserComment> getComment(final long id) {
+		return ud.getComment(id);
+	}
+	
+	@Override
 	public boolean haveRelationship(final long commenterid, final long receiverid) {
 		if(commenterid <= 0 || receiverid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
