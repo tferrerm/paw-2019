@@ -14,11 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
 
@@ -30,7 +27,6 @@ public class BaseController {
 	@Autowired
 	private UserService us;
 	
-	@ModelAttribute("loggedUser")
 	public User loggedUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(auth == null) {

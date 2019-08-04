@@ -75,6 +75,10 @@ public class UserComment {
 	public int hashCode() {
 		return Objects.hash(this.commentid);
 	}
+	
+	public long getCommentId() {
+		return commentid;
+	}
 
 	public User getCommenter() {
 		return commenter;
