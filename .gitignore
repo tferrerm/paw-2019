@@ -43,3 +43,5 @@ interfaces/target
 persistence/target
 model/target
 service/target
+
+node_modules
