@@ -1,5 +1,7 @@
 ## Frontend configuration
 
+### Install NodeJS and NPM
+
 Warning: do *NOT* install `npm` or `nodejs` with `apt` or `apt-get`.
 
 Tested versions:
@@ -9,6 +11,7 @@ npm -v
 node -v
  # v11.12.0
 ```
+
 
 Run the following commands:
 ```bash

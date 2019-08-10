@@ -511,4 +511,6 @@ module.exports = function (grunt) {
     'newer:eslint',
     'build'
   ]);
+
+  grunt.loadNpmTasks('grunt-contrib-compass');
 };
