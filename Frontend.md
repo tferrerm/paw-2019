@@ -12,6 +12,53 @@ node -v
  # v11.12.0
 ```
 
+### Install Ruby
+
+Tested versions:
+```bash
+ruby -v
+ # 2.5.0
+```
+
+macOS:
+```bash
+brew install rbenv
+rbenv init
+exit
+
+# new terminal
+curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+
+mkdir -p "$(rbenv root)"/plugins
+git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+
+rbenv install <desired-ruby-version>
+```
+
+Linux:
+```bash
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+cd ~/.rbenv && src/configure && make -C src # do not worry if it fails
+
+# Ubuntu
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+# Bash
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+# zsh
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshrc
+
+~/.rbenv/bin/rbenv init
+exit
+
+# New terminal
+curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+mkdir -p "$(rbenv root)"/plugins
+git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+
+rbenv install <desired-ruby-version>
+```
+
+### Project Configuration
 
 Run the following commands:
 ```bash
@@ -28,6 +75,7 @@ bower install
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 sudo sysctl --system
 
+gem update --system && gem install compass
 ```
 
 To serve:
