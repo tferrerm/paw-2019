@@ -45,3 +45,4 @@ model/target
 service/target
 
 node_modules
+bower_components
