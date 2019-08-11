@@ -4,7 +4,7 @@ define([], function() {
     return {
         defaultRoutePath: '/',
         routes: {
-            '/': {
+            '/home': {
                 templateUrl: '/views/home.html',
                 controller: 'HomeCtrl'
             }

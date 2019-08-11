@@ -1,6 +1,6 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
-@import 'bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
+@import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
 // endbower
 
 @import 'partials/home';
@@ -14,8 +14,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -85,7 +84,7 @@ body {
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 30px;
+    margin-bottom: 0;
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {

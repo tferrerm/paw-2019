@@ -470,56 +470,6 @@ a.event-link {
   flex-flow: row wrap;
 }
 
-.header {
-    align-items: center;
-    background-color: dodgerblue;
-    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
-    display: flex;
-    font-weight: 500;
-    justify-content: space-between;
-    min-height: 100px;
-    padding-left: 30px;
-}
-
-.header-admin {
-    align-items: center;
-    background-color: lightgrey;
-    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
-    display: flex;
-    font-weight: 500;
-    justify-content: space-between;
-    min-height: 100px;
-    padding-left: 30px;
-}
-
-.header a {
-    background-color: white;
-    border: none;
-    border-radius: 7px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    margin: 5px;
-    padding: 5px 12px;
-}
-
-.header-admin a {
-    background-color: white;
-    color: dodgerblue;
-    border: none;
-    border-radius: 7px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    margin: 5px;
-    padding: 5px 12px;
-}
-
-.header div:last-child {
-    margin-right: 15px;
-}
-
-.header-admin div:last-child {
-    margin-right: 15px;
-}
 
 .help-message {
   margin: 10px 0;
@@ -936,45 +886,7 @@ ul.pitch-item {
   min-width: 100px;
 }
 
-.sidebar {
-    background-color: #444444;
-    box-shadow: 0 3px 3px 3px rgba(57, 63, 72, 0.3);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    max-width: 200px;
-    min-width: 200px;
-}
 
-.sidebar li a {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    width: 100%;
-}
-
-.sidebar ul {
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.sidebar li {
-    align-items: center;
-    border-bottom: grey 1px solid;
-    color: white;
-    display: flex;
-    font-size: 20px;
-    height: 60px;
-    justify-content: center;
-}
-
-.sidebar li:hover {
-    background-color: grey;
-}
 
 .stats{
     background-color: blanchedalmond;

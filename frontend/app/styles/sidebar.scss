@@ -1,0 +1,40 @@
+.sidebar {
+  background-color: #444444;
+  box-shadow: 0 3px 3px 3px rgba(57, 63, 72, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 200px;
+  min-width: 200px;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    align-items: center;
+    border-bottom: grey 1px solid;
+    color: white;
+    display: flex;
+    font-size: 20px;
+    height: 60px;
+    justify-content: center;
+
+    a {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  li:hover {
+      background-color: grey;
+  }
+}
+
