@@ -1,0 +1,77 @@
+<div class="content-container">
+  <div class="profile-title">
+    <h2>{{'myEvents' | translate}}</h2>
+  </div>
+  <span class="help-message notice w-70 justify-center">{{'my_events_help' | translate}}</span>
+  <div class="notice" ng-if="no_events">
+    {{'no_past_or_future_events' | translate}}
+  </div>
+  <div class="tbl" ng-if="!no_events">
+    <div class="table-header background-dodgerblue">
+      <div class="flex-grow justify-center my-events-tbl-sub">
+        <span class="event-info-label color-white">{{'pastEvents' | translate}}</span>
+      </div>
+      <div class="flex-grow justify-center my-events-tbl-sub">
+        <span class="event-info-label color-white">{{'upcomingEvents' | translate}}</span>
+      </div>
+    </div>
+    <div class="flex-grow w-100">
+      <div class="events-column flex-grow flex-column right-border w-50">
+        <div ng-repeat="event in past_events">
+          <a href="/event/{{event.eventId}}">
+          <div class="my-event-item">
+            <span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+            <span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
+            <div class="flex flex-1 justify-center home-header">
+<!--                    <fmt:timeZone value="AR">-->
+<!--                      <fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />-->
+<!--                      <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />-->
+<!--                    </fmt:timeZone>-->
+            </div>
+          </div>
+          </a>
+        </div>
+      </div>
+      <div class="events-column flex-grow flex-column w-50">
+        <div ng-repeat="event in future_events">
+          <a href="/event/{{event.eventId}}">
+          <div class="my-event-item">
+            <span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+            <div>{{event.inscriptions.length}}/{{event.maxParticipants}}</div>
+            <span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
+            <div class="flex flex-1 justify-center home-header">
+<!--                    <fmt:timeZone value="AR">-->
+<!--                      <fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />-->
+<!--                      <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />-->
+<!--                    </fmt:timeZone>-->
+            </div>
+          </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-navigator w-100 justify-center">
+    <div class="{{page != 1 ? '' : 'hidden'}}">
+      <a href="/my-events/1">
+        <button type="button" class="btn btn-secondary">
+          {{'first' | translate}}
+        </button>
+      </a>
+      <a href="/my-events/{{page-1}}">
+        <button type="button" class="btn btn-secondary">
+          {{'back' | translate}}
+        </button>
+      </a>
+    </div>
+    <span class="flex">{{'showing_pages' | translate}} {{page}} {{'of' | translate}} {{lastPageNum}}</span>
+    <div class="{{page != lastPageNum ? '' : 'hidden'}}">
+      <a href="/my-events/{{page+1}}">
+        <button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+      </a>
+      <a href="/my-events/{{lastPageNum}}">
+        <button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+      </a>
+    </div>
+  </div>
+</div>

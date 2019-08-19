@@ -6,8 +6,8 @@ define(['frontend'], function(frontend) {
     $scope.sidebarElements = [
       {name: 'Home', link: "#/home"},
       {name: 'All events', link: "#/events"},
-      {name: 'My events', link: "#/home"},
-      {name: 'History', link: "#/home"},
+      {name: 'My events', link: "#/my-events"},
+      {name: 'History', link: "#/history"},
       {name: 'Clubs', link: "#/home"},
       {name: 'Pitches', link: "#/home"},
       {name: 'Tournaments', link: "#/home"}

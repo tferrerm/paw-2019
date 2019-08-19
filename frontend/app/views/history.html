@@ -1,0 +1,69 @@
+<div class="content-container">
+  <div class="profile-title">
+    <h2>{{'myParticipations' | translate }}</h2>
+  </div>
+  <span class="help-message notice w-70 justify-center">{{'history_help' | translate }}</span>
+  <div ng-if="eventQty > 0">
+    <div class="tbl">
+      <div class="table-header background-dodgerblue">
+        <div class="flex-grow justify-center my-events-tbl-sub">
+          <span class="event-info-label color-white">{{'event_name' | translate }}</span>
+        </div>
+        <div class="flex-grow justify-center my-events-tbl-sub">
+          <span class="event-info-label color-white">{{'event_location' | translate }}</span>
+        </div>
+        <div class="flex-grow justify-center my-events-tbl-sub">
+          <span class="event-info-label color-white">{{'event_startsAt' | translate }}</span>
+        </div>
+      </div>
+      <div class="flex-grow w-100">
+        <div class="events-column flex-grow flex-column w-100">
+          <div ng-repeat="event in past_participations">
+            <a href="/event/{{event.eventId}}">
+            <div class="my-event-item">
+              <span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+              <span class="flex flex-1 justify-center home-header">{{event.pitch.club.location}}</span>
+              <div class="flex flex-1 justify-center home-header">
+<!--                  <fmt:timeZone value="AR">-->
+<!--                    <fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />-->
+<!--                    <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />-->
+<!--                  </fmt:timeZone>-->
+              </div>
+            </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-navigator w-100 justify-center">
+      <div class="{{page != 1 ? '' : 'hidden'}}">
+      <a href="/history/1'">
+        <button type="button" class="btn btn-secondary">
+          {{'first' | translate}}
+        </button>
+      </a>
+      <a href="/history/{{page-1}}">
+        <button type="button" class="btn btn-secondary">
+          {{'back' | translate}}
+        </button>
+      </a>
+    </div>
+    <span class="flex">{{'showing_items' | translate}} {{pageInitialIndex}}-{{pageInitialIndex + eventQty - 1}} {{'of' | translate}} {{totalEventQty}}</span>
+    <div class="{{page != lastPageNum ? '' : 'hidden'">
+    <a href="/history/{{page+1}}">
+      <button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+    </a>
+    <a href="/history/{{lastPageNum}}">
+      <button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+    </a>
+  </div>
+  </div>
+    <div ng-if="eventQty <= 0">
+      <div class="notice">
+        {{'no_results' | translate}}
+      </div>
+    </div>
+  </div>
+</div>
+
+
