@@ -2,6 +2,9 @@
 define(['frontend'], function(frontend) {
 
 	frontend.controller('HomeCtrl', function($scope) {
-		$scope.homePageText = 'This is your homepage';
+		$scope.loggedUser = {name: "Santiago"};
+		$scope.noParticipations = true;
+    $scope.scheduleHeaders = [];
+    $scope.myEvents = []
 	});
 });

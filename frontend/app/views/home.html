@@ -1,20 +1,41 @@
-<div class="jumbotron">
-
-	<h1>'Allo, 'Allo!</h1>
-	<p class="lead">
-		<img src="images/yeoman.png" alt="I'm Yeoman"><br />
-		{{'WELCOME_MESSAGE' | translate}}
-	</p>
-	<p><a class="btn btn-lg btn-success" ng-href="#">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
-<div class="row marketing">
-	<h4>Angular-Require-Fullstack Generator contains</h4>
-	<ul>
-		<li>AngularJs</li>
-		<li>RequireJs</li>
-		<li>Bootstrap</li>
-		<li>i18n</li>
-		<li>Grunt</li>
-		<li>File revving</li>
-	</ul>
+<div class="content-container">
+  <div class="content-container" ng-if="loggedUser != null">
+    <h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
+    <div ng-if="!noParticipations">
+      <span class="help-message notice w-70 justify-center">{{'home_help' | translate}}</span>
+      <div class="home-evs-container">
+        <div class="home-evs-group flex">
+          <span class="home-ev-title flex flex-1" ng-repeat="header in scheduleHeaders">
+            {{'header' | translate}}
+          </span>
+        </div>
+        <div class="home-all-events">
+          <div ng-repeat="row in myEvents" class="home-ev-column">
+            <a ng-repeat="event in row" ng-if="event.name != null" class="event-link" href="<c:url value='/event/${event.eventId}' />">
+              <span class="event-link">
+                ${event.name}
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="noParticipations">
+      <h4>{{'home_default' | translate}}</h4>
+      <span ng-if="loggedUser == null" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
+        <span class="registration-sport-matcher event-info-label">{{'sport_matcher' | translate}}</span>
+        <span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
+      </span>
+    </div>
+  </div>
+  <div class="bottom-home-container">
+    <div class="bottom-home-item">
+      <h3>{{'introAllEvents' | translate}}</h3>
+      <button><a href="<c:url value='/events/1' />">{{'allEvents' | translate}}</a></button>
+    </div>
+    <div class="bottom-home-item">
+      <h3>{{'introCreateEvent' | translate}}</h3>
+      <button><a href="<c:url value='/pitches/1' />">{{'create_event' | translate}}</a></button>
+    </div>
+  </div>
 </div>

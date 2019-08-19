@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/sidebar.css">
   <link rel="stylesheet" href="styles/header.css">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Oxygen&display=swap" rel="stylesheet">
   <!-- endbuild -->
 
 </head>
@@ -17,15 +18,13 @@
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
   <!-- Add your site or application content here -->
-  <div>
     <div ng-include="'header.html'"></div>
-    <div>
-      <div ng-include="'sidebar.html'"></div>
-      <div ng-view=""></div>
+    <div class="side-and-content">
+      <ng-include src="'sidebar.html'"></ng-include>
+      <div class="content-container">
+        <div ng-view=""></div>
+      </div>
     </div>
-  </div>
-
-
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
   <script>

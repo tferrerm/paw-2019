@@ -1,6 +1,8 @@
 <div id="sidebar" class="sidebar">
   <ul>
-    <li ng-repeat="element in sidebarElements" class="minh-25">{{element}}</li>
+    <li ng-repeat="element in sidebarElements" class="minh-25">
+      <a href="{{element.link}}">{{element.name}}</a>
+    </li>
   </ul>
 <!--        <c:if test="${loggedUser != null}">-->
 <!--          <li class="minh-25"><a href="<c:url value='/user/${loggedUser.userid}' />"><spring:message code="profile"/></a></li>-->
