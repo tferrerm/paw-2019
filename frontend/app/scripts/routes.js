@@ -19,6 +19,14 @@ define([], function() {
             '/history' : {
               templateUrl: '/views/history.html',
               controller: 'HistoryCtrl'
+            },
+            '/clubs' : {
+              templateUrl: '/views/clubs.html',
+              controller: 'ClubsCtrl'
+            },
+            '/pitches' : {
+              templateUrl: '/views/pitches.html',
+              controller: 'PitchesCtrl'
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

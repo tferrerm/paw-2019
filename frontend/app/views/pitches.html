@@ -1,0 +1,69 @@
+<div class="content-container">
+  <div class="profile-title">
+    <h2>{{'choosePitch' | translate}}</h2>
+  </div>
+  <span class="help-message notice w-70 justify-center">{{'pitch_list_help' | translate}}</span>
+  <div class="tbl">
+    <div class="table-header">
+      <form id="searchfilters" class="searchfilters">
+        <div class="table-titles">
+          <div>
+            <label>{{'name' | translate}}</label>
+            <input class="form-control" type="text" maxlength="100"/>
+          </div>
+          <div>
+            <label>{{'sport' | translate}}</label>
+            <select class="form-control">
+              <option  value=""></option>
+              <option ng-repeat="sport in sports">{{sport | translate}}</option>
+            </select>
+          </div>
+          <div>
+            <label>{{'location' | translate}}</label>
+            <input class="form-control" type="text" maxlength="100"/>
+          </div>
+          <div>
+            <label>{{'club' | translate}}</label>
+            <input class="form-control" type="text" maxlength="100"/>
+          </div>
+          <div>
+            <button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div ng-repeat="pitch in pitches" class="custom-row">
+      <div class="home-header">{{pitch.name}}</div>
+      <div>{{pitch.sport | translate}}</div>
+      <div class="home-header">{{pitch.club.location}}</div>
+      <div class="home-header">{{pitch.club.name}}</div>
+      <div>
+        <a href="/pitch/{{pitch.pitchid}}"> <button type="button" class="btn btn-primary view-event">{{'view_pitch' | translate }}</button></a>
+      </div>
+    </div>
+  </div>
+  <div class="table-navigator w-100 justify-center">
+    <div ng-if="pitchQty > 0" class="flex">
+      <div class="{{pageNum}} != 1 ? '' : 'hidden'">
+        <a href="/pitches/1{{queryString}}>"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
+        <a href="<c:url value='/pitches/{{pageNum-1}}{{queryString}}"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
+      </div>
+      <span>{{'showing_items' | translate}} {{pageInitialIndex}}-{{pageInitialIndex + pitchQty - 1}} {{'of' | translate}} {{totalPitchQty}}</span>
+      <div class="{{pageNum != lastPageNum ? '' : 'hidden'}}">
+        <a href="/pitches/{{pageNum+1}}{{queryString}}">
+          <button type="button" class="btn btn-secondary">
+            {{'next' | translate}}
+          </button>
+        </a>
+        <a href="/pitches/{{lastPageNum}}{{queryString}}">
+          <button type="button" class="btn btn-secondary">
+            {{'last' | translate}}
+          </button>
+        </a>
+      </div>
+    </div>
+    <div ng-if="pitchQty <= 0" class="notice">
+      {{'no_results' | translate}}
+    </div>
+  </div>
+</div>

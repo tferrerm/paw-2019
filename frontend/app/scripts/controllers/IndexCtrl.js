@@ -8,8 +8,8 @@ define(['frontend'], function(frontend) {
       {name: 'All events', link: "#/events"},
       {name: 'My events', link: "#/my-events"},
       {name: 'History', link: "#/history"},
-      {name: 'Clubs', link: "#/home"},
-      {name: 'Pitches', link: "#/home"},
+      {name: 'Clubs', link: "#/clubs"},
+      {name: 'Pitches', link: "#/pitches"},
       {name: 'Tournaments', link: "#/home"}
     ]
   });
