@@ -35,7 +35,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,7 +49,7 @@ import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserComment;
-import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
+import ar.edu.itba.paw.webapp.auth.TokenAuthenticationManager;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
@@ -88,7 +87,7 @@ public class UserController extends BaseController {
 	private EmailService ems;
 	
 	@Autowired
-	private CustomPermissionsHandler cph;
+	private TokenAuthenticationManager cph;
 
 	@GET
 	@Path("/login")

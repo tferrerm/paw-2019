@@ -49,54 +49,54 @@ public class PitchController extends BaseController {
 	@Autowired
 	private PitchPictureService pps;
 	
-	@GET
-	@Path("/{pageNum}")
-	public ModelAndView listPitches(
-			@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form,
-			@PathVariable("pageNum") int pageNum,
-			@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "sport", required = false) Sport sport,
-			@RequestParam(value = "location", required = false) String location,
-			@RequestParam(value = "clubname", required = false) String clubName) {
-		String sportString = null;
-		if(sport != null)
-			sportString = sport.toString();
-		String queryString = buildQueryString(name, sportString, location, clubName);
-		ModelAndView mav = new ModelAndView("pitchesList");
-		
-		mav.addObject("pageNum", pageNum);
-        mav.addObject("queryString", queryString);
-        mav.addObject("sports", Sport.values());
-        mav.addObject("pageInitialIndex", ps.getPageInitialPitchIndex(pageNum));
-        
-        List<Pitch> pitches = ps.findBy(
-				Optional.ofNullable(name),
-				Optional.ofNullable(sport),
-				Optional.ofNullable(location),
-				Optional.ofNullable(clubName),
-				pageNum);
-		mav.addObject("pitches", pitches);
-		mav.addObject("pitchQty", pitches.size());
-		
-		Integer totalPitchQty = ps.countFilteredPitches(Optional.ofNullable(name), 
-        		Optional.ofNullable(sport), Optional.ofNullable(location), 
-        		Optional.ofNullable(clubName));
-        mav.addObject("totalPitchQty", totalPitchQty);
-        mav.addObject("lastPageNum", ps.countPitchPages(totalPitchQty));
-        
-		return mav;
-	}
-	
-	@GET
-	@Path("/pitches/filter")
-    public ModelAndView applyFilter(@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form) {
-		String name = form.getName();
-        String sport = form.getSport();
-        String location = form.getLocation();
-        String clubName = form.getClubName();
-        String queryString = buildQueryString(name, sport, location, clubName);
-        return new ModelAndView("redirect:/pitches/1" + queryString);
-    }
+//	@GET
+//	@Path("/{pageNum}")
+//	public ModelAndView listPitches(
+//			@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form,
+//			@PathVariable("pageNum") int pageNum,
+//			@RequestParam(value = "name", required = false) String name,
+//			@RequestParam(value = "sport", required = false) Sport sport,
+//			@RequestParam(value = "location", required = false) String location,
+//			@RequestParam(value = "clubname", required = false) String clubName) {
+//		String sportString = null;
+//		if(sport != null)
+//			sportString = sport.toString();
+//		String queryString = buildQueryString(name, sportString, location, clubName);
+//		ModelAndView mav = new ModelAndView("pitchesList");
+//		
+//		mav.addObject("pageNum", pageNum);
+//        mav.addObject("queryString", queryString);
+//        mav.addObject("sports", Sport.values());
+//        mav.addObject("pageInitialIndex", ps.getPageInitialPitchIndex(pageNum));
+//        
+//        List<Pitch> pitches = ps.findBy(
+//				Optional.ofNullable(name),
+//				Optional.ofNullable(sport),
+//				Optional.ofNullable(location),
+//				Optional.ofNullable(clubName),
+//				pageNum);
+//		mav.addObject("pitches", pitches);
+//		mav.addObject("pitchQty", pitches.size());
+//		
+//		Integer totalPitchQty = ps.countFilteredPitches(Optional.ofNullable(name), 
+//        		Optional.ofNullable(sport), Optional.ofNullable(location), 
+//        		Optional.ofNullable(clubName));
+//        mav.addObject("totalPitchQty", totalPitchQty);
+//        mav.addObject("lastPageNum", ps.countPitchPages(totalPitchQty));
+//        
+//		return mav;
+//	}
+//	
+//	@GET
+//	@Path("/pitches/filter")
+//    public ModelAndView applyFilter(@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form) {
+//		String name = form.getName();
+//        String sport = form.getSport();
+//        String location = form.getLocation();
+//        String clubName = form.getClubName();
+//        String queryString = buildQueryString(name, sport, location, clubName);
+//        return new ModelAndView("redirect:/pitches/1" + queryString);
+//    }
 	
 	private String buildQueryString(final String name, final String sport, final String location, final String clubName) {
 		StringBuilder strBuilder = new StringBuilder();
