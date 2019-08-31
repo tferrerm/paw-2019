@@ -49,4 +49,4 @@ bower_components
 .tmp
 .sass-cache
 
-sport-matcher/webapp/src/main/webapp/resources/\.DS_Store
+.DS_Store

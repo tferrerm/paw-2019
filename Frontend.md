@@ -28,6 +28,7 @@ nvm alias default v10.16.2
 ### Install Ruby
 
 *Note*: macOS already comes with ruby 2.3.7 preinstalled. It may cause some trouble, so it is probably recommended to install it using `rbenv`.
+Xcode needs to be installed.
 
 Tested versions:
 ```bash
@@ -75,7 +76,7 @@ rbenv install <desired-ruby-version>
 
 ### Project Configuration
 
-Run the following commands:
+Run the following commands (do not run sudo if using nvm):
 ```bash
 cd paw-2019/frontend
 sudo npm install -g yo

@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomPermissionsHandler {
+public class TokenAuthenticationManager {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;

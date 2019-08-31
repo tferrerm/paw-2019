@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -22,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -30,13 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
@@ -98,8 +92,14 @@ public class AdminTournamentController extends BaseController {
 	private EmailService ems;
 	
 	@GET
+	@Path("buenas")
+	public Response nana() {
+		return null;
+	}
+	
+	/*@GET
 	@RequestMapping("/{id}")
-    public ModelAndView retrieveTournament(@PathParam("id") long tournamentid,
+    public Response retrieveTournament(@PathParam("id") long tournamentid,
     		@RequestParam(value = "round", required = false) final Integer roundPage,
 			@ModelAttribute("tournamentResultForm") final TournamentResultForm form) 
     		throws TournamentNotFoundException {
@@ -111,28 +111,28 @@ public class AdminTournamentController extends BaseController {
 		}
 		
 		if(tournament.getInscriptionSuccess()) {
-			ModelAndView mav = new ModelAndView("admin/tournament");
-			mav.addObject("tournament",  tournament);
-			mav.addObject("club", tournament.getTournamentClub());
-			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
+			//ModelAndView mav = new ModelAndView("admin/tournament");
+//			mav.addObject("tournament",  tournament);
+//			mav.addObject("club", tournament.getTournamentClub());
+//			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
 			
 			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
-			mav.addObject("roundEvents", roundEvents);
+			// mav.addObject("roundEvents", roundEvents);
 			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
 			for(TournamentEvent event : roundEvents) {
 				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
 			}
-			mav.addObject("eventsHaveResult", eventsHaveResult);
-			mav.addObject("roundInPast", roundEvents.get(0).getEndsAt().compareTo(Instant.now()) <= 0);
+//			mav.addObject("eventsHaveResult", eventsHaveResult);
+//			mav.addObject("roundInPast", roundEvents.get(0).getEndsAt().compareTo(Instant.now()) <= 0);
+//			
+//			mav.addObject("currRoundPage", roundPage);
+//			mav.addObject("maxRoundPage", tournament.getRounds());
 			
-			mav.addObject("currRoundPage", roundPage);
-			mav.addObject("maxRoundPage", tournament.getRounds());
-			
-			return mav;
+			return null;//mav;
 		} else {
-			ModelAndView mav = new ModelAndView("admin/tournamentInscription");
-			mav.addObject("tournament",  tournament);
-			mav.addObject("club", tournament.getTournamentClub());
+			//ModelAndView mav = new ModelAndView("admin/tournamentInscription");
+			//mav.addObject("tournament",  tournament);
+			//mav.addObject("club", tournament.getTournamentClub());
 			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
 			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
 				@Override
@@ -141,18 +141,18 @@ public class AdminTournamentController extends BaseController {
 				}
 			};
 			Collections.sort(teams, cmp);
-		    mav.addObject("teams", teams);
-		    mav.addObject("roundsAmount", tournament.getRounds());
-		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
+//		    mav.addObject("teams", teams);
+//		    mav.addObject("roundsAmount", tournament.getRounds());
+//		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
 		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
-		    mav.addObject("teamsUsers", teamsUsers);
-		    return mav;
+		    //mav.addObject("teamsUsers", teamsUsers);
+		    return null;//mav;
 		}
     }
 	
 	@POST
 	@Path("/{id}/event/{eventId}/result")
-    public ModelAndView comment(@PathParam("id") long tournamentid, @PathVariable("eventId") long eventid,
+    public Response comment(@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
     		@Valid @ModelAttribute("tournamentResultForm") final TournamentResultForm form, final BindingResult errors,
 			HttpServletRequest request) throws TournamentNotFoundException {
 		
@@ -171,62 +171,62 @@ public class AdminTournamentController extends BaseController {
 		try {
 			ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
 		} catch (EventHasNotEndedException e) {
-			ModelAndView mav = retrieveTournament(tournamentid, null, form);
-    		mav.addObject("event_has_not_ended", true);
-    		return mav;
+			//ModelAndView mav = retrieveTournament(tournamentid, null, form);
+    		//mav.addObject("event_has_not_ended", true);
+    		return null;//mav;
 		}
 		
-	    return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
+	    return null;//new ModelAndView("redirect:/admin/tournament/" + tournamentid);
 	}
 	
 	@GET
 	@Path("/{pageNum}")
-	public ModelAndView retrieveEvents(@PathVariable("pageNum") final int pageNum) {
+	public Response retrieveEvents(@PathParam("pageNum") final int pageNum) {
 		
-		ModelAndView mav = new ModelAndView("admin/tournamentList");
+		//ModelAndView mav = new ModelAndView("admin/tournamentList");
 		
 		List<Tournament> tournaments = ts.findBy(pageNum);
-		mav.addObject("tournaments", tournaments);
-		mav.addObject("tournamentQty", tournaments.size());
-		mav.addObject("page", pageNum);
-		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
-		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
-		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
-		mav.addObject("now", Instant.now());
+//		mav.addObject("tournaments", tournaments);
+//		mav.addObject("tournamentQty", tournaments.size());
+//		mav.addObject("page", pageNum);
+//		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
+//		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
+//		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
+//		mav.addObject("now", Instant.now());
 		
-		return mav;
+		return null;//mav;
 	}
 	
 	@GET
 	@Path("/club/{clubId}/tournament/new")
-    public ModelAndView tournamentFormView(@PathVariable("clubId") long clubid,
+    public Response tournamentFormView(@PathParam("clubId") long clubid,
     		@ModelAttribute("newTournamentForm") final NewTournamentForm form) 
     				throws ClubNotFoundException {
 		
-		ModelAndView mav = new ModelAndView("admin/newTournament");
+		//ModelAndView mav = new ModelAndView("admin/newTournament");
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
-		mav.addObject("club", club);
-		
-		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-		mav.addObject("minHour", MIN_HOUR);
-		mav.addObject("maxHour", MAX_HOUR);
+//		mav.addObject("club", club);
+//		
+//		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
+//		mav.addObject("minHour", MIN_HOUR);
+//		mav.addObject("maxHour", MAX_HOUR);
 		
 		List<Event> clubEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);
-		mav.addObject("schedule", cs.convertEventListToSchedule(clubEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT));
-		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
-		mav.addObject("pitchQty", club.getClubPitches().stream()
-				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size());
-		mav.addObject("currentDate", LocalDate.now());
-		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-		mav.addObject("aWeekFromNowDate", LocalDate.now().plus(7, ChronoUnit.DAYS));
-		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
+//		mav.addObject("schedule", cs.convertEventListToSchedule(clubEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT));
+//		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
+//		mav.addObject("pitchQty", club.getClubPitches().stream()
+//				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size());
+//		mav.addObject("currentDate", LocalDate.now());
+//		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+//		mav.addObject("aWeekFromNowDate", LocalDate.now().plus(7, ChronoUnit.DAYS));
+//		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
     	
-        return mav;
+        return null;//mav;
     }
     
 	@POST
     @Path("/club/{clubId}/tournament/create")
-    public ModelAndView createTournament(@PathVariable("clubId") long clubId,
+    public Response createTournament(@PathParam("clubId") long clubId,
     		@Valid @ModelAttribute("newTournamentForm") final NewTournamentForm form,
 			final BindingResult errors, HttpServletRequest request) throws ClubNotFoundException {
     	
@@ -258,7 +258,7 @@ public class AdminTournamentController extends BaseController {
     	Tournament tournament = null;
     	
     	try {
-    		/* Only SOCCER Tournaments are supported for now */
+    		// Only SOCCER Tournaments are supported for now
         	tournament = ts.create(form.getName(), Sport.SOCCER, club, maxTeams,
         			teamSize, firstRoundDate, startsAt, endsAt, inscriptionEndDate, loggedUser());
     	} catch(DateInPastException e) {
@@ -285,20 +285,20 @@ public class AdminTournamentController extends BaseController {
     	
     	LOGGER.debug("Tournament {} created", tournament);
     	
-    	return new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentid());
+    	return null;//new ModelAndView("redirect:/admin/tournament/" + tournament.getTournamentid());
     }
     
     
-    private ModelAndView tournamentCreationError(String error, long clubId, NewTournamentForm form) 
+    private Response tournamentCreationError(String error, long clubId, NewTournamentForm form) 
     		throws ClubNotFoundException {
-    	ModelAndView mav = tournamentFormView(clubId, form);
-		mav.addObject(error, true);
-		return mav;
+    	//ModelAndView mav = tournamentFormView(clubId, form);
+		//mav.addObject(error, true);
+		return null;//mav;
     }
     
     @DELETE
     @Path("/{id}")
-	public ModelAndView deleteEvent(@PathParam("id") final long tournamentid)
+	public Response deleteEvent(@PathParam("id") final long tournamentid)
 			throws TournamentNotFoundException, InscriptionDateInPastException {
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	Map<Long, List<User>> teamsMap = ts.mapTeamMembers(tournamentid);
@@ -312,13 +312,13 @@ public class AdminTournamentController extends BaseController {
 		}
     	
 		LOGGER.debug("Deleted tournament with id {}", tournamentid);
-		return new ModelAndView("redirect:/admin/tournaments/1");
+		return null;//new ModelAndView("redirect:/admin/tournaments/1");
 	}
     
     @POST
     @Path("/{id}/kick-user/{userId}")
-    public ModelAndView kickUserFromTournament(
-    		@PathParam("id") long tournamentid, @PathVariable("userId") long kickedUserId) 
+    public Response kickUserFromTournament(
+    		@PathParam("id") long tournamentid, @PathParam("userId") long kickedUserId) 
     				throws UserNotFoundException, TournamentNotFoundException, InscriptionDateInPastException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -327,13 +327,13 @@ public class AdminTournamentController extends BaseController {
     	ts.kickFromTournament(kickedUser, tournament);
     	ems.youWereKicked(kickedUser, tournament, LocaleContextHolder.getLocale());
     	
-    	return new ModelAndView("redirect:/admin/tournament/" + tournamentid);
+    	return null;//new ModelAndView("redirect:/admin/tournament/" + tournamentid);
     }
     
     
 //    @ExceptionHandler({ TournamentNotFoundException.class })
 //	public ModelAndView tournamentNotFoundHandler() {
 //		return new ModelAndView("404");
-//	}
+//	}*/
 	
 }
