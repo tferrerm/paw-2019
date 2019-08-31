@@ -1,17 +1,9 @@
 package ar.edu.itba.paw.webapp.config;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,11 +13,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import ar.edu.itba.paw.webapp.auth.PlatformUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.PlatformUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.StatelessFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -37,9 +34,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
-	
-	@Value("classpath:rememberme.key")
-    private Resource key; //org.springframework.core.io
+    
+    @Autowired
+    private StatelessFilter sf;
 
     @Bean
     public DaoAuthenticationProvider getDaoAuth() {
@@ -54,64 +51,44 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(getDaoAuth());
     }
     
-    private String getRememberMeKey() {
-        final StringWriter writer = new StringWriter();
-        try (Reader reader = new InputStreamReader(key.getInputStream())) {
-            char[] data = new char[1024];
-            int len;
-            while ((len = reader.read(data)) != -1) {
-                writer.write(data,0,len);
-            }
-        }
-        catch (IOException e){
-            throw new RuntimeException(e);
-        }
-        return writer.toString();
-    }
-    
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
-                .sessionManagement()
-                .invalidSessionUrl("/login")
-                .and().authorizeRequests()
-                .antMatchers(HttpMethod.DELETE).access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/user/create").permitAll()
-                .antMatchers("/user/**").access("hasRole('ROLE_USER')")
-                .antMatchers("/login").permitAll()
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/event/*/join", "/event/*/leave", "/event/*/upvote", "/event/*/downvote",
-                		"/event/*/kick-user/*", "/event/*/delete").access("hasRole('ROLE_USER')")
-                .antMatchers("/event/**", "/events/**").permitAll()
-                .antMatchers("/club/*/comment").access("hasRole('ROLE_USER')")
-                .antMatchers("/club/**", "/clubs/**").permitAll()
-                .antMatchers("/pitch/*/event/create").access("hasRole('ROLE_USER')")
-                .antMatchers("/pitch/**", "/pitches/**").permitAll()
-                .antMatchers("/my-events/**").access("hasRole('ROLE_USER')")
-                .antMatchers("/history/**").access("hasRole('ROLE_USER')")
-                .antMatchers("/tournament/*/team/*/join", 
-                		"/tournament/*/leave").access("hasRole('ROLE_USER')")
-                .antMatchers("/tournament/**", "/tournaments/**").permitAll()
-                .antMatchers("/home").permitAll()
-                .antMatchers("/","/index").permitAll()
-                // POST method restricted unless overridden above, like /user/create/
-                .antMatchers(HttpMethod.POST).access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-                .and().formLogin()
-                .usernameParameter("login_username")
-                .passwordParameter("login_password")
-                .successHandler(platformAuthenticationSuccessHandler())
-                .failureUrl("/login?error=true")
-                .loginPage("/login")
-                .and().rememberMe()
-                .rememberMeParameter("login_remember_me")
-                .userDetailsService(userDetailsService)
-                .key(getRememberMeKey())
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+        		.authorizeRequests()
+	                .antMatchers(HttpMethod.DELETE).access("hasRole('ROLE_ADMIN')")
+	                .antMatchers("/user/create").permitAll()
+	                .antMatchers("/user/**").access("hasRole('ROLE_USER')")
+	                .antMatchers("/login").permitAll()
+	                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+	                .antMatchers("/event/*/join", "/event/*/leave", "/event/*/upvote", "/event/*/downvote",
+	                		"/event/*/kick-user/*", "/event/*/delete").access("hasRole('ROLE_USER')")
+	                .antMatchers("/event/**", "/events/**").permitAll()
+	                .antMatchers("/club/*/comment").access("hasRole('ROLE_USER')")
+	                .antMatchers("/club/**", "/clubs/**").permitAll()
+	                .antMatchers("/pitch/*/event/create").access("hasRole('ROLE_USER')")
+	                .antMatchers("/pitch/**", "/pitches/**").permitAll()
+	                .antMatchers("/my-events/**").access("hasRole('ROLE_USER')")
+	                .antMatchers("/history/**").access("hasRole('ROLE_USER')")
+	                .antMatchers("/tournament/*/team/*/join", 
+	                		"/tournament/*/leave").access("hasRole('ROLE_USER')")
+	                .antMatchers("/tournament/**", "/tournaments/**").permitAll()
+	                .antMatchers("/home").permitAll()
+	                .antMatchers("/","/index").permitAll()
+	                // POST method restricted unless overridden above, like /user/create/
+	                .antMatchers(HttpMethod.POST).access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+                .and().sessionManagement()
+                	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	            .and().formLogin()
+	                .usernameParameter("login_username")
+	                .passwordParameter("login_password")
+	                .loginProcessingUrl("/users/login")
+	                .successHandler(platformAuthenticationSuccessHandler())
+	                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
                 .and().exceptionHandling()
-                .accessDeniedPage("/403")
-                .and().csrf().disable();
+                	.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+                .and().csrf()
+                	.disable().addFilterBefore(sf, UsernamePasswordAuthenticationFilter.class);
     }
     
     @Override

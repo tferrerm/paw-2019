@@ -50,7 +50,7 @@ import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserComment;
-import ar.edu.itba.paw.webapp.auth.CustomPermissionsHandler;
+import ar.edu.itba.paw.webapp.auth.TokenAuthenticationManager;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
@@ -88,10 +88,10 @@ public class UserController extends BaseController {
 	private EmailService ems;
 	
 	@Autowired
-	private CustomPermissionsHandler cph;
+	private TokenAuthenticationManager cph;
 
 	@GET
-	@Path("/login")
+	@Path("/users/login")
 	public Object login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
 		if(cph.isAuthenticated()) {
 			if(cph.isAdmin())
@@ -245,7 +245,7 @@ public class UserController extends BaseController {
 		}
 		
 		ems.userRegistered(user, LocaleContextHolder.getLocale());
-		//cph.authenticate(user.getUsername(), user.getPassword(), null);
+		cph.authenticate(user.getUsername(), user.getPassword(), null);
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
 		return Response.created(uri).entity(UserDto.ofUser(user)).build();
 	}

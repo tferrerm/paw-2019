@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -9,11 +10,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 @Component
-public class CustomPermissionsHandler {
+public class TokenAuthenticationManager {
+	
+	private static final String AUTH_HEADER = "X-Auth-Token";
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -39,12 +44,24 @@ public class CustomPermissionsHandler {
 		return false;
 	}
 	
+	public void authenticate(Authentication authentication, HttpServletResponse response) {
+		final String token = generateTokenForUser(authentication.getName());
+		response.addHeader(AUTH_HEADER, token);
+	}
+	
 	public void authenticate(String username, String password, HttpServletRequest request) {
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				username, password);
-		authToken.setDetails(new WebAuthenticationDetails(request));
-		Authentication authentication = authenticationManager.authenticate(authToken);
+//		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//				username, password);
+//		authToken.setDetails(new WebAuthenticationDetails(request));
+//		Authentication authentication = authenticationManager.authenticate(authToken);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+	
+	private String generateTokenForUser(final String username) {
+		return Jwts.builder()
+				.setId(null).setSubject(username).signWith(SignatureAlgorithm.RS512, new byte[1])
+				.compact();
 	}
 
 }
