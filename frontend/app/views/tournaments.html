@@ -1,0 +1,70 @@
+<div class="content-container">
+  <div class="profile-title">
+    <h2>{{"choose_tournament" | translate}}</h2>
+  </div>
+  <span class="help-message notice w-70 justify-center">{{"tournament_list_help" | translate}}</span>
+  <div class="tbl">
+    <div class="background-dodgerblue table-header">
+      <span class="justify-center flex-1 color-white mt-10">{{"event_name" | translate}}</span>
+      <span class="justify-center flex-1 color-white mt-10">{{"state" | translate}}</span>
+      <span class="justify-center flex-1 color-white mt-10">{{"club" | translate}}</span>
+      <span class="justify-center flex-1 color-white mt-10">{{"sport" | translate}}</span>
+      <span class="justify-center flex-1" />
+    </div>
+    <c:forEach var="tournament" items="${tournaments}">
+      <div class="custom-row">
+        <div><c:out value="${tournament.name}"/></div>
+        <div>
+          <c:choose>
+            <c:when test="${tournament.endsInscriptionAt > now}">
+              <spring:message code="inscription"/>
+            </c:when>
+            <c:when test="${(tournament.endsInscriptionAt <= now) && !tournament.inscriptionSuccess}">
+              <spring:message code="pending_approval"/>
+            </c:when>
+            <c:otherwise>
+              <spring:message code="started"/>
+            </c:otherwise>
+          </c:choose>
+        </div>
+        <div><c:out value="${tournament.tournamentClub.name}"/></div>
+        <div><spring:message code="${tournament.sport}"/></div>
+        <div>
+          <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_tournament"/></button></a>
+        </div>
+      </div>
+    </c:forEach>
+  </div>
+  <div class="table-navigator w-100 justify-center">
+    <c:choose>
+      <c:when test="${tournamentQty > 0}">
+        <div class="${page != 1 ? "" : "hidden"}">
+        <a href="<c:url value='/tournaments/1' />">
+          <button type="button" class="btn btn-secondary">
+            <spring:message code="first"/>
+          </button>
+        </a>
+        <a href="<c:url value='/tournaments/${page-1}' />">
+          <button type="button" class="btn btn-secondary">
+            <spring:message code="back"/>
+          </button>
+        </a>
+  </div>
+  <span class="flex"><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + tournamentQty - 1}"/> <spring:message code="of"/> <c:out value="${totalTournamentQty}"/></span>
+  <div class="${page != lastPageNum ? "" : "hidden"}">
+  <a href="<c:url value='/tournaments/${page+1}' />">
+    <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
+  </a>
+  <a href="<c:url value='/tournaments/${lastPageNum}' />">
+    <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
+  </a>
+</div>
+</c:when>
+<c:otherwise>
+  <div class="notice">
+    <spring:message code="no_results"/>
+  </div>
+</c:otherwise>
+</c:choose>
+</div>
+</div></html>
