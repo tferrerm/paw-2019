@@ -1,15 +1,16 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
@@ -18,19 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.PitchPicture;
-import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
-import ar.edu.itba.paw.webapp.form.PitchesFiltersForm;
 
 @Path("pitches")
 @Component
@@ -49,11 +41,18 @@ public class PitchController extends BaseController {
 	@Autowired
 	private PitchPictureService pps;
 	
+	@GET
+	@Path("/{pageNum}")
+	public Response jaja() {
+		return null;
+	}
+	
+	/*
 //	@GET
 //	@Path("/{pageNum}")
 //	public ModelAndView listPitches(
 //			@ModelAttribute("pitchesFiltersForm") final PitchesFiltersForm form,
-//			@PathVariable("pageNum") int pageNum,
+//			@PathParam("pageNum") int pageNum,
 //			@RequestParam(value = "name", required = false) String name,
 //			@RequestParam(value = "sport", required = false) Sport sport,
 //			@RequestParam(value = "location", required = false) String location,
@@ -120,7 +119,7 @@ public class PitchController extends BaseController {
 	
 	@GET
 	@Path("/{id}/picture")
-	public void getPitchPicture(@PathVariable("id") long pitchid,
+	public void getPitchPicture(@PathParam("id") long pitchid,
 			HttpServletResponse response) {
 		Optional<PitchPicture> picOptional = pps.findByPitchId(pitchid);
 		//response.setContentType(MediaType.IMAGE_PNG_VALUE);
@@ -142,5 +141,5 @@ public class PitchController extends BaseController {
 //	private ModelAndView pitchNotFound() {
 //		return new ModelAndView("404");
 //	}
-
+*/
 }

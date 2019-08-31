@@ -91,7 +91,7 @@ public class UserController extends BaseController {
 
 	@GET
 	@Path("/login")
-	public Object login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
+	public Response login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
 		if(cph.isAuthenticated()) {
 			if(cph.isAdmin())
 				return null;//return new ModelAndView("redirect:/admin/");
@@ -102,19 +102,19 @@ public class UserController extends BaseController {
 		return null;//mav;
 	}
 	
-	@GET
-    @Path("/logout")
-    public Object logout(HttpServletRequest request, HttpServletResponse response) {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null) {
-            new SecurityContextLogoutHandler().logout(request,response,auth);
-        }
-
-        request.getSession().invalidate();
-//        return new ModelAndView("login");
-        return null;
-    }
+//	@GET
+//    @Path("/logout")
+//    public Response logout(HttpServletRequest request, HttpServletResponse response) {
+//
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if(auth != null) {
+//            new SecurityContextLogoutHandler().logout(request,response,auth);
+//        }
+//
+//        request.getSession().invalidate();
+////        return new ModelAndView("login");
+//        return null;
+//    }
 	
     @GET
     @Path("/{id}")
@@ -170,31 +170,31 @@ public class UserController extends BaseController {
     }
     
 	
-    @POST
-	@Path("/{id}/comment")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response comment(@PathParam("id") long userId, 
-    		@FormDataParam("commentForm") final CommentForm form)
-			throws UserNotAuthorizedException, UserNotFoundException {
-		
-    	// Validator VALIDAR!!!!!!!!!!
-    	
-		//if(errors.hasErrors()) {
-    		//return userProfile(userId, 1, form);
-    	//}
-		
-		UserComment comment = us.createComment(loggedUser().getUserid(), userId, form.getComment());
-		
-		// Absolute: /users/
-		// "/users/1/comments/"
-		final URI uri = uriInfo.getAbsolutePathBuilder()
-				.path(userId + "/comments/" + comment.getCommentId()).build();
-	    return Response.created(uri).entity(UserCommentDto.ofComment(comment)).build();
-	}
+//    @POST
+//	@Path("/{id}/comment")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    public Response comment(@PathParam("id") long userId, 
+//    		@FormDataParam("commentForm") final CommentForm form)
+//			throws UserNotAuthorizedException, UserNotFoundException {
+//		
+//    	// Validator VALIDAR!!!!!!!!!!
+//    	
+//		//if(errors.hasErrors()) {
+//    		//return userProfile(userId, 1, form);
+//    	//}
+//		
+//		UserComment comment = us.createComment(loggedUser().getUserid(), userId, form.getComment());
+//		
+//		// Absolute: /users/
+//		// "/users/1/comments/"
+//		final URI uri = uriInfo.getAbsolutePathBuilder()
+//				.path(userId + "/comments/" + comment.getCommentId()).build();
+//	    return Response.created(uri).entity(UserCommentDto.ofComment(comment)).build();
+//	}
 	
 //    @GET
 //	@Path("/")
-//	public Object index(@ModelAttribute("signupForm") final NewUserForm form) {
+//	public Response index(@ModelAttribute("signupForm") final NewUserForm form) {
 //		if(cph.isAuthenticated()) {
 //			if(cph.isAdmin())
 //				return null;//new ModelAndView("redirect:/admin/");
@@ -203,51 +203,51 @@ public class UserController extends BaseController {
 //		return null;//new ModelAndView("index");
 //	}
     
-    @POST
-	@Path("/create")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response create(@FormDataParam("signupForm") final NewUserForm form) {
-		
-    	// DTOValidator.VALIDATE!!!!!!!!!!!
-    	
-    	// AUTO LOGIN
-    	
-    	
-//		if(!form.repeatPasswordMatching())
-//		 	errors.rejectValue("repeatPassword", "different_passwords");
-//		if(errors.hasErrors()) {
-//			//return index(form);
+//    @POST
+//	@Path("/create")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//	public Response create(@FormDataParam("signupForm") final NewUserForm form) {
+//		
+//    	// DTOValidator.VALIDATE!!!!!!!!!!!
+//    	
+//    	// AUTO LOGIN
+//    	
+//    	
+////		if(!form.repeatPasswordMatching())
+////		 	errors.rejectValue("repeatPassword", "different_passwords");
+////		if(errors.hasErrors()) {
+////			//return index(form);
+////		}
+//		
+//		User user;
+//		final MultipartFile profilePicture = form.getProfilePicture();
+//		final String encodedPassword = passwordEncoder.encode(form.getPassword());
+//		
+//		try {
+//			byte[] picture = profilePicture.getBytes();
+//			user = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
+//					encodedPassword, Role.ROLE_USER, picture);
+//
+//		} catch(PictureProcessingException | IOException e) {
+//			
+//			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
+//			//ModelAndView mav = index(form);
+//			//mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
+//			return null;//mav;
+//
+//		} catch(UserAlreadyExistsException e) {
+//
+//			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
+//			//ModelAndView mav = index(form);
+//			//mav.addObject("duplicateUsername", form.getUsername());
+//			return null;//mav;
 //		}
-		
-		User user;
-		final MultipartFile profilePicture = form.getProfilePicture();
-		final String encodedPassword = passwordEncoder.encode(form.getPassword());
-		
-		try {
-			byte[] picture = profilePicture.getBytes();
-			user = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
-					encodedPassword, Role.ROLE_USER, picture);
-
-		} catch(PictureProcessingException | IOException e) {
-			
-			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
-			//ModelAndView mav = index(form);
-			//mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
-			return null;//mav;
-
-		} catch(UserAlreadyExistsException e) {
-
-			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
-			//ModelAndView mav = index(form);
-			//mav.addObject("duplicateUsername", form.getUsername());
-			return null;//mav;
-		}
-		
-		ems.userRegistered(user, LocaleContextHolder.getLocale());
-		//cph.authenticate(user.getUsername(), user.getPassword(), null);
-		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
-		return Response.created(uri).entity(UserDto.ofUser(user)).build();
-	}
+//		
+//		ems.userRegistered(user, LocaleContextHolder.getLocale());
+//		//cph.authenticate(user.getUsername(), user.getPassword(), null);
+//		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
+//		return Response.created(uri).entity(UserDto.ofUser(user)).build();
+//	}
 	
     @GET
 	@Path("/{id}/picture")

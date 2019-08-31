@@ -8,9 +8,11 @@ import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -19,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -52,7 +52,13 @@ public class ClubController extends BaseController {
 	
 	@GET
 	@Path("/{id}")
-	public Object showClub(@PathVariable("id") long clubid,
+	public Response lala() {
+		return null;
+	}
+	
+	/*@GET
+	@Path("/{id}")
+	public Response showClub(@PathParam("id") long clubid,
 			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,
 			@ModelAttribute("commentForm") final CommentForm form) throws ClubNotFoundException {
 		
@@ -81,7 +87,7 @@ public class ClubController extends BaseController {
 	
 	@POST
 	@Path("/{id}/comment")
-    public Object comment(@PathVariable("id") long clubId, 
+    public Response comment(@PathParam("id") long clubId, 
     		@Valid @ModelAttribute("commentForm") final CommentForm form,
     		final BindingResult errors, HttpServletRequest request) 
     				throws UserNotAuthorizedException, ClubNotFoundException {
@@ -97,9 +103,9 @@ public class ClubController extends BaseController {
 
 	@GET
 	@Path("/{pageNum}")
-	public Object clubs(
+	public Response clubs(
 			@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
-			@PathVariable("pageNum") int pageNum,
+			@PathParam("pageNum") int pageNum,
 			@RequestParam(value = "name", required = false) String clubName,
             @RequestParam(value = "location", required = false) String location) {
 		
@@ -128,7 +134,7 @@ public class ClubController extends BaseController {
 	
 	@GET
 	@Path("/filter")
-    public Object applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
+    public Response applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
     	String name = form.getName();
     	String location = form.getLocation();
         String queryString = buildQueryString(name, location);
@@ -152,6 +158,6 @@ public class ClubController extends BaseController {
 //	@ExceptionHandler({ ClubNotFoundException.class })
 //	public ModelAndView clubNotFound() {
 //		return new ModelAndView("404");
-//	}
+//	}*/
 	
 }
