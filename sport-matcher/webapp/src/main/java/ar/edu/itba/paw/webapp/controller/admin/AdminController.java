@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,9 +8,11 @@ import java.util.stream.Collectors;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -20,9 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,15 +56,15 @@ public class AdminController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
 	@GET
-	@Path("/")
-	public ModelAndView adminHome() {
-		return new ModelAndView("redirect:/admin/events/1");
+	@Path("/adminJome")
+	public Response adminHome() {
+		return null;//new ModelAndView("redirect:/admin/events/1");
 	}
 
-	@GET
+/*	@GET
 	@Path("/{pageNum}")
-	public ModelAndView retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
-									   @PathVariable("pageNum") final int pageNum,
+	public Response retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
+									   @PathParam("pageNum") final int pageNum,
 									   @RequestParam(value = "establishment", required = false) String clubName,
 									   @RequestParam(value = "sport", required = false) Sport sport,
 									   @RequestParam(value = "organizer", required = false) String organizer,
@@ -77,67 +75,67 @@ public class AdminController extends BaseController {
     	if(sport != null)
     		sportName = sport.toString();
 		String queryString = buildAdminQueryString(clubName, sportName, organizer, vacancies, date);
-		ModelAndView mav = new ModelAndView("admin/index");
+		//ModelAndView mav = new ModelAndView("admin/index");
 		
 	   	Integer vac = tryInteger(vacancies);
     	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
     	if(vac == null && vacancies != null && !vacancies.isEmpty())
-    		mav.addObject("invalid_number_format", true);
+    		System.out.println("HOLA");//mav.addObject("invalid_number_format", true);
     	if(dateInst == null && date != null && !date.isEmpty())
-    		mav.addObject("invalid_date_format", true);
+    		System.out.println("HOLA");//mav.addObject("invalid_date_format", true);
     	
-		mav.addObject("page", pageNum);
-		mav.addObject("queryString", queryString);
-		mav.addObject("sports", Sport.values());
+		//mav.addObject("page", pageNum);
+		//mav.addObject("queryString", queryString);
+		//mav.addObject("sports", Sport.values());
 		
 		List<Event> events = es.findBy(false, Optional.empty(), Optional.ofNullable(clubName), 
         		Optional.ofNullable(sport), Optional.ofNullable(organizer), 
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
-		mav.addObject("events", events);
-		mav.addObject("eventQty", events.size());
+		//mav.addObject("events", events);
+		//mav.addObject("eventQty", events.size());
 		
 		Integer totalEventQty = es.countFilteredEvents(false, Optional.empty(), 
 				Optional.ofNullable(clubName), Optional.ofNullable(sport), 
 				Optional.ofNullable(organizer), Optional.ofNullable(vac),
 				Optional.ofNullable(dateInst));
 		
-        mav.addObject("totalEventQty", totalEventQty);
-		mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
-        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
-        mav.addObject("currentDate", LocalDate.now());
-        mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
+//        mav.addObject("totalEventQty", totalEventQty);
+//		mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
+//        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+//        mav.addObject("currentDate", LocalDate.now());
+//        mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
         
-		return mav;
+		return null;//mav;
 	}
 	
 	@GET
 	@Path("/events/filter")
-    public ModelAndView applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
+    public Response applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
         String establishment = form.getEstablishment();
         String sport = form.getSport();
         String organizer = form.getOrganizer();
         String vacancies = form.getVacancies();
         String date = form.getDate();
         String queryString = buildAdminQueryString(establishment, sport, organizer, vacancies, date);
-        return new ModelAndView("redirect:/admin/events/1" + queryString);
+        return null;//new ModelAndView("redirect:/admin/events/1" + queryString);
     }
 
 	@GET
 	@RequestMapping(value = "/event/{id}")
-	public ModelAndView retrieveElement(@PathVariable long id)
+	public Response retrieveElement(@PathParam("id") long id)
 			throws EventNotFoundException {
 		ModelAndView mav = new ModelAndView("admin/adminEvent");
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		List<Inscription> inscriptions = event.getInscriptions();
-		mav.addObject("event", event);
-		mav.addObject("participant_count", inscriptions.size());
-		mav.addObject("inscriptions", inscriptions);
-		return mav;
+//		mav.addObject("event", event);
+//		mav.addObject("participant_count", inscriptions.size());
+//		mav.addObject("inscriptions", inscriptions);
+		return null;//mav;
 	}
 
 	@DELETE
 	@RequestMapping(value = "/event/{id}/delete", method = { RequestMethod.POST })
-	public ModelAndView deleteEvent(@PathVariable final long id)
+	public Response deleteEvent(@PathParam("id") final long id)
 			throws EventNotFoundException, DateInPastException {
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		
@@ -151,7 +149,7 @@ public class AdminController extends BaseController {
 		}
 		
 		LOGGER.debug("Deleted event with id {}", id);
-		return new ModelAndView("redirect:/admin/events/1");
+		return null;//new ModelAndView("redirect:/admin/events/1");
 	}
 
 	
@@ -185,5 +183,5 @@ public class AdminController extends BaseController {
 //	public ModelAndView eventNotFound() {
 //		return new ModelAndView("404");
 //	}
-
+*/
 }

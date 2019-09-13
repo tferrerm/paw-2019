@@ -20,7 +20,7 @@ import io.jsonwebtoken.SignatureException;
 
 @Component
 public class TokenAuthenticationManager {
-	
+
 	private static final String AUTH_HEADER = "X-Auth-Token";
 	
 	@Autowired

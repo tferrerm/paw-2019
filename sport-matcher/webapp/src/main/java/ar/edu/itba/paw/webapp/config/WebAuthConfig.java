@@ -57,6 +57,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
         		.authorizeRequests()
+	        		.antMatchers(HttpMethod.GET).permitAll()
+	                .antMatchers(HttpMethod.POST).permitAll()
+	                .antMatchers(HttpMethod.PUT).permitAll()
+	                .antMatchers(HttpMethod.PATCH).permitAll()
+	                .antMatchers(HttpMethod.HEAD).permitAll()
+	                .antMatchers(HttpMethod.OPTIONS).permitAll()
 	                .antMatchers(HttpMethod.DELETE).access("hasRole('ROLE_ADMIN')")
 	                .antMatchers("/user/create").permitAll()
 	                .antMatchers("/user/**").access("hasRole('ROLE_USER')")
