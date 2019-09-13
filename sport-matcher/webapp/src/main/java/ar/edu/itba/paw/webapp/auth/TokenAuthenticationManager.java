@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,9 +21,6 @@ import io.jsonwebtoken.SignatureException;
 public class TokenAuthenticationManager {
 
 	private static final String AUTH_HEADER = "X-Auth-Token";
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private String tokenSecretKey;

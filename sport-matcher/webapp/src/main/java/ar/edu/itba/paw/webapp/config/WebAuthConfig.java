@@ -117,6 +117,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
     
+    @Bean
     public String tokenSecretKey() {
     	return Base64.getEncoder().encodeToString(
     			"E176EA76D237D19395AD4FBA2B605B82A9BCFB4F8ECBFE7E06C237889BB64EFA".getBytes());
