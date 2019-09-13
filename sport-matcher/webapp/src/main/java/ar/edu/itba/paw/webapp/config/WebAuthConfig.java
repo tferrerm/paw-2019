@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -107,6 +109,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+    
+    public String tokenSecretKey() {
+    	return Base64.getEncoder().encodeToString(
+    			"E176EA76D237D19395AD4FBA2B605B82A9BCFB4F8ECBFE7E06C237889BB64EFA".getBytes());
     }
 
 }

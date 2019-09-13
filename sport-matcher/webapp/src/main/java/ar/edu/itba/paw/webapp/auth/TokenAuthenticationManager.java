@@ -10,10 +10,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 @Component
 public class TokenAuthenticationManager {
@@ -22,6 +25,12 @@ public class TokenAuthenticationManager {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private String tokenSecretKey;
+	
+	@Autowired
+	private UserDetailsService uds;
 	
 	public Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
@@ -49,6 +58,20 @@ public class TokenAuthenticationManager {
 		response.addHeader(AUTH_HEADER, token);
 	}
 	
+	public Authentication getAuthentication(final HttpServletRequest request) {
+		String token = request.getHeader(AUTH_HEADER);
+		if(isPresent(token)) {
+			UserDetails u = getUserFromToken(token);
+			if(u != null)
+				return new UsernamePasswordAuthenticationToken(u.getUsername(), u.getPassword());
+		}
+		return null;
+	}
+	
+	private boolean isPresent(final String token) {
+		return token != null && Jwts.parser().isSigned(token);
+	}
+	
 	public void authenticate(String username, String password, HttpServletRequest request) {
 //		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 //				username, password);
@@ -60,8 +83,18 @@ public class TokenAuthenticationManager {
 	
 	private String generateTokenForUser(final String username) {
 		return Jwts.builder()
-				.setId(null).setSubject(username).signWith(SignatureAlgorithm.RS512, new byte[1])
+				.setId(null).setSubject(username).signWith(SignatureAlgorithm.RS512, tokenSecretKey)
 				.compact();
+	}
+	
+	private UserDetails getUserFromToken(final String token) {
+		try {
+			final String username = Jwts.parser().setSigningKey(tokenSecretKey)
+					.parseClaimsJws(token).getBody().getSubject();
+			return uds.loadUserByUsername(username);
+		} catch (SignatureException e) {
+			return null;
+		}
 	}
 
 }
