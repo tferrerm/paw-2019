@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -20,6 +18,7 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
@@ -30,17 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
-import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
@@ -53,10 +47,9 @@ import ar.edu.itba.paw.webapp.auth.TokenAuthenticationManager;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.dto.form.UserForm;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.CommentForm;
-import ar.edu.itba.paw.webapp.form.NewUserForm;
 
 @Path("users")
 @Component
@@ -203,51 +196,55 @@ public class UserController extends BaseController {
 //		return null;//new ModelAndView("index");
 //	}
     
-//    @POST
-//	@Path("/create")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//	public Response create(@FormDataParam("signupForm") final NewUserForm form) {
-//		
-//    	// DTOValidator.VALIDATE!!!!!!!!!!!
-//    	
-//    	// AUTO LOGIN
-//    	
-//    	
-////		if(!form.repeatPasswordMatching())
-////		 	errors.rejectValue("repeatPassword", "different_passwords");
-////		if(errors.hasErrors()) {
-////			//return index(form);
-////		}
-//		
-//		User user;
-//		final MultipartFile profilePicture = form.getProfilePicture();
-//		final String encodedPassword = passwordEncoder.encode(form.getPassword());
-//		
-//		try {
-//			byte[] picture = profilePicture.getBytes();
-//			user = us.create(form.getUsername(), form.getFirstName(), form.getLastName(), 
-//					encodedPassword, Role.ROLE_USER, picture);
-//
-//		} catch(PictureProcessingException | IOException e) {
-//			
-//			LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
-//			//ModelAndView mav = index(form);
-//			//mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
-//			return null;//mav;
-//
-//		} catch(UserAlreadyExistsException e) {
-//
-//			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
-//			//ModelAndView mav = index(form);
-//			//mav.addObject("duplicateUsername", form.getUsername());
-//			return null;//mav;
+    @POST
+	@Path("/create")
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+	public Response createUser(@FormDataParam("user") final UserForm form) {
+		
+    	// DTOValidator.VALIDATE!!!!!!!!!!!
+    	
+    	// AUTO LOGIN
+    	
+    	
+//		if(!form.repeatPasswordMatching())
+//		 	errors.rejectValue("repeatPassword", "different_passwords");
+//		if(errors.hasErrors()) {
+//			//return index(form);
 //		}
-//		
-//		ems.userRegistered(user, LocaleContextHolder.getLocale());
-//		//cph.authenticate(user.getUsername(), user.getPassword(), null);
-//		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
-//		return Response.created(uri).entity(UserDto.ofUser(user)).build();
-//	}
+    	
+    	if(form == null)
+    		return Response.status(Status.BAD_REQUEST).build();
+		
+		User user;
+		//final MultipartFile profilePicture = form.getProfilePicture();
+		final String encodedPassword = passwordEncoder.encode(form.getPassword());
+		
+		try {
+			//byte[] picture = profilePicture.getBytes();
+			user = us.create(form.getUsername(), form.getFirstname(), form.getLastname(),
+					encodedPassword, Role.ROLE_USER, null);
+
+		} catch(PictureProcessingException e) {//| IOException e) {
+			
+			//LOGGER.error("Error reading profile picture {}", profilePicture.getOriginalFilename());
+			//ModelAndView mav = index(form);
+			//mav.addObject("fileErrorMessage", profilePicture.getOriginalFilename());
+			return Response.status(Status.BAD_REQUEST).build();//mav;
+
+		} catch(UserAlreadyExistsException e) {
+
+			LOGGER.warn("User tried to register with repeated email {}", form.getUsername());
+			//ModelAndView mav = index(form);
+			//mav.addObject("duplicateUsername", form.getUsername());
+			return Response.status(Status.BAD_REQUEST).build();//mav;
+		}
+		
+		ems.userRegistered(user, LocaleContextHolder.getLocale());
+		cph.authenticate(user.getUsername(), user.getPassword(), null);
+		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
+		return Response.created(uri).entity(UserDto.ofUser(user)).build();
+	}
 	
     @GET
 	@Path("/{id}/picture")

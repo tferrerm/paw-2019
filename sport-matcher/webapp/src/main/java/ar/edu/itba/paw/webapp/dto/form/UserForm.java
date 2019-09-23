@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.form;
+package ar.edu.itba.paw.webapp.dto.form;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
-public class NewUserForm {
+public class UserForm {
 
 	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -19,16 +19,16 @@ public class NewUserForm {
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z]+")
 	@Size(max = 100)
-	private String firstName;
+	private String firstname;
 
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z]+")
 	@Size(max = 100)
-	private String lastName;
+	private String lastname;
 
 	private String repeatPassword;
 	
-	private MultipartFile profilePicture;
+	//private MultipartFile profilePicture;
 
 	public boolean repeatPasswordMatching() {
 		return password.equals(repeatPassword);
@@ -57,20 +57,20 @@ public class NewUserForm {
 		this.repeatPassword = repeatPassword;
 	}
 
-	public String getFirstName() { return firstName; }
+	public String getFirstname() { return firstname; }
 
-	public void setFirstName(String firstName) { this.firstName = firstName; }
+	public void setFirstname(String firstname) { this.firstname = firstname; }
 
-	public String getLastName() { return lastName; }
+	public String getLastname() { return lastname; }
 
-	public void setLastName(String lastName) { this.lastName = lastName; }
+	public void setLastname(String lastname) { this.lastname = lastname; }
 
-	public MultipartFile getProfilePicture() {
-		return profilePicture;
-	}
-
-	public void setProfilePicture(MultipartFile profilePicture) {
-		this.profilePicture = profilePicture;
-	}
+//	public MultipartFile getProfilePicture() {
+//		return profilePicture;
+//	}
+//
+//	public void setProfilePicture(MultipartFile profilePicture) {
+//		this.profilePicture = profilePicture;
+//	}
 
 }

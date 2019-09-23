@@ -1,11 +1,11 @@
-package ar.edu.itba.paw.webapp.form;
+package ar.edu.itba.paw.webapp.dto.form;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class NewEventForm {
+public class EventForm {
 	
 	@NotBlank
 	@Size(max=100)
