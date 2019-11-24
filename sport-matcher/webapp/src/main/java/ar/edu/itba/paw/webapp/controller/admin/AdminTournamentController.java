@@ -56,11 +56,11 @@ import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
+import ar.edu.itba.paw.webapp.dto.form.TournamentForm;
+import ar.edu.itba.paw.webapp.dto.form.TournamentResultForm;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.form.NewTournamentForm;
-import ar.edu.itba.paw.webapp.form.TournamentResultForm;
 
 @Path("admin/tournaments")
 @Component

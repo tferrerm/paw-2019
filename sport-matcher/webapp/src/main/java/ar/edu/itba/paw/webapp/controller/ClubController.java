@@ -29,9 +29,9 @@ import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
 import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.webapp.dto.form.ClubsFiltersForm;
+import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
-import ar.edu.itba.paw.webapp.form.ClubsFiltersForm;
-import ar.edu.itba.paw.webapp.form.CommentForm;
 
 @Path("clubs")
 @Component
