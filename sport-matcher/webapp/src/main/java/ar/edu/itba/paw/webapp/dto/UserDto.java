@@ -8,7 +8,8 @@ public class UserDto {
 	private String username;
 	private String firstname;
 	private String lastname;
-	
+	private int currentEventCount;
+
 	public static UserDto ofUser(User user) {
 		UserDto dto = new UserDto();
 		dto.userid = user.getUserid();
@@ -49,6 +50,14 @@ public class UserDto {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+	
+	public int getCurrentEventCount() {
+		return currentEventCount;
+	}
+
+	public void setCurrentEventCount(int currentEventCount) {
+		this.currentEventCount = currentEventCount;
 	}
 
 }

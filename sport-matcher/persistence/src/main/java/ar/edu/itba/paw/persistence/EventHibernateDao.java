@@ -390,7 +390,8 @@ public class EventHibernateDao implements EventDao {
 		query.setParameter("userid", userid);
 		query.setParameter("now", Timestamp.from(Instant.now()));
 		
-		return query.getResultList().stream().findFirst();
+		Optional<String> res = query.getResultList().stream().findFirst();
+		return res.map(Sport::valueOf);
 	}
 
 	@SuppressWarnings("unchecked")
