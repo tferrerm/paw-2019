@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -112,7 +112,8 @@ public class UserHibernateDao implements UserDao {
 		final User user = new User(username, firstname, lastname, password, role, Instant.now());
 		try {
 			em.persist(user);
-		} catch(EntityExistsException e) {
+			em.flush();
+		} catch(PersistenceException e) {
 			throw new UserAlreadyExistsException("User with username " + username + " already exists");
 		}
 		return user;

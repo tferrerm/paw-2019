@@ -4,7 +4,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 
 public class UserForm {
 
@@ -25,45 +24,39 @@ public class UserForm {
 	@Pattern(regexp = "[a-zA-Z]+")
 	@Size(max = 100)
 	private String lastname;
-
-	private String repeatPassword;
 	
 	//private MultipartFile profilePicture;
-
-	public boolean repeatPasswordMatching() {
-		return password.equals(repeatPassword);
-	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public UserForm withUsername(String username) {
 		this.username = username;
+		return this;
 	}
 
 	public String getPassword() {
 		return password;
 	}
-	public void setPassword(String password) {
+	public UserForm withPassword(String password) {
 		this.password = password;
-	}
-
-	public String getRepeatPassword() {
-		return repeatPassword;
-	}
-
-	public void setRepeatPassword(String repeatPassword) {
-		this.repeatPassword = repeatPassword;
+		return this;
 	}
 
 	public String getFirstname() { return firstname; }
 
-	public void setFirstname(String firstname) { this.firstname = firstname; }
+	public UserForm withFirstname(String firstname) {
+		this.firstname = firstname;
+		return this;
+	}
 
 	public String getLastname() { return lastname; }
 
-	public void setLastname(String lastname) { this.lastname = lastname; }
+	public UserForm withLastname(String lastname) {
+		this.lastname = lastname;
+		return this;
+	}
 
 //	public MultipartFile getProfilePicture() {
 //		return profilePicture;
