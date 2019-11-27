@@ -10,7 +10,6 @@ public class UserDto {
 	private String firstname;
 	private String lastname;
 	private String role;
-	private int currentEventCount;
 
 	public static UserDto ofUser(User user) {
 		UserDto dto = new UserDto();
@@ -61,14 +60,6 @@ public class UserDto {
 
 	public void setRole(String role) {
 		this.role = role;
-	}
-
-	public int getCurrentEventCount() {
-		return currentEventCount;
-	}
-
-	public void setCurrentEventCount(int currentEventCount) {
-		this.currentEventCount = currentEventCount;
 	}
 
 }

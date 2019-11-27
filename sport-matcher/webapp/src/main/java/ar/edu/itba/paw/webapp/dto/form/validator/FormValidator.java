@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto.form;
+package ar.edu.itba.paw.webapp.dto.form.validator;
 
 import java.util.Set;
 

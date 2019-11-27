@@ -4,23 +4,23 @@ import java.util.List;
 
 public class UserCommentCollectionDto {
 	
-	private List<UserCommentDto> collection;
+	private List<UserCommentDto> comments;
 	private int pageCount;
 	
-	public static UserCommentCollectionDto ofComments(List<UserCommentDto> collection, int pageCount) {
+	public static UserCommentCollectionDto ofComments(List<UserCommentDto> comments, int pageCount) {
 		UserCommentCollectionDto dto = new UserCommentCollectionDto();
-		dto.collection = collection;
+		dto.comments = comments;
 		dto.pageCount = pageCount;
 		
 		return dto;
 	}
 
-	public List<UserCommentDto> getCollection() {
-		return collection;
+	public List<UserCommentDto> getComments() {
+		return comments;
 	}
 
-	public void setCollection(List<UserCommentDto> collection) {
-		this.collection = collection;
+	public void setComments(List<UserCommentDto> comments) {
+		this.comments = comments;
 	}
 
 	public int getPageCount() {

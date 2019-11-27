@@ -79,7 +79,7 @@ public class UserHibernateDao implements UserDao {
 	public Optional<UserComment> getComment(final long id) {
 		return Optional.of(em.find(UserComment.class, id));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserComment> getCommentsByUser(final long userid, final int pageNum) {
@@ -99,6 +99,7 @@ public class UserHibernateDao implements UserDao {
 		CriteriaQuery<UserComment> cq = cb.createQuery(UserComment.class);
 		Root<UserComment> from = cq.from(UserComment.class);
 		from.fetch("commenter", JoinType.LEFT);
+		from.fetch("receiver", JoinType.LEFT);
 		final TypedQuery<UserComment> query = em.createQuery(
 				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
 			);

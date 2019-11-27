@@ -41,18 +41,20 @@ import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserComment;
 import ar.edu.itba.paw.webapp.auth.TokenAuthenticationManager;
+import ar.edu.itba.paw.webapp.dto.ClubDto;
 import ar.edu.itba.paw.webapp.dto.FullUserDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
-import ar.edu.itba.paw.webapp.dto.form.FormValidator;
 import ar.edu.itba.paw.webapp.dto.form.UserForm;
+import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
@@ -143,7 +145,14 @@ public class UserController extends BaseController {
 		final User user = us.findById(userid).orElseThrow(UserNotFoundException::new);
 		final int currentEventCount = es.countByUserInscriptions(true, userid);
 		final Sport favoriteSport = es.getFavoriteSport(userid).orElse(null);
-		return Response.ok(FullUserDto.ofUser(user, currentEventCount, favoriteSport)).build();
+		final int currEventsOwned = es.countByOwner(true, userid);
+		final int pastEventsParticipant = es.countByUserInscriptions(false, userid);
+		final Club mainClub = es.getFavoriteClub(userid).orElse(null);
+		final int votesReceived = us.countVotesReceived(userid);
+
+		return Response.ok(FullUserDto.ofUser(user, currentEventCount, favoriteSport,
+				currEventsOwned, pastEventsParticipant, ClubDto.ofClub(mainClub), votesReceived))
+				.build();
 	}
     
     @GET
@@ -234,16 +243,16 @@ public class UserController extends BaseController {
 		} catch(PictureProcessingException | IOException e) {
 
 			LOGGER.error("Error reading profile picture from {}", username);
-			return Response.status(Status.BAD_REQUEST).build();//mav;
+			return Response.status(Status.BAD_REQUEST).build();
 
 		} catch(UserAlreadyExistsException e) {
 
 			LOGGER.warn("User tried to register with repeated email {}", username);
-			return Response.status(Status.BAD_REQUEST).build();//mav;
+			return Response.status(Status.CONFLICT).build();
 		}
 		
 		ems.userRegistered(user, LocaleContextHolder.getLocale());
-		cph.authenticate(user.getUsername(), user.getPassword(), null);
+
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(user.getUsername()).build();
 		return Response.created(uri).entity(UserDto.ofUser(user)).build();
 	}
