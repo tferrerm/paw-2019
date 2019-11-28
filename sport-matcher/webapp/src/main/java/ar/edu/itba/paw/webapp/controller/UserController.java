@@ -59,6 +59,7 @@ import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.FormValidationException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
+import ar.edu.itba.paw.webapp.http.CustomStatus;
 
 @Path("users")
 @Component
@@ -232,7 +233,7 @@ public class UserController extends BaseController {
 		} catch(PictureProcessingException | IOException e) {
 
 			LOGGER.error("Error reading profile picture from {}", username);
-			return Response.status(Status.BAD_REQUEST).build();
+			return Response.status(CustomStatus.UNPROCESSABLE_ENTITY).build();
 
 		} catch(UserAlreadyExistsException e) {
 

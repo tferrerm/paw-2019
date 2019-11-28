@@ -20,6 +20,6 @@ public class FormValidator {
 		final Set<ConstraintViolation<T>> constraintViolations = validator.validate(dto, groups);
 		
 		if (!constraintViolations.isEmpty())
-			throw new FormValidationException(constraintViolations.toString());
+			throw new FormValidationException("Invalid request", constraintViolations);
 	}
 }
