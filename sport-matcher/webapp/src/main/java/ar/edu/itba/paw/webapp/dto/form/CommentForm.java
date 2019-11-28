@@ -14,8 +14,9 @@ public class CommentForm {
 		return comment;
 	}
 
-	public void setComment(String comment) {
+	public CommentForm withComment(String comment) {
 		this.comment = comment;
+		return this;
 	}
 
 }

@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ar.edu.itba.paw.exception.FormValidationException;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
@@ -53,6 +54,7 @@ import ar.edu.itba.paw.webapp.dto.FullUserDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.UserForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
@@ -62,33 +64,33 @@ import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 @Component
 @Produces(value = { MediaType.APPLICATION_JSON })
 public class UserController extends BaseController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private static final String DEFAULT_PROFILE_PICTURE = "profile_default.png";
-	
+
 	@Context
 	private	UriInfo	uriInfo;
-	
+
 	@Qualifier("userServiceImpl")
 	@Autowired
 	private UserService us;
-	
+
 	@Autowired
 	private FormValidator validator;
 
 	@Autowired
 	private ProfilePictureService pps;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Qualifier("eventServiceImpl")
 	@Autowired
 	private EventService es;
-	
+
 	@Autowired
 	private EmailService ems;
-	
+
 	@Autowired
 	private TokenAuthenticationManager cph;
 
@@ -181,38 +183,25 @@ public class UserController extends BaseController {
     }
     
 	
-//    @POST
-//	@Path("/{id}/comment")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//    public Response comment(@PathParam("id") long userId, 
-//    		@FormDataParam("commentForm") final CommentForm form)
-//			throws UserNotAuthorizedException, UserNotFoundException {
-//		
-//    	// Validator VALIDAR!!!!!!!!!!
-//    	
-//		//if(errors.hasErrors()) {
-//    		//return userProfile(userId, 1, form);
-//    	//}
-//		
-//		UserComment comment = us.createComment(loggedUser().getUserid(), userId, form.getComment());
-//		
-//		// Absolute: /users/
-//		// "/users/1/comments/"
-//		final URI uri = uriInfo.getAbsolutePathBuilder()
-//				.path(userId + "/comments/" + comment.getCommentId()).build();
-//	    return Response.created(uri).entity(UserCommentDto.ofComment(comment)).build();
-//	}
-	
-//    @GET
-//	@Path("/")
-//	public Response index(@ModelAttribute("signupForm") final NewUserForm form) {
-//		if(cph.isAuthenticated()) {
-//			if(cph.isAdmin())
-//				return null;//new ModelAndView("redirect:/admin/");
-//			//return new ModelAndView("redirect:/home");
-//		}
-//		return null;//new ModelAndView("index");
-//	}
+    @POST
+	@Path("/{id}/comment")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response comment(@PathParam("id") long userId, 
+    		@FormDataParam("comment") final String commentContent)
+			throws UserNotAuthorizedException, UserNotFoundException, FormValidationException {
+
+    	CommentForm cf = new CommentForm().withComment(commentContent);
+    	validator.validate(cf);
+
+    	// HARDCODED HARDCODEADO
+		UserComment comment = us.createComment(/*loggedUser().getUserid()*/2, userId, commentContent);
+
+		// Absolute: /users/
+		// "/users/1/comments/"
+		final URI uri = uriInfo.getAbsolutePathBuilder()
+				.path(userId + "/comments/" + comment.getCommentId()).build();
+	    return Response.created(uri).entity(UserCommentDto.ofComment(comment)).build();
+	}
     
     @POST
 	@Path("/create")
