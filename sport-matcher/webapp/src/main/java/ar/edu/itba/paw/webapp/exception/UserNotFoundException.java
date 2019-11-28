@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.webapp.exception;
 
-public class UserNotFoundException extends Exception {
-
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class UserNotFoundException extends EntityNotFoundException {
 
 	public UserNotFoundException() {
 		super("The requested user was not found.");
