@@ -8,7 +8,7 @@ import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.paw.exception.FormValidationException;
+import ar.edu.itba.paw.webapp.exception.FormValidationException;
 
 @Component
 public class FormValidator {

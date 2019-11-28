@@ -34,7 +34,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ar.edu.itba.paw.exception.FormValidationException;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -58,6 +57,7 @@ import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.UserForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
+import ar.edu.itba.paw.webapp.exception.FormValidationException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Path("users")
