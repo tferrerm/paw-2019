@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
@@ -115,29 +114,6 @@ public class ClubController extends BaseController {
 						totalClubQty, clubPages))
 				.build();
 	}
-	
-	@GET
-	@Path("/filter")
-    public Response applyFilter(@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form) {
-    	String name = form.getName();
-    	String location = form.getLocation();
-        String queryString = buildQueryString(name, location);
-        return null;//new ModelAndView("redirect:/clubs/1" + queryString);
-    }
-
-    private String buildQueryString(final String name, final String location){
-	    StringBuilder strBuilder = new StringBuilder();
-	    strBuilder.append("?");
-	    if(name != null && !name.isEmpty()) {
-        	strBuilder.append("name=").append(encodeUriString(name)).append("&");
-        }
-        if(location != null && !location.isEmpty()) {
-        	strBuilder.append("location=").append(encodeUriString(location));
-        } else {
-        	strBuilder.deleteCharAt(strBuilder.length()-1);
-        }
-        return strBuilder.toString();
-    }
 	
 //	@ExceptionHandler({ ClubNotFoundException.class })
 //	public ModelAndView clubNotFound() {
