@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -35,6 +36,8 @@ import ar.edu.itba.paw.webapp.dto.ClubCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.ClubCommentDto;
 import ar.edu.itba.paw.webapp.dto.ClubDto;
 import ar.edu.itba.paw.webapp.dto.FullClubDto;
+import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
+import ar.edu.itba.paw.webapp.dto.PitchDto;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
@@ -96,18 +99,25 @@ public class ClubController extends BaseController {
 	@Path("/{id}/pitches")
 	public Response getClubPitches(@PathParam("id") long clubid,
 			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws ClubNotFoundException {
-		cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
+		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		
 		List<Pitch> pitches = ps.findByClubId(clubid, pageNum);
+		int pitchCount = ps.countFilteredPitches(
+				Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(club.getName()));
+		int pageCount = ps.countPitchPages(pitchCount);
 		
 		return Response
 				.status(Status.OK)
-				.entity(null)
+				.entity(PitchCollectionDto.ofPitches(
+						pitches.stream()
+						.map(PitchDto::ofPitch)
+						.collect(Collectors.toList()), pitchCount, pageCount))
 				.build();
 		
 	}
 	
 	@POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/{id}/comment")
     public Response comment(@PathParam("id") long clubId,
     		@FormDataParam("comment") final String commentContent) 
@@ -159,7 +169,6 @@ public class ClubController extends BaseController {
 	}
 
 	@GET
-	@Path("/")
 	public Response clubs(
 			@QueryParam("pageNum") @DefaultValue("1") int pageNum,
 			@QueryParam("name") String clubName,

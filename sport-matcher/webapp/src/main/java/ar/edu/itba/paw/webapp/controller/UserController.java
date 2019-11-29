@@ -208,7 +208,6 @@ public class UserController extends BaseController {
 	}
     
     @POST
-	@Path("/create")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = { MediaType.APPLICATION_JSON })
 	public Response createUser(@FormDataParam("username") final String username,
