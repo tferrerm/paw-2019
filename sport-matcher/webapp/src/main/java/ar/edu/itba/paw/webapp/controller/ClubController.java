@@ -2,35 +2,31 @@ package ar.edu.itba.paw.webapp.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.ClubComment;
-import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.webapp.dto.form.ClubsFiltersForm;
-import ar.edu.itba.paw.webapp.dto.form.CommentForm;
+import ar.edu.itba.paw.webapp.dto.ClubCollectionDto;
+import ar.edu.itba.paw.webapp.dto.ClubDto;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 
 @Path("clubs")
@@ -52,29 +48,20 @@ public class ClubController extends BaseController {
 	
 	@GET
 	@Path("/{id}")
-	public Response lala() {
-		return null;
-	}
-	
-	/*@GET
-	@Path("/{id}")
-	public Response showClub(@PathParam("id") long clubid,
-			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,
-			@ModelAttribute("commentForm") final CommentForm form) throws ClubNotFoundException {
+	public Response showClub(@PathParam("id") long clubid/*,
+			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,*/
+			/*@ModelAttribute("commentForm") final CommentForm form*/) throws ClubNotFoundException {
 		
-		//ModelAndView mav = new ModelAndView("club");
+		final Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		
-		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
-		//mav.addObject("club", club);
-		
-		List<Pitch> pitches = ps.findByClubId(clubid, 1);
+		//List<Pitch> pitches = ps.findByClubId(clubid, 1);
 		//mav.addObject("pitches", pitches);
 		
 		//mav.addObject("past_events_count", cs.countPastEvents(clubid));
 		
 		//mav.addObject("haveRelationship", loggedUser() != null ? cs.haveRelationship(loggedUser().getUserid(), clubid) : false);
 
-		List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
+		//List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
 		//mav.addObject("comments", comments);
 		//mav.addObject("commentQty", comments.size());
 		//mav.addObject("currCommentPage", pageNum);
@@ -82,54 +69,51 @@ public class ClubController extends BaseController {
 		//mav.addObject("totalCommentQty", cs.countByClubComments(clubid));
 		//mav.addObject("commentsPageInitIndex", cs.getCommentsPageInitIndex(pageNum));
 		
-		return null;//mav;
+		return Response
+				.status(Status.OK)
+				.entity(ClubDto.ofClub(club))
+				.build();
 	}
 	
-	@POST
-	@Path("/{id}/comment")
-    public Response comment(@PathParam("id") long clubId, 
-    		@Valid @ModelAttribute("commentForm") final CommentForm form,
-    		final BindingResult errors, HttpServletRequest request) 
-    				throws UserNotAuthorizedException, ClubNotFoundException {
-		
-		if(errors.hasErrors()) {
-    		return showClub(clubId, 1, form);
-    	}
-		
-		cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
-		
-	    return null;//new ModelAndView("redirect:/club/" + clubId);
-	}
+//	@POST
+//	@Path("/{id}/comment")
+//    public Response comment(@PathParam("id") long clubId, 
+//    		@Valid @ModelAttribute("commentForm") final CommentForm form,
+//    		final BindingResult errors, HttpServletRequest request) 
+//    				throws UserNotAuthorizedException, ClubNotFoundException {
+//		
+//		if(errors.hasErrors()) {
+//    		return showClub(clubId, 1, form);
+//    	}
+//		
+//		cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
+//		
+//	    return null;//new ModelAndView("redirect:/club/" + clubId);
+//	}
 
 	@GET
-	@Path("/{pageNum}")
+	@Path("/")
 	public Response clubs(
-			@ModelAttribute("clubsFiltersForm") final ClubsFiltersForm form,
-			@PathParam("pageNum") int pageNum,
-			@RequestParam(value = "name", required = false) String clubName,
-            @RequestParam(value = "location", required = false) String location) {
-		
-		String queryString = buildQueryString(clubName, location);
-		
-		//ModelAndView mav = new ModelAndView("clubList");
-		
-		//mav.addObject("pageNum", pageNum);
-        //mav.addObject("queryString", queryString);
-        //mav.addObject("pageInitialIndex", cs.getPageInitialClubIndex(pageNum));
+			@QueryParam("pageNum") @DefaultValue("1") int pageNum,
+			@QueryParam("name") String clubName,
+            @QueryParam("location") String location) {
         
-        List<Club> clubs = cs.findBy(
+        final List<Club> clubs = cs.findBy(
 				Optional.ofNullable(clubName), 
         		Optional.ofNullable(location),
         		pageNum);
-        //mav.addObject("clubs", clubs);
-        //mav.addObject("clubQty", clubs.size());
         
-        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
+        int totalClubQty = cs.countFilteredClubs(
+        		Optional.ofNullable(clubName), 
         		Optional.ofNullable(location));
-        //mav.addObject("totalClubQty", totalClubQty);
-        //mav.addObject("lastPageNum", cs.countClubPages(totalClubQty));
+        int clubPages = cs.countClubPages(totalClubQty);
 
-		return null;//mav;
+		return Response
+				.status(Status.OK)
+				.entity(ClubCollectionDto.ofClubs(
+						clubs.stream().map(ClubDto::ofClub).collect(Collectors.toList()),
+						totalClubQty, clubPages))
+				.build();
 	}
 	
 	@GET
