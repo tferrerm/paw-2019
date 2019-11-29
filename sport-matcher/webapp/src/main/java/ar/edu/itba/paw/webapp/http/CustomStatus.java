@@ -5,15 +5,15 @@ import javax.ws.rs.core.Response.StatusType;
 
 public enum CustomStatus implements StatusType {
 	
-	UNPROCESSABLE_ENTITY(422, Family.CLIENT_ERROR, "Unprocessable Entity");
+	UNPROCESSABLE_ENTITY(422, "Unprocessable Entity");
 	
 	private int statusCode;
 	private Family family;
 	private String reasonPhrase;
 	
-	CustomStatus(int statusCode, Family family, String reasonPhrase) {
+	CustomStatus(int statusCode, String reasonPhrase) {
 		this.statusCode = statusCode;
-		this.family = family;
+		this.family = Family.familyOf(statusCode);
 		this.reasonPhrase = reasonPhrase;
 	}
 
