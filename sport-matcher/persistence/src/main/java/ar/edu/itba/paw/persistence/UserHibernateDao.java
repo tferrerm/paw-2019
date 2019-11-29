@@ -77,7 +77,7 @@ public class UserHibernateDao implements UserDao {
 	
 	@Override
 	public Optional<UserComment> getComment(final long id) {
-		return Optional.of(em.find(UserComment.class, id));
+		return Optional.ofNullable(em.find(UserComment.class, id));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -74,6 +74,10 @@ public class ClubComment {
 	public int hashCode() {
 		return ((Long)this.commentid).hashCode();
 	}
+	
+	public long getCommentId() {
+		return commentid;
+	}
 
 	public User getCommenter() {
 		return commenter;

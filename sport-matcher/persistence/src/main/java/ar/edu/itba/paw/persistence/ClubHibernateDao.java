@@ -211,6 +211,7 @@ public class ClubHibernateDao implements ClubDao {
 		CriteriaQuery<ClubComment> cq = cb.createQuery(ClubComment.class);
 		Root<ClubComment> from = cq.from(ClubComment.class);
 		from.fetch("commenter", JoinType.LEFT);
+		from.fetch("club", JoinType.LEFT);
 		final TypedQuery<ClubComment> query = em.createQuery(
 				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
 			);
@@ -281,6 +282,11 @@ public class ClubHibernateDao implements ClubDao {
 		query.setMaxResults(MAX_EVENTS_PER_WEEK);
 		
 		return query.getResultList();
+	}
+
+	@Override
+	public Optional<ClubComment> findComment(long commentid) {
+		return Optional.ofNullable(em.find(ClubComment.class, commentid));
 	}
 
 }

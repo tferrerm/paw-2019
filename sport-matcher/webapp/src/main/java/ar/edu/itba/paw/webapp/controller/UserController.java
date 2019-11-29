@@ -174,12 +174,15 @@ public class UserController extends BaseController {
     public Response getComments(@PathParam("id") long userid,
     			@QueryParam("page") @DefaultValue("1") int pageNum) throws UserNotFoundException {
     	us.findById(userid).orElseThrow(UserNotFoundException::new);
+    	
     	List<UserComment> comments = us.getCommentsByUser(userid, pageNum);
+    	int commentCount = us.countByUserComments(userid);
     	int totalPages = us.getCommentsMaxPage(userid);
+    	int commentsPageInitIndex = us.getCommentsPageInitIndex(pageNum);
 
     	return Response.ok(UserCommentCollectionDto.ofComments(
     			comments.stream().map(UserCommentDto::ofComment).collect(Collectors.toList()),
-    			totalPages)
+    			commentCount, totalPages, commentsPageInitIndex)
     			).build();
     }
     

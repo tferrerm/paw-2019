@@ -2,16 +2,16 @@ package ar.edu.itba.paw.webapp.dto;
 
 import java.util.List;
 
-public class UserCommentCollectionDto {
+public class ClubCommentCollectionDto {
 	
-	private List<UserCommentDto> comments;
+	private List<ClubCommentDto> comments;
 	private int commentCount;
 	private int pageCount;
 	private int commentsPageInitIndex;
 	
-	public static UserCommentCollectionDto ofComments(List<UserCommentDto> comments, int commentCount,
+	public static ClubCommentCollectionDto ofComments(List<ClubCommentDto> comments, int commentCount,
 			int pageCount, int commentsPageInitIndex) {
-		UserCommentCollectionDto dto = new UserCommentCollectionDto();
+		ClubCommentCollectionDto dto = new ClubCommentCollectionDto();
 		dto.comments = comments;
 		dto.commentCount = commentCount;
 		dto.pageCount = pageCount;
@@ -20,11 +20,11 @@ public class UserCommentCollectionDto {
 		return dto;
 	}
 
-	public List<UserCommentDto> getComments() {
+	public List<ClubCommentDto> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<UserCommentDto> comments) {
+	public void setComments(List<ClubCommentDto> comments) {
 		this.comments = comments;
 	}
 

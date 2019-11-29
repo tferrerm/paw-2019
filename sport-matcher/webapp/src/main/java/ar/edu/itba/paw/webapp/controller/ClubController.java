@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,17 +18,27 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.ClubComment;
 import ar.edu.itba.paw.webapp.dto.ClubCollectionDto;
+import ar.edu.itba.paw.webapp.dto.ClubCommentCollectionDto;
+import ar.edu.itba.paw.webapp.dto.ClubCommentDto;
 import ar.edu.itba.paw.webapp.dto.ClubDto;
+import ar.edu.itba.paw.webapp.dto.form.CommentForm;
+import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
+import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
+import ar.edu.itba.paw.webapp.exception.FormValidationException;
+import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Path("clubs")
 @Component
@@ -35,6 +47,9 @@ public class ClubController extends BaseController {
 	
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClubController.class);
+	
+	@Autowired
+	private FormValidator validator;
 	
 	@Context
 	private	UriInfo	uriInfo;
@@ -74,21 +89,56 @@ public class ClubController extends BaseController {
 				.build();
 	}
 	
-//	@POST
-//	@Path("/{id}/comment")
-//    public Response comment(@PathParam("id") long clubId, 
-//    		@Valid @ModelAttribute("commentForm") final CommentForm form,
-//    		final BindingResult errors, HttpServletRequest request) 
-//    				throws UserNotAuthorizedException, ClubNotFoundException {
-//		
-//		if(errors.hasErrors()) {
-//    		return showClub(clubId, 1, form);
-//    	}
-//		
-//		cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
-//		
-//	    return null;//new ModelAndView("redirect:/club/" + clubId);
-//	}
+	@POST
+	@Path("/{id}/comment")
+    public Response comment(@PathParam("id") long clubId,
+    		@FormDataParam("comment") final String commentContent) 
+    		//@Valid @ModelAttribute("commentForm") final CommentForm form,
+    		//final BindingResult errors, HttpServletRequest request) 
+    				throws UserNotAuthorizedException, ClubNotFoundException, FormValidationException {
+		
+		final CommentForm form = new CommentForm().withComment(commentContent);
+		validator.validate(form);
+		
+		/* HARDCODED HARDCODEADO */
+		ClubComment comment = cs.createComment(2/*loggedUser().getUserid()*/, clubId, commentContent);
+		
+		final URI uri = uriInfo.getAbsolutePathBuilder()
+				.path(clubId + "/comments/" + comment.getCommentId()).build();
+	    return Response
+	    		.created(uri)
+	    		.entity(ClubCommentDto.ofComment(comment))
+	    		.build();
+	}
+	
+	@GET
+    @Path("/{id}/comment/{commentId}")
+    public Response getComment(@PathParam("id") long clubid,
+    						   @PathParam("commentId") long commentId)
+    								   throws UserNotFoundException, CommentNotFoundException {
+    	cs.findById(clubid).orElseThrow(UserNotFoundException::new);
+    	ClubComment comment = cs.findComment(commentId).orElseThrow(CommentNotFoundException::new);
+
+    	return Response.ok(ClubCommentDto.ofComment(comment)).build();
+    }
+	
+	@GET
+	@Path("/{id}/comments")
+	public Response getComments(@PathParam("id") long clubid,
+								@PathParam("pageNum") @DefaultValue("1") int pageNum) throws ClubNotFoundException {
+		List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
+		int commentCount = cs.countByClubComments(clubid);
+		int pageCount = cs.getCommentsMaxPage(clubid);
+		int commentsPageInitIndex = cs.getCommentsPageInitIndex(pageNum);
+		
+		return Response
+				.status(Status.OK)
+				.entity(ClubCommentCollectionDto.ofComments(
+						comments.stream()
+							.map(ClubCommentDto::ofComment)
+							.collect(Collectors.toList()), commentCount, pageCount, commentsPageInitIndex))
+				.build();
+	}
 
 	@GET
 	@Path("/")
@@ -114,10 +164,5 @@ public class ClubController extends BaseController {
 						totalClubQty, clubPages))
 				.build();
 	}
-	
-//	@ExceptionHandler({ ClubNotFoundException.class })
-//	public ModelAndView clubNotFound() {
-//		return new ModelAndView("404");
-//	}*/
 	
 }
