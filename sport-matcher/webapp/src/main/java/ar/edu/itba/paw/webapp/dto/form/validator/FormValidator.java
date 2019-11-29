@@ -16,8 +16,8 @@ public class FormValidator {
 	@Autowired
 	private Validator validator;
 
-	public <T> void validate(T dto, Class<?>... groups) throws FormValidationException {
-		final Set<ConstraintViolation<T>> constraintViolations = validator.validate(dto, groups);
+	public <T> void validate(T form, Class<?>... groups) throws FormValidationException {
+		final Set<ConstraintViolation<T>> constraintViolations = validator.validate(form, groups);
 		
 		if (!constraintViolations.isEmpty())
 			throw new FormValidationException("Invalid request", constraintViolations);

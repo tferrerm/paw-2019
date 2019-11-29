@@ -10,7 +10,7 @@ public enum CustomStatus implements StatusType {
 	private int statusCode;
 	private Family family;
 	private String reasonPhrase;
-	
+
 	CustomStatus(int statusCode, String reasonPhrase) {
 		this.statusCode = statusCode;
 		this.family = Family.familyOf(statusCode);
