@@ -29,10 +29,12 @@ import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.webapp.dto.ClubCollectionDto;
 import ar.edu.itba.paw.webapp.dto.ClubCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.ClubCommentDto;
 import ar.edu.itba.paw.webapp.dto.ClubDto;
+import ar.edu.itba.paw.webapp.dto.FullClubDto;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
@@ -68,7 +70,7 @@ public class ClubController extends BaseController {
 		
 		final Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		
-		//List<Pitch> pitches = ps.findByClubId(clubid, 1);
+		//List<Pitch> pitches = 
 		//mav.addObject("pitches", pitches);
 		
 		//mav.addObject("past_events_count", cs.countPastEvents(clubid));
@@ -82,11 +84,27 @@ public class ClubController extends BaseController {
 		//mav.addObject("maxCommentPage", cs.getCommentsMaxPage(clubid));
 		//mav.addObject("totalCommentQty", cs.countByClubComments(clubid));
 		//mav.addObject("commentsPageInitIndex", cs.getCommentsPageInitIndex(pageNum));
+		/* HARDCODED HARDCODEADO el false de abajo */
 		
 		return Response
 				.status(Status.OK)
-				.entity(ClubDto.ofClub(club))
+				.entity(FullClubDto.ofClub(club, cs.countPastEvents(clubid), false))
 				.build();
+	}
+	
+	@GET
+	@Path("/{id}/pitches")
+	public Response getClubPitches(@PathParam("id") long clubid,
+			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws ClubNotFoundException {
+		cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
+		
+		List<Pitch> pitches = ps.findByClubId(clubid, pageNum);
+		
+		return Response
+				.status(Status.OK)
+				.entity(null)
+				.build();
+		
 	}
 	
 	@POST
