@@ -102,6 +102,8 @@ public class ClubController extends BaseController {
 		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		
 		List<Pitch> pitches = ps.findByClubId(clubid, pageNum);
+
+		// TODO: IMPLEMENTAR PARA OBTENER PITCHES ESPECIFICOS DEL CLUB (BUSCAR POR ID)
 		int pitchCount = ps.countFilteredPitches(
 				Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(club.getName()));
 		int pageCount = ps.countPitchPages(pitchCount);
@@ -127,10 +129,10 @@ public class ClubController extends BaseController {
 		
 		final CommentForm form = new CommentForm().withComment(commentContent);
 		validator.validate(form);
-		
+
 		/* HARDCODED HARDCODEADO */
 		ClubComment comment = cs.createComment(2/*loggedUser().getUserid()*/, clubId, commentContent);
-		
+
 		final URI uri = uriInfo.getAbsolutePathBuilder()
 				.path(clubId + "/comments/" + comment.getCommentId()).build();
 	    return Response
