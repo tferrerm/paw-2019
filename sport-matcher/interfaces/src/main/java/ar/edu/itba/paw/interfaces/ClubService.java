@@ -43,6 +43,8 @@ public interface ClubService {
 	
 	public ClubComment createComment(final long userid, final long clubid, final String comment)
 			throws UserNotAuthorizedException;
+	
+	public Optional<ClubComment> findComment(final long commentid);
 
 	/**
 	 * Returns true if the commenter has an Inscription for a past Event which took place in the Club

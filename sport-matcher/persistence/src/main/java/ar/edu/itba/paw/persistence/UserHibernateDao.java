@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -77,9 +77,9 @@ public class UserHibernateDao implements UserDao {
 	
 	@Override
 	public Optional<UserComment> getComment(final long id) {
-		return Optional.of(em.find(UserComment.class, id));
+		return Optional.ofNullable(em.find(UserComment.class, id));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserComment> getCommentsByUser(final long userid, final int pageNum) {
@@ -99,6 +99,7 @@ public class UserHibernateDao implements UserDao {
 		CriteriaQuery<UserComment> cq = cb.createQuery(UserComment.class);
 		Root<UserComment> from = cq.from(UserComment.class);
 		from.fetch("commenter", JoinType.LEFT);
+		from.fetch("receiver", JoinType.LEFT);
 		final TypedQuery<UserComment> query = em.createQuery(
 				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
 			);
@@ -112,7 +113,8 @@ public class UserHibernateDao implements UserDao {
 		final User user = new User(username, firstname, lastname, password, role, Instant.now());
 		try {
 			em.persist(user);
-		} catch(EntityExistsException e) {
+			em.flush();
+		} catch(PersistenceException e) {
 			throw new UserAlreadyExistsException("User with username " + username + " already exists");
 		}
 		return user;

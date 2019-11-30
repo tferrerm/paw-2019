@@ -234,4 +234,9 @@ public class ClubServiceImpl implements ClubService {
 		return cd.getAvailablePitches(clubid, sport, startsAt, endsAt, amount);
 	}
 
+	@Override
+	public Optional<ClubComment> findComment(long commentid) {
+		return cd.findComment(commentid);
+	}
+
 }

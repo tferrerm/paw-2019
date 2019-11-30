@@ -83,7 +83,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers("/home").permitAll()
 	                .antMatchers("/","/index").permitAll()
 	                // POST method restricted unless overridden above, like /user/create/
-	                .antMatchers(HttpMethod.POST).access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	                //.antMatchers(HttpMethod.POST).access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
                 .and().sessionManagement()
                 	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	            .and().formLogin()

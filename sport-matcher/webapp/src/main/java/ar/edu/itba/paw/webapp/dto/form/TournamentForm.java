@@ -1,11 +1,11 @@
-package ar.edu.itba.paw.webapp.form;
+package ar.edu.itba.paw.webapp.dto.form;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class NewTournamentForm {
+public class TournamentForm {
 	
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z0-9 ]+")

@@ -184,7 +184,7 @@ public class EventHibernateDaoTest {
 	public void testFavoriteSport() {
 		Optional<Sport> fav = ed.getFavoriteSport(USERID);
 		Assert.assertTrue(fav.isPresent());
-		Assert.assertEquals(Sport.SOCCER.toString(), fav.get());
+		Assert.assertEquals(Sport.SOCCER, fav.get());
 	}
 	
 	@Test

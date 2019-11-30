@@ -43,6 +43,8 @@ public interface ClubDao {
 	
 	public ClubComment createComment(final User commenter, final Club club, final String comment);
 	
+	public Optional<ClubComment> findComment(final long commentid);
+	
 	public List<ClubComment> getCommentsByClub(final long clubid, final int pageNum);
 	
 	public int countByClubComments(final long clubid);

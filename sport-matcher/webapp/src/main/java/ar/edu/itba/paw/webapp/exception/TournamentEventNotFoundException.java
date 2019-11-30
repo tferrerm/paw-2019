@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.exception;
 
 @SuppressWarnings("serial")
-public class TournamentEventNotFoundException extends Exception {
+public class TournamentEventNotFoundException extends EventNotFoundException {
 
 }

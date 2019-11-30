@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.form;
+package ar.edu.itba.paw.webapp.dto.form;
 
 import javax.validation.constraints.Size;
 
@@ -14,8 +14,9 @@ public class CommentForm {
 		return comment;
 	}
 
-	public void setComment(String comment) {
+	public CommentForm withComment(String comment) {
 		this.comment = comment;
+		return this;
 	}
 
 }

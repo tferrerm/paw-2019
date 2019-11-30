@@ -34,8 +34,8 @@ import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
+import ar.edu.itba.paw.webapp.dto.form.FiltersForm;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
-import ar.edu.itba.paw.webapp.form.FiltersForm;
 
 @Path("admin/events")
 @Component
