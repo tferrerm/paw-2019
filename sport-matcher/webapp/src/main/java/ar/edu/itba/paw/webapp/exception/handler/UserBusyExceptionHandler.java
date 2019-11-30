@@ -5,16 +5,16 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import ar.edu.itba.paw.exception.EntityNotFoundException;
+import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.webapp.dto.exception.ExceptionDto;
 
 @Provider
-public class EntityNotFoundExceptionHandler implements ExceptionMapper<EntityNotFoundException> {
+public class UserBusyExceptionHandler implements ExceptionMapper<UserBusyException> {
 
 	@Override
-	public Response toResponse(EntityNotFoundException exception) {
+	public Response toResponse(UserBusyException exception) {
 		return Response
-				.status(Status.NOT_FOUND)
+				.status(Status.FORBIDDEN)
 				.entity(ExceptionDto.ofException(exception))
 				.build();
 	}

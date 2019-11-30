@@ -8,14 +8,17 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -26,10 +29,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
@@ -37,7 +40,6 @@ import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionDateExceededException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
-import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
@@ -46,14 +48,12 @@ import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
+import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.form.EventForm;
-import ar.edu.itba.paw.webapp.dto.form.FiltersForm;
-import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -85,112 +85,106 @@ public class EventController extends BaseController {
 
     @Autowired
     private TournamentService ts;
-    
-    @GET
-    @Path("/home")
-    public Response kaka() {
-    	return null;
-    }
 
-    /*@GET
-	@Path("/home") // SACAR
-	public Response home()	{
-		//ModelAndView mav = new ModelAndView("home");
-
-		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
-		if(loggedUser() != null) {
-			List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
-			List<List<Event>> myEvents = es.convertEventListToSchedule(upcomingEvents);
-
-			//mav.addObject("myEvents", myEvents);
-			//mav.addObject("scheduleHeaders", scheduleDaysHeader);
-
-			boolean noParticipations = upcomingEvents.isEmpty();
-			//mav.addObject("noParticipations", noParticipations);
-		}
-
-	    return null;//mav;
-	}
-
-    @GET
-	@Path("/my-events/{page}") // SACAR
-	public Response list(@PathParam("page") final int pageNum)	{
-		//ModelAndView mav = new ModelAndView("myEvents");
-		if (loggedUser() != null) {
-			long userid = loggedUser().getUserid();
-			List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
-			List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
-
-			//mav.addObject("future_events", futureEvents);
-			//mav.addObject("past_events", pastEvents);
-
-			//mav.addObject("page", pageNum);
-			int futureEventQty = es.countByOwner(true, userid);
-			int pastEventQty = es.countByOwner(false, userid);
-
-			boolean countFutureOwnedPages = (futureEventQty > pastEventQty);
-	        //mav.addObject("lastPageNum", es.countUserOwnedPages(countFutureOwnedPages, userid));
-		}
-	    return null;//mav;
-	}
-
-    @GET
-	@RequestMapping("/history/{page}")
-	public Response historyList(@PathParam("page") final int pageNum)	{
-		//ModelAndView mav = new ModelAndView("history");
-		if (loggedUser() != null) {
-			long loggedUserId = loggedUser().getUserid();
-			List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
-//			mav.addObject("past_participations", events);
-//			mav.addObject("eventQty", events.size());
+//    @GET
+//	@Path("/home") // SACAR
+//	public Response home()	{
+//		//ModelAndView mav = new ModelAndView("home");
 //
-//			mav.addObject("page", pageNum);
-//	        mav.addObject("lastPageNum", es.countUserInscriptionPages(false, loggedUserId));
-//	        mav.addObject("totalEventQty", es.countByUserInscriptions(false, loggedUserId));
-//	        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
-		}
-		return null;//mav;
-	}
+//		String[] scheduleDaysHeader = es.getScheduleDaysHeader();
+//		if(loggedUser() != null) {
+//			List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
+//			List<List<Event>> myEvents = es.convertEventListToSchedule(upcomingEvents);
+//
+//			//mav.addObject("myEvents", myEvents);
+//			//mav.addObject("scheduleHeaders", scheduleDaysHeader);
+//
+//			boolean noParticipations = upcomingEvents.isEmpty();
+//			//mav.addObject("noParticipations", noParticipations);
+//		}
+//
+//	    return null;//mav;
+//	}
 
-    @GET
-    @RequestMapping(value = "/{id}")
-    public Response retrieveElement(@PathParam("id") long id,
-    		@RequestParam(value = "eventFullError", required = false) boolean eventFullError,
-    		@RequestParam(value = "alreadyJoinedError", required = false) boolean alreadyJoinedError,
-    		@RequestParam(value = "userBusyError", required = false) boolean userBusyError)
-    	throws EventNotFoundException, ClubNotFoundException {
+//    @GET
+//	@Path("/my-events/{page}") // SACAR
+//	public Response list(@PathParam("page") final int pageNum)	{
+//		//ModelAndView mav = new ModelAndView("myEvents");
+//		if (loggedUser() != null) {
+//			long userid = loggedUser().getUserid();
+//			List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
+//			List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
+//
+//			//mav.addObject("future_events", futureEvents);
+//			//mav.addObject("past_events", pastEvents);
+//
+//			//mav.addObject("page", pageNum);
+//			int futureEventQty = es.countByOwner(true, userid);
+//			int pastEventQty = es.countByOwner(false, userid);
+//
+//			boolean countFutureOwnedPages = (futureEventQty > pastEventQty);
+//	        //mav.addObject("lastPageNum", es.countUserOwnedPages(countFutureOwnedPages, userid));
+//		}
+//	    return null;//mav;
+//	}
 
-    	Optional<TournamentEvent> tournamentEvent = ts.findTournamentEventById(id);
-    	if(tournamentEvent.isPresent()) {
-    		return null;//new ModelAndView("redirect:/tournament/" + tournamentEvent.get().getTournament().getTournamentid() + "/event/" + id);
-    	}
+//    @GET
+//	@RequestMapping("/history/{page}")
+//	public Response historyList(@PathParam("page") final int pageNum)	{
+//		//ModelAndView mav = new ModelAndView("history");
+//		if (loggedUser() != null) {
+//			long loggedUserId = loggedUser().getUserid();
+//			List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
+////			mav.addObject("past_participations", events);
+////			mav.addObject("eventQty", events.size());
+////
+////			mav.addObject("page", pageNum);
+////	        mav.addObject("lastPageNum", es.countUserInscriptionPages(false, loggedUserId));
+////	        mav.addObject("totalEventQty", es.countByUserInscriptions(false, loggedUserId));
+////	        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
+//		}
+//		return null;//mav;
+//	}
+
+    //@GET
+    //@Path("/{id}")
+    //public Response retrieveElement(@PathParam("id") long id)
+    		//@RequestParam(value = "eventFullError", required = false) boolean eventFullError,
+    		//@RequestParam(value = "alreadyJoinedError", required = false) boolean alreadyJoinedError,
+    		//@RequestParam(value = "userBusyError", required = false) boolean userBusyError)
+    //	throws EventNotFoundException, ClubNotFoundException {
+
+    //	Optional<TournamentEvent> tournamentEvent = ts.findTournamentEventById(id);
+    //	if(tournamentEvent.isPresent()) {
+    //		return null;//new ModelAndView("redirect:/tournament/" + tournamentEvent.get().getTournament().getTournamentid() + "/event/" + id);
+    //	}
 
     	//ModelAndView mav = new ModelAndView("event");
 
-    	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    List<Inscription> inscriptions = event.getInscriptions();
-	    User current = loggedUser();
+    //	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+	//    List<Inscription> inscriptions = event.getInscriptions();
+	//    User current = loggedUser();
 
 //        mav.addObject("event", event);
 //
 //        mav.addObject("participant_count", inscriptions.size());
 //        mav.addObject("inscriptions", inscriptions);
 
-        boolean isParticipant = false;
-        if (loggedUser() != null) {
-	        for(Inscription i : inscriptions) {
-	        	if(i.getInscriptedUser().equals(current))
-	        		isParticipant = true;
-	        }
-        }
+    //    boolean isParticipant = false;
+    //    if (loggedUser() != null) {
+	//        for(Inscription i : inscriptions) {
+	//        	if(i.getInscriptedUser().equals(current))
+	//        		isParticipant = true;
+	//        }
+    //    }
 //        mav.addObject("is_participant", isParticipant);
 //
 //        mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
 //
 //        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId()));
-        if (loggedUser() != null) {
-        	//mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
-        }
+    //    if (loggedUser() != null) {
+    //    	//mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
+    //    }
 
 //        mav.addObject("eventFullError", eventFullError);
 //        mav.addObject("alreadyJoinedError", alreadyJoinedError);
@@ -199,48 +193,35 @@ public class EventController extends BaseController {
 //        mav.addObject("isOwner", loggedUser() != null ? event.getOwner().getUserid() == loggedUser().getUserid() : false);
 //        mav.addObject("now", Instant.now());
 
-        return null;//mav;
-    }
+    //   return null;//mav;
+    //}
 
     @POST
     @RequestMapping("/{id}/join")
     public Response joinEvent(@PathParam("id") long id)
-    	throws EventNotFoundException, DateInPastException {
-	    Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	    //ModelAndView mav = new ModelAndView("redirect:/event/" + id);
+    	throws EntityNotFoundException, DateInPastException, EventFullException, UserBusyException {
+	    /* HARDCODEADO HARDCODED InscriptionClosedException */
+	    
 	    if (loggedUser() != null) {
-		    try {
-		    	es.joinEvent(loggedUser().getUserid(), id);
-
-		    } catch(EventFullException e) {
-		    	//mav.addObject("eventFullError", true);
-		    	return null;//mav;
-		    } catch(UserAlreadyJoinedException e) {
-		    	LOGGER.debug("User {} tried to join event {}, but had already joined", loggedUser(), event);
-		    	//mav.addObject("alreadyJoinedError", true);
-		    	return null;//mav;
-		    } catch(UserBusyException e) {
-		    	//mav.addObject("userBusyError", true);
-		    	return null;//mav;
-		    }
+		    es.joinEvent(loggedUser().getUserid(), id);
 	    }
-        return null;//mav;
+        return Response.status(Status.NO_CONTENT).build();
     }
 
 
     @POST
     @Path("/event/{id}/leave")
-    public Response leaveEvent(@PathParam("id") long id) throws DateInPastException {
+    public Response leaveEvent(@PathParam("id") long id) throws DateInPastException, EntityNotFoundException {
     	if (loggedUser() != null) {
     		es.leaveEvent(id, loggedUser().getUserid());
     	}
-        return null;//new ModelAndView("redirect:/event/" + id);
+        return Response.status(Status.NO_CONTENT).build();
     }
 
     @POST
     @Path("/event/{id}/kick-user/{userId}")
     public Response kickUserFromEvent(
-    		@PathParam("eventId") long eventid,
+    		@PathParam("id") long eventid,
     		@PathParam("userId") long kickedUserId)
     		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException, DateInPastException {
     	if (loggedUser() != null) {
@@ -249,60 +230,52 @@ public class EventController extends BaseController {
 	    	es.kickFromEvent(loggedUser(), kickedUserId, event);
 	    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
     	}
-    	return null;//new ModelAndView("redirect:/event/" + eventid);
+    	return Response.status(Status.NO_CONTENT).build();
     }
 
     @GET
-    @Path(value = "/events/{pageNum}")
-    public Response retrieveEvents(@ModelAttribute("filtersForm") final FiltersForm form,
-                                     @PathParam("pageNum") final int pageNum,
-                                     @RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "establishment", required = false) String clubName,
-                                     @RequestParam(value = "sport", required = false) Sport sport,
-                                     @RequestParam(value = "vacancies", required = false) String vacancies,
-                                     @RequestParam(value = "date", required = false) String date) {
-    	String sportName = "";
-    	if(sport != null)
-    		sportName = sport.toString();
-
-        String queryString = buildQueryString(name, clubName, sportName, vacancies, date);
-        //ModelAndView mav = new ModelAndView("list");
+    public Response retrieveEvents(@QueryParam("pageNum") @DefaultValue("1") final int pageNum,
+                                     @QueryParam("name") String name,
+                                     @QueryParam("club") String clubName,
+                                     @QueryParam("sport") Sport sport,
+                                     @QueryParam("vacancies") String vacancies,
+                                     @QueryParam("date") String date) {
 
         Integer vac = tryInteger(vacancies);
     	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
     	if(vac == null && vacancies != null && !vacancies.isEmpty())
-    		System.out.println("HOLA");//mav.addObject("invalid_number_format", true);
+    		System.out.println("HOLA");
     	if(dateInst == null && date != null && !date.isEmpty())
-    		System.out.println("HOLA");//mav.addObject("invalid_date_format", true);
-
-//        mav.addObject("page", pageNum);
-//        mav.addObject("queryString", queryString);
-//        mav.addObject("sports", Sport.values());
+    		System.out.println("HOLA");
 
         List<Event> events = es.findBy(true, Optional.ofNullable(name),
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
 
-        //mav.addObject("events", events);
-        //mav.addObject("eventQty", events.size());
-
-        Integer totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name),
+        int totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name),
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
         		Optional.ofNullable(vac), Optional.ofNullable(dateInst));
+        int lastPageNum = es.countEventPages(totalEventQty);
+        int pageInitialIndex = es.getPageInitialEventIndex(pageNum);
 //        mav.addObject("totalEventQty", totalEventQty);
 //        mav.addObject("lastPageNum", es.countEventPages(totalEventQty));
 //        mav.addObject("pageInitialIndex", es.getPageInitialEventIndex(pageNum));
 //        mav.addObject("currentDate", LocalDate.now());
 //        mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
 
-        return null;//mav;
+        return Response
+        		.status(Status.OK)
+        		.entity(EventCollectionDto.ofEvents(
+        				events.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
+        				totalEventQty, lastPageNum, pageInitialIndex))
+        		.build();
     }
 
     @GET
 	@RequestMapping("/pitch/{pitchId}")
 	public Response seePitch(
 			@PathParam("pitchId") long id,
-			@ModelAttribute("newEventForm") final NewEventForm form) throws PitchNotFoundException {
+			@ModelAttribute("newEventForm") final EventForm form) throws PitchNotFoundException {
 
 //		ModelAndView mav = new ModelAndView("pitch");
 //
@@ -326,7 +299,7 @@ public class EventController extends BaseController {
     @Path("/pitch/{pitchId}/event/create")
     public Response createEvent(
     		@PathParam("pitchId") long pitchId,
-    		@Valid @ModelAttribute("newEventForm") final NewEventForm form,
+    		@Valid @ModelAttribute("newEventForm") final EventForm form,
 			final BindingResult errors,
 			HttpServletRequest request) throws PitchNotFoundException {
 
@@ -370,11 +343,11 @@ public class EventController extends BaseController {
     	} catch(InscriptionDateExceededException e) {
     		return eventCreationError("inscription_date_exceeded", pitchId, form);
     	}
-    	return null;//new ModelAndView("redirect:/event/" + ev.getEventId());
+    	return Response.ok().entity(EventDto.ofEvent(ev)).build();
     }
 
 
-    private Response eventCreationError(String error, long pitchId, NewEventForm form)
+    private Response eventCreationError(String error, long pitchId, EventForm form)
     	throws PitchNotFoundException {
     	//ModelAndView mav = seePitch(pitchId, form);
 		//mav.addObject(error, true);
@@ -399,18 +372,6 @@ public class EventController extends BaseController {
 		return null;//new ModelAndView("redirect:/events/1");
 	}
 
-    @GET
-    @Path(value = "/filter")
-    public Response applyFilter(@ModelAttribute("filtersForm") final FiltersForm form) {
-    	String name = form.getName();
-        String establishment = form.getEstablishment();
-        String sport = form.getSport();
-        String vacancies = form.getVacancies();
-        String date = form.getDate();
-        String queryString = buildQueryString(name, establishment, sport, vacancies, date);
-        return null;//new ModelAndView("redirect:/events/1" + queryString);
-    }
-
 
     @POST
     @Path("/event/{eventId}/upvote")
@@ -420,7 +381,7 @@ public class EventController extends BaseController {
 	    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
 	    	es.vote(true, ev, loggedUser().getUserid());
     	}
-    	return null;//new ModelAndView("redirect:/event/" + eventid);
+    	return Response.status(Status.NO_CONTENT).build();
     }
 
 
@@ -432,32 +393,7 @@ public class EventController extends BaseController {
 	    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
 	    	es.vote(false, ev, loggedUser().getUserid());
     	}
-    	return null;//new ModelAndView("redirect:/event/" + eventid);
-    }
-
-
-    private String buildQueryString(final String name, final String establishment, final String sport,
-                                    final String vacancies, final String date){
-	    StringBuilder strBuilder = new StringBuilder();
-	    strBuilder.append("?");
-	    if(name != null && !name.isEmpty()) {
-        	strBuilder.append("name=").append(encodeUriString(name)).append("&");
-        }
-        if(establishment != null && !establishment.isEmpty()) {
-        	strBuilder.append("establishment=").append(encodeUriString(establishment)).append("&");
-        }
-        if(sport != null && !sport.isEmpty()) {
-        	strBuilder.append("sport=").append(encodeUriString(sport)).append("&");
-        }
-        if(vacancies != null && !vacancies.isEmpty()) {
-        	strBuilder.append("vacancies=").append(encodeUriString(vacancies)).append("&");
-        }
-        if(date != null && !date.isEmpty()) {
-        	strBuilder.append("date=").append(encodeUriString(date));
-        } else {
-        	strBuilder.deleteCharAt(strBuilder.length()-1);
-        }
-        return strBuilder.toString();
+    	return Response.status(Status.NO_CONTENT).build();
     }
 
 
@@ -482,6 +418,6 @@ public class EventController extends BaseController {
 //	@ExceptionHandler({ UserNotFoundException.class })
 //	private ModelAndView userNotFound() {
 //		return new ModelAndView("404");
-//	}*/
+//	}
 
 }

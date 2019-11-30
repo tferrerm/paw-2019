@@ -180,8 +180,7 @@ public class TournamentHibernateDao implements TournamentDao {
 			try {
 				em.persist(new Inscription(tournamentEvent, user, team));
 			} catch(EntityExistsException e) {
-				throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
-						+ tournamentEvent.getEventId());
+				throw new UserAlreadyJoinedException(user.getUserid(), tournamentEvent.getEventId());
 			}
 		}
 	}

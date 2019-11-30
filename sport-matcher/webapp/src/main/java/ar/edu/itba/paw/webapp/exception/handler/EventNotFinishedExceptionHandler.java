@@ -5,16 +5,16 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import ar.edu.itba.paw.exception.EntityNotFoundException;
+import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.webapp.dto.exception.ExceptionDto;
 
 @Provider
-public class EntityNotFoundExceptionHandler implements ExceptionMapper<EntityNotFoundException> {
+public class EventNotFinishedExceptionHandler implements ExceptionMapper<EventNotFinishedException> {
 
 	@Override
-	public Response toResponse(EntityNotFoundException exception) {
+	public Response toResponse(EventNotFinishedException exception) {
 		return Response
-				.status(Status.NOT_FOUND)
+				.status(Status.FORBIDDEN)
 				.entity(ExceptionDto.ofException(exception))
 				.build();
 	}

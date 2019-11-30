@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.exception;
 
 @SuppressWarnings("serial")
-public class UserAlreadyJoinedException extends Exception {
+public class UserAlreadyJoinedException extends UserBusyException {
 	
-	public UserAlreadyJoinedException(String message) {
-		super(message);
+	public UserAlreadyJoinedException(long userid, long eventid) {
+		super("User " + userid + " already joined event "
+				+ eventid);
 	}
 
 }

@@ -374,8 +374,7 @@ public class EventHibernateDao implements EventDao {
 		try {
 			em.persist(new Inscription(event, user));
 		} catch(EntityExistsException e) {
-			throw new UserAlreadyJoinedException("User " + user.getUserid() + " already joined event "
-					+ event.getEventId());
+			throw new UserAlreadyJoinedException(user.getUserid(), event.getEventId());
 		}
 	}
 

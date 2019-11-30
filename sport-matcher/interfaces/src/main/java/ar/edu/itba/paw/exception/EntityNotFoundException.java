@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.exception;
+package ar.edu.itba.paw.exception;
 
 @SuppressWarnings("serial")
 public class EntityNotFoundException extends Exception {
