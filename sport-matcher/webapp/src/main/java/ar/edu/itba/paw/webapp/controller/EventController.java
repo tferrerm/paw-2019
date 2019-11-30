@@ -210,7 +210,7 @@ public class EventController extends BaseController {
 
 
     @POST
-    @Path("/event/{id}/leave")
+    @Path("/{id}/leave")
     public Response leaveEvent(@PathParam("id") long id) throws DateInPastException, EntityNotFoundException {
     	if (loggedUser() != null) {
     		es.leaveEvent(id, loggedUser().getUserid());
