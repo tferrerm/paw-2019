@@ -219,7 +219,7 @@ public class EventController extends BaseController {
     }
 
     @POST
-    @Path("/event/{id}/kick-user/{userId}")
+    @Path("/{id}/kick-user/{userId}")
     public Response kickUserFromEvent(
     		@PathParam("id") long eventid,
     		@PathParam("userId") long kickedUserId)
@@ -374,7 +374,7 @@ public class EventController extends BaseController {
 
 
     @POST
-    @Path("/event/{eventId}/upvote")
+    @Path("/{eventId}/upvote")
     public Response upvote(@PathParam("eventId") final long eventid)
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
     	if (loggedUser() != null) {
@@ -386,7 +386,7 @@ public class EventController extends BaseController {
 
 
     @POST
-    @Path("/event/{eventId}/downvote")
+    @Path("/{eventId}/downvote")
     public Response downvote(@PathParam("eventId") final long eventid)
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
     	if (loggedUser() != null) {
