@@ -155,7 +155,7 @@ public class ClubController extends BaseController {
 	@GET
 	@Path("/{id}/comments")
 	public Response getComments(@PathParam("id") long clubid,
-								@PathParam("pageNum") @DefaultValue("1") int pageNum) throws ClubNotFoundException {
+								@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws ClubNotFoundException {
 		List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
 		int commentCount = cs.countByClubComments(clubid);
 		int pageCount = cs.getCommentsMaxPage(clubid);
