@@ -2,11 +2,8 @@
 define(['frontend', 'services/sampleService'], function(frontend) {
 
 	frontend.controller('AllEventsCtrl', ['$scope', 'sampleService', function($scope, sampleService) {
-		$scope.eventQty = 3;
-		$scope.pageInitialIndex =  1;
-		$scope.totalEventQty = 2;
-		$scope.lastPageNum = 1;
-    	$scope.currentDate = new Date();
+		
+		$scope.currentDate = new Date();
     	$scope.aWeekFromNow = new Date();
 		$scope.sports = [];
 		
@@ -17,6 +14,9 @@ define(['frontend', 'services/sampleService'], function(frontend) {
 
 		sampleService.sampleFunction().then(function(data) {
 			$scope.events = data.events;
+			$scope.eventCount = data.eventCount;
+			$scope.lastPageNum = data.lastPageNum;
+			$scope.initialPageIndex = data.initialPageIndex;
 		});
 
   	}]);

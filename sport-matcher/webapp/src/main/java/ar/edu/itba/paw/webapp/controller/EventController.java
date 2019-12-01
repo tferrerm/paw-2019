@@ -53,6 +53,8 @@ import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.EventDto;
+import ar.edu.itba.paw.webapp.dto.InscriptionCollectionDto;
+import ar.edu.itba.paw.webapp.dto.InscriptionDto;
 import ar.edu.itba.paw.webapp.dto.form.EventForm;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
@@ -395,6 +397,15 @@ public class EventController extends BaseController {
 	    	es.vote(false, ev, loggedUser().getUserid());
     	}
     	return Response.status(Status.NO_CONTENT).build();
+    }
+    
+    
+    @GET
+    @Path("/{id}/inscriptions")
+    public Response getInscriptions(@PathParam("id") final long eventid) throws EventNotFoundException {
+    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	return Response.ok(InscriptionCollectionDto.ofInscriptions(ev.getInscriptions().stream()
+    			.map(InscriptionDto::ofInscription).collect(Collectors.toList()))).build();
     }
 
 

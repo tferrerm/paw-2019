@@ -12,6 +12,7 @@ public class EventDto {
 	private String description;
 	private int maxParticipants;
 	private PitchDto pitch;
+	private int inscriptionCount;
 	private Instant inscriptionEnd;
 	private boolean inscriptionSuccess;
 	private Instant startsAt;
@@ -25,6 +26,7 @@ public class EventDto {
 		dto.owner = UserDto.ofUser(event.getOwner());
 		dto.maxParticipants = event.getMaxParticipants();
 		dto.pitch = PitchDto.ofPitch(event.getPitch());
+		dto.inscriptionCount = event.getInscriptions().size();
 		dto.inscriptionEnd = event.getEndsInscriptionAt();
 		dto.inscriptionSuccess = event.getInscriptionSuccess();
 		dto.startsAt = event.getStartsAt();
@@ -80,6 +82,14 @@ public class EventDto {
 	
 	public void setPitch(PitchDto pitch) {
 		this.pitch = pitch;
+	}
+
+	public int getInscriptionCount() {
+		return inscriptionCount;
+	}
+
+	public void setInscriptionCount(int inscriptionCount) {
+		this.inscriptionCount = inscriptionCount;
 	}
 
 	public Instant getInscriptionEnd() {
