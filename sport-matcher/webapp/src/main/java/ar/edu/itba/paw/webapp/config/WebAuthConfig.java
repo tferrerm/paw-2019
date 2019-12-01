@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.webapp.config;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +25,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import ar.edu.itba.paw.webapp.auth.PlatformUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.PlatformUserDetailsService;
@@ -62,7 +63,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.userDetailsService(userDetailsService)
+        http
+        	.addFilterBefore(corsFilter(), SessionManagementFilter.class)
+        	.userDetailsService(userDetailsService)
         		.authorizeRequests()
 	        		.antMatchers(HttpMethod.GET).permitAll()
 	                .antMatchers(HttpMethod.POST).permitAll()
@@ -135,7 +138,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOWED_HEADERS = {"Authorization", "Cache-Control", "Content-Type"};
     
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsFilter corsFilter() {
     	final CorsConfiguration configuration = new CorsConfiguration();
     	final List<String> origins = addAllArray(
     			new ArrayList<String>(ALLOWED_ORIGINS.length), ALLOWED_ORIGINS);
@@ -150,7 +153,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedHeaders(Collections.unmodifiableList(headers));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        return source;    	
+        return new CorsFilter(source);    	
     }
     
     private List<String> addAllArray(List<String> list, String[] array) {
