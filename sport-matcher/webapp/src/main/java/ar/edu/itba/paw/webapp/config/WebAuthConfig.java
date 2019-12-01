@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.webapp.config;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +25,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import ar.edu.itba.paw.webapp.auth.PlatformUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.PlatformUserDetailsService;
@@ -121,6 +128,34 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public String tokenSecretKey() {
     	return Base64.getEncoder().encodeToString(
     			"E176EA76D237D19395AD4FBA2B605B82A9BCFB4F8ECBFE7E06C237889BB64EFA".getBytes());
+    }
+    
+    private static final String[] ALLOWED_ORIGINS = {"*"};
+    private static final String[] ALLOWED_METHODS = {"HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"};
+    private static final String[] ALLOWED_HEADERS = {"Authorization", "Cache-Control", "Content-Type"};
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+    	final CorsConfiguration configuration = new CorsConfiguration();
+    	final List<String> origins = addAllArray(
+    			new ArrayList<String>(ALLOWED_ORIGINS.length), ALLOWED_ORIGINS);
+    	final List<String> methods = addAllArray(
+    			new ArrayList<String>(ALLOWED_METHODS.length), ALLOWED_METHODS);
+    	final List<String> headers = addAllArray(
+    			new ArrayList<String>(ALLOWED_HEADERS.length), ALLOWED_HEADERS);
+
+        configuration.setAllowedOrigins(Collections.unmodifiableList(origins));
+        configuration.setAllowedMethods(Collections.unmodifiableList(methods));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Collections.unmodifiableList(headers));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;    	
+    }
+    
+    private List<String> addAllArray(List<String> list, String[] array) {
+    	list.addAll(Arrays.asList(array));
+    	return list;
     }
 
 }
