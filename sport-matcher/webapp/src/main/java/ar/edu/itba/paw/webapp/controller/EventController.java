@@ -233,6 +233,7 @@ public class EventController extends BaseController {
     	return Response.status(Status.NO_CONTENT).build();
     }
 
+    
     @GET
     public Response retrieveEvents(@QueryParam("pageNum") @DefaultValue("1") final int pageNum,
                                      @QueryParam("name") String name,
@@ -271,79 +272,79 @@ public class EventController extends BaseController {
         		.build();
     }
 
-    @GET
-	@RequestMapping("/pitch/{pitchId}")
-	public Response seePitch(
-			@PathParam("pitchId") long id,
-			@ModelAttribute("newEventForm") final EventForm form) throws PitchNotFoundException {
-
-//		ModelAndView mav = new ModelAndView("pitch");
+//    @GET
+//	@RequestMapping("/pitch/{pitchId}")
+//	public Response seePitch(
+//			@PathParam("pitchId") long id,
+//			@ModelAttribute("newEventForm") final EventForm form) throws PitchNotFoundException {
 //
-//		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
-//		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
-//		mav.addObject("minHour", MIN_HOUR);
-//		mav.addObject("maxHour", MAX_HOUR);
-//		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-//		mav.addObject("schedule", es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id)));
-//		mav.addObject("currentDate", LocalDate.now());
-//		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-//		mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
-//		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
-//
-//		return mav;
-    	return null;
-	}
+////		ModelAndView mav = new ModelAndView("pitch");
+////
+////		mav.addObject("pitch", ps.findById(id).orElseThrow(PitchNotFoundException::new));
+////		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
+////		mav.addObject("minHour", MIN_HOUR);
+////		mav.addObject("maxHour", MAX_HOUR);
+////		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
+////		mav.addObject("schedule", es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id)));
+////		mav.addObject("currentDate", LocalDate.now());
+////		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+////		mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));
+////		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
+////
+////		return mav;
+//    	return null;
+//	}
 
 
     @POST
     @Path("/pitch/{pitchId}/event/create")
     public Response createEvent(
-    		@PathParam("pitchId") long pitchId,
-    		@Valid @ModelAttribute("newEventForm") final EventForm form,
+    		@PathParam("pitchId") long pitchId//,
+    		/*@Valid @ModelAttribute("newEventForm") final EventForm form,
 			final BindingResult errors,
-			HttpServletRequest request) throws PitchNotFoundException {
-
-    	Integer mp = tryInteger(form.getMaxParticipants());
-    	Integer sa = tryInteger(form.getStartsAtHour());
-    	Integer ea = tryInteger(form.getEndsAtHour());
-    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
-    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
-    	if(mp == null)
-    		errors.rejectValue("maxParticipants", "wrong_int_format");
-    	if(sa == null)
-    		errors.rejectValue("startsAtHour", "wrong_int_format");
-    	if(ea == null)
-    		errors.rejectValue("endsAtHour", "wrong_int_format");
-    	if(date == null)
-    		errors.rejectValue("date", "wrong_date_format");
-    	if(inscriptionEndDate == null)
-    		errors.rejectValue("inscriptionEndDate", "wrong_date_format");
-
-    	if(errors.hasErrors()) {
-    		return seePitch(pitchId, form);
-    	}
-
-    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
-    	Event ev = null;
-    	try {
-	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-	    			mp, date, sa, ea, inscriptionEndDate);
-    	} catch(EndsBeforeStartsException e) {
-    		return eventCreationError("ends_before_starts", pitchId, form);
-    	} catch(DateInPastException e) {
-    		return eventCreationError("event_in_past", pitchId, form);
-    	} catch(MaximumDateExceededException e) {
-    		return eventCreationError("date_exceeded", pitchId, form);
-    	} catch(EventOverlapException e) {
-    		return eventCreationError("event_overlap", pitchId, form);
-    	} catch(HourOutOfRangeException e) {
-    		return eventCreationError("hour_out_of_range", pitchId, form);
-    	} catch(InscriptionDateInPastException e) {
-    		return eventCreationError("inscription_date_in_past", pitchId, form);
-    	} catch(InscriptionDateExceededException e) {
-    		return eventCreationError("inscription_date_exceeded", pitchId, form);
-    	}
-    	return Response.ok().entity(EventDto.ofEvent(ev)).build();
+			HttpServletRequest request*/) throws PitchNotFoundException {
+    	
+//    	Integer mp = tryInteger(form.getMaxParticipants());
+//    	Integer sa = tryInteger(form.getStartsAtHour());
+//    	Integer ea = tryInteger(form.getEndsAtHour());
+//    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
+//    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
+//    	if(mp == null)
+//    		errors.rejectValue("maxParticipants", "wrong_int_format");
+//    	if(sa == null)
+//    		errors.rejectValue("startsAtHour", "wrong_int_format");
+//    	if(ea == null)
+//    		errors.rejectValue("endsAtHour", "wrong_int_format");
+//    	if(date == null)
+//    		errors.rejectValue("date", "wrong_date_format");
+//    	if(inscriptionEndDate == null)
+//    		errors.rejectValue("inscriptionEndDate", "wrong_date_format");
+//
+//    	if(errors.hasErrors()) {
+//    		return seePitch(pitchId, form);
+//    	}
+//
+//    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
+//    	Event ev = null;
+//    	try {
+//	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+//	    			mp, date, sa, ea, inscriptionEndDate);
+//    	} catch(EndsBeforeStartsException e) {
+//    		return eventCreationError("ends_before_starts", pitchId, form);
+//    	} catch(DateInPastException e) {
+//    		return eventCreationError("event_in_past", pitchId, form);
+//    	} catch(MaximumDateExceededException e) {
+//    		return eventCreationError("date_exceeded", pitchId, form);
+//    	} catch(EventOverlapException e) {
+//    		return eventCreationError("event_overlap", pitchId, form);
+//    	} catch(HourOutOfRangeException e) {
+//    		return eventCreationError("hour_out_of_range", pitchId, form);
+//    	} catch(InscriptionDateInPastException e) {
+//    		return eventCreationError("inscription_date_in_past", pitchId, form);
+//    	} catch(InscriptionDateExceededException e) {
+//    		return eventCreationError("inscription_date_exceeded", pitchId, form);
+//    	}
+    	return Response.ok()/*.entity(EventDto.ofEvent(ev))*/.build();
     }
 
 

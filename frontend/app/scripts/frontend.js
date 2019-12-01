@@ -38,7 +38,8 @@ define(['routes',
 
 					$translateProvider.translations('preferredLanguage', i18n);
 					$translateProvider.preferredLanguage('preferredLanguage');
-				}]);
+				}])
+			.value('url', 'http://localhost:8080/webapp');
 		return frontend;
 	}
 );
