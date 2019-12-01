@@ -202,10 +202,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return templateEngine;
 	}
 	
-	@Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
-                .allowedOrigins("http://localhost:9000");
-    }
 }
