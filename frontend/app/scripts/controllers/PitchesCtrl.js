@@ -1,12 +1,16 @@
 'use strict';
-define(['frontend'], function(frontend) {
+define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('PitchesCtrl', function($scope) {
-    $scope.pitches = [];
-    $scope.pitchQty = 1;
-    $scope.pageInitialIndex = 1;
-    $scope.pageNum = 2;
-    $scope.totalPitchQty = 12;
+	frontend.controller('PitchesCtrl', ['$scope', 'restService', function($scope, restService) {
+    
+	    $scope.pitchQty = 1;
+	    $scope.pageInitialIndex = 1;
+	    $scope.pageNum = 2;
+	    $scope.totalPitchQty = 12;
 
-	});
+	    restService.getPitches().then(function(data) {
+			$scope.pitches = data.pitches;
+		});
+
+	}]);
 });

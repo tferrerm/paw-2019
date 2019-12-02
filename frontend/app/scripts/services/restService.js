@@ -16,6 +16,9 @@ define(['frontend'], function(frontend) {
 			},
 			getClubs: function() {
 				return httpGet('/clubs');
+			},
+			getPitches: function() {
+				return httpGet('/pitches');
 			}
 		}
 
