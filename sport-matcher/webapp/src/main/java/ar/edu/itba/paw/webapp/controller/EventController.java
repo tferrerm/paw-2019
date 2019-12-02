@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -26,20 +24,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ar.edu.itba.paw.exception.DateInPastException;
-import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
-import ar.edu.itba.paw.exception.EventOverlapException;
-import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateExceededException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
-import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
@@ -48,14 +38,16 @@ import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Pitch;
+import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.EventDto;
+import ar.edu.itba.paw.webapp.dto.FullEventDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionCollectionDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionDto;
 import ar.edu.itba.paw.webapp.dto.form.EventForm;
+import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
@@ -148,55 +140,38 @@ public class EventController extends BaseController {
 //		return null;//mav;
 //	}
 
-    //@GET
-    //@Path("/{id}")
-    //public Response retrieveElement(@PathParam("id") long id)
-    		//@RequestParam(value = "eventFullError", required = false) boolean eventFullError,
-    		//@RequestParam(value = "alreadyJoinedError", required = false) boolean alreadyJoinedError,
-    		//@RequestParam(value = "userBusyError", required = false) boolean userBusyError)
-    //	throws EventNotFoundException, ClubNotFoundException {
+    @GET
+    @Path("/{id}")
+    public Response retrieveElement(@PathParam("id") long id)
+    		throws EventNotFoundException, ClubNotFoundException {
 
     //	Optional<TournamentEvent> tournamentEvent = ts.findTournamentEventById(id);
     //	if(tournamentEvent.isPresent()) {
     //		return null;//new ModelAndView("redirect:/tournament/" + tournamentEvent.get().getTournament().getTournamentid() + "/event/" + id);
     //	}
 
-    	//ModelAndView mav = new ModelAndView("event");
+    	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+    	List<Inscription> inscriptions = event.getInscriptions();
+	    User current = loggedUser();
 
-    //	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-	//    List<Inscription> inscriptions = event.getInscriptions();
-	//    User current = loggedUser();
-
-//        mav.addObject("event", event);
-//
-//        mav.addObject("participant_count", inscriptions.size());
-//        mav.addObject("inscriptions", inscriptions);
-
-    //    boolean isParticipant = false;
-    //    if (loggedUser() != null) {
-	//        for(Inscription i : inscriptions) {
-	//        	if(i.getInscriptedUser().equals(current))
-	//        		isParticipant = true;
-	//        }
-    //    }
-//        mav.addObject("is_participant", isParticipant);
-//
+        boolean isParticipant = false;
+        if (loggedUser() != null) {
+        	Long count = inscriptions.stream()
+        		.filter(x -> x.getInscriptedUser().equals(current))
+        		.collect(Collectors.counting());
+        	isParticipant = count > 0;
+        }
 //        mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
-//
-//        mav.addObject("vote_balance", es.getVoteBalance(event.getEventId()));
-    //    if (loggedUser() != null) {
-    //    	//mav.addObject("user_vote", es.getUserVote(event.getEventId(), current.getUserid()));
-    //    }
-
-//        mav.addObject("eventFullError", eventFullError);
-//        mav.addObject("alreadyJoinedError", alreadyJoinedError);
-//        mav.addObject("userBusyError", userBusyError);
-//
-//        mav.addObject("isOwner", loggedUser() != null ? event.getOwner().getUserid() == loggedUser().getUserid() : false);
-//        mav.addObject("now", Instant.now());
-
-    //   return null;//mav;
-    //}
+        int voteBalance = es.getVoteBalance(event.getEventId());
+        int userVote = 0;
+        if (loggedUser() != null) {
+        	userVote = es.getUserVote(event.getEventId(), current.getUserid());
+        }
+        
+        return Response.ok(FullEventDto.ofEvent(
+        		event, isParticipant, voteBalance, userVote)
+        		).build();
+    }
 
     @POST
     @RequestMapping("/{id}/join")
