@@ -1,7 +1,7 @@
 <div class="main-container">
 	<div class="content-container">
 		<div class="profile-title">
-			<h2><c:out value="{{event.name}}"/></h2>
+			<h2>{{event.name}}</h2>
 		</div>
 		<div class="detail-container average-min-width">
 			<div class="status" ng-if="!has_ended">
@@ -20,7 +20,7 @@
 				<div class="margin-right">
 					<div class="description-item">
 						<span class="event-info-label">{{'organizer' | translate}} </span>
-						<a class="link-text" href="<c:url value="/user/${event.owner.userid}" /> ">{{event.owner.firstname}} {{event.owner.lastname}}</a>
+						<a class="link-text" href="<c:url value="/user/${event.owner.userid}" />{{event.owner.firstname}} {{event.owner.lastname}}</a>
 					</div>
 					<div class="description-item">
 						<span class="event-info-label">{{'event_description' | translate}}</span>
@@ -28,26 +28,20 @@
 					</div>
 					<div class="description-item">
 						<span class="event-info-label">{{'sport' | translate}}</span>
-						<span>{{event.pitch.sport}}</span>
+						<span>{{event.pitch.sport | translate}}</span>
 					</div>
 					<div class="description-item">
 						<span class="event-info-label">{{'club' | translate}} </span>
-						<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" /> ">{{event.pitch.club.name}}</a>
-						<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">{{event.pitch.name}}</a>
+						<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" />{{event.pitch.club.name}}</a>
+						<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" />{{event.pitch.name}}</a>
 					</div>
 					<div class="double-box">
 						<div class="description-item">
 							<span class="event-info-label">{{'date' | translate}}</span>
 							<span class="just-row">
-								<fmt:timeZone value="AR">
-									<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-									<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-								</fmt:timeZone>
+								<div>{{event.startsAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
 								<span class="date-separator">-</span>
-								<fmt:timeZone value="AR">
-									<fmt:parseDate value="${event.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-									<fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-								</fmt:timeZone>
+								<div>{{event.endsAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
 							</span>
 						</div>
 						<div class="description-item">
@@ -58,10 +52,7 @@
 					<div class="description-item">
 						<span class="event-info-label">{{'end_date' | translate}}</span>
 						<span>
-							<fmt:timeZone value="AR">
-								<fmt:parseDate value="${event.endsInscriptionAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-							</fmt:timeZone>
+							<div>{{event.inscriptionEnd | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
 						</span>
 					</div>
 				</div>
