@@ -1,18 +1,13 @@
 'use strict';
-define(['frontend', 'services/sampleService'], function(frontend) {
+define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('AllEventsCtrl', ['$scope', 'sampleService', function($scope, sampleService) {
+	frontend.controller('AllEventsCtrl', ['$scope', 'restService', function($scope, restService) {
 		
 		$scope.currentDate = new Date();
     	$scope.aWeekFromNow = new Date();
 		$scope.sports = [];
-		
-		/*$http({
-			method: 'GET',
-			url: 'http://localhost:8080/webapp/events'
-		});*/
 
-		sampleService.sampleFunction().then(function(data) {
+		restService.getAllEvents().then(function(data) {
 			$scope.events = data.events;
 			$scope.eventCount = data.eventCount;
 			$scope.lastPageNum = data.lastPageNum;
