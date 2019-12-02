@@ -1,0 +1,148 @@
+<div class="main-container">
+	<div class="content-container">
+		<div class="profile-title">
+			<h2><c:out value="{{event.name}}"/></h2>
+		</div>
+		<div class="detail-container average-min-width">
+			<div class="status" ng-if="!has_ended">
+				<div ng-if="${participant_count < event.maxParticipants}">
+					<h3>{{'status' | translate}} {{'uncompleted' | translate}}</h3>
+				</div>
+				<div ng-if="${participant_count >= event.maxParticipants}">
+					<h3>{{'status' | translate}} {{'completed' | translate}}</h3>
+				</div>
+				<div class="progress">
+					<!--<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>-->
+				</div>
+				<h4 class="progress-bar-completion">{{participant_count}}/{{event.maxParticipants}}</h4>
+			</div>
+			<div class="description-body">
+				<div class="margin-right">
+					<div class="description-item">
+						<span class="event-info-label">{{'organizer' | translate}} </span>
+						<a class="link-text" href="<c:url value="/user/${event.owner.userid}" /> ">{{event.owner.firstname}} {{event.owner.lastname}}</a>
+					</div>
+					<div class="description-item">
+						<span class="event-info-label">{{'event_description' | translate}}</span>
+						<span>{{event.description}}</span>
+					</div>
+					<div class="description-item">
+						<span class="event-info-label">{{'sport' | translate}}</span>
+						<span>{{event.pitch.sport}}</span>
+					</div>
+					<div class="description-item">
+						<span class="event-info-label">{{'club' | translate}} </span>
+						<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" /> ">{{event.pitch.club.name}}</a>
+						<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" /> ">{{event.pitch.name}}</a>
+					</div>
+					<div class="double-box">
+						<div class="description-item">
+							<span class="event-info-label">{{'date' | translate}}</span>
+							<span class="just-row">
+								<fmt:timeZone value="AR">
+									<fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+									<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+								</fmt:timeZone>
+								<span class="date-separator">-</span>
+								<fmt:timeZone value="AR">
+									<fmt:parseDate value="${event.endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+									<fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+								</fmt:timeZone>
+							</span>
+						</div>
+						<div class="description-item">
+							<span class="event-info-label">{{'vacancies' | translate}}</span>
+							<span>{{event.maxParticipants - participant_count}}</span>
+						</div>
+					</div>
+					<div class="description-item">
+						<span class="event-info-label">{{'end_date' | translate}}</span>
+						<span>
+							<fmt:timeZone value="AR">
+								<fmt:parseDate value="${event.endsInscriptionAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+								<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+							</fmt:timeZone>
+						</span>
+					</div>
+				</div>
+				<div class="participants-list">
+					<span class="event-info-label">{{'participants' | translate}}</span>
+					<ul>
+					    <div ng-repeat="i in inscriptions">
+				            <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">
+					            <a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</a>
+					            <button type="submit" class="kick-user-btn" ng-if="!has_ended && isOwner && i.inscriptedUser.userid != event.owner.userid">{{'kick' | translate}}</button>
+				            </form>
+				        </div>
+			      	</ul>
+				</div>
+			</div>
+			<div ng-if="has_ended && is_participant">
+				<div class="event-points">
+					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
+					<h5 class="pitch-info-label vote-balance">{{vote_balance}}</h5>
+				</div>
+				<div class="voting-buttons" ng-if="loggedUser != null && loggedUser.userid != event.owner.userid">
+					<c:choose>
+						<div ng-if="user_vote > 0">
+							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+								<button type="submit" class="btn btn-danger join-button">{{'downvote' | translate}}</button>
+							</form>
+							<div>
+								<button type="submit" class="btn btn-success join-button vote-balance" disabled="true">{{'upvoted' | translate}}</button>
+							</div>
+						</div>
+						<div ng-if="user_vote < 0">
+							<div>
+								<button type="submit" class="btn btn-danger join-button" disabled="true">{{'downvoted' | translate}}</button>
+							</div>
+							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+								<button type="submit" class="btn btn-success join-button vote-balance">{{'upvote' | translate}}</button>
+							</form>
+						</div>
+						<div ng-if="user_vote == 0">
+							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
+								<button type="submit" class="btn btn-danger join-button">{{'downvote' | translate}}</button>
+							</form>
+							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
+								<button type="submit" class="btn btn-success join-button vote-balance">{{'upvote' | translate}}</button>
+							</form>
+						</div>
+					</c:choose>
+				</div>
+			</div>
+		</div>
+		<!--<c:if test="${eventFullError == true}">
+			<span class="form-error notice">
+				<spring:message code="event_full_error"/>
+			</span>
+		</c:if>
+		<c:if test="${alreadyJoinedError == true}">
+			<span class="form-error notice">
+				<spring:message code="already_joined_error"/>
+			</span>
+		</c:if>
+		<c:if test="${userBusyError == true}">
+			<span class="form-error notice">
+				<spring:message code="user_busy_error"/>
+			</span>
+		</c:if>-->
+		<div class="club-buttons" ng-if="!(event.endsInscriptionAt < now)">
+			<div ng-if="is_participant">
+				<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
+					<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
+				</form>
+			</div>
+			<div ng-if="participant_count < event.maxParticipants">
+				<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
+					<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
+				</form>
+			</div>
+			<div ng-if="isOwner">
+				<form method="POST" action="<c:url value="/event/${event.eventId}/delete"/>">
+					<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

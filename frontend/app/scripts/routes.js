@@ -27,7 +27,11 @@ define([], function() {
             '/pitches' : {
               templateUrl: '/views/pitches.html',
               controller: 'PitchesCtrl'
-            }
+            },
+            '/events/:id' : {
+                templateUrl: '/views/event.html',
+                controller: 'EventCtrl'
+            },
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */
         }
