@@ -30,8 +30,14 @@ define([], function() {
             },
             '/events/:id' : {
                 templateUrl: '/views/event.html',
-                controller: 'EventCtrl'
-            },
+                controller: 'EventCtrl',
+                resolve: {
+                    event: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getEvent(params.id);
+                    }]
+                }
+            }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */
         }

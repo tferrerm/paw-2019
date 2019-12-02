@@ -29,7 +29,16 @@ define(['routes',
 
 					if (config.routes !== undefined) {
 						angular.forEach(config.routes, function(route, path) {
-							$routeProvider.when(path, {templateUrl: route.templateUrl, resolve: dependencyResolverFor(['controllers/' + route.controller]), controller: route.controller, gaPageTitle: route.gaPageTitle});
+							var resolve = dependencyResolverFor(['controllers/' + route.controller]);
+							angular.forEach(route.resolve, function(value, key) {
+								resolve[key] = value;
+							});
+
+							$routeProvider.when(path, {
+								templateUrl: route.templateUrl, 
+								resolve: resolve, 
+								controller: route.controller, 
+								gaPageTitle: route.gaPageTitle});
 						});
 					}
 					if (config.defaultRoutePath !== undefined) {

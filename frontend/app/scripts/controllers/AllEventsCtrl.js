@@ -15,7 +15,6 @@ define(['frontend', 'services/restService'], function(frontend) {
 		});
 
 		$scope.goToEvent = function(id) {
-			alert('hola ' + id);
 			$location.url('events/' + id);
 		};
 
