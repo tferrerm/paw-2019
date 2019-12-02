@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend'], function(frontend) {
 
-	frontend.factory('sampleService', ['$http', 'url', function($http, url) {
+	frontend.factory('restService', ['$http', 'url', function($http, url) {
 
 		function httpGet(path) {
 			return $http.get(url + path)
@@ -11,8 +11,11 @@ define(['frontend'], function(frontend) {
 		}
 
 		return {
-			sampleFunction: function() {
+			getAllEvents: function() {
 				return httpGet('/events');
+			},
+			getClubs: function() {
+				return httpGet('/clubs');
 			}
 		}
 
