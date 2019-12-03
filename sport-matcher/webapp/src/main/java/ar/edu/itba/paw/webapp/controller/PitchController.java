@@ -115,5 +115,11 @@ public class PitchController extends BaseController {
 		
 		return Response.ok(image).cacheControl(cache).build();
 	}
+	
+	@GET
+	@Path("/sports")
+	public Response getSports() {
+		return Response.ok(Sport.values()).build();
+	}
 
 }
