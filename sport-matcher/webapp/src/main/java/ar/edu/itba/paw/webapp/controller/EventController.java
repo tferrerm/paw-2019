@@ -174,14 +174,14 @@ public class EventController extends BaseController {
     }
 
     @POST
-    @RequestMapping("/{id}/join")
+    @Path("/{id}/join")
     public Response joinEvent(@PathParam("id") long id)
     	throws EntityNotFoundException, DateInPastException, EventFullException, UserBusyException {
 	    /* HARDCODEADO HARDCODED InscriptionClosedException */
 	    
-	    if (loggedUser() != null) {
-		    es.joinEvent(loggedUser().getUserid(), id);
-	    }
+	    //if (loggedUser() != null) {
+		    es.joinEvent(2/*loggedUser().getUserid()*/, id);
+	    //}
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -262,7 +262,7 @@ public class EventController extends BaseController {
 ////		mav.addObject("minHour", MIN_HOUR);
 ////		mav.addObject("maxHour", MAX_HOUR);
 ////		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-////		mav.addObject("schedule", es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id)));
+////		mav.addObject("schedule", es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id))); OTRO ENDPOINT
 ////		mav.addObject("currentDate", LocalDate.now());
 ////		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 ////		mav.addObject("aWeekFromNow", LocalDate.now().plus(7, ChronoUnit.DAYS));

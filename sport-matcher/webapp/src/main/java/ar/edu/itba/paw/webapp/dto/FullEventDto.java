@@ -29,6 +29,7 @@ public class FullEventDto {
 		dto.eventid = event.getEventId();
 		dto.name = event.getName();
 		dto.owner = UserDto.ofUser(event.getOwner());
+		dto.description = event.getDescription();
 		dto.maxParticipants = event.getMaxParticipants();
 		dto.pitch = PitchDto.ofPitch(event.getPitch());
 		dto.inscriptionCount = event.getInscriptions().size();

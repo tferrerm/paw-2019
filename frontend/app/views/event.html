@@ -4,17 +4,17 @@
 			<h2>{{event.name}}</h2>
 		</div>
 		<div class="detail-container average-min-width">
-			<div class="status" ng-if="!has_ended">
-				<div ng-if="${participant_count < event.maxParticipants}">
+			<div class="status" ng-if="!eventHasEnded">
+				<div ng-if="${event.inscriptionCount < event.maxParticipants}">
 					<h3>{{'status' | translate}} {{'uncompleted' | translate}}</h3>
 				</div>
-				<div ng-if="${participant_count >= event.maxParticipants}">
+				<div ng-if="${event.inscriptionCount >= event.maxParticipants}">
 					<h3>{{'status' | translate}} {{'completed' | translate}}</h3>
 				</div>
 				<div class="progress">
 					<!--<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>-->
 				</div>
-				<h4 class="progress-bar-completion">{{participant_count}}/{{event.maxParticipants}}</h4>
+				<h4 class="progress-bar-completion">{{event.inscriptionCount}}/{{event.maxParticipants}}</h4>
 			</div>
 			<div class="description-body">
 				<div class="margin-right">
@@ -46,7 +46,7 @@
 						</div>
 						<div class="description-item">
 							<span class="event-info-label">{{'vacancies' | translate}}</span>
-							<span>{{event.maxParticipants - participant_count}}</span>
+							<span>{{event.maxParticipants - event.inscriptionCount}}</span>
 						</div>
 					</div>
 					<div class="description-item">
@@ -62,20 +62,20 @@
 					    <div ng-repeat="i in inscriptions">
 				            <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">
 					            <a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</a>
-					            <button type="submit" class="kick-user-btn" ng-if="!has_ended && isOwner && i.inscriptedUser.userid != event.owner.userid">{{'kick' | translate}}</button>
+					            <button type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid">{{'kick' | translate}}</button>
 				            </form>
 				        </div>
 			      	</ul>
 				</div>
 			</div>
-			<div ng-if="has_ended && is_participant">
+			<div ng-if="eventHasEnded && event.isParticipant">
 				<div class="event-points">
 					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
-					<h5 class="pitch-info-label vote-balance">{{vote_balance}}</h5>
+					<h5 class="pitch-info-label vote-balance">{{event.voteBalance}}</h5>
 				</div>
 				<div class="voting-buttons" ng-if="loggedUser != null && loggedUser.userid != event.owner.userid">
 					<c:choose>
-						<div ng-if="user_vote > 0">
+						<div ng-if="event.userVote > 0">
 							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
 								<button type="submit" class="btn btn-danger join-button">{{'downvote' | translate}}</button>
 							</form>
@@ -83,7 +83,7 @@
 								<button type="submit" class="btn btn-success join-button vote-balance" disabled="true">{{'upvoted' | translate}}</button>
 							</div>
 						</div>
-						<div ng-if="user_vote < 0">
+						<div ng-if="event.userVote < 0">
 							<div>
 								<button type="submit" class="btn btn-danger join-button" disabled="true">{{'downvoted' | translate}}</button>
 							</div>
@@ -91,7 +91,7 @@
 								<button type="submit" class="btn btn-success join-button vote-balance">{{'upvote' | translate}}</button>
 							</form>
 						</div>
-						<div ng-if="user_vote == 0">
+						<div ng-if="event.userVote == 0">
 							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
 								<button type="submit" class="btn btn-danger join-button">{{'downvote' | translate}}</button>
 							</form>
@@ -118,21 +118,21 @@
 				<spring:message code="user_busy_error"/>
 			</span>
 		</c:if>-->
-		<div class="club-buttons" ng-if="!(event.endsInscriptionAt < now)">
-			<div ng-if="is_participant">
-				<form method="POST" action="<c:url value="/event/${event.eventId}/leave"/>">
+		<div class="club-buttons" ng-if="!inscriptionHasEnded">
+			<div ng-if="event.isParticipant">
+				<a ng-click="leaveEvent(event.eventid)">
 					<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
-				</form>
+				</a>
 			</div>
-			<div ng-if="participant_count < event.maxParticipants">
-				<form method="POST" action="<c:url value="/event/${event.eventId}/join"/>">
+			<div ng-if="event.inscriptionCount < event.maxParticipants">
+				<a ng-click="joinEvent(event.eventid)">
 					<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
-				</form>
+				</a>
 			</div>
 			<div ng-if="isOwner">
-				<form method="POST" action="<c:url value="/event/${event.eventId}/delete"/>">
+				<a ng-click="deleteEvent(event.eventid)">
 					<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
-				</form>
+				</a>
 			</div>
 		</div>
 	</div>

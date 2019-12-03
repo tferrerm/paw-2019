@@ -10,6 +10,13 @@ define(['frontend'], function(frontend) {
 				});
 		}
 
+		function httpPost(path) {
+			return $http.post(url + path, {}, {})
+				.then(function(response) { 
+					return response.data; 
+				});
+		}
+
 		return {
 			getAllEvents: function() {
 				return httpGet('/events');
@@ -22,6 +29,12 @@ define(['frontend'], function(frontend) {
 			},
 			getEvent: function(id) {
 				return httpGet('/events/' + id);
+			},
+			getEventInscriptions: function(id) {
+				return httpGet('/events/' + id + '/inscriptions');
+			},
+			joinEvent: function(id) {
+				return httpPost('/events/' + id + '/join');
 			}
 		}
 
