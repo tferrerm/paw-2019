@@ -20,7 +20,7 @@ define(['frontend', 'jquery'], function(frontend) {
 
 		return {
 			getAllEvents: function(params) {
-				return httpGet('/events', {pageNum: params.pageNum});
+				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
 			},
 			getClub: function(id) {
 				return httpGet('/clubs/' + id, {});
