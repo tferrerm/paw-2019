@@ -1,90 +1,90 @@
 <div class="main-container">
-  <div class="content-container">
-    <div class="profile-title">
-      <h2>{{'choose_event' | translate}}</h2>
-    </div>
-    <span class="help-message notice w-70 justify-center">{{'event_list_help' | translate}}</span>
-    <div class="tbl">
-      <div class="table-header">
-        <form id="searchfilters" class="searchfilters" onsubmit="">
-          <div class="table-titles">
-            <div>
-              <label>{{'event_name' | translate}}</label>
-              <input class="form-control" type="text" maxlength="100"/>
-            </div>
-            <div>
-              <label>{{'club' | translate}}</label>
-              <input class="form-control" type="text" maxlength="100"/>
-            </div>
-            <div>
-              <label>{{'sport' | translate}}</label>
-              <select class="form-control">
-                <option  value=""></option>
-                <option ng-repeat="sport in sports" value="sport">
-                  {{sport | translate}}
-                </option>
-              </select>
-            </div>
-            <div>
-              <label>{{'vacancies' | translate}}</label>
-              <input class="form-control" min="1" max="99" type="number" />
-              <span class="form-error" ng-if="invalid_number_format">
-                {{'invalid_number_format' | translate}}
-              </span>
-            </div>
-            <div>
-              <label>{{'date' | translate}}</label>
-              <input class="form-control" type="date" min="{{currentDate}}" max="{{aWeekFromNow}}"/>
-              <span class="form-error" ng-if="invalid_date_format">
-                {{'invalid_date_format' | translate}}
-              </span>
-            </div>
-            <div>
-              <button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
-            </div>
-          </div>
-        </form>
+	<div class="content-container">
+		<div class="profile-title">
+			<h2>{{'choose_event' | translate}}</h2>
+		</div>
+		<span class="help-message notice w-70 justify-center">{{'event_list_help' | translate}}</span>
+		<div class="tbl">
+			<div class="table-header">
+				<form id="searchfilters" class="searchfilters" onsubmit="">
+					<div class="table-titles">
+						<div>
+							<label>{{'event_name' | translate}}</label>
+							<input class="form-control" type="text" maxlength="100"/>
+						</div>
+						<div>
+							<label>{{'club' | translate}}</label>
+							<input class="form-control" type="text" maxlength="100"/>
+						</div>
+						<div>
+							<label>{{'sport' | translate}}</label>
+							<select class="form-control">
+								<option  value=""></option>
+								<option ng-repeat="sport in sports" value="sport">
+									{{sport | translate}}
+								</option>
+							</select>
+						</div>
+						<div>
+							<label>{{'vacancies' | translate}}</label>
+							<input class="form-control" min="1" max="99" type="number" />
+							<span class="form-error" ng-if="invalid_number_format">
+								{{'invalid_number_format' | translate}}
+							</span>
+						</div>
+						<div>
+							<label>{{'date' | translate}}</label>
+							<input class="form-control" type="date" min="{{currentDate}}" max="{{aWeekFromNow}}"/>
+							<span class="form-error" ng-if="invalid_date_format">
+								{{'invalid_date_format' | translate}}
+							</span>
+						</div>
+						<div>
+							<button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+						</div>
+					</div>
+				</form>
 
-      </div>
-      <div ng-repeat="event in events" class="custom-row">
-        <div class="home-header">{{event.name}}</div>
-        <div class="home-header">{{event.pitch.club.name}}</div>
-        <div>{{event.pitch.sport | translate}}</div>
-        <div>{{event.maxParticipants - event.inscriptionCount}}</div>
-        <div>{{event.startsAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
-        </div>
-        <div>
-          <a ng-click="goToEvent(event.eventid)">
-            <button type="button" class="btn btn-primary view-event">{{'view_event' | translate}}</button>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="table-navigator w-100 justify-center" ng-if="events.length > 0">
-      <div class="{{page}} != 1 ? '' : 'hidden'">
-      <a href="/events/1{{queryString}}'">
-        <button type="button" class="btn btn-secondary">
-          {{'first' | translate}}
-        </button>
-      </a>
-      <a href="/events/{{page}}-1{{queryString}}">
-        <button type="button" class="btn btn-secondary">
-          {{'back' | translate}}
-        </button>
-      </a>
-    </div>
-    <span class="flex">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
-    <div class="{{page}} != {{lastPageNum}} ? '' : 'hidden'">
-      <a href="/events/{{page+1}}{{queryString}}' />">
-        <button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-      </a>
-      <a href="/events/{{lastPageNum}}{{queryString}}">
-        <button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-      </a>
-    </div>
-    <div class="notice" ng-if="events.length <= 0">
-      {{'no_results' | translate}}
-    </div>
-  </div>
-  </div>
+			</div>
+			<div ng-repeat="event in events" class="custom-row">
+				<div class="home-header">{{event.name}}</div>
+				<div class="home-header">{{event.pitch.club.name}}</div>
+				<div>{{event.pitch.sport | translate}}</div>
+				<div>{{event.maxParticipants - event.inscriptionCount}}</div>
+				<div>{{event.startsAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
+				</div>
+				<div>
+					<a ng-click="goToEvent(event.eventid)">
+						<button type="button" class="btn btn-primary view-event">{{'view_event' | translate}}</button>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="table-navigator w-100 justify-center" ng-if="events.length > 0">
+			<div ng-hide="pageNum == 1">
+				<a href="/events/1{{queryString}}'">
+					<button type="button" class="btn btn-secondary">
+						{{'first' | translate}}
+					</button>
+				</a>
+				<a ng-click="getPrevPage()">
+					<button type="button" class="btn btn-secondary">
+						{{'back' | translate}}
+					</button>
+				</a>
+			</div>
+			<span class="flex">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
+			<div ng-hide="pageNum == lastPageNum">
+				<a ng-click="getNextPage()">
+					<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+				</a>
+				<a href="/events/{{lastPageNum}}{{queryString}}">
+					<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+				</a>
+			</div>
+			<div class="notice" ng-if="events.length <= 0">
+				{{'no_results' | translate}}
+			</div>
+		</div>
+	</div>
 </div>

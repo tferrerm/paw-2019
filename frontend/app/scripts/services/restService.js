@@ -1,10 +1,11 @@
 'use strict';
-define(['frontend'], function(frontend) {
+define(['frontend', 'jquery'], function(frontend) {
 
-	frontend.factory('restService', ['$http', 'url', function($http, url) {
+	frontend.factory('restService', ['$http','$rootScope', 'url', function($http, $rootScope, url) {
 
-		function httpGet(path) {
-			return $http.get(url + path)
+		function httpGet(path, params) {
+			params = Object.keys(params).length ? '?' + jQuery.param(params) : '';
+			return $http.get(url + path + params)
 				.then(function(response) { 
 					return response.data; 
 				});
@@ -18,26 +19,26 @@ define(['frontend'], function(frontend) {
 		}
 
 		return {
-			getAllEvents: function() {
-				return httpGet('/events');
+			getAllEvents: function(params) {
+				return httpGet('/events', {pageNum: params.pageNum});
 			},
 			getClub: function(id) {
-				return httpGet('/clubs/' + id);
+				return httpGet('/clubs/' + id, {});
 			},
-			getClubs: function() {
-				return httpGet('/clubs');
+			getClubs: function(params) {
+				return httpGet('/clubs', {pageNum: params.pageNum});
 			},
 			getPitch: function(id) {
-				return httpGet('/pitches/' + id);
+				return httpGet('/pitches/' + id, {});
 			},
-			getPitches: function() {
-				return httpGet('/pitches');
+			getPitches: function(params) {
+				return httpGet('/pitches', {pageNum: params.pageNum});
 			},
 			getEvent: function(id) {
-				return httpGet('/events/' + id);
+				return httpGet('/events/' + id, {});
 			},
 			getEventInscriptions: function(id) {
-				return httpGet('/events/' + id + '/inscriptions');
+				return httpGet('/events/' + id + '/inscriptions', {});
 			},
 			joinEvent: function(id) {
 				return httpPost('/events/' + id + '/join');
