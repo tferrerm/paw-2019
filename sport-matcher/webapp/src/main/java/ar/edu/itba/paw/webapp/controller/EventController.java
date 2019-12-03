@@ -179,9 +179,9 @@ public class EventController extends BaseController {
     	throws EntityNotFoundException, DateInPastException, EventFullException, UserBusyException {
 	    /* HARDCODEADO HARDCODED InscriptionClosedException */
 	    
-	    //if (loggedUser() != null) {
-		    es.joinEvent(2/*loggedUser().getUserid()*/, id);
-	    //}
+	    if (loggedUser() != null) {
+		    es.joinEvent(loggedUser().getUserid(), id);
+	    }
         return Response.status(Status.NO_CONTENT).build();
     }
 

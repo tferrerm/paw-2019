@@ -35,6 +35,10 @@ define([], function() {
                     event: ['$route', 'restService', function($route, restService) {
                         var params = $route.current.params;
                         return restService.getEvent(params.id);
+                    }],
+                    inscriptions: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getEventInscriptions(params.id);
                     }]
                 }
             }

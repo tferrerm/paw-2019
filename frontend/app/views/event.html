@@ -68,7 +68,7 @@
 			      	</ul>
 				</div>
 			</div>
-			<div ng-if="eventHasEnded && event.isParticipant">
+			<div ng-if="eventHasEnded && event.participant">
 				<div class="event-points">
 					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
 					<h5 class="pitch-info-label vote-balance">{{event.voteBalance}}</h5>
@@ -119,12 +119,12 @@
 			</span>
 		</c:if>-->
 		<div class="club-buttons" ng-if="!inscriptionHasEnded">
-			<div ng-if="event.isParticipant">
+			<div ng-if="event.participant">
 				<a ng-click="leaveEvent(event.eventid)">
 					<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
 				</a>
 			</div>
-			<div ng-if="event.inscriptionCount < event.maxParticipants">
+			<div ng-if="!event.participant && event.inscriptionCount < event.maxParticipants">
 				<a ng-click="joinEvent(event.eventid)">
 					<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
 				</a>

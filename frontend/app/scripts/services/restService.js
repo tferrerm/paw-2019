@@ -35,6 +35,9 @@ define(['frontend'], function(frontend) {
 			},
 			joinEvent: function(id) {
 				return httpPost('/events/' + id + '/join');
+			},
+			leaveEvent: function(id) {
+				return httpPost('/events/' + id + '/leave');
 			}
 		}
 
