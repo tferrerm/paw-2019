@@ -42,6 +42,7 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ProfilePictureService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.ProfilePicture;
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Sport;
@@ -49,6 +50,9 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserComment;
 import ar.edu.itba.paw.webapp.auth.TokenAuthenticationManager;
 import ar.edu.itba.paw.webapp.dto.ClubDto;
+import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
+import ar.edu.itba.paw.webapp.dto.EventDto;
+import ar.edu.itba.paw.webapp.dto.EventScheduleDto;
 import ar.edu.itba.paw.webapp.dto.FullUserDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
@@ -268,6 +272,72 @@ public class UserController extends BaseController {
 		return Response.ok(image).cacheControl(cache).build();
 		
 	}
+    
+    @GET
+    @Path("/{id}/future-inscriptions")
+    public Response getFutureInscriptedEvents(@PathParam("id") final long userid) {
+    	List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
+		List<List<Event>> myEvents = es.convertEventListToSchedule(upcomingEvents);
+		
+		return Response.ok(EventScheduleDto.ofEvents(
+				myEvents.stream()
+				.map(x -> {
+					return EventCollectionDto.ofEvents(x.stream().map(EventDto::ofEvent).collect(Collectors.toList()));
+				})
+				.collect(Collectors.toList()))
+				).build();
+    }
+    
+    @GET
+    @Path("/future-owned-events")
+    public Response getMyFutureEvents(@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
+    	if(loggedUser() != null) {
+    		final long userid = loggedUser().getUserid();
+    		final List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
+			final int futureEventQty = es.countByOwner(true, userid);
+			final int pageCount = es.countUserOwnedPages(true, userid);
+			return Response.ok(
+					EventCollectionDto.ofEvents(
+							futureEvents.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
+							futureEventQty, pageCount, es.getPageInitialEventIndex(pageNum))
+					).build();
+    	}
+    	return Response.ok().build();
+    }
+    
+    @GET
+    @Path("/past-owned-events")
+    public Response getMyPastEvents(@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
+    	if(loggedUser() != null) {
+    		final long userid = loggedUser().getUserid();
+    		final List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
+			final int pastEventQty = es.countByOwner(false, userid);
+			final int pageCount = es.countUserOwnedPages(false, userid);
+			return Response.ok(
+					EventCollectionDto.ofEvents(
+							pastEvents.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
+							pastEventQty, pageCount, es.getPageInitialEventIndex(pageNum))
+					).build();
+    	}
+    	return Response.ok().build();
+    }
+    
+    @GET
+    @Path("/history")
+    public Response getHistory(@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
+    	if(loggedUser() != null) {
+    		final long loggedUserId = loggedUser().getUserid();
+			final List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
+			final int eventQty = es.countByUserInscriptions(false, loggedUserId);
+			final int pageCount = es.countUserInscriptionPages(false, loggedUserId);
+			return Response.ok(
+					EventCollectionDto.ofEvents(
+							events.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
+							eventQty, pageCount, es.getPageInitialEventIndex(pageNum))
+					).build();
+    	}
+    	return Response.ok().build();
+    }
 	
 //	@ExceptionHandler({ UserNotFoundException.class })
 //	private ModelAndView userNotFound() {

@@ -346,8 +346,9 @@ public class EventController extends BaseController {
 						ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
 				}
 				LOGGER.debug("Deleted event with id {}", id);
+				return Response.status(Status.NO_CONTENT).build();
     	}
-		return null;//new ModelAndView("redirect:/events/1");
+		return Response.status(Status.FORBIDDEN).build();
 	}
 
 

@@ -19,6 +19,13 @@ public class EventCollectionDto {
 		
 		return dto;
 	}
+	
+	public static EventCollectionDto ofEvents(List<EventDto> events) {
+		EventCollectionDto dto = new EventCollectionDto();
+		dto.events = events;
+		
+		return dto;
+	}
 
 	public List<EventDto> getEvents() {
 		return events;

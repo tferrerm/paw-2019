@@ -31,6 +31,7 @@ import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
+import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 
 @Path("pitches")
 @Component
@@ -86,6 +87,14 @@ public class PitchController extends BaseController {
 						.map(PitchDto::ofPitch)
 						.collect(Collectors.toList()), totalPitchQty, ps.countPitchPages(totalPitchQty)))
 				.build();
+	}
+	
+	@GET
+	@Path("/{id}")
+	public Response getPitch(@PathParam("id") final long id) throws PitchNotFoundException {
+		final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
+		
+		return Response.ok(PitchDto.ofPitch(pitch)).build();
 	}
 	
 	@GET
