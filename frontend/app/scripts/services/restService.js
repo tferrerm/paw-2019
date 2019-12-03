@@ -21,8 +21,14 @@ define(['frontend'], function(frontend) {
 			getAllEvents: function() {
 				return httpGet('/events');
 			},
+			getClub: function(id) {
+				return httpGet('/clubs/' + id);
+			},
 			getClubs: function() {
 				return httpGet('/clubs');
+			},
+			getPitch: function(id) {
+				return httpGet('/pitches/' + id);
 			},
 			getPitches: function() {
 				return httpGet('/pitches');

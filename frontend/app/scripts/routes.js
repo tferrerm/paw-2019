@@ -41,6 +41,26 @@ define([], function() {
                         return restService.getEventInscriptions(params.id);
                     }]
                 }
+            },
+            '/clubs/:id' : {
+                templateUrl: '/views/club.html',
+                controller: 'ClubCtrl',
+                resolve: {
+                    club: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getClub(params.id);
+                    }]
+                }
+            },
+            '/pitches/:id' : {
+                templateUrl: '/views/pitch.html',
+                controller: 'PitchCtrl',
+                resolve: {
+                    pitch: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getPitch(params.id);
+                    }]
+                }
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

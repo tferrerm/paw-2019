@@ -25,7 +25,7 @@
       <div class="home-header">{{club.name}}</div>
       <div class="home-header">{{club.location}}</div>
       <div>
-        <a href="/club/{{club.clubid}}"> <button type="button" class="btn btn-primary view-club">{{'view_club' | translate}}</button></a>
+        <a ng-click="goToClub(club.clubid)"> <button type="button" class="btn btn-primary view-club">{{'view_club' | translate}}</button></a>
       </div>
     </div>
   </div>

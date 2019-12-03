@@ -38,7 +38,7 @@
       <div class="home-header">{{pitch.club.location}}</div>
       <div class="home-header">{{pitch.club.name}}</div>
       <div>
-        <a href="/pitch/{{pitch.pitchid}}"> <button type="button" class="btn btn-primary view-event">{{'view_pitch' | translate }}</button></a>
+        <a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-event">{{'view_pitch' | translate }}</button></a>
       </div>
     </div>
   </div>

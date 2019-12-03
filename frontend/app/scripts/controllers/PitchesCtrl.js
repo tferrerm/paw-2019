@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('PitchesCtrl', ['$scope', 'restService', function($scope, restService) {
+	frontend.controller('PitchesCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
     
 	    $scope.pitchQty = 1;
 	    $scope.pageInitialIndex = 1;
@@ -11,6 +11,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    restService.getPitches().then(function(data) {
 			$scope.pitches = data.pitches;
 		});
+
+		$scope.goToPitch = function(id) {
+			$location.url('pitches/' + id);
+		};
 
 	}]);
 });

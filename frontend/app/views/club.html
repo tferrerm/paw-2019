@@ -1,0 +1,91 @@
+<div class="main-container">
+	<div class="content-container">
+		<div class="profile-title">
+			<h2>{{club.name}}</h2>
+		</div>
+		<div class="club-detail-container">
+			<div class="description-body">
+				<div class="description-item">
+					<div class="flex">
+						<div class="h4 pitch-info-label">
+							{{'club_location' | translate}}
+							<span class="h4"> {{club.location}}</span>
+						</div>
+					</div>
+					<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
+				</div>
+			</div>
+			<div class="description-item">
+				<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
+				<div ng-if="pitches.length == 0">
+					<span>{{'no_pitches' | translate}}</span>
+				</div>
+				<div ng-if="pitches.length > 0">
+					<ul>
+						<div ng-repeat="pitch in pitches">
+							<div class="custom-row flex-space-around club-pitches-list">
+								<div>{{pitch.name}}</div>
+								<div>{{pitch.sport | translate}}</div>
+								<div>
+									<a href="<c:url value="/pitch/${pitch.pitchid}" /> "> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
+								</div>
+							</div>
+						</div>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="tbl profile-cont">
+			<div ng-if="haveRelationship">
+				<c:url value="/club/${club.clubid}/comment" var="postPath"/>
+				<form:form id="commentForm" modelAttribute="commentForm" action="${postPath}" class="comments_form">
+					<form:label path="comment"><spring:message code="comment"/></form:label>
+					<form:input class="form-control" type="text" path="comment" maxlength="500"/>
+					<form:errors path="comment" cssClass="form-error" element="span"/>
+					<div class="justify-center">
+						<button type="submit" class="btn btn-primary submit-btn btn-primary"><spring:message code="comment_action"/></button>
+					</div>
+				</form:form>
+			</div>
+			<div ng-repeat="cmt in comments" class="comment-container">
+				<div class="comment-profile-row mv-10">
+					<img class="comment-image" src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
+					<a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> ">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
+				</div>
+				<span class="comment-text ml-10">{{cmt.comment}}</span>
+				<div class="comment-date ml-10 mt-10">
+					<div>{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
+				</div>
+			</div>
+			<div class="table-navigator">
+			    <div ng-if="commentQty > 0">
+			  		<div ng-if="currCommentPage != 1">
+			            <a href="<c:url value='/club/${club.clubid}?cmt=1' />">
+			                <button type="button" class="btn btn-secondary">
+			                    <spring:message code="first"/>
+			                </button>
+			            </a>
+			            <a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage-1}' />">
+			                <button type="button" class="btn btn-secondary">
+			                    <spring:message code="back"/>
+			                </button>
+			            </a>
+			        </div>
+			        <span class="flex">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + commentQty - 1}} {{'of' | translate}} {{totalCommentQty}}</span>
+			  		<div ng-if="currCommentPage != maxCommentPage">
+			            <a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage+1}' />">
+			                <button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+			            </a>
+			            <a href="<c:url value='/club/${club.clubid}?cmt=${maxCommentPage}' />">
+			                <button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+			            </a>
+			        </div>
+			    </div>
+			    <div ng-if="commentQty == 0" class="notice">
+			        {{'no_comments' | translate}}
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
