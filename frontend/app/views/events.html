@@ -10,15 +10,15 @@
 					<div class="table-titles">
 						<div>
 							<label>{{'event_name' | translate}}</label>
-							<input class="form-control" type="text" maxlength="100"/>
+							<input class="form-control" type="text" maxlength="100" ng-model="filters.name"/>
 						</div>
 						<div>
 							<label>{{'club' | translate}}</label>
-							<input class="form-control" type="text" maxlength="100"/>
+							<input class="form-control" type="text" maxlength="100" ng-model="filters.club"/>
 						</div>
 						<div>
 							<label>{{'sport' | translate}}</label>
-							<select class="form-control">
+							<select class="form-control" ng-model="filters.sport">
 								<option  value=""></option>
 								<option ng-repeat="sport in sports" value="sport">
 									{{sport | translate}}
@@ -27,20 +27,22 @@
 						</div>
 						<div>
 							<label>{{'vacancies' | translate}}</label>
-							<input class="form-control" min="1" max="99" type="number" />
+							<input class="form-control" min="1" max="99" type="number" ng-model="filters.vacancies"/>
 							<span class="form-error" ng-if="invalid_number_format">
 								{{'invalid_number_format' | translate}}
 							</span>
 						</div>
 						<div>
 							<label>{{'date' | translate}}</label>
-							<input class="form-control" type="date" min="{{currentDate}}" max="{{aWeekFromNow}}"/>
+							<input class="form-control" type="date" min="{{currentDate}}" max="{{aWeekFromNow}}" ng-model="filters.date"/>
 							<span class="form-error" ng-if="invalid_date_format">
 								{{'invalid_date_format' | translate}}
 							</span>
 						</div>
 						<div>
-							<button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+							<a ng-click="filterEvents()">
+								<button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+							</a>
 						</div>
 					</div>
 				</form>

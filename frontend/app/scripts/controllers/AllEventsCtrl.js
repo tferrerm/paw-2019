@@ -3,6 +3,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 	frontend.controller('AllEventsCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
 		var params = {pageNum: 1};
+		$scope.filters = {};
 		$scope.currentDate = new Date();
     	$scope.aWeekFromNow = new Date();
 		$scope.sports = [];
@@ -40,6 +41,18 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.pageNum = params.pageNum;
 			});
 		};
+
+		$scope.filterEvents = function() {
+			params = $scope.filters;
+			params.pageNum = 1;
+			restService.getAllEvents(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		}
 
   	}]);
 
