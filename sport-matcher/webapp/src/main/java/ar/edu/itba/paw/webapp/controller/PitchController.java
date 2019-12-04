@@ -31,6 +31,7 @@ import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
+import ar.edu.itba.paw.webapp.dto.SportCollectionDto;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 
 @Path("pitches")
@@ -114,6 +115,12 @@ public class PitchController extends BaseController {
 				: IOUtils.toByteArray(new ClassPathResource(DEFAULT_PITCH_PICTURE).getInputStream());
 		
 		return Response.ok(image).cacheControl(cache).build();
+	}
+	
+	@GET
+	@Path("/sports")
+	public Response getSports() {
+		return Response.ok(SportCollectionDto.ofSports(Sport.values())).build();
 	}
 
 }
