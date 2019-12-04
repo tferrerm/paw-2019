@@ -10,10 +10,10 @@
           </span>
         </div>
         <div class="home-all-events">
-          <div ng-repeat="row in myEvents" class="home-ev-column">
-            <a ng-repeat="event in row" ng-if="event.name != null" class="event-link" href="<c:url value='/event/${event.eventId}' />">
+          <div ng-repeat="row in schedule" class="home-ev-column">
+            <a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" href="">
               <span class="event-link">
-                ${event.name}
+                {{event.name}}
               </span>
             </a>
           </div>
