@@ -7,13 +7,15 @@ public class ClubCollectionDto {
 	private List<ClubDto> clubs;
 	private int totalClubsMatching;
 	private int pagesCountMatching;
+	private int initialPageIndex;
 	
 	public static ClubCollectionDto ofClubs(List<ClubDto> clubs, int totalClubsMatching,
-			int pagesCountMatching) {
+			int pagesCountMatching, int initialPageIndex) {
 		final ClubCollectionDto dto = new ClubCollectionDto();
 		dto.clubs = clubs;
 		dto.totalClubsMatching = totalClubsMatching;
 		dto.pagesCountMatching = pagesCountMatching;
+		dto.initialPageIndex = initialPageIndex;
 		
 		return dto;
 	}
@@ -40,6 +42,14 @@ public class ClubCollectionDto {
 
 	public void setPagesCountMatching(int pagesCountMatching) {
 		this.pagesCountMatching = pagesCountMatching;
+	}
+
+	public int getInitialPageIndex() {
+		return initialPageIndex;
+	}
+
+	public void setInitialPageIndex(int initialPageIndex) {
+		this.initialPageIndex = initialPageIndex;
 	}
 
 }

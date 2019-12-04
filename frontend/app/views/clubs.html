@@ -1,48 +1,48 @@
 <div class="content-container">
-  <div class="profile-title">
-    <h2>{{'all_clubs' | translate}}</h2>
-  </div>
-  <span class="help-message notice w-70 justify-center">{{'club_list_help' | translate}}</span>
-  <div class="tbl club-table-size">
-    <div class="table-header">
-      <form id="searchfilters" class="searchfilters">
-        <div class="table-titles flex-space-around">
-          <div>
-            <label>{{'name' | translate}}</label>
-            <input class="form-control" type="text" maxlength="100"/>
-          </div>
-          <div>
-            <label>{{'location' | translate}}</label>
-            <input class="form-control" type="text" maxlength="100"/>
-          </div>
-          <div>
-            <button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div ng-repeat="club in clubs" class="custom-row flex-space-around">
-      <div class="home-header">{{club.name}}</div>
-      <div class="home-header">{{club.location}}</div>
-      <div>
-        <a ng-click="goToClub(club.clubid)"> <button type="button" class="btn btn-primary view-club">{{'view_club' | translate}}</button></a>
-      </div>
-    </div>
-  </div>
-  <div class="table-navigator w-100 justify-center">
-    <div ng-if="clubQty > 0" class="flex">
-      <div class="{{pageNum}} ? '' : 'hidden'">
-        <a href="/clubs/1"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
-        <a href="/clubs/{{pageNum-1}}"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
-      </div>
-      <span>{{showing_items | translate}} {{pageInitialIndex}}-{{pageInitialIndex + clubQty - 1}} {{'of' | translate }} {{totalClubQty}}</span>
-      <div class="{{pageNum != lastPageNum ? '' : 'hidden'}}">
-        <a href="/clubs/{{pageNum+1}}"><button type="button" class="btn btn-secondary">{{'next' | translate}}</button></a>
-        <a href="/clubs/{{lastPageNum}}"><button type="button" class="btn btn-secondary">{{'last' | translate }}</button></a>
-      </div>
-    </div>
-    <div ng-if="clubQty <= 0" class="notice">
-      {{'no_results' | translate}}
-    </div>
-  </div>
+	<div class="profile-title">
+		<h2>{{'all_clubs' | translate}}</h2>
+	</div>
+	<span class="help-message notice w-70 justify-center">{{'club_list_help' | translate}}</span>
+	<div class="tbl club-table-size">
+		<div class="table-header">
+			<form id="searchfilters" class="searchfilters">
+				<div class="table-titles flex-space-around">
+					<div>
+						<label>{{'name' | translate}}</label>
+						<input class="form-control" type="text" maxlength="100"/>
+					</div>
+					<div>
+						<label>{{'location' | translate}}</label>
+						<input class="form-control" type="text" maxlength="100"/>
+					</div>
+					<div>
+						<button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div ng-repeat="club in clubs" class="custom-row flex-space-around">
+			<div class="home-header">{{club.name}}</div>
+			<div class="home-header">{{club.location}}</div>
+			<div>
+				<a ng-click="goToClub(club.clubid)"> <button type="button" class="btn btn-primary view-club">{{'view_club' | translate}}</button></a>
+			</div>
+		</div>
+	</div>
+	<div class="table-navigator w-100 justify-center">
+		<div ng-if="clubCount > 0" class="flex">
+			<div class="{{pageNum}} ? '' : 'hidden'">
+				<a href="/clubs/1"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
+				<a href="/clubs/{{pageNum-1}}"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
+			</div>
+			<span>{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + clubs.length - 1}} {{'of' | translate }} {{clubCount}}</span>
+			<div class="{{pageNum != lastPageNum ? '' : 'hidden'}}">
+				<a href="/clubs/{{pageNum+1}}"><button type="button" class="btn btn-secondary">{{'next' | translate}}</button></a>
+				<a href="/clubs/{{lastPageNum}}"><button type="button" class="btn btn-secondary">{{'last' | translate }}</button></a>
+			</div>
+		</div>
+		<div ng-if="clubCount <= 0" class="notice">
+			{{'no_results' | translate}}
+		</div>
+	</div>
 </div>

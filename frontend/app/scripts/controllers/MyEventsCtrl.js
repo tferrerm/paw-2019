@@ -1,11 +1,26 @@
 'use strict';
-define(['frontend'], function(frontend) {
+define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('MyEventsCtrl', function($scope) {
-    $scope.past_events = [];
-    $scope.future_events = [];
-    $scope.no_events = false;
-    $scope.page = 2;
-    $scope.lastPageNum = 3;
-	});
+	frontend.controller('MyEventsCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
+	    var pastEventParams = {pageNum: 1};
+	    var futureEventParams = {pageNum: 1};
+
+	    restService.getMyPastEvents(pastEventParams).then(function(data) {
+			$scope.pastEvents = data.events;
+			$scope.pastEventCount = data.eventCount;
+			$scope.pastEventsLastPageNum = data.lastPageNum;
+			$scope.pastEventsInitialPageIndex = data.initialPageIndex;
+			$scope.pastEventsPageNum = pastEventParams.pageNum;
+		});
+
+		restService.getMyFutureEvents(futureEventParams).then(function(data) {
+			$scope.futureEvents = data.events;
+			$scope.futureEventCount = data.eventCount;
+			$scope.futureEventsLastPageNum = data.lastPageNum;
+			$scope.futureEventsInitialPageIndex = data.initialPageIndex;
+			$scope.futureEventsPageNum = futureEventParams.pageNum;
+		});
+
+		$scope.noEvents = false;//($scope.pastEvents.length == 0) && ($scope.futureEvents.length == 0);
+	}]);
 });

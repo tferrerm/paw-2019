@@ -40,6 +40,15 @@ define(['frontend', 'jquery'], function(frontend) {
 			getEventInscriptions: function(id) {
 				return httpGet('/events/' + id + '/inscriptions', {});
 			},
+			getHistory: function(params) {
+				return httpGet('/users/history', {pageNum: params.pageNum});
+			},
+			getMyFutureEvents: function(params) {
+				return httpGet('/users/future-owned-events', {pageNum: params.pageNum});
+			},
+			getMyPastEvents: function(params) {
+				return httpGet('/users/past-owned-events', {pageNum: params.pageNum});
+			},
 			joinEvent: function(id) {
 				return httpPost('/events/' + id + '/join');
 			},

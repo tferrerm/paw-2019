@@ -185,12 +185,13 @@ public class ClubController extends BaseController {
         		Optional.ofNullable(clubName), 
         		Optional.ofNullable(location));
         int clubPages = cs.countClubPages(totalClubQty);
+        int pageInitialIndex = cs.getPageInitialClubIndex(pageNum);
 
 		return Response
 				.status(Status.OK)
 				.entity(ClubCollectionDto.ofClubs(
 						clubs.stream().map(ClubDto::ofClub).collect(Collectors.toList()),
-						totalClubQty, clubPages))
+						totalClubQty, clubPages, pageInitialIndex))
 				.build();
 	}
 	

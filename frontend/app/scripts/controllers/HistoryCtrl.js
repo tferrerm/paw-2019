@@ -1,11 +1,15 @@
 'use strict';
-define(['frontend'], function(frontend) {
+define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('HistoryCtrl', function($scope) {
-    $scope.eventQty = 2;
-    $scope.past_participations = [];
-    $scope.pageInitialIndex = 1;
-    $scope.eventQty = 3;
-    $scope.totalEventQty = 5;
-	});
+	frontend.controller('HistoryCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
+	    var params = {pageNum: 1};
+
+	    restService.getHistory(params).then(function(data) {
+			$scope.events = data.events;
+			$scope.eventCount = data.eventCount;
+			$scope.lastPageNum = data.lastPageNum;
+			$scope.initialPageIndex = data.initialPageIndex;
+			$scope.pageNum = params.pageNum;
+		});
+	}]);
 });
