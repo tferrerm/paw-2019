@@ -9,14 +9,16 @@
 				<div class="table-titles flex-space-around">
 					<div>
 						<label>{{'name' | translate}}</label>
-						<input class="form-control" type="text" maxlength="100"/>
+						<input class="form-control" type="text" maxlength="100" ng-model="filters.name"/>
 					</div>
 					<div>
 						<label>{{'location' | translate}}</label>
-						<input class="form-control" type="text" maxlength="100"/>
+						<input class="form-control" type="text" maxlength="100" ng-model="filters.location"/>
 					</div>
 					<div>
-						<button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+						<a ng-click="filterClubs()">
+							<button class="btn btn-primary" type="submit">{{'filter' | translate}}</button>
+						</a>
 					</div>
 				</div>
 			</form>
@@ -31,14 +33,14 @@
 	</div>
 	<div class="table-navigator w-100 justify-center">
 		<div ng-if="clubCount > 0" class="flex">
-			<div class="{{pageNum}} ? '' : 'hidden'">
-				<a href="/clubs/1"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
-				<a href="/clubs/{{pageNum-1}}"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
+			<div ng-hide="pageNum == 1">
+				<a ng-click="getFirstPage()"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
+				<a ng-click="getPrevPage()"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
 			</div>
 			<span>{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + clubs.length - 1}} {{'of' | translate }} {{clubCount}}</span>
-			<div class="{{pageNum != lastPageNum ? '' : 'hidden'}}">
-				<a href="/clubs/{{pageNum+1}}"><button type="button" class="btn btn-secondary">{{'next' | translate}}</button></a>
-				<a href="/clubs/{{lastPageNum}}"><button type="button" class="btn btn-secondary">{{'last' | translate }}</button></a>
+			<div ng-hide="pageNum == lastPageNum">
+				<a ng-click="getNextPage()"><button type="button" class="btn btn-secondary">{{'next' | translate}}</button></a>
+				<a ng-click="getLastPage()"><button type="button" class="btn btn-secondary">{{'last' | translate }}</button></a>
 			</div>
 		</div>
 		<div ng-if="clubCount <= 0" class="notice">

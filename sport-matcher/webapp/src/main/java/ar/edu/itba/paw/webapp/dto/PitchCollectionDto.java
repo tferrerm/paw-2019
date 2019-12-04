@@ -7,12 +7,23 @@ public class PitchCollectionDto {
 	private List<PitchDto> pitches;
 	private int pitchCount;
 	private int pageCount;
+	private int initialPageIndex;
 	
 	public static PitchCollectionDto ofPitches(List<PitchDto> pitches, int pitchCount, int pageCount) {
 		PitchCollectionDto dto = new PitchCollectionDto();
 		dto.pitches = pitches;
 		dto.pitchCount = pitchCount;
 		dto.pageCount = pageCount;
+		
+		return dto;
+	}
+	
+	public static PitchCollectionDto ofPitches(List<PitchDto> pitches, int pitchCount, int pageCount, int initialPageIndex) {
+		PitchCollectionDto dto = new PitchCollectionDto();
+		dto.pitches = pitches;
+		dto.pitchCount = pitchCount;
+		dto.pageCount = pageCount;
+		dto.initialPageIndex = initialPageIndex;
 		
 		return dto;
 	}
@@ -39,6 +50,14 @@ public class PitchCollectionDto {
 
 	public void setPageCount(int pageCount) {
 		this.pageCount = pageCount;
+	}
+
+	public int getInitialPageIndex() {
+		return initialPageIndex;
+	}
+
+	public void setInitialPageIndex(int initialPageIndex) {
+		this.initialPageIndex = initialPageIndex;
 	}
 
 }

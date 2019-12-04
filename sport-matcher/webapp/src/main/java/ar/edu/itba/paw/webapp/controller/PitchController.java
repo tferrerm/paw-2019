@@ -58,7 +58,7 @@ public class PitchController extends BaseController {
 			@QueryParam("name") String name,
 			@QueryParam("sport") Sport sport,
 			@QueryParam("location") String location,
-			@QueryParam("clubname") String clubName) {
+			@QueryParam("club") String clubName) {
 		//String queryString = buildQueryString(name, sportString, location, clubName);
 		//ModelAndView mav = new ModelAndView("pitchesList");
 		
@@ -79,6 +79,8 @@ public class PitchController extends BaseController {
 		int totalPitchQty = ps.countFilteredPitches(Optional.ofNullable(name), 
         		Optional.ofNullable(sport), Optional.ofNullable(location), 
         		Optional.ofNullable(clubName));
+		int pageInitialIndex = ps.getPageInitialPitchIndex(pageNum);
+		
         //mav.addObject("totalPitchQty", totalPitchQty);
         //mav.addObject("lastPageNum", ps.countPitchPages(totalPitchQty));
         
@@ -86,7 +88,7 @@ public class PitchController extends BaseController {
 				.ok(PitchCollectionDto.ofPitches(
 						pitches.stream()
 						.map(PitchDto::ofPitch)
-						.collect(Collectors.toList()), totalPitchQty, ps.countPitchPages(totalPitchQty)))
+						.collect(Collectors.toList()), totalPitchQty, ps.countPitchPages(totalPitchQty), pageInitialIndex))
 				.build();
 	}
 	

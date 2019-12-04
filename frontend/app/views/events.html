@@ -64,7 +64,7 @@
 		</div>
 		<div class="table-navigator w-100 justify-center" ng-if="events.length > 0">
 			<div ng-hide="pageNum == 1">
-				<a href="/events/1{{queryString}}'">
+				<a ng-click="getFirstPage()">
 					<button type="button" class="btn btn-secondary">
 						{{'first' | translate}}
 					</button>
@@ -80,7 +80,7 @@
 				<a ng-click="getNextPage()">
 					<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 				</a>
-				<a href="/events/{{lastPageNum}}{{queryString}}">
+				<a ng-click="getLastPage()">
 					<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
 				</a>
 			</div>

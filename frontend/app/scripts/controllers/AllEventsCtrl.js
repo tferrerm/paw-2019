@@ -20,6 +20,17 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$location.url('events/' + id);
 		};
 
+		$scope.getFirstPage = function() {
+			params.pageNum = 1;
+			restService.getAllEvents(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		};
+
 		$scope.getPrevPage = function() {
 			params.pageNum--;
 			restService.getAllEvents(params).then(function(data) {
@@ -33,6 +44,17 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getNextPage = function() {
 			params.pageNum++;
+			restService.getAllEvents(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		};
+
+		$scope.getLastPage = function() {
+			params.pageNum = $scope.lastPageNum;
 			restService.getAllEvents(params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;

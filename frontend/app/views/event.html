@@ -60,10 +60,10 @@
 					<span class="event-info-label">{{'participants' | translate}}</span>
 					<ul>
 					    <div ng-repeat="i in inscriptions">
-				            <form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">
-					            <a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</a>
+				            <!--<form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">-->
+					            <!--<a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">--><span>{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</span><!--</a>-->
 					            <button type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid">{{'kick' | translate}}</button>
-				            </form>
+				            <!--</form>-->
 				        </div>
 			      	</ul>
 				</div>

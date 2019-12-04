@@ -26,13 +26,13 @@ define(['frontend', 'jquery'], function(frontend) {
 				return httpGet('/clubs/' + id, {});
 			},
 			getClubs: function(params) {
-				return httpGet('/clubs', {pageNum: params.pageNum});
+				return httpGet('/clubs', {pageNum: params.pageNum, name: params.name, location: params.location});
 			},
 			getPitch: function(id) {
 				return httpGet('/pitches/' + id, {});
 			},
 			getPitches: function(params) {
-				return httpGet('/pitches', {pageNum: params.pageNum});
+				return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
 			},
 			getEvent: function(id) {
 				return httpGet('/events/' + id, {});
