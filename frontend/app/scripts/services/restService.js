@@ -49,6 +49,9 @@ define(['frontend', 'jquery'], function(frontend) {
 			getMyPastEvents: function(params) {
 				return httpGet('/users/past-owned-events', {pageNum: params.pageNum});
 			},
+			getUpcomingEvents: function(id) {
+				return httpGet('/users/' + id + '/future-inscriptions', {});
+			},
 			joinEvent: function(id) {
 				return httpPost('/events/' + id + '/join');
 			},

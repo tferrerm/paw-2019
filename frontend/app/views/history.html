@@ -36,24 +36,24 @@
 			</div>
 		</div>
 		<div class="table-navigator w-100 justify-center">
-			<div class="{{pageNum != 1 ? '' : 'hidden'}}">
-			<a href="/history/1'">
+			<div ng-hide="pageNum == 1">
+			<a ng-click="getFirstPage()">
 				<button type="button" class="btn btn-secondary">
 					{{'first' | translate}}
 				</button>
 			</a>
-			<a href="/history/{{pageNum-1}}">
+			<a ng-click="getPrevPage()">
 				<button type="button" class="btn btn-secondary">
 					{{'back' | translate}}
 				</button>
 			</a>
 		</div>
-		<span class="flex">{{'showing_items' | translate}} {{pageInitialIndex}}-{{pageInitialIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
-		<div class="{{pageNum != lastPageNum ? '' : 'hidden'">
-		<a href="/history/{{pageNum+1}}">
+		<span class="flex">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
+		<div ng-hide="pageNum == lastPageNum">
+		<a ng-click="getNextPage()">
 			<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 		</a>
-		<a href="/history/{{lastPageNum}}">
+		<a ng-click="getLastPage()">
 			<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
 		</a>
 	</div>

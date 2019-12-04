@@ -11,5 +11,49 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$scope.initialPageIndex = data.initialPageIndex;
 			$scope.pageNum = params.pageNum;
 		});
+
+		$scope.getFirstPage = function() {
+			params.pageNum = 1;
+			restService.getHistory(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		};
+
+		$scope.getPrevPage = function() {
+			params.pageNum--;
+			restService.getHistory(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		};
+
+		$scope.getNextPage = function() {
+			params.pageNum++;
+			restService.getHistory(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		};
+
+		$scope.getLastPage = function() {
+			params.pageNum = $scope.lastPageNum;
+			restService.getHistory(params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+		};
 	}]);
 });
