@@ -99,18 +99,18 @@ public class UserController extends BaseController {
 	@Autowired
 	private TokenAuthenticationManager cph;
 
-	@GET
-	@Path("/users/login")
-	public Response login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
-		if(cph.isAuthenticated()) {
-			if(cph.isAdmin())
-				return null;//return new ModelAndView("redirect:/admin/");
-			//return new ModelAndView("redirect:/home");
-		}
-		//ModelAndView mav = new ModelAndView("login");
-		//mav.addObject("error", error);
-		return null;//mav;
-	}
+//	@GET
+//	@Path("/users/login")
+//	public Response login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
+//		if(cph.isAuthenticated()) {
+//			if(cph.isAdmin())
+//				return null;//return new ModelAndView("redirect:/admin/");
+//			//return new ModelAndView("redirect:/home");
+//		}
+//		//ModelAndView mav = new ModelAndView("login");
+//		//mav.addObject("error", error);
+//		return null;//mav;
+//	}
 	
 //	@GET
 //    @Path("/logout")

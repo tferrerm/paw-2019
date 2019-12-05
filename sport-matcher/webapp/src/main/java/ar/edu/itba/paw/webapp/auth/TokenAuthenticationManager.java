@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,26 +30,26 @@ public class TokenAuthenticationManager {
 	@Autowired
 	private UserDetailsService uds;
 	
-	public Authentication getAuthentication() {
-		return SecurityContextHolder.getContext().getAuthentication();
-	}
-	
-	public boolean isAuthenticated() {
-		Authentication auth = getAuthentication();
-		return auth != null && auth.isAuthenticated() && 
-				!(auth instanceof AnonymousAuthenticationToken);
-	}
-	
-	public boolean isAdmin() {
-		Authentication auth = getAuthentication();
-		if(!isAuthenticated())
-			return false;
-		for(GrantedAuthority authority : auth.getAuthorities()) {
-			if(authority.getAuthority().equals("ROLE_ADMIN"))
-				return true;
-		}
-		return false;
-	}
+//	public Authentication getAuthentication() {
+//		return SecurityContextHolder.getContext().getAuthentication();
+//	}
+//	
+//	public boolean isAuthenticated() {
+//		Authentication auth = getAuthentication();
+//		return auth != null && auth.isAuthenticated() && 
+//				!(auth instanceof AnonymousAuthenticationToken);
+//	}
+//	
+//	public boolean isAdmin() {
+//		Authentication auth = getAuthentication();
+//		if(!isAuthenticated())
+//			return false;
+//		for(GrantedAuthority authority : auth.getAuthorities()) {
+//			if(authority.getAuthority().equals("ROLE_ADMIN"))
+//				return true;
+//		}
+//		return false;
+//	}
 	
 	public void authenticate(Authentication authentication, HttpServletResponse response) {
 		final String token = generateTokenForUser(authentication.getName());
@@ -68,18 +70,18 @@ public class TokenAuthenticationManager {
 		return token != null && Jwts.parser().isSigned(token);
 	}
 	
-	public void authenticate(String username, String password, HttpServletRequest request) {
-//		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-//				username, password);
-//		authToken.setDetails(new WebAuthenticationDetails(request));
-//		Authentication authentication = authenticationManager.authenticate(authToken);
-		Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-	}
+//	public void authenticate(String username, String password, HttpServletRequest request) {
+////		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+////				username, password);
+////		authToken.setDetails(new WebAuthenticationDetails(request));
+////		Authentication authentication = authenticationManager.authenticate(authToken);
+//		Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//	}
 	
 	private String generateTokenForUser(final String username) {
 		return Jwts.builder()
-				.setId(null).setSubject(username).signWith(SignatureAlgorithm.RS512, tokenSecretKey)
+				.setId(UUID.randomUUID().toString()).setSubject(username).signWith(SignatureAlgorithm.RS512, tokenSecretKey)
 				.compact();
 	}
 	

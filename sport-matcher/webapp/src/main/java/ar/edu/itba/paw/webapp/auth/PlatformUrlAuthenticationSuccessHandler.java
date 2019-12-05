@@ -22,6 +22,7 @@ public class PlatformUrlAuthenticationSuccessHandler
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		tam.authenticate(authentication, response);
+		clearAuthenticationAttributes(request);
 	}
 
 }

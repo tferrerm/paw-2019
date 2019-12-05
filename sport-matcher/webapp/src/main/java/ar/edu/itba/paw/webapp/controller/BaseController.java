@@ -28,18 +28,18 @@ public class BaseController {
 	private UserService us;
 	
 	public User loggedUser() {
-		return us.findById(2).get();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		if(auth == null) {
-//			LOGGER.debug("Returning null as logged user");
-//			return null;
-//		}
-//		LOGGER.debug("Auth is: {}", auth.isAuthenticated());
-//		if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
-//			return null;
-//		}
-//		final Optional<User> user = us.findByUsername(auth.getName());
-//		return user.get();
+//		return us.findById(2).get();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth == null) {
+			LOGGER.debug("Returning null as logged user");
+			return null;
+		}
+		LOGGER.debug("Auth is: {}", auth.isAuthenticated());
+		if(auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+			return null;
+		}
+		final Optional<User> user = us.findByUsername(auth.getName());
+		return user.get();
 	}
 	
     public Integer tryInteger(String str) {
