@@ -6,11 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -81,7 +78,7 @@ public class TokenAuthenticationManager {
 	
 	private String generateTokenForUser(final String username) {
 		return Jwts.builder()
-				.setId(UUID.randomUUID().toString()).setSubject(username).signWith(SignatureAlgorithm.RS512, tokenSecretKey)
+				.setId(UUID.randomUUID().toString()).setSubject(username).signWith(SignatureAlgorithm.HS512, tokenSecretKey)
 				.compact();
 	}
 	
