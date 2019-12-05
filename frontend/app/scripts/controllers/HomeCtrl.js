@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('HomeCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
+	frontend.controller('HomeCtrl', ['$scope', '$location', 'restService', 'authService', function($scope, $location, restService, authService) {
 		$scope.loggedUser = {name: "Santiago"};
 		$scope.noParticipations = false;
     	$scope.scheduleHeaders = [];
@@ -10,5 +10,10 @@ define(['frontend', 'services/restService'], function(frontend) {
     	restService.getUpcomingEvents(2).then(function(data) {
 			$scope.schedule = data.schedule;
 		});
+
+    	$scope.loginUser = {};
+		$scope.login = function() {
+			authService.login($scope.loginUser.username, $scope.loginUser.password, false/*$scope.loginUser.rememberMe*/);
+		}
 	}]);
 });

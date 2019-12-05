@@ -1,41 +1,48 @@
 <div class="content-container">
-  <div class="content-container" ng-if="loggedUser != null">
-    <h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
-    <div ng-if="!noParticipations">
-      <span class="help-message notice w-70 justify-center">{{'home_help' | translate}}</span>
-      <div class="home-evs-container">
-        <div class="home-evs-group flex">
-          <span class="home-ev-title flex flex-1" ng-repeat="header in scheduleHeaders">
-            {{'header' | translate}}
-          </span>
-        </div>
-        <div class="home-all-events">
-          <div ng-repeat="row in schedule" class="home-ev-column">
-            <a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" href="">
-              <span class="event-link">
-                {{event.name}}
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div ng-if="noParticipations">
-      <h4>{{'home_default' | translate}}</h4>
-      <span ng-if="loggedUser == null" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
-        <span class="registration-sport-matcher event-info-label">{{'sport_matcher' | translate}}</span>
-        <span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
-      </span>
-    </div>
-  </div>
-  <div class="bottom-home-container">
-    <div class="bottom-home-item">
-      <h3>{{'introAllEvents' | translate}}</h3>
-      <button><a href="<c:url value='/events/1' />">{{'allEvents' | translate}}</a></button>
-    </div>
-    <div class="bottom-home-item">
-      <h3>{{'introCreateEvent' | translate}}</h3>
-      <button><a href="<c:url value='/pitches/1' />">{{'create_event' | translate}}</a></button>
-    </div>
-  </div>
+	<div class="content-container" ng-if="loggedUser != null">
+		<h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
+		<div>
+			<input type="text" name="username" ng-model="loginUser.username">
+			<input type="password" name="password" ng-model="loginUser.password">
+			<a ng-click="login()">
+				<button>LOGIN</button>
+			</a>
+		</div>
+		<div ng-if="!noParticipations">
+			<span class="help-message notice w-70 justify-center">{{'home_help' | translate}}</span>
+			<div class="home-evs-container">
+				<div class="home-evs-group flex">
+					<span class="home-ev-title flex flex-1" ng-repeat="header in scheduleHeaders">
+						{{'header' | translate}}
+					</span>
+				</div>
+				<div class="home-all-events">
+					<div ng-repeat="row in schedule" class="home-ev-column">
+						<a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" href="">
+							<span class="event-link">
+								{{event.name}}
+							</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-if="noParticipations">
+			<h4>{{'home_default' | translate}}</h4>
+			<span ng-if="loggedUser == null" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
+				<span class="registration-sport-matcher event-info-label">{{'sport_matcher' | translate}}</span>
+				<span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
+			</span>
+		</div>
+	</div>
+	<div class="bottom-home-container">
+		<div class="bottom-home-item">
+			<h3>{{'introAllEvents' | translate}}</h3>
+			<button><a href="<c:url value='/events/1' />">{{'allEvents' | translate}}</a></button>
+		</div>
+		<div class="bottom-home-item">
+			<h3>{{'introCreateEvent' | translate}}</h3>
+			<button><a href="<c:url value='/pitches/1' />">{{'create_event' | translate}}</a></button>
+		</div>
+	</div>
 </div>
