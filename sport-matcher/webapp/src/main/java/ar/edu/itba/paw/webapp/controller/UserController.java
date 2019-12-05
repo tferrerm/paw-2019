@@ -163,6 +163,13 @@ public class UserController extends BaseController {
 	}
     
     @GET
+    @Path("/profile")
+    public Response getProfile() {
+    	return Response.ok(UserDto.ofUser(loggedUser())).build();
+    }
+    
+    
+    @GET
     @Path("/{id}/comment/{commentId}")
     public Response getComment(@PathParam("id") long userid,
     						   @PathParam("commentId") long commentId)
