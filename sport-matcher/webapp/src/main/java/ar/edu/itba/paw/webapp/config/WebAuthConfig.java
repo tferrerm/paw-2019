@@ -76,7 +76,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers(HttpMethod.DELETE).access("hasRole('ROLE_ADMIN')")
 	                .antMatchers("/user/create").permitAll()
 	                .antMatchers("/user/**").access("hasRole('ROLE_USER')")
-	                .antMatchers("/login").permitAll()
+	                .antMatchers("/user/login").permitAll()
 	                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 	                .antMatchers("/event/*/join", "/event/*/leave", "/event/*/upvote", "/event/*/downvote",
 	                		"/event/*/kick-user/*", "/event/*/delete").access("hasRole('ROLE_USER')")
@@ -104,7 +104,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
                 .and().exceptionHandling()
-                	.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+               		.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
                 .and().csrf()
                 	.disable().addFilterBefore(sf, UsernamePasswordAuthenticationFilter.class);
     }
