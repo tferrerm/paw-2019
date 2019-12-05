@@ -276,67 +276,77 @@ public class UserController extends BaseController {
     @GET
     @Path("/{id}/future-inscriptions")
     public Response getFutureInscriptedEvents(@PathParam("id") final long userid) {
+    	if(loggedUser() == null || loggedUser().getUserid() != userid) {
+    		return Response.status(Status.FORBIDDEN).build();
+    	}
+    	
     	List<Event> upcomingEvents = es.findFutureUserInscriptions(loggedUser().getUserid(), true);
 		List<List<Event>> myEvents = es.convertEventListToSchedule(upcomingEvents);
 		
 		return Response.ok(EventScheduleDto.ofEvents(
 				myEvents.stream()
 				.map(x -> {
-					return EventCollectionDto.ofEvents(x.stream().map(EventDto::ofEvent).collect(Collectors.toList()));
+					return EventCollectionDto.ofEvents(x.stream()
+							.map(ev -> ev != null? EventDto.ofEvent(ev, false) : null)
+							.collect(Collectors.toList()));
 				})
 				.collect(Collectors.toList()))
 				).build();
     }
     
     @GET
-    @Path("/future-owned-events")
-    public Response getMyFutureEvents(@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
-    	if(loggedUser() != null) {
-    		final long userid = loggedUser().getUserid();
-    		final List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
-			final int futureEventQty = es.countByOwner(true, userid);
-			final int pageCount = es.countUserOwnedPages(true, userid);
-			return Response.ok(
-					EventCollectionDto.ofEvents(
-							futureEvents.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
-							futureEventQty, pageCount, es.getPageInitialEventIndex(pageNum))
-					).build();
+    @Path("/{id}/future-owned-events")
+    public Response getMyFutureEvents(@PathParam("id") final long userid,
+    		@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
+    	if(loggedUser() == null || loggedUser().getUserid() != userid) {
+    		return Response.status(Status.FORBIDDEN).build();
     	}
-    	return Response.ok().build();
+    	
+		final List<Event> futureEvents = es.findByOwner(true, userid, pageNum);
+		final int futureEventQty = es.countByOwner(true, userid);
+		final int pageCount = es.countUserOwnedPages(true, userid);
+		return Response.ok(
+				EventCollectionDto.ofEvents(
+						futureEvents.stream().map(e -> EventDto.ofEvent(e, true)).collect(Collectors.toList()),
+						futureEventQty, pageCount, es.getPageInitialEventIndex(pageNum))
+				).build();
     }
     
     @GET
-    @Path("/past-owned-events")
-    public Response getMyPastEvents(@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
-    	if(loggedUser() != null) {
-    		final long userid = loggedUser().getUserid();
-    		final List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
-			final int pastEventQty = es.countByOwner(false, userid);
-			final int pageCount = es.countUserOwnedPages(false, userid);
-			return Response.ok(
-					EventCollectionDto.ofEvents(
-							pastEvents.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
-							pastEventQty, pageCount, es.getPageInitialEventIndex(pageNum))
-					).build();
+    @Path("/{id}/past-owned-events")
+    public Response getMyPastEvents(@PathParam("id") final long userid,
+    		@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
+    	if(loggedUser() == null || loggedUser().getUserid() != userid) {
+    		return Response.status(Status.FORBIDDEN).build();
     	}
-    	return Response.ok().build();
+    	
+		final List<Event> pastEvents = es.findByOwner(false, userid, pageNum);
+		final int pastEventQty = es.countByOwner(false, userid);
+		final int pageCount = es.countUserOwnedPages(false, userid);
+		return Response.ok(
+				EventCollectionDto.ofEvents(
+						pastEvents.stream().map(e -> EventDto.ofEvent(e, false)).collect(Collectors.toList()),
+						pastEventQty, pageCount, es.getPageInitialEventIndex(pageNum))
+				).build();
     }
     
     @GET
-    @Path("/history")
-    public Response getHistory(@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
-    	if(loggedUser() != null) {
-    		final long loggedUserId = loggedUser().getUserid();
-			final List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
-			final int eventQty = es.countByUserInscriptions(false, loggedUserId);
-			final int pageCount = es.countUserInscriptionPages(false, loggedUserId);
-			return Response.ok(
-					EventCollectionDto.ofEvents(
-							events.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
-							eventQty, pageCount, es.getPageInitialEventIndex(pageNum))
-					).build();
+    @Path("/{id}/history")
+    public Response getHistory(@PathParam("id") final long userid,
+    		@QueryParam("pageNum") @DefaultValue("1") final int pageNum) {
+    	if(loggedUser() == null || loggedUser().getUserid() != userid) {
+    		return Response.status(Status.FORBIDDEN).build();
     	}
-    	return Response.ok().build();
+    	
+		final long loggedUserId = loggedUser().getUserid();
+		final List<Event> events = es.findPastUserInscriptions(loggedUserId, pageNum);
+		final int eventQty = es.countByUserInscriptions(false, loggedUserId);
+		final int pageCount = es.countUserInscriptionPages(false, loggedUserId);
+		return Response.ok(
+				EventCollectionDto.ofEvents(
+						events.stream().map(e -> EventDto.ofEvent(e, false)).collect(Collectors.toList()),
+						eventQty, pageCount, es.getPageInitialEventIndex(pageNum))
+				).build();
     }
 	
 //	@ExceptionHandler({ UserNotFoundException.class })

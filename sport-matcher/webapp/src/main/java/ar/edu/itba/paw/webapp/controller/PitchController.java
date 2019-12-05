@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Pitch;
@@ -39,6 +40,9 @@ import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 @Produces(value = { MediaType.APPLICATION_JSON })
 public class PitchController extends BaseController {
 	
+	private static final int MIN_HOUR = 9;
+	private static final int MAX_HOUR = 23;
+	
 	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(PitchController.class);
 	private static final String DEFAULT_PITCH_PICTURE = "pitch_default.png";
@@ -51,6 +55,9 @@ public class PitchController extends BaseController {
 	
 	@Autowired
 	private PitchPictureService pps;
+	
+	@Autowired
+	private EventService es;
 
 	@GET
 	public Response listPitches(
@@ -96,6 +103,9 @@ public class PitchController extends BaseController {
 	@Path("/{id}")
 	public Response getPitch(@PathParam("id") final long id) throws PitchNotFoundException {
 		final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
+		//String[] scheduleHeaders = es.getScheduleDaysHeader();
+		//Map<Integer, String> availableHours = es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR);
+		//es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id));
 		
 		return Response.ok(PitchDto.ofPitch(pitch)).build();
 	}

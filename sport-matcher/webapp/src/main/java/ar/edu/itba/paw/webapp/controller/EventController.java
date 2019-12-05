@@ -59,8 +59,6 @@ public class EventController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final int MIN_HOUR = 9;
-	private static final int MAX_HOUR = 23;
 	
 	@Context
 	private	UriInfo	uriInfo;
@@ -244,7 +242,7 @@ public class EventController extends BaseController {
         return Response
         		.status(Status.OK)
         		.entity(EventCollectionDto.ofEvents(
-        				events.stream().map(EventDto::ofEvent).collect(Collectors.toList()),
+        				events.stream().map(e -> EventDto.ofEvent(e, true)).collect(Collectors.toList()),
         				totalEventQty, lastPageNum, pageInitialIndex))
         		.build();
     }

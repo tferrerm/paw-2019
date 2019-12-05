@@ -12,14 +12,14 @@ public class EventDto {
 	private String description;
 	private int maxParticipants;
 	private PitchDto pitch;
-	private int inscriptionCount;
+	private Integer inscriptionCount;
 	private Instant inscriptionEnd;
 	private boolean inscriptionSuccess;
 	private Instant startsAt;
 	private Instant endsAt;
 	private Instant createdAt;
 	
-	public static EventDto ofEvent(Event event) {
+	public static EventDto ofEvent(Event event, boolean withInscriptionCount) {
 		EventDto dto = new EventDto();
 		dto.eventid = event.getEventId();
 		dto.name = event.getName();
@@ -27,7 +27,8 @@ public class EventDto {
 		dto.description = event.getDescription();
 		dto.maxParticipants = event.getMaxParticipants();
 		dto.pitch = PitchDto.ofPitch(event.getPitch());
-		dto.inscriptionCount = event.getInscriptions().size();
+		if(withInscriptionCount)
+			dto.inscriptionCount = event.getInscriptions().size();
 		dto.inscriptionEnd = event.getEndsInscriptionAt();
 		dto.inscriptionSuccess = event.getInscriptionSuccess();
 		dto.startsAt = event.getStartsAt();
@@ -85,11 +86,11 @@ public class EventDto {
 		this.pitch = pitch;
 	}
 
-	public int getInscriptionCount() {
+	public Integer getInscriptionCount() {
 		return inscriptionCount;
 	}
 
-	public void setInscriptionCount(int inscriptionCount) {
+	public void setInscriptionCount(Integer inscriptionCount) {
 		this.inscriptionCount = inscriptionCount;
 	}
 

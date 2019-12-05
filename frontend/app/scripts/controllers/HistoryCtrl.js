@@ -3,8 +3,9 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 	frontend.controller('HistoryCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
 	    var params = {pageNum: 1};
+	    var userid = 2;
 
-	    restService.getHistory(params).then(function(data) {
+	    restService.getHistory(userid, params).then(function(data) {
 			$scope.events = data.events;
 			$scope.eventCount = data.eventCount;
 			$scope.lastPageNum = data.lastPageNum;
@@ -14,7 +15,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getFirstPage = function() {
 			params.pageNum = 1;
-			restService.getHistory(params).then(function(data) {
+			restService.getHistory(userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
@@ -25,7 +26,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getPrevPage = function() {
 			params.pageNum--;
-			restService.getHistory(params).then(function(data) {
+			restService.getHistory(userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
@@ -36,7 +37,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getNextPage = function() {
 			params.pageNum++;
-			restService.getHistory(params).then(function(data) {
+			restService.getHistory(userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
@@ -47,7 +48,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getLastPage = function() {
 			params.pageNum = $scope.lastPageNum;
-			restService.getHistory(params).then(function(data) {
+			restService.getHistory(userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;

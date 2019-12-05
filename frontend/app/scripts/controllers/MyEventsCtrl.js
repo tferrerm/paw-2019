@@ -4,8 +4,9 @@ define(['frontend', 'services/restService'], function(frontend) {
 	frontend.controller('MyEventsCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
 	    var pastEventParams = {pageNum: 1};
 	    var futureEventParams = {pageNum: 1};
+	    var userid = 2;
 
-	    restService.getMyPastEvents(pastEventParams).then(function(data) {
+	    restService.getMyPastEvents(userid, pastEventParams).then(function(data) {
 			$scope.pastEvents = data.events;
 			$scope.pastEventCount = data.eventCount;
 			$scope.pastEventsLastPageNum = data.lastPageNum;
@@ -13,7 +14,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$scope.pastEventsPageNum = pastEventParams.pageNum;
 		});
 
-		restService.getMyFutureEvents(futureEventParams).then(function(data) {
+		restService.getMyFutureEvents(userid, futureEventParams).then(function(data) {
 			$scope.futureEvents = data.events;
 			$scope.futureEventCount = data.eventCount;
 			$scope.futureEventsLastPageNum = data.lastPageNum;

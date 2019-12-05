@@ -40,14 +40,14 @@ define(['frontend', 'jquery'], function(frontend) {
 			getEventInscriptions: function(id) {
 				return httpGet('/events/' + id + '/inscriptions', {});
 			},
-			getHistory: function(params) {
-				return httpGet('/users/history', {pageNum: params.pageNum});
+			getHistory: function(id, params) {
+				return httpGet('/users/' + id + '/history', {pageNum: params.pageNum});
 			},
-			getMyFutureEvents: function(params) {
-				return httpGet('/users/future-owned-events', {pageNum: params.pageNum});
+			getMyFutureEvents: function(id, params) {
+				return httpGet('/users/' + id + '/future-owned-events', {pageNum: params.pageNum});
 			},
-			getMyPastEvents: function(params) {
-				return httpGet('/users/past-owned-events', {pageNum: params.pageNum});
+			getMyPastEvents: function(id, params) {
+				return httpGet('/users/' + id + '/past-owned-events', {pageNum: params.pageNum});
 			},
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});

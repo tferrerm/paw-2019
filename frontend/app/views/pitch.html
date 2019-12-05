@@ -24,15 +24,15 @@
                 </div>
             </div>
         </div>
-        <!--<c:if test="${loggedUser != null}">
+        <!--<c:if test="${loggedUser != null}">-->
           <div>
-            <span class="notice justify-center home-header"><spring:message code="event_creation_description" /></span>
+            <span class="notice justify-center home-header">{{'event_creation_description' | translate}}</span>
             <div class="tbl-no-flex profile-cont profile-second minh-550">
-                <c:if test="${event_overlap == true}">
+                <!--<c:if test="${event_overlap == true}">
                     <span class="form-error notice">
                         <spring:message code="event_overlap"/>
                     </span>
-                </c:if>
+                </c:if>-->
                 <div class="create-event">
                     <table class="schedule-table flex">
                         <tr>
@@ -150,6 +150,6 @@
                 </div>
             </div>
         </div>
-      </c:if>-->
+      <!--</c:if>-->
     </div>
 </div>
