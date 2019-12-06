@@ -133,13 +133,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     private static final List<String> ALLOWED_ORIGINS = Collections.unmodifiableList(
-    		Arrays.asList(new String[] {"*"}));
+    		Arrays.asList("*"));
     private static final List<String> ALLOWED_METHODS = Collections.unmodifiableList(
-    		Arrays.asList(new String[] {"HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"}));
+    		Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
     private static final List<String> ALLOWED_HEADERS = Collections.unmodifiableList(
-    		Arrays.asList(new String[] {"Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"}));
+    		Arrays.asList("Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"));
     private static final List<String> EXPOSED_HEADERS = Collections.unmodifiableList(
-    		Arrays.asList(new String[] {"X-Auth-Token"}));
+    		Arrays.asList("X-Auth-Token"));
 
     @Bean
     public CorsFilter corsFilter() {
