@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.config;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
@@ -126,39 +125,34 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    
+
     @Bean
     public String tokenSecretKey() {
     	return Base64.getEncoder().encodeToString(
     			"E176EA76D237D19395AD4FBA2B605B82A9BCFB4F8ECBFE7E06C237889BB64EFA".getBytes());
     }
-    
-    private static final String[] ALLOWED_ORIGINS = {"*"};
-    private static final String[] ALLOWED_METHODS = {"HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"};
-    private static final String[] ALLOWED_HEADERS = {"Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"};
-    
+
+    private static final List<String> ALLOWED_ORIGINS = Collections.unmodifiableList(
+    		Arrays.asList("*"));
+    private static final List<String> ALLOWED_METHODS = Collections.unmodifiableList(
+    		Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+    private static final List<String> ALLOWED_HEADERS = Collections.unmodifiableList(
+    		Arrays.asList("Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"));
+    private static final List<String> EXPOSED_HEADERS = Collections.unmodifiableList(
+    		Arrays.asList("X-Auth-Token"));
+
     @Bean
     public CorsFilter corsFilter() {
     	final CorsConfiguration configuration = new CorsConfiguration();
-    	final List<String> origins = addAllArray(
-    			new ArrayList<String>(ALLOWED_ORIGINS.length), ALLOWED_ORIGINS);
-    	final List<String> methods = addAllArray(
-    			new ArrayList<String>(ALLOWED_METHODS.length), ALLOWED_METHODS);
-    	final List<String> headers = addAllArray(
-    			new ArrayList<String>(ALLOWED_HEADERS.length), ALLOWED_HEADERS);
 
-        configuration.setAllowedOrigins(Collections.unmodifiableList(origins));
-        configuration.setAllowedMethods(Collections.unmodifiableList(methods));
+        configuration.setAllowedOrigins(ALLOWED_ORIGINS);
+        configuration.setAllowedMethods(ALLOWED_METHODS);
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Collections.unmodifiableList(headers));
+        configuration.setAllowedHeaders(ALLOWED_HEADERS);
+        configuration.setExposedHeaders(EXPOSED_HEADERS);
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return new CorsFilter(source);    	
-    }
-    
-    private List<String> addAllArray(List<String> list, String[] array) {
-    	list.addAll(Arrays.asList(array));
-    	return list;
     }
 
 }
