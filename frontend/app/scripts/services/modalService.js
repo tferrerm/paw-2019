@@ -1,5 +1,5 @@
 'use strict';
-define(['frontend', 'controllers/RegisterModalCtrl'/*, 'controllers/LoginModalCtrl',*/, 'services/restService'], function(frontend) {
+define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/LoginModalCtrl', 'services/restService'], function(frontend) {
 
 	frontend.service('modalService', ['$uibModal', 'restService', function($uibModal, restService) {
 
@@ -12,7 +12,11 @@ define(['frontend', 'controllers/RegisterModalCtrl'/*, 'controllers/LoginModalCt
 		};
 
 		this.loginModal = function() {
-			return null;
+			return $uibModal.open({
+				templateUrl: 'views/loginModal.html',
+				controller: 'LoginModalCtrl',
+				size: 'md'
+			});
 		};
 
 	}]);

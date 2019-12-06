@@ -18,10 +18,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		$scope.loggedUser = authService.getLoggedUser();
 
 		$scope.showRegisterModal = modalService.registerModal;
-
-		$scope.login = function() {
-			//
-		}
+		$scope.showLoginModal = modalService.loginModal;
 
 		$scope.logout = function() {
 			authService.logout();

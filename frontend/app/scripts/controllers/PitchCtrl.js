@@ -1,8 +1,10 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('PitchCtrl', ['$scope', '$filter', 'restService', 'pitch', function($scope, $filter, restService, pitch) {
-    
+	frontend.controller('PitchCtrl', ['$scope', '$filter', 'restService', 'authService', 'pitch', function($scope, $filter, restService, authService, pitch) {
+    	
+		$scope.isLoggedIn = authService.isLoggedIn();
+
 	    $scope.pitch = pitch;
 	    $scope.minHour = 9; // PEDIR DE BACK
 	    $scope.maxHour = 23; // PEDIR DE BACK
@@ -12,8 +14,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    }
 	    
 	    restService.getPitchWeekEvents(pitch.pitchid, {}).then(function(data) {
-	    	$scope.weekEvents = data.events;
-	    	angular.forEach($scope.weekEvents, function(event, index) {
+	    	var weekEvents = data.events;
+	    	angular.forEach(weekEvents, function(event, index) {
 	    		var startsDate = new Date(Date.parse(event.startsAt));
 	    		var endsDate = new Date(Date.parse(event.endsAt));
 	    		/* Sunday = 0 --> Sunday = 6 */
@@ -28,6 +30,18 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    	});
 	    	
 	    });
+
+	    $scope.event = {};
+
+	    $scope.createEventSubmit = function() {
+			//checkPasswordsMatch();
+			if ($scope.createEventForm.$valid) {
+				//$scope.duplicateEmailError = false;
+				//$scope.loggingIn = true;
+
+				restService.createEvent($scope.event); // then redirect to event
+			}
+		};
 
 	}]);
 });

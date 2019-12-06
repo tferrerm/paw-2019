@@ -33,6 +33,16 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 		}
 
 		return {
+			createEvent: function(data) {
+			var eventData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
+				//var formData = new FormData();
+				//formData.append('username', userData.username);
+				//formData.append('password', userData.password);
+				//formData.append('firstname', userData.firstname);
+				//formData.append('lastname', userData.lastname);
+				//formData.append('picture', userData.picture);
+				return null;//httpPost('/users', formData, {});
+			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
 			},
