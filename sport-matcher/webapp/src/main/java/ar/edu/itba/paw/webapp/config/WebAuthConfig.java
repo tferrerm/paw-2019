@@ -136,6 +136,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOWED_ORIGINS = {"*"};
     private static final String[] ALLOWED_METHODS = {"HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"};
     private static final String[] ALLOWED_HEADERS = {"Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"};
+    private static final String[] EXPOSED_HEADERS = {"X-Auth-Token"};
     
     @Bean
     public CorsFilter corsFilter() {
@@ -144,13 +145,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     			new ArrayList<String>(ALLOWED_ORIGINS.length), ALLOWED_ORIGINS);
     	final List<String> methods = addAllArray(
     			new ArrayList<String>(ALLOWED_METHODS.length), ALLOWED_METHODS);
-    	final List<String> headers = addAllArray(
+    	final List<String> allowedHeaders = addAllArray(
     			new ArrayList<String>(ALLOWED_HEADERS.length), ALLOWED_HEADERS);
+    	final List<String> exposedHeaders = addAllArray(
+    			new ArrayList<String>(EXPOSED_HEADERS.length), EXPOSED_HEADERS);
 
         configuration.setAllowedOrigins(Collections.unmodifiableList(origins));
         configuration.setAllowedMethods(Collections.unmodifiableList(methods));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Collections.unmodifiableList(headers));
+        configuration.setAllowedHeaders(Collections.unmodifiableList(allowedHeaders));
+        configuration.setExposedHeaders(Collections.unmodifiableList(exposedHeaders));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return new CorsFilter(source);    	
