@@ -28,10 +28,10 @@ define(['frontend'], function(frontend) {
 					$window.sessionStorage.setItem('session.authToken', JSON.stringify(token));
 			},
 			destroy: function() {
-				setUser(null, false);
-				setUser(null, true);
-				setAuthToken(null, false);
-				setAuthToken(null, true);
+				this.setUser(null, false);
+				this.setUser(null, true);
+				this.setAuthToken(null, false);
+				this.setAuthToken(null, true);
 			}
 		};
 	}]);

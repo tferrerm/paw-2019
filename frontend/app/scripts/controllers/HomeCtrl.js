@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService', 'services/modalService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('HomeCtrl', ['$scope', '$location', 'restService', 'authService', 'modalService', function($scope, $location, restService, authService, modalService) {
+	frontend.controller('HomeCtrl', ['$scope', '$location', 'restService', 'authService', function($scope, $location, restService, authService) {
 		//$scope.loggedUser = {name: "Santiago"};
 		$scope.noParticipations = false;
     	$scope.scheduleHeaders = [];
@@ -24,13 +24,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				}
 	        });
 		});*/
-
-    	$scope.loginUser = {};
-		$scope.login = function() {
-			authService.login($scope.loginUser.username, $scope.loginUser.password, false/*$scope.loginUser.rememberMe*/);
-		}
-
-		$scope.registerModal = modalService.registerModal;
 
 	}]);
 });

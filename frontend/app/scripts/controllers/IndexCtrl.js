@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/authService', 'services/storageService', 'services/restService'], function(frontend) {
+define(['frontend', 'services/authService', 'services/storageService', 'services/restService', 'services/modalService'], function(frontend) {
 
-	frontend.controller('IndexCtrl', ['$scope', '$location', 'authService', 'storageService', 'restService', function($scope, $location, authService, storageService, restService) {
+	frontend.controller('IndexCtrl', ['$scope', '$location', 'authService', 'storageService', 'restService', 'modalService', function($scope, $location, authService, storageService, restService, modalService) {
 		$scope.welcomeText = 'Welcome to your frontend page';
 		$scope.sidebarElements = [
 			{name: 'Home', link: "#/home"},
@@ -14,8 +14,18 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		]
 
 
-		//$scope.isLoggedIn = authService.isLoggedIn();
+		$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.loggedUser = authService.getLoggedUser();
+
+		$scope.showRegisterModal = modalService.registerModal;
+
+		$scope.login = function() {
+			//
+		}
+
+		$scope.logout = function() {
+			authService.logout();
+		}
 		
 		/*$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = auth.isLoggedIn();

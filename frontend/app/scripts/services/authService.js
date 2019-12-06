@@ -8,9 +8,9 @@ define(['frontend', 'services/restService', 'services/storageService'], function
 			getLoggedUser: function() {
 				return loggedUser;
 			},
-			/*isLoggedIn: function() {
+			isLoggedIn: function() {
 				!!loggedUser
-			},*/
+			},
 			login: function(username, password, rememberMe) {
 				var credentials = {login_username: username, login_password: password};
 				//var self = this;
