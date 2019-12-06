@@ -135,7 +135,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     
     private static final String[] ALLOWED_ORIGINS = {"*"};
     private static final String[] ALLOWED_METHODS = {"HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"};
-    private static final String[] ALLOWED_HEADERS = {"Authorization", "Cache-Control", "Content-Type"};
+    private static final String[] ALLOWED_HEADERS = {"Authorization", "Cache-Control", "Content-Type", "X-Auth-Token"};
     
     @Bean
     public CorsFilter corsFilter() {

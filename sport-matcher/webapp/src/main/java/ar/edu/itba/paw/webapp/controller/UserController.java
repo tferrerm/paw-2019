@@ -57,6 +57,7 @@ import ar.edu.itba.paw.webapp.dto.FullUserDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.dto.exception.ExceptionDto;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.UserForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
@@ -246,12 +247,13 @@ public class UserController extends BaseController {
 		} catch(PictureProcessingException | IOException e) {
 
 			LOGGER.error("Error reading profile picture from {}", username);
-			return Response.status(CustomStatus.UNPROCESSABLE_ENTITY).build();
+			Exception aux = (e.getClass().equals(PictureProcessingException.class))? e : null;
+			return Response.status(CustomStatus.UNPROCESSABLE_ENTITY).entity(ExceptionDto.ofException(aux)).build();
 
 		} catch(UserAlreadyExistsException e) {
 
 			LOGGER.warn("User tried to register with repeated email {}", username);
-			return Response.status(Status.CONFLICT).build();
+			return Response.status(Status.CONFLICT).entity(ExceptionDto.ofException(e)).build();
 		}
 		
 		ems.userRegistered(user, LocaleContextHolder.getLocale());

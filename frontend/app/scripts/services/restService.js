@@ -1,21 +1,35 @@
 'use strict';
-define(['frontend', 'jquery'], function(frontend) {
+define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 
-	frontend.factory('restService', ['$http','$rootScope', 'url', function($http, $rootScope, url) {
+	frontend.factory('restService', ['$http','$rootScope', 'url', 'storageService', function($http, $rootScope, url, storageService) {
 
 		function httpGet(path, params) {
+			var headers = {};
+			headers = addAuthHeader(headers);
+
 			params = Object.keys(params).length ? '?' + jQuery.param(params) : '';
-			return $http.get(url + path + params)
+			return $http.get(url + path + params, headers)
 				.then(function(response) { 
 					return response.data; 
 				});
 		}
 
-		function httpPost(path) {
-			return $http.post(url + path, {}, {})
+		function httpPost(path, data, params) {
+			var headers = {'Content-Type': undefined};
+			headers = addAuthHeader(headers);
+
+			return $http.post(url + path, data, {transformRequest: angular.identity, headers: headers})
 				.then(function(response) { 
 					return response.data; 
 				});
+		}
+
+		function addAuthHeader(headers) {
+			var authToken = storageService.getAuthToken();
+			if(authToken) {
+				headers['X-Auth-Token'] = authToken;
+			}
+			return headers;
 		}
 
 		return {
@@ -53,10 +67,20 @@ define(['frontend', 'jquery'], function(frontend) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},
 			joinEvent: function(id) {
-				return httpPost('/events/' + id + '/join');
+				return httpPost('/events/' + id + '/join', {}, {});
 			},
 			leaveEvent: function(id) {
-				return httpPost('/events/' + id + '/leave');
+				return httpPost('/events/' + id + '/leave', {}, {});
+			},
+			register: function(data) {
+				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
+				var formData = new FormData();
+				formData.append('username', userData.username);
+				formData.append('password', userData.password);
+				formData.append('firstname', userData.firstname);
+				formData.append('lastname', userData.lastname);
+				//formData.append('picture', userData.picture);
+				return httpPost('/users', formData, {});
 			}
 		}
 

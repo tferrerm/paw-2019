@@ -16,7 +16,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 
 		//$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.loggedUser = authService.getLoggedUser();
-
+		
 		/*$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = auth.isLoggedIn();
 			$scope.loggedUser = auth.getLoggedUser();

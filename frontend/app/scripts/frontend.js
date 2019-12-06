@@ -4,12 +4,14 @@ define(['routes',
 	'i18n/i18nLoader!',
 	'angular',
 	'angular-route',
+	'angular-bootstrap',
 	'bootstrap',
 	'angular-translate'],
 	function(config, dependencyResolverFor, i18n) {
 		var frontend = angular.module('frontend', [
 			'ngRoute',
-			'pascalprecht.translate'
+			'pascalprecht.translate',
+			'ui.bootstrap'
 		]);
 		frontend
 			.config(
@@ -19,7 +21,8 @@ define(['routes',
 				'$filterProvider',
 				'$provide',
 				'$translateProvider',
-				function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider) {
+				'$locationProvider',
+				function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $locationProvider) {
 
 					frontend.controller = $controllerProvider.register;
 					frontend.directive = $compileProvider.directive;
@@ -47,6 +50,9 @@ define(['routes',
 
 					$translateProvider.translations('preferredLanguage', i18n);
 					$translateProvider.preferredLanguage('preferredLanguage');
+
+					//$locationProvider.html5Mode(false);
+           			$locationProvider.hashPrefix('');
 				}])
 			.value('url', 'http://localhost:8080/webapp');
 		return frontend;

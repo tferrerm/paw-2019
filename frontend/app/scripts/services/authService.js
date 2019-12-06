@@ -16,8 +16,8 @@ define(['frontend', 'services/restService', 'services/storageService'], function
 				//var self = this;
 				return $http.post(url + '/users/login', Object.keys(credentials).length ? jQuery.param(credentials) : '', {transformRequest: angular.identity, headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
 					.then(function(response) {
-						storageService.setAuthToken(response.headers('X-AUTH-TOKEN'), rememberMe);
-						return $http.get(url + '/user', {headers: {'X-AUTH-TOKEN': storageService.getAccessToken()}}); // OJO!
+						storageService.setAuthToken(response.headers('X-Auth-Token'), rememberMe);
+						return $http.get(url + '/users/profile', {headers: {'X-Auth-Token': storageService.getAccessToken()}});
 					})
 					.then(function(response) {
 						return response.data;
