@@ -63,6 +63,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getMyPastEvents: function(id, params) {
 				return httpGet('/users/' + id + '/past-owned-events', {pageNum: params.pageNum});
 			},
+			getPitchWeekEvents: function(id, params) {
+				return httpGet('/pitches/' + id + '/week-events', {})
+			},
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},

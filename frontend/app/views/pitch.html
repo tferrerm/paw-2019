@@ -33,31 +33,29 @@
                         <spring:message code="event_overlap"/>
                     </span>
                 </c:if>-->
+
                 <div class="create-event">
-                    <table class="schedule-table flex">
-                        <tr>
+                    <table class="schedule-table flex"><thead></thead>
+                        <!--<tr>
                             <th class="schedule-table-cell-size schedule-table-hours"></th>
                             <c:forEach var="dayMessage" items="${scheduleHeaders}">
                                 <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
                             </c:forEach>
-                        </tr>
-                        <c:set var="hours" value="${minHour}"/>
-                        <c:forEach var="row" items="${schedule}">
-                            <tr>
-                                <td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>
-                                <c:forEach var="column" items="${row}">
-                                    <c:choose>
-                                        <c:when test="${column == true}">
-                                            <td class="schedule-table background-red schedule-table-cell-size"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td class="schedule-table background-green schedule-table-cell-size"/>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                            </tr>
-                            <c:set var="hours" value="${hours + 1}"/>
-                        </c:forEach>
+                        </tr>-->
+                        <!--<c:set var="hours" value="${minHour}"/>-->
+                        <tbody >
+                            <tr ng-repeat="row in schedule track by $index">
+
+                                <!--<td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>-->
+                                
+                                    <!--<td ng-if="cell != null" class="schedule-table background-red schedule-table-cell-size"/>
+                                    <td ng-if="cell == null" class="schedule-table background-green schedule-table-cell-size"/>-->
+                                    <td ng-repeat="cell in row track by $index" ng-class="cell != null ? 'schedule-table background-red schedule-table-cell-size' : 'schedule-table background-green schedule-table-cell-size'">
+                                        
+                                    </td>
+                                
+                            </tr></tbody>
+                            <!--<c:set var="hours" value="${hours + 1}"/>-->
                     </table>
                     <div class="flex flex-column create-event-form">
                         <c:url value="/pitch/${pitch.pitchid}/event/create" var="postPath"/>

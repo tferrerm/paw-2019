@@ -30,6 +30,8 @@ import ar.edu.itba.paw.interfaces.PitchService;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
+import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
+import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
 import ar.edu.itba.paw.webapp.dto.SportCollectionDto;
@@ -103,9 +105,9 @@ public class PitchController extends BaseController {
 	@Path("/{id}")
 	public Response getPitch(@PathParam("id") final long id) throws PitchNotFoundException {
 		final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
-		//String[] scheduleHeaders = es.getScheduleDaysHeader();
-		//Map<Integer, String> availableHours = es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR);
-		//es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id));
+		//System.out.println(es.getScheduleDaysHeader());
+		//System.out.println(es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
+		//System.out.println(es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id)));
 		
 		return Response.ok(PitchDto.ofPitch(pitch)).build();
 	}
@@ -133,6 +135,16 @@ public class PitchController extends BaseController {
 	@Path("/sports")
 	public Response getSports() {
 		return Response.ok(SportCollectionDto.ofSports(Sport.values())).build();
+	}
+	
+	@GET
+	@Path("/{id}/week-events")
+	public Response getPitchSchedule(@PathParam("id") final long id,
+			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws PitchNotFoundException {
+		//final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
+		
+		return Response.ok(EventCollectionDto.ofEvents(es.findCurrentEventsInPitch(id).stream() // CAMBIAR METHOD
+				.map(ev -> EventDto.ofEvent(ev, true)).collect(Collectors.toList()))).build();
 	}
 
 }

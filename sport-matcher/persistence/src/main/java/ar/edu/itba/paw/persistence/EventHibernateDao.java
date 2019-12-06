@@ -164,16 +164,30 @@ public class EventHibernateDao implements EventDao {
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
 		// In seven days at 23:00
 		Instant inAWeek = today.plus(7, ChronoUnit.DAYS);
+
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events "
+				+ " WHERE pitchid = :pitchid AND starts_at > :today AND starts_at < :inAWeek");
+		paramsMap.put("pitchid", pitchid);
+		paramsMap.put("today", Timestamp.from(today));
+		paramsMap.put("inAWeek", Timestamp.from(inAWeek));
 		
-		String queryString = "FROM Event AS e WHERE e.pitch.pitchid = :pitchid AND "
-				+ " e.startsAt > :today AND e.startsAt < :inAWeek";
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		final List<Long> ids = (List<Long>) idQuery.getResultList();
 		
-		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
-		query.setParameter("pitchid", pitchid);
-		query.setParameter("today", today);
-		query.setParameter("inAWeek", inAWeek);
-		/* Only for prevention */
-		query.setMaxResults(MAX_EVENTS_PER_WEEK);
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		from.fetch("inscriptions");
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+			);
 		
 		return query.getResultList();
 	}
