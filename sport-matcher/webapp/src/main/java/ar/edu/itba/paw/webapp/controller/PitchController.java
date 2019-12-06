@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
+import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
@@ -142,8 +143,9 @@ public class PitchController extends BaseController {
 	public Response getPitchSchedule(@PathParam("id") final long id,
 			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws PitchNotFoundException {
 		//final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
+		List<Event> weekEvents = es.findCurrentEventsInPitch(id);
 		
-		return Response.ok(EventCollectionDto.ofEvents(es.findCurrentEventsInPitch(id).stream() // CAMBIAR METHOD
+		return Response.ok(EventCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD
 				.map(ev -> EventDto.ofEvent(ev, true)).collect(Collectors.toList()))).build();
 	}
 

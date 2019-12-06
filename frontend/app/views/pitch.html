@@ -50,9 +50,13 @@
                                 
                                     <!--<td ng-if="cell != null" class="schedule-table background-red schedule-table-cell-size"/>
                                     <td ng-if="cell == null" class="schedule-table background-green schedule-table-cell-size"/>-->
-                                    <td ng-repeat="cell in row track by $index" ng-class="cell != null ? 'schedule-table background-red schedule-table-cell-size' : 'schedule-table background-green schedule-table-cell-size'">
+                                    <td ng-repeat="cell in row track by $index" ng-class="cell == null ? 'schedule-table background-green schedule-table-cell-size' : (cell.maxParticipants == cell.inscriptionCount? 'schedule-table background-red schedule-table-cell-size' : 'schedule-table background-yellow schedule-table-cell-size')">
                                         
                                     </td>
+                                    }
+                                    }
+                                    }
+                                    }
                                 
                             </tr></tbody>
                             <!--<c:set var="hours" value="${hours + 1}"/>-->

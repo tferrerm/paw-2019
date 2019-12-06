@@ -23,7 +23,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    		var endHourIndex = endsDate.getUTCHours() - $scope.minHour - 1;
 	    		
 	    		for(var i = startHourIndex; i <= endHourIndex; i++) {
-	    			$scope.schedule[i][eventDayIndex] = {name: event.name, inscriptionCount: event.inscriptionCount};
+	    			$scope.schedule[i][eventDayIndex] = {name: event.name, maxParticipants: event.maxParticipants, inscriptionCount: event.inscriptionCount};
 	    		}
 	    	});
 	    	

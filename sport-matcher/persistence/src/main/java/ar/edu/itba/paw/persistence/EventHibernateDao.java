@@ -163,7 +163,7 @@ public class EventHibernateDao implements EventDao {
 		// Today at 00:00
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
 		// In seven days at 23:00
-		Instant inAWeek = today.plus(7, ChronoUnit.DAYS);
+		Instant inAWeek = today.plus(7, ChronoUnit.DAYS); // ARREGLAR
 
 		Map<String, Object> paramsMap = new HashMap<>();
 		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events "
@@ -184,7 +184,7 @@ public class EventHibernateDao implements EventDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 		Root<Event> from = cq.from(Event.class);
-		from.fetch("inscriptions");
+		from.fetch("inscriptions", JoinType.LEFT);
 		final TypedQuery<Event> query = em.createQuery(
 				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
 			);
