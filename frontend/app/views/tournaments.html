@@ -36,8 +36,7 @@
     </div>
   </div>
   <div class="table-navigator w-100 justify-center">
-    <c:choose>
-      <c:when test="${tournamentQty > 0}">
+    <div ng-if="tournamentQty > 0">
         <div class="${page != 1 ? "" : "hidden"}">
         <a href="<c:url value='/tournaments/1' />">
           <button type="button" class="btn btn-secondary">
