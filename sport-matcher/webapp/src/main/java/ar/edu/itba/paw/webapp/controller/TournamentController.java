@@ -12,18 +12,17 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
@@ -34,6 +33,7 @@ import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.dto.TournamentEventDto;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 
@@ -56,21 +56,18 @@ public class TournamentController extends BaseController {
 		return null;
 	}
 	
-	/*@GET
+	@GET
     @Path("/{id}")
     public Response retrieveTournament(@PathParam("id") long tournamentid,
-    		@RequestParam(value = "round", required = false) final Integer roundPage,
-    		@RequestParam(value = "userBusyError", required = false) boolean userBusyError) 
+    		@QueryParam("round") final Integer roundPage) 
     		throws TournamentNotFoundException {
-    	
+
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
     	if(tournament.getInscriptionSuccess()) {
 			if(roundPage == null) {
-				return retrieveTournament(tournamentid, ts.getCurrentRound(tournament), false);
+				return Response.status(Status.NOT_FOUND).build();
 			}
-			//ModelAndView mav = new ModelAndView("tournament");
-//			mav.addObject("tournament",  tournament);
 //			mav.addObject("club", tournament.getTournamentClub());
 //			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
 			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
@@ -113,9 +110,7 @@ public class TournamentController extends BaseController {
     }
 
     @GET
-    @Path("/{pageNum}")
-    public Response retrieveTournaments(
-			@PathParam("pageNum") final int pageNum) {
+    public Response retrieveTournaments(@QueryParam("pageNum") final int pageNum) {
 
         //ModelAndView mav = new ModelAndView("tournamentList");
         
@@ -139,26 +134,14 @@ public class TournamentController extends BaseController {
         try {
 			ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
 		} catch (InscriptionDateInPastException e) {
-			joinTournamentError("tournament_already_started", tournamentid);
 		} catch (TeamAlreadyFilledException e) {
-			joinTournamentError("team_already_filled", tournamentid);
 		} catch (UserAlreadyJoinedException e) {
-			joinTournamentError("already_joined_tournament", tournamentid);
 		} catch(UserBusyException e) {
-	    	return retrieveTournament(tournamentid, null, true);
 		}
         
         LOGGER.debug("User {} joined Tournament {}", loggedUser(), tournamentid);
         
-        return null;//new ModelAndView("redirect:/tournament/" + tournamentid);
-    }
-    
-    
-    private Response joinTournamentError(String error, long tournamentid) 
-    		throws TournamentNotFoundException {
-    	//ModelAndView mav = new ModelAndView("redirect:/tournament/" + tournamentid);
-		//mav.addObject(error, true);
-		return null;//mav;
+        return Response.status(Status.NO_CONTENT).build();//new ModelAndView("redirect:/tournament/" + tournamentid);
     }
     
     @POST
@@ -169,33 +152,51 @@ public class TournamentController extends BaseController {
         try {
 			ts.leaveTournament(tournamentid, loggedUser().getUserid());
 		} catch (InscriptionDateInPastException e) {
-			//ModelAndView mav = retrieveTournament(tournamentid, null, false);
-			//mav.addObject("tournament_already_started", true);
-			return null;//mav;
 		}
         
-        return null;//new ModelAndView("redirect:/tournament/" + tournamentid);
+        return Response.status(Status.NO_CONTENT).build();//new ModelAndView("redirect:/tournament/" + tournamentid);
     }
 
     @GET
-    @RequestMapping("/{id}/event/{eventId}")
+    @Path("/{id}/events/{eventId}")
     public Response retrieveTournamentEvent(@PathParam("id") long tournamentid,
     		@PathParam("eventId") long eventid) 
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
-        //ModelAndView mav = new ModelAndView("tournamentEvent");
         Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
-        //mav.addObject("tournament",  tournament);
         TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
-        //mav.addObject("tournamentEvent", tournamentEvent);
         //mav.addObject("firstTeamMembers", ts.findTeamMembers(tournamentEvent.getFirstTeam()));
         //mav.addObject("secondTeamMembers", ts.findTeamMembers(tournamentEvent.getSecondTeam()));
-        return null;//mav;
+        return Response.ok(TournamentEventDto.ofTournamentEvent(
+        		tournamentEvent, false)).build(); // VER SI ES PARTICIPANTE
+    }
+    
+    @GET
+    @Path("/{id}/events/{eventId}/first-team-members")
+    public Response retrieveFirstTeamMembers(@PathParam("id") long tournamentid,
+    		@PathParam("eventId") long eventid) throws TournamentNotFoundException, TournamentEventNotFoundException {
+    	return retrieveTeamMembers(tournamentid, eventid, 1);
+    }
+    
+    @GET
+    @Path("/{id}/events/{eventId}/second-team-members")
+    public Response retrieveSecondTeamMembers(@PathParam("id") long tournamentid,
+    		@PathParam("eventId") long eventid) throws TournamentNotFoundException, TournamentEventNotFoundException {
+    	return retrieveTeamMembers(tournamentid, eventid, 2);
+    }
+    
+    private Response retrieveTeamMembers(long tournamentid, long eventid, int teamNumber)
+    		throws TournamentNotFoundException, TournamentEventNotFoundException {
+    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+        TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
+        List<User> user = teamNumber == 1 ?
+        ts.findTeamMembers(tournamentEvent.getFirstTeam()) : ts.findTeamMembers(tournamentEvent.getSecondTeam());
+        return null;
     }
 
     
 //	@ExceptionHandler({ TournamentEventNotFoundException.class })
 //	private ModelAndView tournamentEventNotFound() {
 //		return new ModelAndView("404");
-//	}*/
+//	}
 
 }

@@ -2,9 +2,9 @@ package ar.edu.itba.paw.webapp.dto;
 
 import java.time.Instant;
 
-import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.TournamentEvent;
 
-public class FullEventDto {
+public class TournamentEventDto {
 	
 	private long eventid;
 	private String name;
@@ -20,28 +20,22 @@ public class FullEventDto {
 	private Instant createdAt;
 	
 	private boolean isParticipant;
-	private int voteBalance;
-	private int userVote;
 	
-	public static FullEventDto ofEvent(Event event, boolean isParticipant, int voteBalance,
-			int userVote) {
-		FullEventDto dto = new FullEventDto();
+	public static TournamentEventDto ofTournamentEvent(TournamentEvent event, boolean isParticipant) {
+		TournamentEventDto dto = new TournamentEventDto();
 		dto.eventid = event.getEventId();
 		dto.name = event.getName();
 		dto.owner = UserDto.ofUser(event.getOwner());
 		dto.description = event.getDescription();
 		dto.maxParticipants = event.getMaxParticipants();
-		dto.pitch = PitchDto.ofPitch(event.getPitch());
 		dto.inscriptionCount = event.getInscriptions().size();
 		dto.inscriptionEnd = event.getEndsInscriptionAt();
-		//dto.inscriptionSuccess = event.getInscriptionSuccess(); ROMPEEEEE!!!!!
+		dto.inscriptionSuccess = event.getInscriptionSuccess();
 		dto.startsAt = event.getStartsAt();
 		dto.endsAt = event.getEndsAt();
 		dto.createdAt = event.getCreatedAt();
 		dto.isParticipant = isParticipant;
-		dto.voteBalance = voteBalance;
-		dto.userVote = userVote;
-		
+
 		return dto;
 	}
 
@@ -84,11 +78,11 @@ public class FullEventDto {
 	public void setMaxParticipants(int maxParticipants) {
 		this.maxParticipants = maxParticipants;
 	}
-	
+
 	public PitchDto getPitch() {
 		return pitch;
 	}
-	
+
 	public void setPitch(PitchDto pitch) {
 		this.pitch = pitch;
 	}
@@ -147,22 +141,6 @@ public class FullEventDto {
 
 	public void setParticipant(boolean isParticipant) {
 		this.isParticipant = isParticipant;
-	}
-
-	public int getVoteBalance() {
-		return voteBalance;
-	}
-
-	public void setVoteBalance(int voteBalance) {
-		this.voteBalance = voteBalance;
-	}
-
-	public int getUserVote() {
-		return userVote;
-	}
-
-	public void setUserVote(int userVote) {
-		this.userVote = userVote;
 	}
 
 }
