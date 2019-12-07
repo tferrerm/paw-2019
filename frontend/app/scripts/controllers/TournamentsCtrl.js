@@ -7,6 +7,11 @@ define(['frontend'], function(frontend) {
     $scope.pageInitialIndex = 1;
     $scope.pageNum = 2;
     $scope.totalTournamentQty = 12;
+    $scope.now = new Date();
+
+    $scope.goToTournament = function(id) {
+      $location.url('tournament/' + id);
+    };
 
 	});
 });

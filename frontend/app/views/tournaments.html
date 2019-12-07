@@ -11,29 +11,29 @@
       <span class="justify-center flex-1 color-white mt-10">{{"sport" | translate}}</span>
       <span class="justify-center flex-1" />
     </div>
-    <c:forEach var="tournament" items="${tournaments}">
+    <div ng-repeat="tournament in tournaments" class="custom-row">
       <div class="custom-row">
-        <div><c:out value="${tournament.name}"/></div>
+        <div>{{tournament.name}}</div>
         <div>
-          <c:choose>
-            <c:when test="${tournament.endsInscriptionAt > now}">
-              <spring:message code="inscription"/>
-            </c:when>
-            <c:when test="${(tournament.endsInscriptionAt <= now) && !tournament.inscriptionSuccess}">
-              <spring:message code="pending_approval"/>
-            </c:when>
-            <c:otherwise>
-              <spring:message code="started"/>
-            </c:otherwise>
-          </c:choose>
+          <div ng-if="tournament.endsInscriptionAt > now" class="notice">
+              {{'inscription' | translate}}
+          </div>
+          <div ng-if="tournament.endsInscriptionAt <= now && !tournament.inscriptionSuccess" class="notice">
+            {{'pending_approval' | translate}}
+          </div>
+          <div ng-if="tournament.endsInscriptionAt < now">
+            {{'started' | translate}}
+          </div>
         </div>
-        <div><c:out value="${tournament.tournamentClub.name}"/></div>
-        <div><spring:message code="${tournament.sport}"/></div>
+        <div>{{tournament.tournamentClub.name}}</div>
+        <div>{{'tournament.sport' | translate}}</div>
         <div>
-          <a href="<c:url value="/tournament/${tournament.tournamentid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_tournament"/></button></a>
+          <a ng-click="goToTournament(tournament.tournamentid)">
+            <button type="button" class="btn btn-primary view-event">{{'view_tournament' | translate}}</button>
+          </a>
         </div>
       </div>
-    </c:forEach>
+    </div>
   </div>
   <div class="table-navigator w-100 justify-center">
     <c:choose>
