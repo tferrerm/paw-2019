@@ -27,7 +27,6 @@ import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateExceededException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.InvalidTeamAmountException;
@@ -112,8 +111,7 @@ public class TournamentServiceImpl implements TournamentService {
 			final Integer endsAtHour, final Instant inscriptionEndDate, final User user) 
 					throws DateInPastException, MaximumDateExceededException, EndsBeforeStartsException,
 					HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException,
-					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException,
-					InscriptionDateExceededException {
+					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException {
 		
     	Instant firstRoundStartsAt = firstRoundDate.plus(startsAtHour, ChronoUnit.HOURS);
     	Instant firstRoundEndsAt = firstRoundDate.plus(endsAtHour, ChronoUnit.HOURS);
@@ -131,11 +129,11 @@ public class TournamentServiceImpl implements TournamentService {
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
-    		throw new HourOutOfRangeException();
+    		throw new HourOutOfRangeException(MIN_HOUR, MAX_HOUR);
     	if(inscriptionEndDate.isBefore(Instant.now()))
     		throw new InscriptionDateInPastException();
     	if(inscriptionEndDate.isAfter((firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS))))
-    		throw new InscriptionDateExceededException();
+    		throw new MaximumDateExceededException("The inscription cannot close in less than 24 hs before the event starts");
     	
     	List<Pitch> availablePitches = cs.getAvailablePitches(club.getClubid(), sport, 
     			firstRoundStartsAt, firstRoundEndsAt, maxTeams/2);

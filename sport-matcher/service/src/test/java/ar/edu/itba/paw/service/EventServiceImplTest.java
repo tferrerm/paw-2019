@@ -22,7 +22,6 @@ import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateExceededException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.interfaces.EventDao;
 import ar.edu.itba.paw.interfaces.UserDao;
@@ -101,13 +100,6 @@ public class EventServiceImplTest {
 		} catch(Exception e) {
 			Assert.assertEquals(DateInPastException.class, e.getClass());
 		}
-	}
-	
-	@Test(expected = InscriptionDateExceededException.class)
-	public void createWithInscriptionDateShortDiffTest() throws Exception {
-		es.create(NAME_1, USER, PITCH, DESCRIPTION,
-				1, NOW.plus(2, ChronoUnit.DAYS),
-				10, 11, NOW.plus(2, ChronoUnit.DAYS).minus(1, ChronoUnit.MINUTES));
 	}
 	
 	@Test(expected = MaximumDateExceededException.class)

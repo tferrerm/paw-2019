@@ -9,7 +9,6 @@ import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateExceededException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.InvalidTeamAmountException;
@@ -39,8 +38,7 @@ public interface TournamentService {
 			final Integer endsAt, final Instant inscriptionEndDate, final User user) 
 					throws DateInPastException, MaximumDateExceededException, EndsBeforeStartsException, 
 					HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException, 
-					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException, 
-					InscriptionDateExceededException;
+					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException;
 
 	public void joinTournament(final long tournamentid, final long teamid, final long userid) 
 			throws UserBusyException, UserAlreadyJoinedException, InscriptionDateInPastException, 

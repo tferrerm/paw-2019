@@ -14,7 +14,9 @@ import javax.validation.Payload;
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FutureDate {
-	String message() default "Date must be in the future";
+	String message() default "Date must be present and in the future";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
+	boolean startOfDay() default false;
+	String timezone() default "America/Buenos_Aires";
 }

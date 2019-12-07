@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +33,9 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
-import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
-import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
@@ -49,7 +45,6 @@ import ar.edu.itba.paw.webapp.dto.InscriptionCollectionDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionDto;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Path("events")
@@ -70,13 +65,7 @@ public class EventController extends BaseController {
     private EmailService ems;
 
     @Autowired
-    private PitchService ps;
-
-    @Autowired
     private UserService us;
-
-    @Autowired
-    private TournamentService ts;
 
 //    @GET
 //	@Path("/home") // SACAR
@@ -269,51 +258,6 @@ public class EventController extends BaseController {
 ////		return mav;
 //    	return null;
 //	}
-
-
-    @POST
-    @Path("/pitch/{pitchId}/event/create")
-    public Response createEvent(
-    		@PathParam("pitchId") long pitchId,
-    		@FormDataParam("name") final String name,
-    		@FormDataParam("description") final String description,
-    		@FormDataParam("maxParticipants") final String maxParticipants,
-    		@FormDataParam("date") final String date,
-    		
-    		//,
-    		/*@Valid @ModelAttribute("newEventForm") final EventForm form,
-			final BindingResult errors,
-			HttpServletRequest request*/) throws PitchNotFoundException {
-    	
-    	Integer mp = tryInteger(form.getMaxParticipants());
-    	Integer sa = tryInteger(form.getStartsAtHour());
-    	Integer ea = tryInteger(form.getEndsAtHour());
-    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
-    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
-
-    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
-    	Event ev = null;
-//    	try {
-	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-	    			mp, date, sa, ea, inscriptionEndDate);
-//    	} catch(EndsBeforeStartsException e) {
-//    		return eventCreationError("ends_before_starts", pitchId, form);
-//    	} catch(DateInPastException e) {
-//    		return eventCreationError("event_in_past", pitchId, form);
-//    	} catch(MaximumDateExceededException e) {
-//    		return eventCreationError("date_exceeded", pitchId, form);
-//    	} catch(EventOverlapException e) {
-//    		return eventCreationError("event_overlap", pitchId, form);
-//    	} catch(HourOutOfRangeException e) {
-//    		return eventCreationError("hour_out_of_range", pitchId, form);
-//    	} catch(InscriptionDateInPastException e) {
-//    		return eventCreationError("inscription_date_in_past", pitchId, form);
-//    	} catch(InscriptionDateExceededException e) {
-//    		return eventCreationError("inscription_date_exceeded", pitchId, form);
-//    	}
-    	return Response.ok()/*.entity(EventDto.ofEvent(ev))*/.build();
-    }
-
 
     @DELETE
     @Path("/{id}")

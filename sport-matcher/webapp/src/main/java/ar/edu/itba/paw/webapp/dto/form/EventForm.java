@@ -21,7 +21,7 @@ public class EventForm {
 	@IntegerRange(min = 1, max = 100)
 	private Integer maxParticipants;
 	
-	@FutureDate
+	@FutureDate(startOfDay = true)
 	private Instant date;
 
 	@IntegerRange(min = 0, max = 23)
@@ -64,7 +64,7 @@ public class EventForm {
 		return date;
 	}
 
-	public EventForm setDate(Instant date) {
+	public EventForm withDate(Instant date) {
 		this.date = date;
 		return this;
 	}
@@ -73,7 +73,7 @@ public class EventForm {
 		return startsAtHour;
 	}
 
-	public EventForm setStartsAtHour(Integer startsAtHour) {
+	public EventForm withStartsAtHour(Integer startsAtHour) {
 		this.startsAtHour = startsAtHour;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class EventForm {
 		return endsAtHour;
 	}
 
-	public EventForm setEndsAtHour(Integer endsAtHour) {
+	public EventForm withEndsAtHour(Integer endsAtHour) {
 		this.endsAtHour = endsAtHour;
 		return this;
 	}
@@ -91,7 +91,7 @@ public class EventForm {
 		return inscriptionEndDate;
 	}
 
-	public EventForm setInscriptionEndDate(Instant inscriptionEndDate) {
+	public EventForm withInscriptionEndDate(Instant inscriptionEndDate) {
 		this.inscriptionEndDate = inscriptionEndDate;
 		return this;
 	}
