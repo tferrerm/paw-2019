@@ -19,12 +19,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EntityNotFoundException;
@@ -39,6 +39,7 @@ import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
+import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
@@ -46,7 +47,6 @@ import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.FullEventDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionCollectionDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionDto;
-import ar.edu.itba.paw.webapp.dto.form.EventForm;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
@@ -220,9 +220,9 @@ public class EventController extends BaseController {
         Integer vac = tryInteger(vacancies);
     	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
     	if(vac == null && vacancies != null && !vacancies.isEmpty())
-    		System.out.println("HOLA");
+    		Response.status(Status.BAD_REQUEST).build();
     	if(dateInst == null && date != null && !date.isEmpty())
-    		System.out.println("HOLA");
+    		Response.status(Status.BAD_REQUEST).build();
 
         List<Event> events = es.findBy(true, Optional.ofNullable(name),
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
@@ -274,36 +274,28 @@ public class EventController extends BaseController {
     @POST
     @Path("/pitch/{pitchId}/event/create")
     public Response createEvent(
-    		@PathParam("pitchId") long pitchId//,
+    		@PathParam("pitchId") long pitchId,
+    		@FormDataParam("name") final String name,
+    		@FormDataParam("description") final String description,
+    		@FormDataParam("maxParticipants") final String maxParticipants,
+    		@FormDataParam("date") final String date,
+    		
+    		//,
     		/*@Valid @ModelAttribute("newEventForm") final EventForm form,
 			final BindingResult errors,
 			HttpServletRequest request*/) throws PitchNotFoundException {
     	
-//    	Integer mp = tryInteger(form.getMaxParticipants());
-//    	Integer sa = tryInteger(form.getStartsAtHour());
-//    	Integer ea = tryInteger(form.getEndsAtHour());
-//    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
-//    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
-//    	if(mp == null)
-//    		errors.rejectValue("maxParticipants", "wrong_int_format");
-//    	if(sa == null)
-//    		errors.rejectValue("startsAtHour", "wrong_int_format");
-//    	if(ea == null)
-//    		errors.rejectValue("endsAtHour", "wrong_int_format");
-//    	if(date == null)
-//    		errors.rejectValue("date", "wrong_date_format");
-//    	if(inscriptionEndDate == null)
-//    		errors.rejectValue("inscriptionEndDate", "wrong_date_format");
-//
-//    	if(errors.hasErrors()) {
-//    		return seePitch(pitchId, form);
-//    	}
-//
-//    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
-//    	Event ev = null;
+    	Integer mp = tryInteger(form.getMaxParticipants());
+    	Integer sa = tryInteger(form.getStartsAtHour());
+    	Integer ea = tryInteger(form.getEndsAtHour());
+    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
+    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
+
+    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
+    	Event ev = null;
 //    	try {
-//	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-//	    			mp, date, sa, ea, inscriptionEndDate);
+	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+	    			mp, date, sa, ea, inscriptionEndDate);
 //    	} catch(EndsBeforeStartsException e) {
 //    		return eventCreationError("ends_before_starts", pitchId, form);
 //    	} catch(DateInPastException e) {
@@ -320,14 +312,6 @@ public class EventController extends BaseController {
 //    		return eventCreationError("inscription_date_exceeded", pitchId, form);
 //    	}
     	return Response.ok()/*.entity(EventDto.ofEvent(ev))*/.build();
-    }
-
-
-    private Response eventCreationError(String error, long pitchId, EventForm form)
-    	throws PitchNotFoundException {
-    	//ModelAndView mav = seePitch(pitchId, form);
-		//mav.addObject(error, true);
-		return null;//mav;
     }
 
 
