@@ -13,7 +13,6 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			{name: 'Tournaments', link: "#/home"}
 		]
 
-
 		$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.loggedUser = authService.getLoggedUser();
 
@@ -24,9 +23,9 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			authService.logout();
 		}
 		
-		/*$scope.$on('user:updated', function() {
-			$scope.isLoggedIn = auth.isLoggedIn();
-			$scope.loggedUser = auth.getLoggedUser();
-		});*/
+		$scope.$on('user:updated', function() {
+			$scope.isLoggedIn = authService.isLoggedIn();
+			$scope.loggedUser = authService.getLoggedUser();
+		});
 	}]);
 });

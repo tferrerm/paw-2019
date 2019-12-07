@@ -9,11 +9,11 @@ define(['frontend', 'services/restService', 'services/storageService'], function
 				return loggedUser;
 			},
 			isLoggedIn: function() {
-				!!loggedUser
+				return !!loggedUser;
 			},
 			login: function(username, password, rememberMe) {
 				var credentials = {login_username: username, login_password: password};
-				//var self = this;
+
 				return $http.post(url + '/users/login', Object.keys(credentials).length ? jQuery.param(credentials) : '', {transformRequest: angular.identity, headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
 					.then(function(response) {
 						storageService.setAuthToken(response.headers('X-Auth-Token'), rememberMe);
@@ -24,15 +24,15 @@ define(['frontend', 'services/restService', 'services/storageService'], function
 					})
 					.then(function(data) {
 						storageService.setUser(data, rememberMe);
-						/*self.*/loggedUser = data;
-						//$rootScope.$broadcast('user:updated');
+						loggedUser = data;
+						$rootScope.$broadcast('user:updated');
 						return data;
 					});
 			},
 			logout: function() {
 				storageService.destroy();
 				loggedUser = null;
-				//$rootScope.$broadcast('user:updated');
+				$rootScope.$broadcast('user:updated');
 			}
 		};
 	}]);
