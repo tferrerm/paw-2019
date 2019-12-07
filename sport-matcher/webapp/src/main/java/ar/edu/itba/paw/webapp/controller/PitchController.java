@@ -51,8 +51,6 @@ import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 public class PitchController extends BaseController {
 
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	
-	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(PitchController.class);
 	private static final String DEFAULT_PITCH_PICTURE = "pitch_default.png";
 	
@@ -167,7 +165,7 @@ public class PitchController extends BaseController {
     		@FormDataParam("maxParticipants") final String maxParticipants,
     		@FormDataParam("date") final String date,
     		@FormDataParam("startsAtHour") final String startsAtHour,
-    		@FormDataParam("endsAt") final String endsAtHour,
+    		@FormDataParam("endsAtHour") final String endsAtHour,
     		@FormDataParam("inscriptionEndDate") final String inscriptionEndDate)
     		 throws PitchNotFoundException, FormValidationException, EventCreationException {
     	
@@ -176,6 +174,9 @@ public class PitchController extends BaseController {
     	Integer ea = tryInteger(endsAtHour);
     	Instant eventDate = tryInstantStartOfDay(date, TIME_ZONE);
     	Instant inscriptionEnd = tryDateTimeToInstant(inscriptionEndDate, TIME_ZONE);
+    	
+    	LOGGER.debug("date: {}, eventDate: {}", date, eventDate);
+    	LOGGER.debug("inscription: {}, inscriptionDate: {}", inscriptionEndDate, inscriptionEnd);
     	
     	validator.validate(
     		new EventForm()

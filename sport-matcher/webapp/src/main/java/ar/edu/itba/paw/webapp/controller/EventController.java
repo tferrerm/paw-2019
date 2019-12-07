@@ -165,10 +165,7 @@ public class EventController extends BaseController {
     public Response joinEvent(@PathParam("id") long id)
     	throws EntityNotFoundException, DateInPastException, EventFullException, UserBusyException {
 	    /* HARDCODEADO HARDCODED InscriptionClosedException */
-	    
-	    if (loggedUser() != null) {
-		    es.joinEvent(loggedUser().getUserid(), id);
-	    }
+    	es.joinEvent(loggedUser().getUserid(), id);
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -176,9 +173,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{id}/leave")
     public Response leaveEvent(@PathParam("id") long id) throws DateInPastException, EntityNotFoundException {
-    	if (loggedUser() != null) {
-    		es.leaveEvent(id, loggedUser().getUserid());
-    	}
+		es.leaveEvent(id, loggedUser().getUserid());
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -188,12 +183,10 @@ public class EventController extends BaseController {
     		@PathParam("id") long eventid,
     		@PathParam("userId") long kickedUserId)
     		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException, DateInPastException {
-    	if (loggedUser() != null) {
-	    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-	    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
-	    	es.kickFromEvent(loggedUser(), kickedUserId, event);
-	    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
-    	}
+    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
+    	es.kickFromEvent(loggedUser(), kickedUserId, event);
+    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
     	return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -263,18 +256,15 @@ public class EventController extends BaseController {
     @Path("/{id}")
 	public Response deleteEvent(@PathParam("id") final long id)
 			throws EventNotFoundException, UserNotAuthorizedException, DateInPastException {
-    	if (loggedUser() != null) {
-				Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-				List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
-				es.cancelEvent(event, loggedUser().getUserid());
-				for(User inscriptedUser : inscriptedUsers) {
-					if(inscriptedUser != event.getOwner())
-						ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
-				}
-				LOGGER.debug("Deleted event with id {}", id);
-				return Response.status(Status.NO_CONTENT).build();
-    	}
-		return Response.status(Status.FORBIDDEN).build();
+		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
+		es.cancelEvent(event, loggedUser().getUserid());
+		for(User inscriptedUser : inscriptedUsers) {
+			if(inscriptedUser != event.getOwner())
+				ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
+		}
+		LOGGER.debug("Deleted event with id {}", id);
+		return Response.status(Status.NO_CONTENT).build();
 	}
 
 
@@ -294,10 +284,8 @@ public class EventController extends BaseController {
     @Path("/{eventId}/downvote")
     public Response downvote(@PathParam("eventId") final long eventid)
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
-    	if (loggedUser() != null) {
-	    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-	    	es.vote(false, ev, loggedUser().getUserid());
-    	}
+    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	es.vote(false, ev, loggedUser().getUserid());
     	return Response.status(Status.NO_CONTENT).build();
     }
     
