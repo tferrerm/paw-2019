@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EntityNotFoundException;
@@ -34,8 +33,6 @@ import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
-import ar.edu.itba.paw.interfaces.PitchService;
-import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
@@ -46,10 +43,8 @@ import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.FullEventDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionCollectionDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionDto;
-import ar.edu.itba.paw.webapp.dto.form.EventForm;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
 import ar.edu.itba.paw.webapp.exception.EventNotFoundException;
-import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Path("events")
@@ -70,13 +65,7 @@ public class EventController extends BaseController {
     private EmailService ems;
 
     @Autowired
-    private PitchService ps;
-
-    @Autowired
     private UserService us;
-
-    @Autowired
-    private TournamentService ts;
 
 //    @GET
 //	@Path("/home") // SACAR
@@ -176,10 +165,7 @@ public class EventController extends BaseController {
     public Response joinEvent(@PathParam("id") long id)
     	throws EntityNotFoundException, DateInPastException, EventFullException, UserBusyException {
 	    /* HARDCODEADO HARDCODED InscriptionClosedException */
-	    
-	    if (loggedUser() != null) {
-		    es.joinEvent(loggedUser().getUserid(), id);
-	    }
+    	es.joinEvent(loggedUser().getUserid(), id);
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -187,9 +173,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{id}/leave")
     public Response leaveEvent(@PathParam("id") long id) throws DateInPastException, EntityNotFoundException {
-    	if (loggedUser() != null) {
-    		es.leaveEvent(id, loggedUser().getUserid());
-    	}
+		es.leaveEvent(id, loggedUser().getUserid());
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -199,12 +183,10 @@ public class EventController extends BaseController {
     		@PathParam("id") long eventid,
     		@PathParam("userId") long kickedUserId)
     		throws UserNotAuthorizedException, EventNotFoundException, UserNotFoundException, DateInPastException {
-    	if (loggedUser() != null) {
-	    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-	    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
-	    	es.kickFromEvent(loggedUser(), kickedUserId, event);
-	    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
-    	}
+    	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
+    	es.kickFromEvent(loggedUser(), kickedUserId, event);
+    	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
     	return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -220,9 +202,9 @@ public class EventController extends BaseController {
         Integer vac = tryInteger(vacancies);
     	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
     	if(vac == null && vacancies != null && !vacancies.isEmpty())
-    		System.out.println("HOLA");
+    		Response.status(Status.BAD_REQUEST).build();
     	if(dateInst == null && date != null && !date.isEmpty())
-    		System.out.println("HOLA");
+    		Response.status(Status.BAD_REQUEST).build();
 
         List<Event> events = es.findBy(true, Optional.ofNullable(name),
         		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
@@ -270,83 +252,19 @@ public class EventController extends BaseController {
 //    	return null;
 //	}
 
-
-    @POST
-    @Path("/pitch/{pitchId}/event/create")
-    public Response createEvent(
-    		@PathParam("pitchId") long pitchId//,
-    		/*@Valid @ModelAttribute("newEventForm") final EventForm form,
-			final BindingResult errors,
-			HttpServletRequest request*/) throws PitchNotFoundException {
-    	
-//    	Integer mp = tryInteger(form.getMaxParticipants());
-//    	Integer sa = tryInteger(form.getStartsAtHour());
-//    	Integer ea = tryInteger(form.getEndsAtHour());
-//    	Instant date = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
-//    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
-//    	if(mp == null)
-//    		errors.rejectValue("maxParticipants", "wrong_int_format");
-//    	if(sa == null)
-//    		errors.rejectValue("startsAtHour", "wrong_int_format");
-//    	if(ea == null)
-//    		errors.rejectValue("endsAtHour", "wrong_int_format");
-//    	if(date == null)
-//    		errors.rejectValue("date", "wrong_date_format");
-//    	if(inscriptionEndDate == null)
-//    		errors.rejectValue("inscriptionEndDate", "wrong_date_format");
-//
-//    	if(errors.hasErrors()) {
-//    		return seePitch(pitchId, form);
-//    	}
-//
-//    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
-//    	Event ev = null;
-//    	try {
-//	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-//	    			mp, date, sa, ea, inscriptionEndDate);
-//    	} catch(EndsBeforeStartsException e) {
-//    		return eventCreationError("ends_before_starts", pitchId, form);
-//    	} catch(DateInPastException e) {
-//    		return eventCreationError("event_in_past", pitchId, form);
-//    	} catch(MaximumDateExceededException e) {
-//    		return eventCreationError("date_exceeded", pitchId, form);
-//    	} catch(EventOverlapException e) {
-//    		return eventCreationError("event_overlap", pitchId, form);
-//    	} catch(HourOutOfRangeException e) {
-//    		return eventCreationError("hour_out_of_range", pitchId, form);
-//    	} catch(InscriptionDateInPastException e) {
-//    		return eventCreationError("inscription_date_in_past", pitchId, form);
-//    	} catch(InscriptionDateExceededException e) {
-//    		return eventCreationError("inscription_date_exceeded", pitchId, form);
-//    	}
-    	return Response.ok()/*.entity(EventDto.ofEvent(ev))*/.build();
-    }
-
-
-    private Response eventCreationError(String error, long pitchId, EventForm form)
-    	throws PitchNotFoundException {
-    	//ModelAndView mav = seePitch(pitchId, form);
-		//mav.addObject(error, true);
-		return null;//mav;
-    }
-
-
     @DELETE
     @Path("/{id}")
 	public Response deleteEvent(@PathParam("id") final long id)
 			throws EventNotFoundException, UserNotAuthorizedException, DateInPastException {
-    	if (loggedUser() != null) {
-				Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-				List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
-				es.cancelEvent(event, loggedUser().getUserid());
-				for(User inscriptedUser : inscriptedUsers) {
-					if(inscriptedUser != event.getOwner())
-						ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
-				}
-				LOGGER.debug("Deleted event with id {}", id);
-				return Response.status(Status.NO_CONTENT).build();
-    	}
-		return Response.status(Status.FORBIDDEN).build();
+		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
+		es.cancelEvent(event, loggedUser().getUserid());
+		for(User inscriptedUser : inscriptedUsers) {
+			if(inscriptedUser != event.getOwner())
+				ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
+		}
+		LOGGER.debug("Deleted event with id {}", id);
+		return Response.status(Status.NO_CONTENT).build();
 	}
 
 
@@ -366,10 +284,8 @@ public class EventController extends BaseController {
     @Path("/{eventId}/downvote")
     public Response downvote(@PathParam("eventId") final long eventid)
     	throws EventNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
-    	if (loggedUser() != null) {
-	    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
-	    	es.vote(false, ev, loggedUser().getUserid());
-    	}
+    	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
+    	es.vote(false, ev, loggedUser().getUserid());
     	return Response.status(Status.NO_CONTENT).build();
     }
     

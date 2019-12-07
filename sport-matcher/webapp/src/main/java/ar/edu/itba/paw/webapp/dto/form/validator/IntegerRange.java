@@ -10,13 +10,13 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = FutureDateValidator.class)
+@Constraint(validatedBy = IntegerRangeValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FutureDate {
-	String message() default "Date must be present and in the future";
+public @interface IntegerRange {
+	String message() default "Integer must be present and in the given range";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
-	boolean startOfDay() default false;
-	String timezone() default "America/Buenos_Aires";
+	int min();
+	int max();
 }

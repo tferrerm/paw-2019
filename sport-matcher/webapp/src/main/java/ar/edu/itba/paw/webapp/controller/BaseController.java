@@ -28,7 +28,6 @@ public class BaseController {
 	private UserService us;
 	
 	public User loggedUser() {
-//		return us.findById(2).get();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(auth == null) {
 			LOGGER.debug("Returning null as logged user");
@@ -59,6 +58,7 @@ public class BaseController {
     	try {
     		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(timezone)).toInstant();
     	} catch(DateTimeException e) {
+    		LOGGER.debug("{}", e.getMessage());
     		return null;
     	}
     	return i;
@@ -71,6 +71,7 @@ public class BaseController {
     	try {
     		i = LocalDateTime.parse(str).atZone(ZoneId.of(timezone)).toInstant();
     	} catch(DateTimeException e) {
+    		LOGGER.debug("{}", e.getMessage());
     		return null;
     	}
     	return i;

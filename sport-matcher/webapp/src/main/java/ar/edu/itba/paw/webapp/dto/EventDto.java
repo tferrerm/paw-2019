@@ -30,7 +30,7 @@ public class EventDto {
 		if(withInscriptionCount)
 			dto.inscriptionCount = event.getInscriptions().size();
 		dto.inscriptionEnd = event.getEndsInscriptionAt();
-		dto.inscriptionSuccess = event.getInscriptionSuccess();
+		//dto.inscriptionSuccess = event.getInscriptionSuccess(); ROMPEEEEEE
 		dto.startsAt = event.getStartsAt();
 		dto.endsAt = event.getEndsAt();
 		dto.createdAt = event.getCreatedAt();

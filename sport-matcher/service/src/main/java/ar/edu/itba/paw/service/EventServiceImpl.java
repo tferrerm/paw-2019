@@ -29,8 +29,6 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateExceededException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -263,23 +261,18 @@ public class EventServiceImpl implements EventService {
 	public Event create(final String name, final User owner, final Pitch pitch,
 			final String description, final int maxParticipants, final Instant date, 
 			final int startsAtHour, final int endsAtHour, final Instant inscriptionEndDate) 
-					throws 	DateInPastException,
-							MaximumDateExceededException, EndsBeforeStartsException, 
-							EventOverlapException, HourOutOfRangeException, InscriptionDateExceededException, InscriptionDateInPastException {
+					throws 	MaximumDateExceededException, EndsBeforeStartsException, 
+							EventOverlapException, HourOutOfRangeException {
 		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
-		
-    	if(startsAtDate.isBefore(Instant.now()))
-    		throw new DateInPastException("Event start date is in the past");
+
     	if(startsAtDate.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
-    		throw new HourOutOfRangeException();
-    	if(inscriptionEndDate.isBefore(Instant.now()))
-    		throw new InscriptionDateInPastException();
+    		throw new HourOutOfRangeException(MIN_HOUR, MAX_HOUR);
     	if(inscriptionEndDate.isAfter((startsAtDate.minus(INSCRIPTION_END_FROM_EVENT_DAY_DIFFERENCE, ChronoUnit.DAYS))))
-    		throw new InscriptionDateExceededException();
+    		throw new MaximumDateExceededException("The inscription cannot close in less than 24 hs before the event starts");
 
 		return ed.create(name, owner, pitch, description, maxParticipants, 
 				startsAtDate, date.plus(endsAtHour, ChronoUnit.HOURS), inscriptionEndDate);

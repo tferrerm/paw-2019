@@ -32,7 +32,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
@@ -48,7 +47,6 @@ import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserComment;
-import ar.edu.itba.paw.webapp.auth.TokenAuthenticationManager;
 import ar.edu.itba.paw.webapp.dto.ClubDto;
 import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.EventDto;
@@ -96,9 +94,6 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private EmailService ems;
-
-	@Autowired
-	private TokenAuthenticationManager cph;
 
 //	@GET
 //	@Path("/users/login")
@@ -209,11 +204,8 @@ public class UserController extends BaseController {
     	CommentForm cf = new CommentForm().withComment(commentContent);
     	validator.validate(cf);
 
-    	// HARDCODED HARDCODEADO
-		UserComment comment = us.createComment(/*loggedUser().getUserid()*/2, userId, commentContent);
+		UserComment comment = us.createComment(loggedUser().getUserid(), userId, commentContent);
 
-		// Absolute: /users/
-		// "/users/1/comments/"
 		final URI uri = uriInfo.getAbsolutePathBuilder()
 				.path(userId + "/comments/" + comment.getCommentId()).build();
 	    return Response.created(uri).entity(UserCommentDto.ofComment(comment)).build();

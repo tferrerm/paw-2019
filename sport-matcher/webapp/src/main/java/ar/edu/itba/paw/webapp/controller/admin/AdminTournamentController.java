@@ -1,20 +1,7 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -24,43 +11,14 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import ar.edu.itba.paw.exception.DateInPastException;
-import ar.edu.itba.paw.exception.EndsBeforeStartsException;
-import ar.edu.itba.paw.exception.EventHasNotEndedException;
-import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateExceededException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
-import ar.edu.itba.paw.exception.InsufficientPitchesException;
-import ar.edu.itba.paw.exception.InvalidTeamAmountException;
-import ar.edu.itba.paw.exception.InvalidTeamSizeException;
-import ar.edu.itba.paw.exception.MaximumDateExceededException;
-import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
-import ar.edu.itba.paw.model.Sport;
-import ar.edu.itba.paw.model.Tournament;
-import ar.edu.itba.paw.model.TournamentEvent;
-import ar.edu.itba.paw.model.TournamentTeam;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
-import ar.edu.itba.paw.webapp.dto.form.TournamentForm;
-import ar.edu.itba.paw.webapp.dto.form.TournamentResultForm;
-import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
-import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
-import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
 @Path("admin/tournaments")
 @Component

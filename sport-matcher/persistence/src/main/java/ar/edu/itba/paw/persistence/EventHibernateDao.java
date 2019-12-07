@@ -157,6 +157,7 @@ public class EventHibernateDao implements EventDao {
 		return query.getSingleResult().intValue();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> findCurrentEventsInPitch(final long pitchid) {
 		LocalDate ld = LocalDate.now();
