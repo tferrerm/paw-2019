@@ -1,21 +1,26 @@
 'use strict';
 define(['frontend'], function(frontend) {
 
-	frontend.controller('ClubsCtrl', function($scope) {
-    $scope.tournaments = [];
-    $scope.tournamentQty = 0;
-    $scope.pageInitialIndex = 0;
-    $scope.pageNum = 0;
-    $scope.totalTournamentQty = 0;
-    $scope.now = new Date();
+  frontend.controller('TournamentsCtrl', ['$scope', '$location', 'restService', function ($scope, $location, restService) {
+    var params = {pageNum: 1};
+    $scope.filters = {};
 
-    $scope.goToTournament = function(id) {
+    restService.getTournaments(params).then(function (data) {
+      $scope.tournaments = data.tournaments;
+      $scope.tournamentQty = data.tournamentQty;
+      $scope.totalTournamentQty = data.totalTournamentQty;
+      $scope.pageNum = params.pageNum;
+      $scope.pageInitialIndex = params.pageInitialIndex;
+      $scope.now = new Date();
+    });
+
+    $scope.goToTournament = function (id) {
       $location.url('tournament/' + id);
     };
 
-    $scope.getFirstPage = function() {
+    $scope.getFirstPage = function () {
       params.pageNum = 1;
-      restService.getTournaments(params).then(function(data) {
+      restService.getTournaments(params).then(function (data) {
         $scope.tournaments = data.tournaments;
         $scope.tournamentQty = data.tournamentQty;
         $scope.lastPageNum = data.pagesCountMatching;
@@ -24,9 +29,9 @@ define(['frontend'], function(frontend) {
       });
     };
 
-    $scope.getPrevPage = function() {
+    $scope.getPrevPage = function () {
       params.pageNum--;
-      restService.getTournaments(params).then(function(data) {
+      restService.getTournaments(params).then(function (data) {
         $scope.tournaments = data.tournaments;
         $scope.tournamentCount = data.totalTournamentsMatching;
         $scope.lastPageNum = data.pagesCountMatching;
@@ -35,9 +40,9 @@ define(['frontend'], function(frontend) {
       });
     };
 
-    $scope.getNextPage = function() {
+    $scope.getNextPage = function () {
       params.pageNum++;
-      restService.getTournaments(params).then(function(data) {
+      restService.getTournaments(params).then(function (data) {
         $scope.tournaments = data.clubs;
         $scope.tournamentsCount = data.totalTournamentsMatching;
         $scope.lastPageNum = data.pagesCountMatching;
@@ -46,9 +51,9 @@ define(['frontend'], function(frontend) {
       });
     };
 
-    $scope.getLastPage = function() {
+    $scope.getLastPage = function () {
       params.pageNum = $scope.lastPageNum;
-      restService.getTournaments(params).then(function(data) {
+      restService.getTournaments(params).then(function (data) {
         $scope.tournaments = data.clubs;
         $scope.tournamentsCount = data.totalTournamentsMatching;
         $scope.lastPageNum = data.pagesCountMatching;
@@ -56,6 +61,5 @@ define(['frontend'], function(frontend) {
         $scope.pageNum = params.pageNum;
       });
     };
-
-	});
-});
+  }]);
+})

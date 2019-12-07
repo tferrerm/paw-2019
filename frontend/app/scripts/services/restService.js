@@ -67,6 +67,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getHistory: function(id, params) {
 				return httpGet('/users/' + id + '/history', {pageNum: params.pageNum});
 			},
+      getTournaments: function(params) {
+        return httpGet('/tournaments', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
+      },
 			getMyFutureEvents: function(id, params) {
 				return httpGet('/users/' + id + '/future-owned-events', {pageNum: params.pageNum});
 			},
