@@ -9,10 +9,10 @@
       <span class="justify-center flex-1 color-white mt-10">{{"state" | translate}}</span>
       <span class="justify-center flex-1 color-white mt-10">{{"club" | translate}}</span>
       <span class="justify-center flex-1 color-white mt-10">{{"sport" | translate}}</span>
-      <span class="justify-center flex-1" />
+      <span class="justify-center flex-1" > </span>
     </div>
-    <div ng-repeat="tournament in tournaments" class="custom-row">
-      <div class="custom-row">
+    <div ng-if="tournamentCount > 0">
+      <div ng-repeat="tournament in tournaments" class="custom-row">
         <div>{{tournament.name}}</div>
         <div>
           <div ng-if="tournament.endsInscriptionAt > now" class="notice">
@@ -33,37 +33,34 @@
           </a>
         </div>
       </div>
+      <div class="table-navigator w-100 justify-center">
+        <div>
+          <a ng-click="getFirstPage()">
+            <button type="button" class="btn btn-secondary">
+              {{'first' | translate}}
+            </button>
+          </a>
+          <a ng-click="getPreviousPage()">
+            <button type="button" class="btn btn-secondary">
+              {{'back' | translate}}
+            </button>
+          </a>
+        </div>
+      </div>
+      <span class="flex">{{'showing_items' | translate}} {{pageInitialIndex}}}-{{pageInitialIndex + tournamentQty - 1}} {{'of' | translate}} {{totalTournamentQty}</span>
+      <div>
+        <a ng-click="getNextPage()">
+          <button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+        </a>
+        <a ng-click="getLastPage()">
+          <button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+        </a>
+      </div>
+      <div ng-if="tournamentCount < 0">
+        <div class="notice">
+          {{'no_results' | translate}}
+        </div>
+      </div>
     </div>
   </div>
-  <div class="table-navigator w-100 justify-center">
-    <div ng-if="tournamentQty > 0">
-        <div class="${page != 1 ? "" : "hidden"}">
-        <a href="<c:url value='/tournaments/1' />">
-          <button type="button" class="btn btn-secondary">
-            <spring:message code="first"/>
-          </button>
-        </a>
-        <a href="<c:url value='/tournaments/${page-1}' />">
-          <button type="button" class="btn btn-secondary">
-            <spring:message code="back"/>
-          </button>
-        </a>
-  </div>
-  <span class="flex"><spring:message code="showing_items"/> <c:out value="${pageInitialIndex}"/>-<c:out value="${pageInitialIndex + tournamentQty - 1}"/> <spring:message code="of"/> <c:out value="${totalTournamentQty}"/></span>
-  <div class="${page != lastPageNum ? "" : "hidden"}">
-  <a href="<c:url value='/tournaments/${page+1}' />">
-    <button type="button" class="btn btn-secondary"><spring:message code="next"/></button>
-  </a>
-  <a href="<c:url value='/tournaments/${lastPageNum}' />">
-    <button type="button" class="btn btn-secondary"><spring:message code="last"/></button>
-  </a>
 </div>
-</c:when>
-<c:otherwise>
-  <div class="notice">
-    <spring:message code="no_results"/>
-  </div>
-</c:otherwise>
-</c:choose>
-</div>
-</div></html>

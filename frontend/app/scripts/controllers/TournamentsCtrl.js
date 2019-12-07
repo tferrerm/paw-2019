@@ -37,7 +37,7 @@ define(['frontend'], function(frontend) {
 
     $scope.getNextPage = function() {
       params.pageNum++;
-      restService.getClubs(params).then(function(data) {
+      restService.getTournaments(params).then(function(data) {
         $scope.tournaments = data.clubs;
         $scope.tournamentsCount = data.totalTournamentsMatching;
         $scope.lastPageNum = data.pagesCountMatching;
@@ -48,7 +48,7 @@ define(['frontend'], function(frontend) {
 
     $scope.getLastPage = function() {
       params.pageNum = $scope.lastPageNum;
-      restService.getClubs(params).then(function(data) {
+      restService.getTournaments(params).then(function(data) {
         $scope.tournaments = data.clubs;
         $scope.tournamentsCount = data.totalTournamentsMatching;
         $scope.lastPageNum = data.pagesCountMatching;
