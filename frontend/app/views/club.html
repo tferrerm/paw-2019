@@ -3,9 +3,9 @@
 		<div class="profile-title">
 			<h2>{{club.name}}</h2>
 		</div>
-		<div class="flex-row">
-			<div class="club-detail-container">
-				<div class="description-body">
+		<div class="flex-row w-90">
+			<div class="club-detail-container flex-1">
+				<div class="club-description">
 					<div class="club-item club-pitches-list">
 						<div class="flex">
 							<div class="h4 pitch-info-label">
@@ -13,90 +13,90 @@
 								<span class="h4"> {{club.location}}</span>
 							</div>
 						</div>
-						<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
 					</div>
+					<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
 				</div>
 				<div class="club-item club-pitches-list">
-					<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
-					<div ng-if="pitches.length == 0">
-						<span>{{'no_pitches' | translate}}</span>
-					</div>
-					<div ng-if="pitches.length > 0">
-						<ul>
-							<div ng-repeat="pitch in pitches">
-								<div class="custom-row flex-space-around club-pitches-list">
-									<div>{{pitch.name}}</div>
-									<div>{{pitch.sport | translate}}</div>
-									<div>
-								<a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
-							</div>
-						</ul>
-						<div ng-hide="pageNum == 1">
-							<a ng-click="getFirstPage()">
-								<button type="button" class="btn btn-secondary">
-									{{'first' | translate}}
-								</button>
-							</a>
-							<a ng-click="getPrevPage()">
-								<button type="button" class="btn btn-secondary">
-									{{'back' | translate}}
-								</button>
-							</a>
+						<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
+						<div ng-if="pitches.length == 0">
+							<span>{{'no_pitches' | translate}}</span>
 						</div>
-						<div ng-hide="pageNum == lastPageNum">
-							<a ng-click="getNextPage()">
-								<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-							</a>
-							<a ng-click="getLastPage()">
-								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-							</a>
-						</div>
-					</div>
-				</div>
-				<div class="tbl profile-cont club-comments">
-					<div ng-if="haveRelationship">
-						<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
-							<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
-							<div class="justify-center">
-								<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
-							</div>
-						</form>
-					</div>
-					<div ng-repeat="cmt in comments" class="comment-container">
-						<div class="flex-row mv-10">
-							<img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
-							<a class="link-text ml-10">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
-						</div>
-						<span class="comment-text ml-10">{{cmt.comment}}</span>
-						<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>
-					</div>
-					<div class="table-navigator">
-						<div ng-if="comments.length > 0">
-								<div ng-hide="commentsPageNum == 1">
-								<a href="<c:url value='/club/${club.clubid}?cmt=1' />">
+						<div ng-if="pitches.length > 0">
+							<ul>
+								<div ng-repeat="pitch in pitches">
+									<div class="custom-row flex-space-around club-pitches-list">
+										<div>{{pitch.name}}</div>
+										<div>{{pitch.sport | translate}}</div>
+										<a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
+									</div>
+								</div>
+							</ul>
+							<div ng-hide="pageNum == 1">
+								<a ng-click="getFirstPage()">
 									<button type="button" class="btn btn-secondary">
-										<spring:message code="first"/>
+										{{'first' | translate}}
 									</button>
 								</a>
-								<a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage-1}' />">
+								<a ng-click="getPrevPage()">
 									<button type="button" class="btn btn-secondary">
-										<spring:message code="back"/>
+										{{'back' | translate}}
 									</button>
 								</a>
 							</div>
-							<span class="flex">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + comments.length - 1}} {{'of' | translate}} {{commentCount}}</span>
-								<div ng-hide="commentsPageNum == commentsLastPageNum">
-								<a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage+1}' />">
+							<div ng-hide="pageNum == lastPageNum">
+								<a ng-click="getNextPage()">
 									<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 								</a>
-								<a href="<c:url value='/club/${club.clubid}?cmt=${maxCommentPage}' />">
+								<a ng-click="getLastPage()">
 									<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
 								</a>
 							</div>
 						</div>
-						<div ng-if="comments.length == 0" class="notice">
-							{{'no_comments' | translate}}
+					</div>
+			</div>
+			<div class="tbl profile-cont club-comments flex-1">
+				<div ng-if="haveRelationship" class="w-100">
+					<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
+						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
+						<div class="justify-center">
+							<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
 						</div>
+					</form>
+				</div>
+				<div ng-repeat="cmt in comments" class="comment-container">
+					<div class="flex-row mv-10">
+						<img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
+						<a class="link-text ml-10">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
+					</div>
+					<span class="comment-text ml-10">{{cmt.comment}}</span>
+					<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>
+				</div>
+				<div class="table-navigator">
+					<div ng-if="comments.length > 0">
+						<div ng-hide="commentsPageNum == 1">
+							<a href="<c:url value='/club/${club.clubid}?cmt=1' />">
+								<button type="button" class="btn btn-secondary">
+									<spring:message code="first"/>
+								</button>
+							</a>
+							<a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage-1}' />">
+								<button type="button" class="btn btn-secondary">
+									<spring:message code="back"/>
+								</button>
+							</a>
+						</div>
+						<span class="flex">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + comments.length - 1}} {{'of' | translate}} {{commentCount}}</span>
+						<div ng-hide="commentsPageNum == commentsLastPageNum">
+							<a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage+1}' />">
+								<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+							</a>
+							<a href="<c:url value='/club/${club.clubid}?cmt=${maxCommentPage}' />">
+								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+							</a>
+						</div>
+					</div>
+					<div ng-if="comments.length == 0" class="notice">
+						{{'no_comments' | translate}}
 					</div>
 				</div>
 			</div>
