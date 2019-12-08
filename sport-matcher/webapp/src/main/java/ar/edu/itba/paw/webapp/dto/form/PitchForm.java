@@ -4,7 +4,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
+
+import ar.edu.itba.paw.webapp.dto.form.validator.Sport;
 
 public class PitchForm {
 	
@@ -13,34 +14,35 @@ public class PitchForm {
 	@Size(max=100)
 	private String name;
 	
-	@NotBlank
-	@Size(max=100)
+	@Sport
 	private String sport;
 	
-	private MultipartFile pitchPicture;
+	// private MultipartFile pitchPicture;
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public PitchForm withName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getSport() {
 		return sport;
 	}
 
-	public void setSport(String sport) {
+	public PitchForm withSport(String sport) {
 		this.sport = sport;
+		return this;
 	}
 	
-	public MultipartFile getPitchPicture() {
-		return pitchPicture;
-	}
-
-	public void setPitchPicture(MultipartFile pitchPicture) {
-		this.pitchPicture = pitchPicture;
-	}
+//	public MultipartFile getPitchPicture() {
+//		return pitchPicture;
+//	}
+//
+//	public void setPitchPicture(MultipartFile pitchPicture) {
+//		this.pitchPicture = pitchPicture;
+//	}
 	
 }

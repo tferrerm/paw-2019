@@ -2,6 +2,10 @@ a.event-link {
     margin: 10px 5px;
 }
 
+.cancel-event {
+    align-self: flex-end;
+}
+
 .create-event {
     display: flex;
     flex-direction: row;
@@ -31,7 +35,19 @@ a.event-link {
     display: flex;
     font-weight: bold;
 }
-  
+
+.event-item-box {
+    background-color: #fff2e6;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.event-item-box ul {
+  list-style: none;
+  padding: 0;
+}
+
 .event-participants {
     margin-bottom: 0;
 }
