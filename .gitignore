@@ -52,3 +52,5 @@ bower_components
 
 .DS_Store
 .metadata
+dist
+
