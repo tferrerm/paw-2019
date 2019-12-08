@@ -13,9 +13,8 @@
           </div>
           <div>
             <label>{{'sport' | translate}}</label>
-            <select class="form-control">
-              <option  value=""></option>
-              <option ng-repeat="sport in sports">{{sport | translate}}</option>
+            <select class="form-control" ng-model="filters.sport" ng-options="sport | translate for sport in sports">
+              <option></option>
             </select>
           </div>
           <div>
@@ -45,7 +44,7 @@
     </div>
   </div>
   <div class="table-navigator w-100 justify-center">
-    <div ng-if="pitchCount > 0" class="flex">
+    <div ng-if="pitches.length > 0" class="flex">
       <div ng-hide="pageNum == 1">
         <a ng-click="getFirstPage()"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
         <a ng-click="getPrevPage()"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
@@ -64,7 +63,7 @@
         </a>
       </div>
     </div>
-    <div ng-if="pitchCount <= 0" class="notice">
+    <div ng-if="pitches.length == 0" class="notice">
       {{'no_results' | translate}}
     </div>
   </div>

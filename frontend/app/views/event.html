@@ -3,7 +3,7 @@
 		<div class="profile-title">
 			<h2>{{event.name}}</h2>
 		</div>
-		<div class="detail-container average-min-width">
+		<div class="detail-container w-100">
 			<div class="status" ng-if="!eventHasEnded">
 				<div ng-if="event.inscriptionCount < event.maxParticipants">
 					<h3>{{'status' | translate}} {{'uncompleted' | translate}}</h3>
@@ -19,9 +19,9 @@
 			
 			<div>
 				<div class="margin-right comment-profile-row">
-					<div>
+					<div class="flex-05">
 						<div class="double-box">
-								<div class="description-item">
+								<div class="event-item-box">
 									<span class="event-info-label">{{'date' | translate}}</span>
 									<span class="just-row">
 										<span>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}</span>
@@ -29,36 +29,36 @@
 										<span>{{event.endsAt | date:'HH:mm' : 'UTC'}}</span>
 									</span>
 								</div>
-								<div class="description-item">
+								<div class="event-item-box">
 									<span class="event-info-label">{{'vacancies' | translate}}</span>
 									<span>{{event.maxParticipants - event.inscriptionCount}}</span>
 								</div>
 						</div>
-						<div class="description-item">
+						<div class="event-item-box">
 							<span class="event-info-label">{{'end_date' | translate}}</span>
 							<span>{{event.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}</span>
 						</div>
 					</div>
-					<div>
-						<div class="description-item">
+					<div class="flex-1">
+						<div class="event-item-box">
 							<span class="event-info-label">{{'organizer' | translate}} </span>
 							<a class="link-text">{{event.owner.firstname}} {{event.owner.lastname}}</a>
 						</div>
-						<div class="description-item">
+						<div class="event-item-box">
 							<span class="event-info-label">{{'event_description' | translate}}</span>
 							<span>{{event.description}}</span>
 						</div>
-						<div class="description-item">
+						<div class="event-item-box">
 							<span class="event-info-label">{{'sport' | translate}}</span>
 							<span>{{event.pitch.sport | translate}}</span>
 						</div>
-						<div class="description-item">
+						<div class="event-item-box">
 							<span class="event-info-label">{{'club' | translate}} </span>
 							<a class="link-text" ng-click="goToClub(event.pitch.club.clubid)" >{{event.pitch.club.name}}</a>
 							<span> - </span><a class="link-text" ng-click="goToPitch(event.pitch.pitchid)" >{{event.pitch.name}}</a>
 						</div>
 					</div>
-					<div class="participants-list">
+					<div class="event-item-box flex-2">
 						<span class="event-info-label">{{'participants' | translate}}</span>
 						<ul>
 							<div ng-repeat="i in inscriptions">
@@ -134,7 +134,7 @@
 				</a>
 			</div>
 		</div>
-		<div ng-if="isOwner">
+		<div class ="cancel-event" ng-if="isOwner">
 			<a ng-click="deleteEvent(event.pitch.pitchid, event.eventid)">
 				<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
 			</a>
