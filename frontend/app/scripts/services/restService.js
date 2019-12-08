@@ -104,6 +104,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},
+			hasRelationshipWithClub: function(id) {
+				
+			},
 			joinEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});
 			},

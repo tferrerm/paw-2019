@@ -13,7 +13,7 @@
 								<span class="h4"> {{club.location}}</span>
 							</div>
 						</div>
-						<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
+						<h4>{{'hosted' | translate}} {{club.pastEventsCount}} {{'event_s' | translate}}</h4>
 					</div>
 				</div>
 				<div class="club-item club-pitches-list">
@@ -54,7 +54,7 @@
 					</div>
 				</div>
 				<div class="tbl profile-cont club-comments">
-					<div ng-if="haveRelationship">
+					<div ng-if="hasRelationship">
 						<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
 							<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
 							<div class="justify-center">

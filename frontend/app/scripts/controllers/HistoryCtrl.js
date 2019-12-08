@@ -1,21 +1,46 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('HistoryCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
+	frontend.controller('HistoryCtrl', ['$scope', '$location', 'restService', 'authService', function($scope, $location, restService, authService) {
 	    var params = {pageNum: 1};
-	    var userid = 2;
 
-	    restService.getHistory(userid, params).then(function(data) {
-			$scope.events = data.events;
-			$scope.eventCount = data.eventCount;
-			$scope.lastPageNum = data.lastPageNum;
-			$scope.initialPageIndex = data.initialPageIndex;
-			$scope.pageNum = params.pageNum;
+	    $scope.isLoggedIn = authService.isLoggedIn();
+	    if($scope.isLoggedIn) {
+	    	$scope.loggedUser = authService.getLoggedUser();
+    		restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
+				$scope.events = data.events;
+				$scope.eventCount = data.eventCount;
+				$scope.lastPageNum = data.lastPageNum;
+				$scope.initialPageIndex = data.initialPageIndex;
+				$scope.pageNum = params.pageNum;
+			});
+	    } else {
+	    	// REDIRECCIONAR
+	    }
+
+		$scope.$on('user:updated', function() {
+			$scope.isLoggedIn = authService.isLoggedIn();
+		    if($scope.isLoggedIn) {
+		    	$scope.loggedUser = authService.getLoggedUser();
+	    		restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
+					$scope.events = data.events;
+					$scope.eventCount = data.eventCount;
+					$scope.lastPageNum = data.lastPageNum;
+					$scope.initialPageIndex = data.initialPageIndex;
+					$scope.pageNum = params.pageNum;
+				});
+		    } else {
+	    		// REDIRECCIONAR
+	    	}
 		});
+
+		$scope.goToEvent = function(pitchid, eventid) {
+			$location.url('pitches/' + pitchid + '/events/' + eventid);
+		};
 
 		$scope.getFirstPage = function() {
 			params.pageNum = 1;
-			restService.getHistory(userid, params).then(function(data) {
+			restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
@@ -26,7 +51,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getPrevPage = function() {
 			params.pageNum--;
-			restService.getHistory(userid, params).then(function(data) {
+			restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
@@ -37,7 +62,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getNextPage = function() {
 			params.pageNum++;
-			restService.getHistory(userid, params).then(function(data) {
+			restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
@@ -48,7 +73,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getLastPage = function() {
 			params.pageNum = $scope.lastPageNum;
-			restService.getHistory(userid, params).then(function(data) {
+			restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 				$scope.events = data.events;
 				$scope.eventCount = data.eventCount;
 				$scope.lastPageNum = data.lastPageNum;
