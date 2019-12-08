@@ -79,6 +79,16 @@ public class EventServiceImpl implements EventService {
 		}
 		return ed.findByEventId(eventid);
 	}
+	
+	@Override
+	public int getMinHour() {
+		return MIN_HOUR;
+	}
+	
+	@Override
+	public int getMaxHour() {
+		return MAX_HOUR;
+	}
 
 	@Override
 	public List<Event> findByOwner(final boolean futureEvents, final long userid, final int pageNum) {

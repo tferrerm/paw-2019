@@ -212,4 +212,8 @@ public interface EventService {
 
 	public int countEventPages(final int totalEventQty);
 
+	public int getMinHour();
+
+	public int getMaxHour();
+
 }
