@@ -3,17 +3,14 @@ package ar.edu.itba.paw.webapp.controller;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -41,9 +38,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.Pitch;
-import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.FullEventDto;
 import ar.edu.itba.paw.webapp.dto.InscriptionCollectionDto;
@@ -149,42 +144,6 @@ public class EventController extends BaseController {
     	es.kickFromEvent(loggedUser(), kickedUserId, event);
     	ems.youWereKicked(kicked, event, LocaleContextHolder.getLocale());
     	return Response.status(Status.NO_CONTENT).build();
-    }
-
-    
-    @GET
-    public Response retrieveEvents(@PathParam("pitchId") long pitchid,
-    		@QueryParam("pageNum") @DefaultValue("1") final int pageNum,
-                                     @QueryParam("name") String name,
-                                     @QueryParam("club") String clubName,
-                                     @QueryParam("sport") Sport sport,
-                                     @QueryParam("vacancies") String vacancies,
-                                     @QueryParam("date") String date) throws PitchNotFoundException {
-    	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
-
-        Integer vac = tryInteger(vacancies);
-    	Instant dateInst = tryInstantStartOfDay(date, TIME_ZONE);
-    	if(vac == null && vacancies != null && !vacancies.isEmpty())
-    		Response.status(Status.BAD_REQUEST).build();
-    	if(dateInst == null && date != null && !date.isEmpty())
-    		Response.status(Status.BAD_REQUEST).build();
-
-        List<Event> events = es.findBy(true, Optional.ofNullable(name),
-        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
-        		Optional.ofNullable(vac), Optional.ofNullable(dateInst), pageNum);
-
-        int totalEventQty = es.countFilteredEvents(true, Optional.ofNullable(name),
-        		Optional.ofNullable(clubName), Optional.ofNullable(sport), Optional.empty(),
-        		Optional.ofNullable(vac), Optional.ofNullable(dateInst));
-        int lastPageNum = es.countEventPages(totalEventQty);
-        int pageInitialIndex = es.getPageInitialEventIndex(pageNum);
-
-        return Response
-        		.status(Status.OK)
-        		.entity(EventCollectionDto.ofEvents(
-        				events.stream().map(e -> EventDto.ofEvent(e, true)).collect(Collectors.toList()),
-        				totalEventQty, lastPageNum, pageInitialIndex))
-        		.build();
     }
 
     @DELETE
