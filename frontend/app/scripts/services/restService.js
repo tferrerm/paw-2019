@@ -63,7 +63,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpGet('/clubs/' + id + '/comments', {pageNum: params.pageNum});
 			},
 			getClubPitches: function(id, params) {
-				return httpGet('/clubs/' + id + '/pitches', {}); //PAGINADO
+				return httpGet('/clubs/' + id + '/pitches', {pageNum: params.pageNum});
 			},
 			getClubs: function(params) {
 				return httpGet('/clubs', {pageNum: params.pageNum, name: params.name, location: params.location});

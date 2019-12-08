@@ -11,7 +11,7 @@
                 <div class="stats">
                     <div class="h4 pitch-info-label" style="padding: 5px 0">
                         {{'pitch_club' | translate}}
-                        <a class="h4 link-text">{{pitch.club.name}}</a>
+                        <a class="h4 link-text" ng-click="goToClub(pitch.club.clubid)">{{pitch.club.name}}</a>
                     </div>
                     <div class="h4 pitch-info-label" style="padding: 5px 0">
                         {{'pitch_sport' | translate}}
@@ -19,7 +19,7 @@
                     </div>
                     <div class="h4 pitch-info-label" style="padding: 5px 0">
                         {{'pitch_location' | translate}}
-                        <span class="h4"> {{pitch.club.location}}</span>
+                        <span class="h4">{{pitch.club.location}}</span>
                     </div>
                 </div>
             </div>

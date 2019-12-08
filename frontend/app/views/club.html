@@ -5,34 +5,51 @@
 		</div>
 		<div class="flex-row">
 			<div class="club-detail-container">
-					<div class="description-body">
-						<div class="club-item club-pitches-list">
-							<div class="flex">
-								<div class="h4 pitch-info-label">
-									{{'club_location' | translate}}
-									<span class="h4"> {{club.location}}</span>
-								</div>
-							</div>
-							<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
-						</div>
-					</div>
+				<div class="description-body">
 					<div class="club-item club-pitches-list">
-						<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
-						<div ng-if="pitches.length == 0">
-							<span>{{'no_pitches' | translate}}</span>
+						<div class="flex">
+							<div class="h4 pitch-info-label">
+								{{'club_location' | translate}}
+								<span class="h4"> {{club.location}}</span>
+							</div>
 						</div>
-						<div ng-if="pitches.length > 0">
-							<ul>
-								<div ng-repeat="pitch in pitches">
-									<div class="custom-row flex-space-around club-pitches-list">
-										<div>{{pitch.name}}</div>
-										<div>{{pitch.sport | translate}}</div>
-										<div>
-											<a ng-click=""> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
-										</div>
-									</div>
-								</div>
-							</ul>
+						<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
+					</div>
+				</div>
+				<div class="club-item club-pitches-list">
+					<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
+					<div ng-if="pitches.length == 0">
+						<span>{{'no_pitches' | translate}}</span>
+					</div>
+					<div ng-if="pitches.length > 0">
+						<ul>
+							<div ng-repeat="pitch in pitches">
+								<div class="custom-row flex-space-around club-pitches-list">
+									<div>{{pitch.name}}</div>
+									<div>{{pitch.sport | translate}}</div>
+									<div>
+								<a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
+							</div>
+						</ul>
+						<div ng-hide="pageNum == 1">
+							<a ng-click="getFirstPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'first' | translate}}
+								</button>
+							</a>
+							<a ng-click="getPrevPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'back' | translate}}
+								</button>
+							</a>
+						</div>
+						<div ng-hide="pageNum == lastPageNum">
+							<a ng-click="getNextPage()">
+								<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+							</a>
+							<a ng-click="getLastPage()">
+								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -82,6 +99,7 @@
 						</div>
 					</div>
 				</div>
+			</div>
 		</div>
 	</div>
 </div>
