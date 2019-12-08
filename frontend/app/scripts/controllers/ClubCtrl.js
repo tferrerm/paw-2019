@@ -5,7 +5,11 @@ define(['frontend', 'services/restService'], function(frontend) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
-	    $scope.hasRelationship = true;
+	    
+	    restService.hasRelationshipWithClub($scope.club.clubid)
+	    	.then(function(data) {
+	    		$scope.hasRelationship = data.relationship;
+	    	});
 
 	    restService.getClubPitches(club.clubid, pitchParams)
 		    .then(function(data) {
@@ -26,7 +30,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			});
 
 		$scope.$on('user:updated', function() {
-			$scope.haveRelationship = restService.hasRelationshipWithClub($scope.club.clubid);
+			$scope.hasRelationship = restService.hasRelationshipWithClub($scope.club.clubid);
 		});
 
 		$scope.getFirstPage = function() {

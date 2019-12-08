@@ -105,7 +105,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},
 			hasRelationshipWithClub: function(id) {
-				
+				return httpGet('/clubs/' + id + '/has-relationship', {});
 			},
 			joinEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});
