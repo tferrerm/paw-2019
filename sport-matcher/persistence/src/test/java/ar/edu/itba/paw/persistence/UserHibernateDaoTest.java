@@ -32,12 +32,14 @@ public class UserHibernateDaoTest {
 	private static final String LASTNAME = "last";
 	private static final String PASSWORD = "12345678";
 
+	@Transactional
 	@Rollback
 	@Test
 	public void testCreate() throws UserAlreadyExistsException {
-		final User user = userDao.create(USERNAME, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER);
+		final String username = "cool-user@domain.com";
+		final User user = userDao.create(username, FIRSTNAME, LASTNAME, PASSWORD, Role.ROLE_USER);
 		Assert.assertNotNull(user);
-		Assert.assertEquals(USERNAME, user.getUsername());
+		Assert.assertEquals(username, user.getUsername());
 		Assert.assertEquals(FIRSTNAME, user.getFirstname());
 		Assert.assertEquals(LASTNAME, user.getLastname());
 		Assert.assertEquals(PASSWORD, user.getPassword());
