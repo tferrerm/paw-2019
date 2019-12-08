@@ -17,6 +17,6 @@ public @interface IntegerRange {
 	String message() default "Integer must be present and in the given range";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
-	int min();
-	int max();
+	int min() default Integer.MIN_VALUE;
+	int max() default Integer.MAX_VALUE;
 }
