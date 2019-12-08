@@ -6,9 +6,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 		function httpGet(path, params) {
 			var headers = {};
 			headers = addAuthHeader(headers);
-
+			
 			params = Object.keys(params).length ? '?' + jQuery.param(params) : '';
-			return $http.get(url + path + params, headers)
+			return $http.get(url + path + params, {headers: headers})
 				.then(function(response) { 
 					return response.data; 
 				});
