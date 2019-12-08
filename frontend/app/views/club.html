@@ -3,8 +3,8 @@
 		<div class="profile-title">
 			<h2>{{club.name}}</h2>
 		</div>
-		<div class="flex-row">
-			<div class="club-detail-container">
+		<div class="flex-row w-90">
+			<div class="club-detail-container flex-15">
 					<div class="description-body">
 						<div class="club-item club-pitches-list">
 							<div class="flex">
@@ -36,7 +36,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="tbl profile-cont club-comments">
+				<div class="tbl profile-cont club-comments flex-2">
 					<div ng-if="haveRelationship">
 						<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
 							<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
