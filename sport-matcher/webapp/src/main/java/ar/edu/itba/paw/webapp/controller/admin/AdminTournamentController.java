@@ -4,8 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,19 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
-import ar.edu.itba.paw.exception.DateInPastException;
-import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
-import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionDateInPastException;
-import ar.edu.itba.paw.exception.InsufficientPitchesException;
-import ar.edu.itba.paw.exception.InvalidTeamAmountException;
-import ar.edu.itba.paw.exception.InvalidTeamSizeException;
-import ar.edu.itba.paw.exception.MaximumDateExceededException;
-import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
@@ -56,15 +44,13 @@ import ar.edu.itba.paw.webapp.exception.FormValidationException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 
-@Path("admin/tournaments")
+@Path("admin/clubs/{clubId}/tournaments")
 @Component
 @Produces(value = { MediaType.APPLICATION_JSON })
 public class AdminTournamentController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminTournamentController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final int MIN_HOUR = 9;
-	private static final int MAX_HOUR = 23;
 	private static final int DAY_LIMIT = 7;
 	
 	@Context
@@ -142,7 +128,7 @@ public class AdminTournamentController extends BaseController {
 	
 	@POST
 	@Path("/{id}/events/{eventId}/result")
-    public Response setTournamentEventResult(
+    public Response setTournamentEventResult(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
     		@FormDataParam("firstResult") String first, @FormDataParam("secondResult") String second)
     				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException {
@@ -162,7 +148,7 @@ public class AdminTournamentController extends BaseController {
 	
 	@GET
 	@Path("/{pageNum}")
-	public Response retrieveEvents(@PathParam("pageNum") final int pageNum) {
+	public Response retrieveEvents(@PathParam("clubId") long clubid, @PathParam("pageNum") final int pageNum) {
 		
 		//ModelAndView mav = new ModelAndView("admin/tournamentList");
 		
@@ -179,7 +165,7 @@ public class AdminTournamentController extends BaseController {
 	}
 	
 	@GET
-	@Path("/clubs/{clubId}/tournaments/new")
+	@Path("/tournaments/new")
     public Response tournamentFormView(@PathParam("clubId") long clubid,
     		@FormDataParam("newTournamentForm") final TournamentForm form) 
     				throws ClubNotFoundException {
@@ -206,7 +192,6 @@ public class AdminTournamentController extends BaseController {
     }
     
 	@POST
-    @Path("/clubs/{clubId}/tournaments")
     public Response createTournament(@PathParam("clubId") long clubId,
     		@FormDataParam("name") String name, @FormDataParam("maxTeams") String maxTeams,
     		@FormDataParam("teamSize") String teamSize, @FormDataParam("firstRoundDate") String firstRoundDate,
