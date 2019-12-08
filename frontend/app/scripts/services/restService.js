@@ -48,7 +48,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('startsAtHour', eventData.startsAtHour);
 				formData.append('endsAtHour', eventData.endsAtHour);
 				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
-				return httpPost('/pitch/' + pitchid + '/events', formData, {});
+				return httpPost('/pitches/' + pitchid + '/events', formData, {});
 			},
 			deleteEvent: function(id) {
 
@@ -82,6 +82,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			},
 			getHistory: function(id, params) {
 				return httpGet('/users/' + id + '/history', {pageNum: params.pageNum});
+			},
+			getHourRange: function() {
+				return httpGet('/pitches/hour-range', {});
 			},
 		    getTournaments: function(params) {
 		        return httpGet('/tournaments', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
