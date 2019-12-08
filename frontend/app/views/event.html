@@ -19,7 +19,7 @@
 			
 			<div>
 				<div class="margin-right comment-profile-row">
-					<div>
+					<div class="flex-05">
 						<div class="double-box">
 								<div class="event-item-box">
 									<span class="event-info-label">{{'date' | translate}}</span>
@@ -39,7 +39,7 @@
 							<span>{{event.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}</span>
 						</div>
 					</div>
-					<div>
+					<div class="flex-1">
 						<div class="event-item-box">
 							<span class="event-info-label">{{'organizer' | translate}} </span>
 							<a class="link-text">{{event.owner.firstname}} {{event.owner.lastname}}</a>
@@ -58,7 +58,7 @@
 							<span> - </span><a class="link-text" ng-click="goToPitch(event.pitch.pitchid)" >{{event.pitch.name}}</a>
 						</div>
 					</div>
-					<div class="event-item-box">
+					<div class="event-item-box flex-2">
 						<span class="event-info-label">{{'participants' | translate}}</span>
 						<ul>
 							<div ng-repeat="i in inscriptions">
