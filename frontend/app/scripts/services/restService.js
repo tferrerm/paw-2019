@@ -38,15 +38,17 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('comment', comment);
 				return httpPost('/clubs/' + id + '/comment', formData, {});
 			},
-			createEvent: function(data) {
-				var eventData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
-				//var formData = new FormData();
-				//formData.append('username', userData.username);
-				//formData.append('password', userData.password);
-				//formData.append('firstname', userData.firstname);
-				//formData.append('lastname', userData.lastname);
-				//formData.append('picture', userData.picture);
-				return null;//httpPost('/users', formData, {});
+			createEvent: function(pitchid, data) {
+				var eventData = {name: data.name, description: data.description, maxParticipants: data.maxParticipants, date: data.date, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
+				var formData = new FormData();
+				formData.append('name', eventData.name);
+				formData.append('description', eventData.description);
+				formData.append('maxParticipants', eventData.maxParticipants);
+				formData.append('date', eventData.date);
+				formData.append('startsAtHour', eventData.startsAtHour);
+				formData.append('endsAtHour', eventData.endsAtHour);
+				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
+				return httpPost('/pitch/' + pitchid + '/events', formData, {});
 			},
 			deleteEvent: function(id) {
 
