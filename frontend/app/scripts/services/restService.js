@@ -111,7 +111,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});
 			},
 			kickUser: function(pitchid, eventid, userid) {
-
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/kick-user/' + userid, {}, {});
 			},
 			leaveEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/leave', {}, {});

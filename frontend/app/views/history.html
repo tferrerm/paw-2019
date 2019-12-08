@@ -24,7 +24,7 @@
 								<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
 								<span class="flex flex-1 justify-center home-header">{{event.pitch.club.location}}</span>
 								<span class="flex flex-1 justify-center home-header">
-									<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}
+									<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}</div>
 								</span>
 							</div>
 						</a>
@@ -34,16 +34,17 @@
 		</div>
 		<div class="table-navigator w-100 justify-center">
 			<div ng-hide="pageNum == 1">
-			<a ng-click="getFirstPage()">
-				<button type="button" class="btn btn-secondary">
-					{{'first' | translate}}
-				</button>
-			</a>
-			<a ng-click="getPrevPage()">
-				<button type="button" class="btn btn-secondary">
-					{{'back' | translate}}
-				</button>
-			</a>
+				<a ng-click="getFirstPage()">
+					<button type="button" class="btn btn-secondary">
+						{{'first' | translate}}
+					</button>
+				</a>
+				<a ng-click="getPrevPage()">
+					<button type="button" class="btn btn-secondary">
+						{{'back' | translate}}
+					</button>
+				</a>
+			</div>
 		</div>
 		<span class="flex">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
 		<div ng-hide="pageNum == lastPageNum">

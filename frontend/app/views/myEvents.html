@@ -3,9 +3,9 @@
 		<h2>{{'myEvents' | translate}}</h2>
 	</div>
 	<span class="help-message notice w-70 justify-center">{{'my_events_help' | translate}}</span>
-	<div class="notice" ng-if="noEvents">
+	<!--<div class="notice" ng-if="noEvents">
 		{{'no_past_or_future_events' | translate}}
-	</div>
+	</div>-->
 	<div class="tbl" ng-if="!noEvents">
 		<div class="table-header background-dodgerblue">
 			<div class="flex-grow justify-center my-events-tbl-sub">
@@ -18,35 +18,75 @@
 		<div class="flex-grow w-100">
 			<div class="events-column flex-grow flex-column right-border w-50">
 				<div ng-repeat="event in pastEvents">
-					<!--<a href="/event/{{event.eventId}}">-->
-					<div class="my-event-item">
-						<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
-						<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
-						<div class="flex flex-1 justify-center home-header">
-<!--                    <fmt:timeZone value="AR">-->
-<!--                      <fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />-->
-<!--                      <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />-->
-<!--                    </fmt:timeZone>-->
+					<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
+						<div class="my-event-item">
+							<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+							<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
+							<span class="flex flex-1 justify-center home-header">
+								<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}</div>
+							</span>
 						</div>
+					</a>
+				</div>
+				<div class="table-navigator w-100 justify-center">
+					<div ng-hide="pastEventsPageNum == 1">
+						<a ng-click="getPastEventsFirstPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'first' | translate}}
+							</button>
+						</a>
+						<a ng-click="getPastEventsPrevPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'back' | translate}}
+							</button>
+						</a>
 					</div>
-					<!--</a>-->
+				</div>
+				<span class="flex">{{'showing_items' | translate}} {{pastEventsInitialPageIndex}}-{{pastEventsInitialPageIndex + pastEvents.length - 1}} {{'of' | translate}} {{pastEventCount}}</span>
+				<div ng-hide="pastEventsPageNum == pastEventsLastPageNum">
+					<a ng-click="getPastEventsNextPage()">
+						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+					</a>
+					<a ng-click="getPastEventsLastPage()">
+						<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+					</a>
 				</div>
 			</div>
 			<div class="events-column flex-grow flex-column w-50">
 				<div ng-repeat="event in futureEvents">
-					<!--<a href="/event/{{event.eventId}}">-->
-					<div class="my-event-item">
-						<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
-						<div>{{event.inscriptionCount}}/{{event.maxParticipants}}</div>
-						<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
-						<div class="flex flex-1 justify-center home-header">
-<!--                    <fmt:timeZone value="AR">-->
-<!--                      <fmt:parseDate value="${event.startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />-->
-<!--                      <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />-->
-<!--                    </fmt:timeZone>-->
+					<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
+						<div class="my-event-item">
+							<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+							<div>{{event.inscriptionCount}}/{{event.maxParticipants}}</div>
+							<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
+							<span class="flex flex-1 justify-center home-header">
+								<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}</div>
+							</span>
 						</div>
+					</a>
+				</div>
+				<div class="table-navigator w-100 justify-center">
+					<div ng-hide="futureEventsPageNum == 1">
+						<a ng-click="getFutureEventsFirstPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'first' | translate}}
+							</button>
+						</a>
+						<a ng-click="getFutureEventsPrevPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'back' | translate}}
+							</button>
+						</a>
 					</div>
-					<!--</a>-->
+				</div>
+				<span class="flex">{{'showing_items' | translate}} {{futureEventsInitialPageIndex}}-{{futureEventsInitialPageIndex + futureEvents.length - 1}} {{'of' | translate}} {{futureEventCount}}</span>
+				<div ng-hide="futureEventsPageNum == futureEventsLastPageNum">
+					<a ng-click="getFutureEventsNextPage()">
+						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+					</a>
+					<a ng-click="getFutureEventsLastPage()">
+						<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+					</a>
 				</div>
 			</div>
 		</div>

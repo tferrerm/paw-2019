@@ -16,6 +16,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			});
 	    } else {
 	    	// REDIRECCIONAR
+	    	alert('LOGIN');
 	    }
 
 		$scope.$on('user:updated', function() {
@@ -31,6 +32,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				});
 		    } else {
 	    		// REDIRECCIONAR
+	    		alert('LOGIN');
 	    	}
 		});
 
