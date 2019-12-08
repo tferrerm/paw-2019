@@ -1,5 +1,5 @@
 <div class="content-container">
-	<div class="content-container" ng-if="loggedUser != null">
+	<div class="content-container" ng-if="isLoggedIn">
 		<h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
 		<div ng-if="!noParticipations">
 			<span class="help-message notice w-70 justify-center">{{'home_help' | translate}}</span>
@@ -22,7 +22,7 @@
 		</div>
 		<div ng-if="noParticipations">
 			<h4>{{'home_default' | translate}}</h4>
-			<span ng-if="loggedUser == null" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
+			<span ng-if="!isLoggedIn" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
 				<span class="registration-sport-matcher event-info-label">{{'sport_matcher' | translate}}</span>
 				<span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
 			</span>

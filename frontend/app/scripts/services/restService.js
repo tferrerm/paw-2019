@@ -33,8 +33,13 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 		}
 
 		return {
+			commentClub: function(id, comment) {
+				var formData = new FormData();
+				formData.append('comment', comment);
+				return httpPost('/clubs/' + id + '/comment', formData, {});
+			},
 			createEvent: function(data) {
-			var eventData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
+				var eventData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
 				//var formData = new FormData();
 				//formData.append('username', userData.username);
 				//formData.append('password', userData.password);
@@ -48,6 +53,12 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			},
 			getClub: function(id) {
 				return httpGet('/clubs/' + id, {});
+			},
+			getClubComments: function(id, params) {
+				return httpGet('/clubs/' + id + '/comments', {pageNum: params.pageNum});
+			},
+			getClubPitches: function(id, params) {
+				return httpGet('/clubs/' + id + '/pitches', {}); //PAGINADO
 			},
 			getClubs: function(params) {
 				return httpGet('/clubs', {pageNum: params.pageNum, name: params.name, location: params.location});
@@ -67,9 +78,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getHistory: function(id, params) {
 				return httpGet('/users/' + id + '/history', {pageNum: params.pageNum});
 			},
-      getTournaments: function(params) {
-        return httpGet('/tournaments', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
-      },
+		    getTournaments: function(params) {
+		        return httpGet('/tournaments', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
+		    },
 			getMyFutureEvents: function(id, params) {
 				return httpGet('/users/' + id + '/future-owned-events', {pageNum: params.pageNum});
 			},

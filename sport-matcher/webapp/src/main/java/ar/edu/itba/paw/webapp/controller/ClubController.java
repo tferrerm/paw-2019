@@ -131,7 +131,7 @@ public class ClubController extends BaseController {
 		validator.validate(form);
 
 		/* HARDCODED HARDCODEADO */
-		ClubComment comment = cs.createComment(2/*loggedUser().getUserid()*/, clubId, commentContent);
+		ClubComment comment = cs.createComment(loggedUser().getUserid(), clubId, commentContent);
 
 		final URI uri = uriInfo.getAbsolutePathBuilder()
 				.path(clubId + "/comments/" + comment.getCommentId()).build();
