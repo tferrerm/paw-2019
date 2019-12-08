@@ -29,6 +29,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -78,6 +79,16 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return ed.findByEventId(eventid);
+	}
+	
+	@Override
+	public int getMinHour() {
+		return MIN_HOUR;
+	}
+	
+	@Override
+	public int getMaxHour() {
+		return MAX_HOUR;
 	}
 
 	@Override
@@ -289,7 +300,7 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void joinEvent(final long userid, final long eventid)
-			throws UserAlreadyJoinedException, EventFullException, UserBusyException, DateInPastException {
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException {
 
 		if(userid <= 0 || eventid <= 0)
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
@@ -298,7 +309,7 @@ public class EventServiceImpl implements EventService {
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot join event if inscription is closed");
+			throw new InscriptionClosedException("Cannot join event if inscription is closed");
 		}
 		
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {

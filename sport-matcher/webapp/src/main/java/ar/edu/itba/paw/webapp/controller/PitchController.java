@@ -33,6 +33,7 @@ import ar.edu.itba.paw.model.PitchPicture;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.EventDto;
+import ar.edu.itba.paw.webapp.dto.HourRangeDto;
 import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
 import ar.edu.itba.paw.webapp.dto.SportCollectionDto;
@@ -133,5 +134,11 @@ public class PitchController extends BaseController {
 		return Response.ok(EventCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD
 				.map(ev -> EventDto.ofEvent(ev, true)).collect(Collectors.toList()))).build();
 	}
+	
+    @GET
+    @Path("/hour-range")
+    public Response getHours() {
+    	return Response.ok(HourRangeDto.ofHours(es.getMinHour(), es.getMaxHour())).build();
+    }
 
 }
