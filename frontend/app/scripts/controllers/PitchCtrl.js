@@ -63,6 +63,10 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			$scope.event.inscriptionEndDate = $filter('date')(newValue, "yyyy-MM-ddTHH:mm:ss");
 		});
 
+		$scope.goToClub = function(id) {
+			$location.url('clubs/' + id);
+		};
+
 	    $scope.createEventSubmit = function() {
 			//checkPasswordsMatch();
 			//if ($scope.createEventForm.$valid) {
