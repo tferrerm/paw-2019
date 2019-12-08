@@ -55,7 +55,7 @@
 					</div>
 			</div>
 			<div class="tbl profile-cont club-comments flex-1">
-				<div ng-if="haveRelationship">
+				<div ng-if="haveRelationship" class="w-100">
 					<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
 						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
 						<div class="justify-center">
