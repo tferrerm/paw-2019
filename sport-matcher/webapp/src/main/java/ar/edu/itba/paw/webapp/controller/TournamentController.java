@@ -51,12 +51,6 @@ public class TournamentController extends BaseController {
 	private TournamentService ts;
 	
 	@GET
-	@Path("/{id}")
-	public Response haha() {
-		return null;
-	}
-	
-	@GET
     @Path("/{id}")
     public Response retrieveTournament(@PathParam("id") long tournamentid,
     		@QueryParam("round") final Integer roundPage) 
