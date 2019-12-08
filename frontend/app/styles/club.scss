@@ -16,12 +16,17 @@
 }
 
 .club-comments {
-    width: 100%;
     margin: 0px 20px;
     align-items: center;
     align-self: flex-start;
 }
-  
+
+.club-description {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .club-detail-container {
     display: flex;
     flex-direction: column;
