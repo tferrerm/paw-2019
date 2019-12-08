@@ -52,6 +52,7 @@ import ar.edu.itba.paw.webapp.dto.EventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.EventScheduleDto;
 import ar.edu.itba.paw.webapp.dto.FullUserDto;
+import ar.edu.itba.paw.webapp.dto.RelationshipDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
@@ -96,8 +97,6 @@ public class UserController extends BaseController {
     @GET
     @Path("/{id}")
 	public Response userProfile(@PathParam("id") long userid) throws UserNotFoundException {
-
-//		mav.addObject("haveRelationship", loggedUser() != null ? us.haveRelationship(loggedUser().getUserid(), userid) : false);
 		
 		final User user = us.findById(userid).orElseThrow(UserNotFoundException::new);
 		final int currentEventCount = es.countByUserInscriptions(true, userid);
@@ -110,6 +109,14 @@ public class UserController extends BaseController {
 		return Response.ok(FullUserDto.ofUser(user, currentEventCount, favoriteSport,
 				currEventsOwned, pastEventsParticipant, ClubDto.ofClub(mainClub), votesReceived))
 				.build();
+	}
+    
+	@GET
+	@Path("/{id}/has-relationship")
+	public Response hasRelationship(@PathParam("id") long userid) {
+		final boolean haveRelationship = loggedUser() != null ?
+				us.haveRelationship(loggedUser().getUserid(), userid) : false;
+		return Response.ok(RelationshipDto.ofRelationship(haveRelationship)).build();
 	}
     
     @GET

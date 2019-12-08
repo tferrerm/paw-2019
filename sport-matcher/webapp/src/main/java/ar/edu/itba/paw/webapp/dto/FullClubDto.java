@@ -11,9 +11,8 @@ public class FullClubDto {
 	private String location;
 	private Instant createdAt;
 	private int pastEventsCount;
-	private boolean haveRelationship;
 	
-	public static FullClubDto ofClub(Club club, int pastEventsCount, boolean haveRelationship) {
+	public static FullClubDto ofClub(Club club, int pastEventsCount) {
 		if(club == null)
 			return null;
 		
@@ -23,7 +22,6 @@ public class FullClubDto {
 		dto.location = club.getLocation();
 		dto.createdAt = club.getCreatedAt();
 		dto.pastEventsCount = pastEventsCount;
-		dto.haveRelationship = haveRelationship;
 		
 		return dto;
 	}
@@ -66,14 +64,6 @@ public class FullClubDto {
 
 	public void setPastEventsCount(int pastEventsCount) {
 		this.pastEventsCount = pastEventsCount;
-	}
-
-	public boolean isHaveRelationship() {
-		return haveRelationship;
-	}
-
-	public void setHaveRelationship(boolean haveRelationship) {
-		this.haveRelationship = haveRelationship;
 	}
 
 }

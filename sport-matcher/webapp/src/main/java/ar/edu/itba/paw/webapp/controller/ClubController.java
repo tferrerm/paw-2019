@@ -16,7 +16,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -38,6 +37,7 @@ import ar.edu.itba.paw.webapp.dto.ClubDto;
 import ar.edu.itba.paw.webapp.dto.FullClubDto;
 import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
+import ar.edu.itba.paw.webapp.dto.RelationshipDto;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
@@ -70,20 +70,25 @@ public class ClubController extends BaseController {
 	public Response showClub(@PathParam("id") long clubid) throws ClubNotFoundException {
 		
 		final Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
-		final boolean haveRelationship = loggedUser() != null ?
-				cs.haveRelationship(loggedUser().getUserid(), clubid) : false;
 		
 		return Response
-				.status(Status.OK)
-				.entity(FullClubDto.ofClub(club, cs.countPastEvents(clubid), haveRelationship))
+				.ok(FullClubDto.ofClub(club, cs.countPastEvents(clubid)))
 				.build();
+	}
+	
+	@GET
+	@Path("/{id}/has-relationship")
+	public Response hasRelationship(@PathParam("id") long clubid) {
+		final boolean haveRelationship = loggedUser() != null ?
+				cs.haveRelationship(loggedUser().getUserid(), clubid) : false;
+		return Response.ok(RelationshipDto.ofRelationship(haveRelationship)).build();
 	}
 	
 	@GET
 	@Path("/{id}/pitches")
 	public Response getClubPitches(@PathParam("id") long clubid,
 			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws ClubNotFoundException {
-		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
+		cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		
 		List<Pitch> pitches = ps.findByClubId(clubid, pageNum);
 
@@ -91,8 +96,7 @@ public class ClubController extends BaseController {
 		int pageCount = ps.countPitchPages(pitchCount);
 		
 		return Response
-				.status(Status.OK)
-				.entity(PitchCollectionDto.ofPitches(
+				.ok(PitchCollectionDto.ofPitches(
 						pitches.stream()
 						.map(PitchDto::ofPitch)
 						.collect(Collectors.toList()), pitchCount, pageCount))
@@ -141,8 +145,7 @@ public class ClubController extends BaseController {
 		int commentsPageInitIndex = cs.getCommentsPageInitIndex(pageNum);
 		
 		return Response
-				.status(Status.OK)
-				.entity(ClubCommentCollectionDto.ofComments(
+				.ok(ClubCommentCollectionDto.ofComments(
 						comments.stream()
 							.map(ClubCommentDto::ofComment)
 							.collect(Collectors.toList()), commentCount, pageCount, commentsPageInitIndex))
@@ -167,11 +170,10 @@ public class ClubController extends BaseController {
         int pageInitialIndex = cs.getPageInitialClubIndex(pageNum);
 
 		return Response
-				.status(Status.OK)
-				.entity(ClubCollectionDto.ofClubs(
+				.ok(ClubCollectionDto.ofClubs(
 						clubs.stream().map(ClubDto::ofClub).collect(Collectors.toList()),
 						totalClubQty, clubPages, pageInitialIndex))
 				.build();
 	}
-	
+
 }
