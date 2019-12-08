@@ -11,6 +11,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -126,7 +127,7 @@ public interface EventService {
 											EventOverlapException, HourOutOfRangeException;
 
 	public void joinEvent(final long userid, final long eventid)
-			throws UserAlreadyJoinedException, EventFullException, UserBusyException, DateInPastException;
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException;
 
 	public void leaveEvent(final long eventid, final long userid) throws DateInPastException;
 

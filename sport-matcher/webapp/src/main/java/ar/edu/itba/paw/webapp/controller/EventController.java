@@ -29,6 +29,7 @@ import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventCreationException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.UserBusyException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.EmailService;
@@ -113,8 +114,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{id}/join")
     public Response joinEvent(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
-    	throws EntityNotFoundException, DateInPastException, EventFullException, UserBusyException {
-	    /* HARDCODEADO HARDCODED InscriptionClosedException */
+    	throws EntityNotFoundException, InscriptionClosedException, EventFullException, UserBusyException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
 
     	es.joinEvent(loggedUser().getUserid(), id);
