@@ -1,11 +1,11 @@
 <div class="main-container">
 	<div class="registration-container bgd-field-image">
-		<div class="registration-form-container maxw-600 mt-30 registration-intro-container">
+		<div class="registration-form-container mt-30 registration-intro-container mb-35">
 			<h1 class="event-info-label registration-sport-matcher justify-center mt-30">{{'sport_matcher' | translate}}</h1>
 			<span class="registration-intro-title">{{'registration_intro_title' | translate}}</span>
 			<span class="registration-intro-text home-header">{{'registration_intro_text' | translate}}</span>
 		</div>
-		<div class="registration-form-container mt-30">
+		<div class="registration-form-container mt-30 mr-40">
 			<div class="form-container">
 				<form ng-submit = registerSubmit() name="registerForm" method="post" novalidate>
 					<div>
@@ -55,11 +55,11 @@
 					</div>
 					<div class="bottom-message mb-10">
 						<span>{{'already_have_account' | translate}}</span>
-						<a class="link-text" href="<c:url value='/login' />">{{'login' | translate}}</a>
+						<a class="link-text" >{{'login' | translate}}</a>
 					</div>
 					<div class="bottom-message mb-10">
 			      <span>{{'skip_login' | translate}}</span>
-			      <a class="link-text" href="<c:url value='/home' />">{{'go_to_home' | translate}}</a>
+			      <a class="link-text" >{{'go_to_home' | translate}}</a>
 			    </div>
 				</form>
 			</div>
