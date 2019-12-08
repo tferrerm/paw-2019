@@ -1,9 +1,14 @@
 package ar.edu.itba.paw.webapp.dto.form;
 
+import java.time.Instant;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import ar.edu.itba.paw.webapp.dto.form.validator.FutureDate;
+import ar.edu.itba.paw.webapp.dto.form.validator.IntegerRange;
 
 public class TournamentForm {
 	
@@ -12,83 +17,85 @@ public class TournamentForm {
 	@Size(max=100)
 	private String name;
 	
-	@NotBlank
-	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
-	private String maxTeams;
+	@IntegerRange(min = 2, max = 4)
+	private Integer maxTeams;
+
+	@IntegerRange(min = 1, max = 11)
+	private Integer teamSize;
 	
-	@NotBlank
-	@Pattern(regexp = "^[0-9]*[1-9][0-9]*")
-	private String teamSize;
+	@FutureDate(startOfDay = true)
+	private Instant firstRoundDate;
 	
-	@NotBlank
-	private String firstRoundDate;
+	@IntegerRange(min = 0, max = 23)
+	private Integer startsAtHour;
 	
-	@NotBlank
-	@Pattern(regexp = "[0-9]?[0-9]")
-	private String startsAtHour;
+	@IntegerRange(min = 0, max = 23)
+	private Integer endsAtHour;
 	
-	@NotBlank
-	@Pattern(regexp = "[0-9]?[0-9]")
-	private String endsAtHour;
-	
-	@NotBlank
-	private String inscriptionEndDate;
+	@FutureDate
+	private Instant inscriptionEndDate;
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public TournamentForm withName(String name) {
 		this.name = name;
+		return this;
 	}
 
-	public String getMaxTeams() {
+	public Integer getMaxTeams() {
 		return maxTeams;
 	}
 
-	public void setMaxTeams(String maxTeams) {
+	public TournamentForm withMaxTeams(Integer maxTeams) {
 		this.maxTeams = maxTeams;
+		return this;
 	}
 
-	public String getTeamSize() {
+	public Integer getTeamSize() {
 		return teamSize;
 	}
 
-	public void setTeamSize(String teamSize) {
+	public TournamentForm withTeamSize(Integer teamSize) {
 		this.teamSize = teamSize;
+		return this;
 	}
 
-	public String getFirstRoundDate() {
+	public Instant getFirstRoundDate() {
 		return firstRoundDate;
 	}
 
-	public void setFirstRoundDate(String firstRoundDate) {
+	public TournamentForm withtFirstRoundDate(Instant firstRoundDate) {
 		this.firstRoundDate = firstRoundDate;
+		return this;
 	}
 
-	public String getStartsAtHour() {
+	public Integer getStartsAtHour() {
 		return startsAtHour;
 	}
 
-	public void setStartsAtHour(String startsAtHour) {
+	public TournamentForm withStartsAtHour(Integer startsAtHour) {
 		this.startsAtHour = startsAtHour;
+		return this;
 	}
 
-	public String getEndsAtHour() {
+	public Integer getEndsAtHour() {
 		return endsAtHour;
 	}
 
-	public void setEndsAtHour(String endsAtHour) {
+	public TournamentForm withEndsAtHour(Integer endsAtHour) {
 		this.endsAtHour = endsAtHour;
+		return this;
 	}
 
-	public String getInscriptionEndDate() {
+	public Instant getInscriptionEndDate() {
 		return inscriptionEndDate;
 	}
 
-	public void setInscriptionEndDate(String inscriptionEndDate) {
+	public TournamentForm withInscriptionEndDate(Instant inscriptionEndDate) {
 		this.inscriptionEndDate = inscriptionEndDate;
+		return this;
 	}
-	
 
 }

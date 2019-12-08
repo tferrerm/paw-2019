@@ -13,6 +13,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$scope.pageNum = params.pageNum;
 		});
 
+		restService.getSports().then(function(data) {
+			$scope.sports = data.sports;
+		});
+
 		$scope.goToPitch = function(id) {
 			$location.url('pitches/' + id);
 		};

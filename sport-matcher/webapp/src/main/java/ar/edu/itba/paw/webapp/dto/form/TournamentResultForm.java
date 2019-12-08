@@ -1,33 +1,31 @@
 package ar.edu.itba.paw.webapp.dto.form;
 
-import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.NotBlank;
+import ar.edu.itba.paw.webapp.dto.form.validator.IntegerRange;
 
 public class TournamentResultForm {
 
-	@NotBlank
-	@Pattern(regexp = "^(0|[1-9][0-9]*)")
-	private String firstResult;
+	@IntegerRange
+	private Integer firstResult;
 	
-	@NotBlank
-	@Pattern(regexp = "^(0|[1-9][0-9]*)")
-	private String secondResult;
+	@IntegerRange
+	private Integer secondResult;
 
-	public String getFirstResult() {
+	public Integer getFirstResult() {
 		return firstResult;
 	}
 
-	public void setFirstResult(String firstResult) {
+	public TournamentResultForm withFirstResult(Integer firstResult) {
 		this.firstResult = firstResult;
+		return this;
 	}
 
-	public String getSecondResult() {
+	public Integer getSecondResult() {
 		return secondResult;
 	}
 
-	public void setSecondResult(String secondResult) {
+	public TournamentResultForm withSecondResult(Integer secondResult) {
 		this.secondResult = secondResult;
+		return this;
 	}
 	
 }

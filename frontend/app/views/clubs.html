@@ -32,7 +32,7 @@
 		</div>
 	</div>
 	<div class="table-navigator w-100 justify-center">
-		<div ng-if="clubCount > 0" class="flex">
+		<div ng-if="clubs.length > 0" class="flex">
 			<div ng-hide="pageNum == 1">
 				<a ng-click="getFirstPage()"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
 				<a ng-click="getPrevPage()"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
@@ -43,7 +43,7 @@
 				<a ng-click="getLastPage()"><button type="button" class="btn btn-secondary">{{'last' | translate }}</button></a>
 			</div>
 		</div>
-		<div ng-if="clubCount <= 0" class="notice">
+		<div ng-if="clubs.length == 0" class="notice">
 			{{'no_results' | translate}}
 		</div>
 	</div>

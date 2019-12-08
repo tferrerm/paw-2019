@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div ng-if="isLoggedIn">
+        <div>
             <span class="notice justify-center home-header">{{'event_creation_description' | translate}}</span>
             <div class="tbl-no-flex profile-cont profile-second">
                 <!--<c:if test="${event_overlap == true}">
@@ -71,7 +71,7 @@
                             <div class="form-field flex-space-between">
                                 <div class="form-field-horizontal">
                                     <span>{{'new_event_date' | translate}}</span>
-                                    <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="event.date" required/>
+                                    <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="event.selectedDate" required/>
                                     <!--<c:if test="${invalid_date_format == true}">
                                         <span class="form-error">
                                             <spring:message code="invalid_date_format"/>
@@ -90,8 +90,7 @@
                                 </div>
                                 <div>
                                     <span>{{'event_startsAt' | translate}}</span>
-                                    <select class="form-control" name="startsAtHour" ng-model="event.startsAtHour" required>
-                                        <option>Hola</option>
+                                    <select class="form-control" name="startsAtHour" ng-model="event.startsAtHour" ng-options="hour for hour in startsAtHours" required>
                                     </select>
                                     <!--<c:if test="${ends_before_starts == true}">
                                         <span class="form-error">
@@ -101,14 +100,13 @@
                                 </div>
                                 <div>
                                     <span>{{'event_endsAt' | translate}}</span>
-                                    <select class="form-control" name="endsAtHour" ng-model="event.endsAtHour" required>
-                                        <option>Hola</option>
+                                    <select class="form-control" name="endsAtHour" ng-model="event.endsAtHour" ng-options="hour for hour in endsAtHours" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="my-events-tbl-sub">
                                 <span>{{'end_date' | translate}}</span>
-                                <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="event.inscriptionEndDate" required/>
+                                <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
                                 <!--<c:if test="${inscription_date_in_past}">
                                     <span class="form-error">
                                         <spring:message code="inscription_date_in_past"/>
