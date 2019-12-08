@@ -1,6 +1,6 @@
-<div class="main-container bgd-field-image">
+<div class="main-container bgd-field-image round">
 	<div class="content-container justify-center">
-		<div class="form-container mt-30">
+		<div class="form-container mt-30 mb-35">
 		<h1 class="event-info-label color-black justify-center mt-30">{{'sport_matcher' | translate}}</h1>
 		
 		<form ng-submit = loginSubmit() name="loginForm" method="post" novalidate>
@@ -10,9 +10,9 @@
 			<div>
 				<input  class="form-control" type="password" placeholder="{{'password' | translate}}" name="password" ng-model="user.password" required ng-maxlength="100"/>
 			</div>
-			<div class="form-check">
-				<span>{{'remember_me' | translate}}</span>
-				<input  class="form-control" type="checkbox" name="remember_me" ng-model="user.remember_me"/>
+			<div class="remember-container">
+				<span class="remember-text">{{'remember_me' | translate}}</span>
+				<input type="checkbox" name="remember_me" ng-model="user.remember_me" class="check-container" />
 				<!--<input type="checkbox" value="" id="defaultCheck1" name="login_remember_me"/>
 				<label class="form-check-label" for="defaultCheck1"><spring:message code="remember_me"/></label>-->
 			</div>

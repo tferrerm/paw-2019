@@ -1,6 +1,6 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
-@import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+@import 'bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
 // endbower
 
 @import 'partials/home';
@@ -228,10 +228,6 @@ div.background-dodgerblue {
 
 .background-yellow {
   background: #ffdf00;
-}
-
-.bgd-field-image {
-  background-image: url("../img/background.jpg");
 }
 
 .bottom-home-container {
@@ -653,10 +649,6 @@ a.event-link {
 
 .left-space {
   margin-left: 20px;
-}
-
-.login-error {
-  text-align: center;
 }
 
 a.logo {
