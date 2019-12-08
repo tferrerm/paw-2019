@@ -58,7 +58,7 @@ public class BaseController {
     	try {
     		i = LocalDate.parse(str).atStartOfDay(ZoneId.of(timezone)).toInstant();
     	} catch(DateTimeException e) {
-    		LOGGER.debug("{}", e.getMessage());
+    		LOGGER.debug("Parsing date, this happened: {}", e.getMessage());
     		return null;
     	}
     	return i;
@@ -71,7 +71,7 @@ public class BaseController {
     	try {
     		i = LocalDateTime.parse(str).atZone(ZoneId.of(timezone)).toInstant();
     	} catch(DateTimeException e) {
-    		LOGGER.debug("{}", e.getMessage());
+    		LOGGER.debug("Parsing date, this happened: {}", e.getMessage());
     		return null;
     	}
     	return i;

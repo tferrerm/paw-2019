@@ -55,14 +55,12 @@ import ar.edu.itba.paw.webapp.dto.FullUserDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
-import ar.edu.itba.paw.webapp.dto.exception.ExceptionDto;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
 import ar.edu.itba.paw.webapp.dto.form.UserForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
 import ar.edu.itba.paw.webapp.exception.FormValidationException;
 import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
-import ar.edu.itba.paw.webapp.http.CustomStatus;
 
 @Path("users")
 @Component
@@ -94,56 +92,12 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private EmailService ems;
-
-//	@GET
-//	@Path("/users/login")
-//	public Response login(@RequestParam(name = "error", defaultValue = "false") boolean error) {
-//		if(cph.isAuthenticated()) {
-//			if(cph.isAdmin())
-//				return null;//return new ModelAndView("redirect:/admin/");
-//			//return new ModelAndView("redirect:/home");
-//		}
-//		//ModelAndView mav = new ModelAndView("login");
-//		//mav.addObject("error", error);
-//		return null;//mav;
-//	}
-	
-//	@GET
-//    @Path("/logout")
-//    public Response logout(HttpServletRequest request, HttpServletResponse response) {
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if(auth != null) {
-//            new SecurityContextLogoutHandler().logout(request,response,auth);
-//        }
-//
-//        request.getSession().invalidate();
-////        return new ModelAndView("login");
-//        return null;
-//    }
 	
     @GET
     @Path("/{id}")
 	public Response userProfile(@PathParam("id") long userid) throws UserNotFoundException {
-		
-		//final ModelAndView mav = new ModelAndView("profile");
-		
-//		mav.addObject("user", us.findById(userid).orElseThrow(UserNotFoundException::new));
-//		mav.addObject("currEventsParticipant", es.countByUserInscriptions(true, userid));
-//		mav.addObject("currEventsOwned", es.countByOwner(true, userid));
-//		mav.addObject("pastEventsParticipant", es.countByUserInscriptions(false, userid));
-//		mav.addObject("favoriteSport", es.getFavoriteSport(userid).orElse(null));
-//		mav.addObject("mainClub", es.getFavoriteClub(userid).orElse(null));
-//		mav.addObject("votes_received", us.countVotesReceived(userid));
-//		
+
 //		mav.addObject("haveRelationship", loggedUser() != null ? us.haveRelationship(loggedUser().getUserid(), userid) : false);
-//		List<UserComment> comments = us.getCommentsByUser(userid, pageNum);
-//		mav.addObject("comments", comments);
-//		mav.addObject("commentQty", comments.size());
-//		mav.addObject("currCommentPage", pageNum);
-//		mav.addObject("maxCommentPage", us.getCommentsMaxPage(userid));
-//		mav.addObject("totalCommentQty", us.countByUserComments(userid));
-//		mav.addObject("commentsPageInitIndex", us.getCommentsPageInitIndex(pageNum));
 		
 		final User user = us.findById(userid).orElseThrow(UserNotFoundException::new);
 		final int currentEventCount = es.countByUserInscriptions(true, userid);
@@ -218,7 +172,8 @@ public class UserController extends BaseController {
 							   @FormDataParam("password") final String password,
 							   @FormDataParam("firstname") final String firstname,
 							   @FormDataParam("lastname") final String lastname,
-							   @FormDataParam("picture") final InputStream profilePicture) throws FormValidationException {
+							   @FormDataParam("picture") final InputStream profilePicture)
+			throws FormValidationException, UserAlreadyExistsException, PictureProcessingException {
     	
     	validator.validate(new UserForm()
     			.withUsername(username)
@@ -235,17 +190,9 @@ public class UserController extends BaseController {
 				picture = IOUtils.toByteArray(profilePicture);
 			user = us.create(username, firstname, lastname,
 					encodedPassword, Role.ROLE_USER, picture);
-
-		} catch(PictureProcessingException | IOException e) {
-
-			LOGGER.error("Error reading profile picture from {}", username);
-			Exception aux = (e.getClass().equals(PictureProcessingException.class))? e : null;
-			return Response.status(CustomStatus.UNPROCESSABLE_ENTITY).entity(ExceptionDto.ofException(aux)).build();
-
-		} catch(UserAlreadyExistsException e) {
-
-			LOGGER.warn("User tried to register with repeated email {}", username);
-			return Response.status(Status.CONFLICT).entity(ExceptionDto.ofException(e)).build();
+		} catch(IOException e) {
+			LOGGER.error("Error reading profile picture from {}: {}", username, e.getMessage());
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 		
 		ems.userRegistered(user, LocaleContextHolder.getLocale());
