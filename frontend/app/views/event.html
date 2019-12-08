@@ -61,7 +61,7 @@
 					<ul>
 					    <div ng-repeat="i in inscriptions">
 				            <a class="link-text" ng-click="goToProfile(i.inscriptedUser.userid)"><span>{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</span></a>
-				            <a type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid" ng-click="kickUser(i.inscriptedUser.userid)">{{'kick' | translate}}</a>
+				            <a type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid" ng-click="kickUser(event.pitch.pitchid, event.eventid, i.inscriptedUser.userid)">{{'kick' | translate}}</a>
 				        </div>
 			      	</ul>
 				</div>
@@ -118,17 +118,17 @@
 		</c:if>-->
 		<div class="club-buttons" ng-if="!inscriptionHasEnded">
 			<div ng-if="event.participant">
-				<a ng-click="leaveEvent(event.eventid)">
+				<a ng-click="leaveEvent(event.pitch.pitchid, event.eventid)">
 					<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
 				</a>
 			</div>
 			<div ng-if="!event.participant && event.inscriptionCount < event.maxParticipants">
-				<a ng-click="joinEvent(event.eventid)">
+				<a ng-click="joinEvent(event.pitch.pitchid, event.eventid)">
 					<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
 				</a>
 			</div>
 			<div ng-if="isOwner">
-				<a ng-click="deleteEvent(event.eventid)">
+				<a ng-click="deleteEvent(event.pitch.pitchid, event.eventid)">
 					<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
 				</a>
 			</div>

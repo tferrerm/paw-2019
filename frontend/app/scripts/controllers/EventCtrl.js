@@ -32,37 +32,37 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			$location.url('users/' + id);
 		}
 
-		$scope.kickUser = function(id) {
-			restService.kickUser(id).then(function(data) {
-				updateEvent(id);
+		$scope.kickUser = function(pitchid, eventid, userid) {
+			restService.kickUser(pitchid, eventid, userid).then(function(data) {
+				updateEvent(pitchid, eventid);
 			});
 		}
 
-		$scope.leaveEvent = function(id) {
-			restService.leaveEvent(id).then(function(data) {
-				updateEvent(id);
+		$scope.leaveEvent = function(pitchid, eventid) {
+			restService.leaveEvent(pitchid, eventid).then(function(data) {
+				updateEvent(pitchid, eventid);
 			});
 		};
 
-		$scope.joinEvent = function(id) {
+		$scope.joinEvent = function(pitchid, eventid) {
 			if($scope.isLoggedIn) {
-				restService.joinEvent(id).then(function(data) {
-					updateEvent(id);
+				restService.joinEvent(pitchid, eventid).then(function(data) {
+					updateEvent(pitchid, eventid);
 				});
 			} else {
 				$scope.showLoginModal();
 			}
 		};
 
-		$scope.deleteEvent = function(id) {
-			restService.deleteEvent(id);
+		$scope.deleteEvent = function(pitchid, eventid) {
+			restService.deleteEvent(pitchid, eventid);
 		};
 
-		function updateEvent(id) {
-			restService.getEvent(id).then(function(data) {
+		function updateEvent(pitchid, eventid) {
+			restService.getEvent(pitchid, eventid).then(function(data) {
 				event = Object.assign(event, data);
 			});
-			restService.getEventInscriptions(id).then(function(data) {
+			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
 			});
 		}
