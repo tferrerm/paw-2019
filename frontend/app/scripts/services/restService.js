@@ -76,7 +76,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpGet('/pitches/' + pitchid + '/events/' + eventid, {});
 			},
 			getEventInscriptions: function(pitchid, eventid) {
-				return httpGet('/pitches/' + pitchid + '/events/' + id + '/inscriptions', {});
+				return httpGet('/pitches/' + pitchid + '/events/' + eventid + '/inscriptions', {});
 			},
 			getHistory: function(id, params) {
 				return httpGet('/users/' + id + '/history', {pageNum: params.pageNum});
@@ -106,7 +106,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 
 			},
 			leaveEvent: function(pitchid, eventid) {
-				return httpPost('/pitchid/' + pitchid + '/events/' + eventid + '/leave', {}, {});
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/leave', {}, {});
 			},
 			register: function(data) {
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
