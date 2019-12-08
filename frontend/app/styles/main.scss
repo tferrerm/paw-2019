@@ -100,6 +100,18 @@ a, a:link, a:visited, a:hover {
   cursor: pointer;
 }
 
+a.logo {
+  background-color: #123456;
+  margin: 0;
+  padding: 0;
+}
+
+a.logo-admin {
+  background-color: lightgrey;
+  margin: 0;
+  padding: 0;
+}
+
 html {
   height: 100%;
 }
@@ -228,44 +240,6 @@ div.background-dodgerblue {
 
 .choose-file {
   margin: 15px 0;
-}
-
-.club-address {
-  width: 60%;
-  background-color: #fff2e6;
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-  word-break: break-word;
-}
-
-.club-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  width: 60%;
-}
-
-.club-detail-container {
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
-  align-items: flex-start;
-  align-self: center;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
-  justify-content: center;
-  width: 80%;
-}
-
-.club-pitches-list {
-  width: 100%;
-}
-
-.club-table-size {
-  min-width: 75%;
 }
 
 .color-black {
@@ -492,18 +466,6 @@ div.background-dodgerblue {
 
 .left-space {
   margin-left: 20px;
-}
-
-a.logo {
-  background-color: #123456;
-  margin: 0;
-  padding: 0;
-}
-
-a.logo-admin {
-  background-color: lightgrey;
-  margin: 0;
-  padding: 0;
 }
 
 .main-container {
@@ -835,13 +797,6 @@ a.logo-admin {
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
-}
-
-.view-club {
-  height: 30px;
-  font-size: 13px;
-  text-align: center;
-  margin: 5px 0;
 }
 
 .vote-balance {

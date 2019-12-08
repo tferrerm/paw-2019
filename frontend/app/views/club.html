@@ -5,7 +5,7 @@
 		</div>
 		<div class="club-detail-container">
 			<div class="description-body">
-				<div class="description-item">
+				<div class="club-item club-pitches-list">
 					<div class="flex">
 						<div class="h4 pitch-info-label">
 							{{'club_location' | translate}}
@@ -15,7 +15,7 @@
 					<h4>{{'hosted' | translate}} {{past_events_count}} {{'event_s' | translate}}</h4>
 				</div>
 			</div>
-			<div class="description-item">
+			<div class="club-item club-pitches-list">
 				<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
 				<div ng-if="pitches.length == 0">
 					<span>{{'no_pitches' | translate}}</span>
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 
-		<div class="tbl profile-cont">
+		<div class="tbl profile-cont club-comments">
 			<div ng-if="haveRelationship">
 				<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
 					<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
@@ -47,13 +47,11 @@
 			</div>
 			<div ng-repeat="cmt in comments" class="comment-container">
 				<div class="comment-profile-row mv-10">
-					<img class="comment-image" src="<c:url value='/user/${cmt.commenter.userid}/picture'/>" width="40" height="40"/>
-					<a class="link-text ml-10" href="<c:url value="/user/${cmt.commenter.userid}" /> ">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
+					<img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
+					<a class="link-text ml-10">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
 				</div>
 				<span class="comment-text ml-10">{{cmt.comment}}</span>
-				<div class="comment-date ml-10 mt-10">
-					<div>{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
-				</div>
+				<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>
 			</div>
 			<div class="table-navigator">
 			    <div ng-if="comments.length > 0">
