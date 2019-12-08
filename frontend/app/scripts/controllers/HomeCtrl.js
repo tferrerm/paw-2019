@@ -10,6 +10,14 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 
 		updateSchedule();
 
+		$scope.goToEvents = function() {
+			$location.url('events/');
+		};
+
+		$scope.goToPitches = function() {
+			$location.url('pitches/');
+		};
+
 		$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = authService.isLoggedIn();
 			updateSchedule();
