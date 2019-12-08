@@ -6,12 +6,12 @@
         <div class="tbl profile-cont minh-150">
             <div class="profile-top">
                 <div class="pitch-pic-container">
-                    <img class="pitch-pic" src="<c:url value='/pitch/${pitch.pitchid}/picture'/>"/>
+                    <img class="pitch-pic" src="../images/pitch_default.png"/>
                 </div>
                 <div class="stats">
                     <div class="h4 pitch-info-label" style="padding: 5px 0">
                         {{'pitch_club' | translate}}
-                        <a class="h4 link-text" href="<c:url value="/club/${pitch.club.clubid}" /> ">{{pitch.club.name}}</a>
+                        <a class="h4 link-text">{{pitch.club.name}}</a>
                     </div>
                     <div class="h4 pitch-info-label" style="padding: 5px 0">
                         {{'pitch_sport' | translate}}
@@ -66,12 +66,12 @@
                                 <input class="form-control" type="text" placeholder="{{'event_description' | translate}}" ng-maxlength="500" name="description" ng-model="event.description" required/>
                             </div>
                             <div class="form-field">
-                                <input class="form-control input-number" type="number" placeholder="{{'event_max_participants' | translate}}" ng-min="1" ng-max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
+                                <input class="form-control" type="number" placeholder="{{'event_max_participants' | translate}}" ng-min="1" ng-max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
                             </div>
                             <div class="form-field flex-space-between">
                                 <div class="form-field-horizontal">
                                     <span>{{'new_event_date' | translate}}</span>
-                                    <input class="form-control date-input" type="date" ng-min="currentDate" name="date" ng-model="event.date" required/>
+                                    <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="event.date" required/>
                                     <!--<c:if test="${invalid_date_format == true}">
                                         <span class="form-error">
                                             <spring:message code="invalid_date_format"/>

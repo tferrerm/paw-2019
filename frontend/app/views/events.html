@@ -31,7 +31,7 @@
 						</div>
 						<div>
 							<label>{{'date' | translate}}</label>
-							<input class="form-control" type="date" min="{{currentDate | date:'yyyy-MM-dd'}}" ng-model="filters.date"/>
+							<input class="form-control p-6" type="date" min="{{currentDate | date:'yyyy-MM-dd'}}" ng-model="filters.date"/>
 							<span class="form-error" ng-if="invalid_date_format">
 								{{'invalid_date_format' | translate}}
 							</span>

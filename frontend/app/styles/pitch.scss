@@ -1,0 +1,38 @@
+.pitch-form-container {
+    align-self: center;
+    background-color: #fff2e6;
+    border-radius: 5px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 10px;
+    width: 100%;
+}
+  
+.pitch-info-label {
+    font-weight: bold;
+    word-break: break-word;
+}
+  
+.pitch-item {
+    align-items: center;
+    padding: 10px;
+}
+  
+ul.pitch-item {
+    padding-inline-start: 5px;
+}
+  
+.pitch-name {
+    max-width: 50%;
+}
+  
+.pitch-pic-container {
+    margin-right: 30px;
+}
+  
+.pitch-pic {
+    width: 300px;
+    height: 150px;
+}

@@ -1,0 +1,75 @@
+a.event-link {
+    margin: 10px 5px;
+}
+
+.create-event {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    align-self: center;
+}
+  
+.create-event-form {
+    width: 350px;
+    height: 400px;
+}
+  
+.create-event-title {
+    padding: 0px;
+    font-size: 27px;
+}
+
+.event-detail {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 10px;
+}
+  
+.event-info-label {
+    display: flex;
+    font-weight: bold;
+}
+  
+.event-participants {
+    margin-bottom: 0;
+}
+  
+.event-points {
+    margin-top: 20px;
+    margin-left: 100px;
+}
+  
+.events-column div {
+    padding: 5px 10px;
+}
+  
+.events-column div:hover{
+    background-color: grey;
+    color: white;
+}  
+  
+.event-link {
+    text-align: center;
+    color: #123456;
+    text-decoration: underline;
+}
+
+.my-events-tbl-sub {
+    padding-top: 10px;
+}
+  
+.my-event-item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    word-break: break-word;
+}
+
+.view-event {
+    height: 30px;
+    font-size: 13px;
+    text-align: center;
+    margin: 5px 0;
+}
