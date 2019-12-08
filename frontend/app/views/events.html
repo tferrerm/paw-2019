@@ -53,7 +53,7 @@
 				<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}
 				</div>
 				<div>
-					<a ng-click="goToEvent(event.eventid)">
+					<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
 						<button type="button" class="btn btn-primary view-event">{{'view_event' | translate}}</button>
 					</a>
 				</div>

@@ -18,8 +18,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$scope.pageNum = params.pageNum;
 		});
 
-		$scope.goToEvent = function(id) {
-			$location.url('events/' + id);
+		$scope.goToEvent = function(pitchid, eventid) {
+			$location.url('pitches/' + pitchid + '/events/' + eventid);
 		};
 
 		$scope.getFirstPage = function() {

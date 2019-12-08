@@ -28,17 +28,17 @@ define([], function() {
               templateUrl: '/views/pitches.html',
               controller: 'PitchesCtrl'
             },
-            '/events/:id' : {
+            '/pitches/:pitchid/events/:eventid' : {
                 templateUrl: '/views/event.html',
                 controller: 'EventCtrl',
                 resolve: {
                     event: ['$route', 'restService', function($route, restService) {
                         var params = $route.current.params;
-                        return restService.getEvent(params.id);
+                        return restService.getEvent(params.pitchid, params.eventid);
                     }],
                     inscriptions: ['$route', 'restService', function($route, restService) {
                         var params = $route.current.params;
-                        return restService.getEventInscriptions(params.id);
+                        return restService.getEventInscriptions(params.pitchid, params.eventid);
                     }]
                 }
             },

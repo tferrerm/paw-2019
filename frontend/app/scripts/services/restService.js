@@ -72,11 +72,11 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getPitches: function(params) {
 				return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
 			},
-			getEvent: function(id) {
-				return httpGet('/events/' + id, {});
+			getEvent: function(pitchid, eventid) {
+				return httpGet('/pitches/' + pitchid + '/events/' + eventid, {});
 			},
-			getEventInscriptions: function(id) {
-				return httpGet('/events/' + id + '/inscriptions', {});
+			getEventInscriptions: function(pitchid, eventid) {
+				return httpGet('/pitches/' + pitchid + '/events/' + eventid + '/inscriptions', {});
 			},
 			getHistory: function(id, params) {
 				return httpGet('/users/' + id + '/history', {pageNum: params.pageNum});
@@ -99,14 +99,14 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},
-			joinEvent: function(id) {
-				return httpPost('/events/' + id + '/join', {}, {});
+			joinEvent: function(pitchid, eventid) {
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});
 			},
-			kickUser: function(id) {
+			kickUser: function(pitchid, eventid, userid) {
 
 			},
-			leaveEvent: function(id) {
-				return httpPost('/events/' + id + '/leave', {}, {});
+			leaveEvent: function(pitchid, eventid) {
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/leave', {}, {});
 			},
 			register: function(data) {
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
