@@ -94,4 +94,9 @@ public class PitchServiceImpl implements PitchService {
 		pd.deletePitch(pitchid);
 	}
 
+	@Override
+	public int countByClubId(long clubid) {
+		return pd.countByClubId(clubid);
+	}
+
 }

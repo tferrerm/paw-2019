@@ -87,9 +87,7 @@ public class ClubController extends BaseController {
 		
 		List<Pitch> pitches = ps.findByClubId(clubid, pageNum);
 
-		// TODO: IMPLEMENTAR PARA OBTENER PITCHES ESPECIFICOS DEL CLUB (BUSCAR POR ID)
-		int pitchCount = ps.countFilteredPitches(
-				Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(club.getName()));
+		int pitchCount = ps.countByClubId(clubid);
 		int pageCount = ps.countPitchPages(pitchCount);
 		
 		return Response

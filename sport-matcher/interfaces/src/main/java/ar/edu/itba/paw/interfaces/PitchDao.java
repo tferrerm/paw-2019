@@ -13,6 +13,8 @@ public interface PitchDao {
 	
 	public List<Pitch> findByClubId(long clubid, int page);
 	
+	public int countByClubId(long clubid);
+	
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
 			Optional<String> location, Optional<String> clubName, int page);
 	
