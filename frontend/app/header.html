@@ -2,13 +2,13 @@
   	<h1 class="title">SportMatcher</h1>
   	<div>
         <div ng-if="isLoggedIn">
-            <span class="username">{{loggedUser.username}}</span>
+            <span class="color-white username">{{loggedUser.username}}</span>
             <a ng-click="logout()">
             	{{'logout' | translate}}
             </a>
         </div>
         <div ng-if="!isLoggedIn">
-          	<a ng-click="showLoginModal()">
+          	<a ng-click="showLoginModal()" class="mt-30">
             	{{'login' | translate}}
             </a>
             {{'or' | translate}}
