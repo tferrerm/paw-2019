@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,14 +18,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.paw.exception.EventCreationException;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.PitchPictureService;
 import ar.edu.itba.paw.interfaces.PitchService;
@@ -40,9 +36,6 @@ import ar.edu.itba.paw.webapp.dto.EventDto;
 import ar.edu.itba.paw.webapp.dto.PitchCollectionDto;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
 import ar.edu.itba.paw.webapp.dto.SportCollectionDto;
-import ar.edu.itba.paw.webapp.dto.form.EventForm;
-import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
-import ar.edu.itba.paw.webapp.exception.FormValidationException;
 import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 
 @Path("pitches")
@@ -50,7 +43,6 @@ import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 @Produces(value = { MediaType.APPLICATION_JSON })
 public class PitchController extends BaseController {
 
-	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Logger LOGGER = LoggerFactory.getLogger(PitchController.class);
 	private static final String DEFAULT_PITCH_PICTURE = "pitch_default.png";
 	
@@ -65,9 +57,6 @@ public class PitchController extends BaseController {
 	
 	@Autowired
 	private EventService es;
-	
-	@Autowired
-	private FormValidator validator;
 
 	@GET
 	public Response listPitches(
@@ -76,30 +65,18 @@ public class PitchController extends BaseController {
 			@QueryParam("sport") Sport sport,
 			@QueryParam("location") String location,
 			@QueryParam("club") String clubName) {
-		//String queryString = buildQueryString(name, sportString, location, clubName);
-		//ModelAndView mav = new ModelAndView("pitchesList");
-		
-		//mav.addObject("pageNum", pageNum);
-        //mav.addObject("queryString", queryString);
-        //mav.addObject("sports", Sport.values());
-        //mav.addObject("pageInitialIndex", ps.getPageInitialPitchIndex(pageNum));
-        
+
         List<Pitch> pitches = ps.findBy(
 				Optional.ofNullable(name),
 				Optional.ofNullable(sport),
 				Optional.ofNullable(location),
 				Optional.ofNullable(clubName),
 				pageNum);
-		//mav.addObject("pitches", pitches);
-		//mav.addObject("pitchQty", pitches.size());
 		
 		int totalPitchQty = ps.countFilteredPitches(Optional.ofNullable(name), 
         		Optional.ofNullable(sport), Optional.ofNullable(location), 
         		Optional.ofNullable(clubName));
 		int pageInitialIndex = ps.getPageInitialPitchIndex(pageNum);
-		
-        //mav.addObject("totalPitchQty", totalPitchQty);
-        //mav.addObject("lastPageNum", ps.countPitchPages(totalPitchQty));
         
 		return Response
 				.ok(PitchCollectionDto.ofPitches(
@@ -135,6 +112,7 @@ public class PitchController extends BaseController {
 		
 		byte[] image = picOptional.isPresent() ? picOptional.get().getData()
 				: IOUtils.toByteArray(new ClassPathResource(DEFAULT_PITCH_PICTURE).getInputStream());
+		LOGGER.debug("Image for pitch {} presence: {}", pitchid, picOptional.isPresent());
 		
 		return Response.ok(image).cacheControl(cache).build();
 	}
@@ -155,62 +133,5 @@ public class PitchController extends BaseController {
 		return Response.ok(EventCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD
 				.map(ev -> EventDto.ofEvent(ev, true)).collect(Collectors.toList()))).build();
 	}
-	
-    @POST
-    @Path("/{pitchId}/events/")
-    public Response createEvent(
-    		@PathParam("pitchId") long pitchId,
-    		@FormDataParam("name") final String name,
-    		@FormDataParam("description") final String description,
-    		@FormDataParam("maxParticipants") final String maxParticipants,
-    		@FormDataParam("date") final String date,
-    		@FormDataParam("startsAtHour") final String startsAtHour,
-    		@FormDataParam("endsAtHour") final String endsAtHour,
-    		@FormDataParam("inscriptionEndDate") final String inscriptionEndDate)
-    		 throws PitchNotFoundException, FormValidationException, EventCreationException {
-    	
-    	Integer mp = tryInteger(maxParticipants);
-    	Integer sa = tryInteger(startsAtHour);
-    	Integer ea = tryInteger(endsAtHour);
-    	Instant eventDate = tryInstantStartOfDay(date, TIME_ZONE);
-    	Instant inscriptionEnd = tryDateTimeToInstant(inscriptionEndDate, TIME_ZONE);
-    	
-    	LOGGER.debug("date: {}, eventDate: {}", date, eventDate);
-    	LOGGER.debug("inscription: {}, inscriptionDate: {}", inscriptionEndDate, inscriptionEnd);
-    	
-    	validator.validate(
-    		new EventForm()
-    		.withName(name)
-    		.withDescription(description)
-    		.withMaxParticipants(mp)
-    		.withDate(eventDate)
-    		.withStartsAtHour(sa)
-    		.withEndsAtHour(ea)
-    		.withInscriptionEndDate(inscriptionEnd)
-    	);
-    	
-
-    	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
-    	Event ev = null;
-//    	try {
-	    	ev = es.create(name, loggedUser(), p, description,
-	    			mp, eventDate, sa, ea, inscriptionEnd);
-//    	} catch(EndsBeforeStartsException e) {
-//    		return eventCreationError("ends_before_starts", pitchId, form);
-//    	} catch(DateInPastException e) { // NOOOO!!!!
-//    		return eventCreationError("event_in_past", pitchId, form);
-//    	} catch(MaximumDateExceededException e) {
-//    		return eventCreationError("date_exceeded", pitchId, form);
-//    	} catch(EventOverlapException e) {
-//    		return eventCreationError("event_overlap", pitchId, form);
-//    	} catch(HourOutOfRangeException e) {
-//    		return eventCreationError("hour_out_of_range", pitchId, form);
-//    	} catch(InscriptionDateInPastException e) { // NO!!!!!
-//    		return eventCreationError("inscription_date_in_past", pitchId, form);
-//    	} catch(InscriptionDateExceededException e) {
-//    		return eventCreationError("inscription_date_exceeded", pitchId, form);
-//    	}
-    	return Response.ok().entity(EventDto.ofEvent(ev, false)).build();
-    }
 
 }
