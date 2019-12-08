@@ -3,7 +3,7 @@
 		<div class="profile-title">
 			<h2>{{event.name}}</h2>
 		</div>
-		<div class="detail-container w-100">
+		<div class="event-container">
 			<div class="status" ng-if="!eventHasEnded">
 				<div ng-if="event.inscriptionCount < event.maxParticipants">
 					<h3>{{'status' | translate}} {{'uncompleted' | translate}}</h3>
@@ -18,7 +18,7 @@
 			</div>
 			
 			<div>
-				<div class="margin-right comment-profile-row">
+				<div class="margin-right flex-row">
 					<div class="flex-05">
 						<div class="double-box">
 								<div class="event-item-box">

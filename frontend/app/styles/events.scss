@@ -3,7 +3,7 @@ a.event-link {
 }
 
 .cancel-event {
-    align-self: flex-end;
+    align-self: center;
 }
 
 .create-event {
@@ -22,6 +22,19 @@ a.event-link {
 .create-event-title {
     padding: 0px;
     font-size: 27px;
+}
+
+.event-container {
+    align-items: flex-start;
+    align-self: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
 }
 
 .event-detail {
