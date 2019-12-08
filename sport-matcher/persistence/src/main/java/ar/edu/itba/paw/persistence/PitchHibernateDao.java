@@ -164,4 +164,13 @@ public class PitchHibernateDao implements PitchDao {
 		em.remove(pitch);
 	}
 
+	@Override
+	public int countByClubId(long clubid) {
+		final String queryString = "SELECT count(*) FROM Pitch AS p WHERE p.club.clubid = :clubid";
+		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
+		query.setParameter("clubid", clubid);
+		
+		return query.getSingleResult().intValue();
+	}
+
 }

@@ -14,6 +14,8 @@ public interface PitchService {
 	
 	public List<Pitch> findByClubId(long clubid, int page);
 	
+	public int countByClubId(long clubid);
+	
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
 			Optional<String> location, Optional<String> clubName, int page);
 	
