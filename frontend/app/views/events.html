@@ -34,7 +34,7 @@
 						</div>
 						<div>
 							<label>{{'date' | translate}}</label>
-							<input class="form-control" type="date" min="{{currentDate}}" max="{{aWeekFromNow}}" ng-model="filters.date"/>
+							<input class="form-control date-filter" type="date" min="{{currentDate}}" max="{{aWeekFromNow}}" ng-model="filters.date"/>
 							<span class="form-error" ng-if="invalid_date_format">
 								{{'invalid_date_format' | translate}}
 							</span>

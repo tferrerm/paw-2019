@@ -226,39 +226,6 @@ div.background-dodgerblue {
   background: #ffdf00;
 }
 
-.bottom-home-container {
-  display: flex;
-  width: 80%;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  margin-top: 100px;
-}
-
-.bottom-home-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.bottom-home-item button {
-  margin-top: 30px;
-  width: 70%;
-  height: 50px;
-  border-radius: 5px;
-  border-width: 0;
-  background-color: #123456;
-  color: white;
-  -webkit-transition-duration: 0.2s; /* Safari */
-  transition-duration: 0.2s;
-}
-
-.bottom-home-item button:hover {
-  background-color: white;
-  color: #123456;
-  border-color: #123456;
-  border-width: 1px;
-}
-
 .choose-file {
   margin: 15px 0;
 }
@@ -361,24 +328,6 @@ div.background-dodgerblue {
   width: 100%;
 }
 
-.create-event {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: flex-start;
-  align-self: center;
-}
-
-.create-event-form {
-  width: 350px;
-  height: 400px;
-}
-
-.create-event-title {
-  padding: 0px;
-  font-size: 27px;
-}
-
 .custom-row {
   border-bottom: 1px lightgrey solid;
   height: 50px;
@@ -452,47 +401,6 @@ div.background-dodgerblue {
   padding: 0;
 }
 
-.event-detail {
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  padding: 10px;
-}
-
-.event-info-label {
-  display: flex;
-  font-weight: bold;
-}
-
-.event-participants {
-  margin-bottom: 0;
-}
-
-.event-points {
-  margin-top: 20px;
-  margin-left: 100px;
-}
-
-.events-column div {
-  padding: 5px 10px;
-}
-
-.events-column div:hover{
-  background-color: grey;
-  color: white;
-}
-
-
-.event-link {
-  text-align: center;
-  color: #123456;
-  text-decoration: underline;
-}
-
-a.event-link {
-  margin: 10px 5px;
-}
-
 .form-container {
   align-self: center;
   background-color: white;
@@ -552,67 +460,6 @@ a.event-link {
 
 .help-message {
   margin: 10px 0;
-}
-
-.home-event {
-  background-color: #123456;
-  width: 80%;
-  height: 70px;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: space-around;
-  flex-flow: row wrap;
-  list-style: none;
-  align-items: center;
-}
-
-.home-all-events {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  width: 90%;
-  list-style: none;
-  background-color: white;
-}
-
-.home-ev-column {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  word-break: break-word;
-  margin: 0 5px 5px;
-  background-color: white;
-  border: 1px solid black;
-}
-
-.home-ev-title {
-  justify-content: center;
-  background-color: #123456;
-  color: white;
-  margin: 4px;
-}
-
-.home-evs-container {
-  width: 90%;
-  background-color: white;
-}
-
-.home-evs-group {
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.home-header {
-  text-align: center;
-}
-
-.home-title {
-  margin: 20px 0 10px;
 }
 
 .http-error {
@@ -746,17 +593,6 @@ a.logo-admin {
 
 .minw-300 {
   min-width: 300px;
-}
-
-.my-events-tbl-sub {
-  padding-top: 10px;
-}
-
-.my-event-item {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  word-break: break-word;
 }
 
 .no-margin {
@@ -1055,13 +891,6 @@ ul.pitch-item {
 }
 
 .view-club {
-  height: 30px;
-  font-size: 13px;
-  text-align: center;
-  margin: 5px 0;
-}
-
-.view-event {
   height: 30px;
   font-size: 13px;
   text-align: center;
