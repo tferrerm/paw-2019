@@ -48,6 +48,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				//formData.append('picture', userData.picture);
 				return null;//httpPost('/users', formData, {});
 			},
+			deleteEvent: function(id) {
+
+			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
 			},
@@ -88,13 +91,19 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpGet('/users/' + id + '/past-owned-events', {pageNum: params.pageNum});
 			},
 			getPitchWeekEvents: function(id, params) {
-				return httpGet('/pitches/' + id + '/week-events', {})
+				return httpGet('/pitches/' + id + '/week-events', {});
+			},
+			getSports: function() {
+				return httpGet('/pitches/sports', {});
 			},
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},
 			joinEvent: function(id) {
 				return httpPost('/events/' + id + '/join', {}, {});
+			},
+			kickUser: function(id) {
+
 			},
 			leaveEvent: function(id) {
 				return httpPost('/events/' + id + '/leave', {}, {});

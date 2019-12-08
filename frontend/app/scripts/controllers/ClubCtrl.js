@@ -3,6 +3,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 	frontend.controller('ClubCtrl', ['$scope', 'restService', 'club', function($scope, restService, club) {
 		var pitchParams = {pageNum: 1};
+		var commentParams = {pageNum: 1};
 	    $scope.club = club;
 	    $scope.haveRelationship = true;
 	    //past_events_count

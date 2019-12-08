@@ -5,10 +5,10 @@
 		</div>
 		<div class="detail-container average-min-width">
 			<div class="status" ng-if="!eventHasEnded">
-				<div ng-if="${event.inscriptionCount < event.maxParticipants}">
+				<div ng-if="event.inscriptionCount < event.maxParticipants">
 					<h3>{{'status' | translate}} {{'uncompleted' | translate}}</h3>
 				</div>
-				<div ng-if="${event.inscriptionCount >= event.maxParticipants}">
+				<div ng-if="event.inscriptionCount >= event.maxParticipants">
 					<h3>{{'status' | translate}} {{'completed' | translate}}</h3>
 				</div>
 				<div class="progress">
@@ -32,16 +32,16 @@
 					</div>
 					<div class="description-item">
 						<span class="event-info-label">{{'club' | translate}} </span>
-						<a class="link-text" href="<c:url value="/club/${event.pitch.club.clubid}" />{{event.pitch.club.name}}</a>
-						<span> - </span><a class="link-text" href="<c:url value="/pitch/${event.pitch.pitchid}" />{{event.pitch.name}}</a>
+						<a class="link-text" ng-click="goToClub(event.pitch.club.clubid)" >{{event.pitch.club.name}}</a>
+						<span> - </span><a class="link-text" ng-click="goToPitch(event.pitch.pitchid)" >{{event.pitch.name}}</a>
 					</div>
 					<div class="double-box">
 						<div class="description-item">
 							<span class="event-info-label">{{'date' | translate}}</span>
 							<span class="just-row">
-								<div>{{event.startsAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
-								<span class="date-separator">-</span>
-								<div>{{event.endsAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
+								<div>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}
+								<span>-</span>
+								<div>{{event.endsAt | date:'HH:mm' : 'UTC'}}
 							</span>
 						</div>
 						<div class="description-item">
@@ -52,7 +52,7 @@
 					<div class="description-item">
 						<span class="event-info-label">{{'end_date' | translate}}</span>
 						<span>
-							<div>{{event.inscriptionEnd | date:'dd/MM/yyyy HH:mm' : 'UTC'}}
+							<div>{{event.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}
 						</span>
 					</div>
 				</div>
@@ -60,10 +60,8 @@
 					<span class="event-info-label">{{'participants' | translate}}</span>
 					<ul>
 					    <div ng-repeat="i in inscriptions">
-				            <!--<form class="participant-item" method="POST" action="<c:url value="/event/${event.eventId}/kick-user/${i.inscriptedUser.userid}"/>">-->
-					            <!--<a class="link-text" href="<c:url value="/user/${i.inscriptedUser.userid}" /> ">--><span>{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</span><!--</a>-->
-					            <button type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid">{{'kick' | translate}}</button>
-				            <!--</form>-->
+				            <a class="link-text" ng-click="goToProfile(i.inscriptedUser.userid)"><span>{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</span></a>
+				            <a type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid" ng-click="kickUser(i.inscriptedUser.userid)">{{'kick' | translate}}</a>
 				        </div>
 			      	</ul>
 				</div>

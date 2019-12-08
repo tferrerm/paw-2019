@@ -5,8 +5,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 		var params = {pageNum: 1};
 		$scope.filters = {};
 		$scope.currentDate = new Date();
-    	$scope.aWeekFromNow = new Date();
-		$scope.sports = [];
+    	
+		restService.getSports().then(function(data) {
+			$scope.sports = data.sports;
+		});
 
 		restService.getAllEvents(params).then(function(data) {
 			$scope.events = data.events;

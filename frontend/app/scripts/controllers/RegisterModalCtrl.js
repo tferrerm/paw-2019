@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('RegisterModalCtrl', ['$scope', 'restService', 'authService', function($scope, restService, authService) {
+	frontend.controller('RegisterModalCtrl', ['$scope', '$uibModalInstance', 'restService', 'authService', function($scope, uibModalInstance, restService, authService) {
     
 	    $scope.user = {};
 
