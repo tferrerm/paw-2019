@@ -1,0 +1,26 @@
+.bgd-field-image {
+    background-image: url("../images/background.jpg");
+}
+
+.check-container {
+    height: 20px;
+    width: 20px;
+    color: #555555;
+    background-color: white;
+    margin: 0;
+}
+
+.login-error {
+    text-align: center;
+}
+
+.remember-container {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remember-text {
+    margin-top: 8px;
+}

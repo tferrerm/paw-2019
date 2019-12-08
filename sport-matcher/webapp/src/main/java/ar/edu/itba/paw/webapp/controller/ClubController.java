@@ -67,31 +67,15 @@ public class ClubController extends BaseController {
 	
 	@GET
 	@Path("/{id}")
-	public Response showClub(@PathParam("id") long clubid/*,
-			@RequestParam(value = "cmt", defaultValue = "1") final int pageNum,*/
-			/*@ModelAttribute("commentForm") final CommentForm form*/) throws ClubNotFoundException {
+	public Response showClub(@PathParam("id") long clubid) throws ClubNotFoundException {
 		
 		final Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
-		
-		//List<Pitch> pitches = 
-		//mav.addObject("pitches", pitches);
-		
-		//mav.addObject("past_events_count", cs.countPastEvents(clubid));
-		
-		//mav.addObject("haveRelationship", loggedUser() != null ? cs.haveRelationship(loggedUser().getUserid(), clubid) : false);
-
-		//List<ClubComment> comments = cs.getCommentsByClub(clubid, pageNum);
-		//mav.addObject("comments", comments);
-		//mav.addObject("commentQty", comments.size());
-		//mav.addObject("currCommentPage", pageNum);
-		//mav.addObject("maxCommentPage", cs.getCommentsMaxPage(clubid));
-		//mav.addObject("totalCommentQty", cs.countByClubComments(clubid));
-		//mav.addObject("commentsPageInitIndex", cs.getCommentsPageInitIndex(pageNum));
-		/* HARDCODED HARDCODEADO el false de abajo */
+		final boolean haveRelationship = loggedUser() != null ?
+				cs.haveRelationship(loggedUser().getUserid(), clubid) : false;
 		
 		return Response
 				.status(Status.OK)
-				.entity(FullClubDto.ofClub(club, cs.countPastEvents(clubid), false))
+				.entity(FullClubDto.ofClub(club, cs.countPastEvents(clubid), haveRelationship))
 				.build();
 	}
 	
@@ -122,16 +106,13 @@ public class ClubController extends BaseController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/{id}/comment")
     public Response comment(@PathParam("id") long clubId,
-    		@FormDataParam("comment") final String commentContent) 
-    		//@Valid @ModelAttribute("commentForm") final CommentForm form,
-    		//final BindingResult errors, HttpServletRequest request) 
+    		@FormDataParam("comment") final String commentContent)
     				throws UserNotAuthorizedException, ClubNotFoundException, FormValidationException {
 		
 		final CommentForm form = new CommentForm().withComment(commentContent);
 		validator.validate(form);
 
-		/* HARDCODED HARDCODEADO */
-		ClubComment comment = cs.createComment(loggedUser().getUserid(), clubId, commentContent);
+		final ClubComment comment = cs.createComment(loggedUser().getUserid(), clubId, commentContent);
 
 		final URI uri = uriInfo.getAbsolutePathBuilder()
 				.path(clubId + "/comments/" + comment.getCommentId()).build();
