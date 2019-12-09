@@ -57,7 +57,7 @@
 			<div class="tbl profile-cont club-comments flex-1">
 				<div ng-if="hasRelationship" class="w-100">
 					<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
-						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="comment" required/>
+						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="commentText.comment" required/>
 						<div class="justify-center">
 							<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
 						</div>
@@ -66,7 +66,7 @@
 				<div ng-repeat="cmt in comments" class="comment-container">
 					<div class="flex-row mv-10">
 						<img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
-						<a class="link-text ml-10">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
+						<a class="link-text ml-10" ng-click="goToProfile(cmt.commenter.userid)">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
 					</div>
 					<span class="comment-text ml-10">{{cmt.comment}}</span>
 					<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>

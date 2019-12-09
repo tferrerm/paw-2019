@@ -77,15 +77,31 @@ define(['frontend', 'services/restService'], function(frontend) {
 			});
 		};
 
+		$scope.commentText = {};
+
 		$scope.commentSubmit = function() {
-			if ($scope.commentForm.$valid) {
-				restService.commentClub(club.clubid, $scope.comment); // broadcast
-			}
+			//if ($scope.commentForm.$valid) {
+				restService.commentClub(club.clubid, $scope.commentText.comment).then(function(data) {
+					commentParams.pageNum = 1;
+					restService.getClubComments(club.clubid, commentParams)
+					    .then(function(data) {
+							$scope.comments = data.comments;
+							$scope.commentCount = data.commentCount;
+							$scope.commentsLastPageNum = data.pageCount;
+							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+							$scope.commentsPageNum = commentParams.pageNum;
+						});
+				});
+			//}
 		};
 
 		$scope.goToPitch = function(id) {
 			$location.url('pitches/' + id);
 		};
+
+		$scope.goToProfile = function(id) {
+			$location.url('users/' + id);
+		}
 
 	}]);
 });
