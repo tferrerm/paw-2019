@@ -14,7 +14,6 @@ public class EventDto {
 	private PitchDto pitch;
 	private Integer inscriptionCount;
 	private Instant inscriptionEnd;
-	private boolean inscriptionSuccess;
 	private Instant startsAt;
 	private Instant endsAt;
 	private Instant createdAt;
@@ -30,7 +29,6 @@ public class EventDto {
 		if(withInscriptionCount)
 			dto.inscriptionCount = event.getInscriptions().size();
 		dto.inscriptionEnd = event.getEndsInscriptionAt();
-		//dto.inscriptionSuccess = event.getInscriptionSuccess(); ROMPEEEEEE
 		dto.startsAt = event.getStartsAt();
 		dto.endsAt = event.getEndsAt();
 		dto.createdAt = event.getCreatedAt();
@@ -100,14 +98,6 @@ public class EventDto {
 
 	public void setInscriptionEnd(Instant inscriptionEnd) {
 		this.inscriptionEnd = inscriptionEnd;
-	}
-
-	public boolean isInscriptionSuccess() {
-		return inscriptionSuccess;
-	}
-
-	public void setInscriptionSuccess(boolean inscriptionSuccess) {
-		this.inscriptionSuccess = inscriptionSuccess;
 	}
 
 	public Instant getStartsAt() {

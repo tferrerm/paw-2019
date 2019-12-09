@@ -2,7 +2,7 @@
 
 define([], function() {
     return {
-        defaultRoutePath: '/',
+        defaultRoutePath: '/home',
         routes: {
             '/home': {
                 templateUrl: '/views/home.html',
@@ -71,6 +71,10 @@ define([], function() {
                         return restService.getUserProfile(params.id);
                     }]
                 }
+            },
+            '/tournaments' : {
+              templateUrl: '/views/tournaments.html',
+              controller: 'TournamentsCtrl'
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

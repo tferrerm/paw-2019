@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,6 +34,8 @@ import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.dto.TournamentCollectionDto;
+import ar.edu.itba.paw.webapp.dto.TournamentDto;
 import ar.edu.itba.paw.webapp.dto.TournamentEventDto;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
@@ -109,6 +112,10 @@ public class TournamentController extends BaseController {
         //ModelAndView mav = new ModelAndView("tournamentList");
         
 	    List<Tournament> tournaments = ts.findBy(pageNum);
+	    
+	    int totalTournamentQty = ts.countTournamentTotal();
+	    int lastPageNum = ts.countTotalTournamentPages();
+        int pageInitialIndex = ts.getPageInitialTournamentIndex(pageNum);
 //	    mav.addObject("tournaments", tournaments);
 //	    mav.addObject("tournamentQty", tournaments.size());
 //		mav.addObject("page", pageNum);
@@ -117,7 +124,13 @@ public class TournamentController extends BaseController {
 //		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
 //		mav.addObject("now", Instant.now());
 //        
-        return null;//mav;
+//        return null;//mav;
+        return Response
+        		.status(Status.OK)
+        		.entity(TournamentCollectionDto.ofTournaments(
+        				tournaments.stream().map(t -> TournamentDto.ofTournament(t)).collect(Collectors.toList()),
+        				totalTournamentQty, lastPageNum, pageInitialIndex))
+        		.build();
     }
 
     @POST
