@@ -27,7 +27,7 @@ import ar.edu.itba.paw.model.UserComment;
 @Repository
 public class UserHibernateDao implements UserDao {
 	
-	private static final int MAX_ROWS = 10;
+	private static final int MAX_ROWS = 1;
 	
 	@PersistenceContext
 	private EntityManager em;

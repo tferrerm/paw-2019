@@ -74,24 +74,28 @@
 				<div class="table-navigator">
 					<div ng-if="comments.length > 0">
 						<div ng-hide="commentsPageNum == 1">
-							<a href="<c:url value='/club/${club.clubid}?cmt=1' />">
+							<a ng-click="getCommentsFirstPage()">
 								<button type="button" class="btn btn-secondary">
-									<spring:message code="first"/>
+									{{'first' | translate}}
 								</button>
 							</a>
-							<a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage-1}' />">
+							<a ng-click="getCommentsPrevPage()">
 								<button type="button" class="btn btn-secondary">
-									<spring:message code="back"/>
+									{{'back' | translate}}
 								</button>
 							</a>
 						</div>
 						<span class="flex">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + comments.length - 1}} {{'of' | translate}} {{commentCount}}</span>
 						<div ng-hide="commentsPageNum == commentsLastPageNum">
-							<a href="<c:url value='/club/${club.clubid}?cmt=${currCommentPage+1}' />">
-								<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+							<a ng-click="getCommentsNextPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'next' | translate}}
+								</button>
 							</a>
-							<a href="<c:url value='/club/${club.clubid}?cmt=${maxCommentPage}' />">
-								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+							<a ng-click="getCommentsLastPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'last' | translate}}
+								</button>
 							</a>
 						</div>
 					</div>

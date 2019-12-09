@@ -1,0 +1,98 @@
+<div class="main-container">
+	<div class="content-container">
+		<div ng-if="isLoggedUser">
+			<div class="profile-title">
+				<h2 translate="user_greeting" translate-value-name="{{user.firstname}}"></h2>
+  			</div>
+		</div>
+		<div ng-if="!isLoggedUser">
+			<div class="profile-title">
+                <h2>{{user.firstname}} {{user.lastname}}</h2>
+            </div>
+		</div>
+		<div class="tbl profile-cont">
+			<div class="profile-top">
+				<img class="profile-pic" src="../images/profile_default.png"/>
+				<div class="stats">
+					<div class="notice" style="padding: 5px 0">
+						{{'curr_event_participant' | translate}}
+						<span class="notice"> {{user.currentEventCount}} </span>
+						{{'event_s' | translate}}
+					</div>
+					<div class="notice" style="padding: 5px 0">
+						{{'curr_events_owned' | translate}}
+						<span class="notice"> {{user.currentEventsOwned}} </span>
+						{{'event_s' | translate}}
+					</div>
+					<div class="notice" style="padding: 5px 0">
+						{{'past_events_participant' | translate}}
+						<span class="notice"> {{user.pastEventsParticipant}} </span>
+						{{'event_s' | translate}}
+					</div>
+						<div class="notice" style="padding: 5px 0" ng-if="user.favoriteSport != null">
+							{{'favorite_sport' | translate}}
+							<span class="notice">{{user.favoriteSport | translate}}</span>
+						</div>
+						<div class="notice" style="padding: 5px 0" ng-if="user.favoriteClub != null">
+							{{'main_club' | translate}}
+							<span class="notice"> {{user.favoriteClub.name}}</span>
+						</div>
+					<div class="notice" style="padding: 5px 0">
+						{{'user_vote_balance' | translate}}
+						<span class="notice"> {{user.votesReceived}} </span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tbl profile-cont">
+			<div ng-if="hasRelationship">
+				<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
+					<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="commentText.comment" required/>
+					<div class="justify-center">
+						<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
+					</div>
+				</form>
+			</div>
+			<div ng-repeat="cmt in comments" class="comment-container">
+				<div class="flex-row mv-10">
+					<img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
+					<a class="link-text ml-10" ng-click="goToProfile(cmt.commenter.userid)">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
+				</div>
+				<span class="comment-text ml-10">{{cmt.comment}}</span>
+				<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>
+			</div>
+			<div class="table-navigator">
+				<div ng-if="comments.length > 0">
+					<div ng-hide="commentsPageNum == 1">
+						<a ng-click="getFirstPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'first' | translate}}
+							</button>
+						</a>
+						<a ng-click="getPrevPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'back' | translate}}
+							</button>
+						</a>
+					</div>
+					<span class="flex">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + comments.length - 1}} {{'of' | translate}} {{commentCount}}</span>
+					<div ng-hide="commentsPageNum == commentsLastPageNum">
+						<a ng-click="getNextPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'next' | translate}}
+							</button>
+						</a>
+						<a ng-click="getLastPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'last' | translate}}
+							</button>
+						</a>
+					</div>
+				</div>
+				<div ng-if="comments.length == 0" class="notice">
+					{{'no_comments' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

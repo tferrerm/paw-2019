@@ -38,6 +38,11 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('comment', comment);
 				return httpPost('/clubs/' + id + '/comment', formData, {});
 			},
+			commentUser: function(id, comment) {
+				var formData = new FormData();
+				formData.append('comment', comment);
+				return httpPost('/users/' + id + '/comment', formData, {});
+			},
 			createEvent: function(pitchid, data) {
 				var eventData = {name: data.name, description: data.description, maxParticipants: data.maxParticipants, date: data.date, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
 				var formData = new FormData();
@@ -86,9 +91,6 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getHourRange: function() {
 				return httpGet('/pitches/hour-range', {});
 			},
-		    getTournaments: function(params) {
-		        return httpGet('/tournaments', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
-		    },
 			getMyFutureEvents: function(id, params) {
 				return httpGet('/users/' + id + '/future-owned-events', {pageNum: params.pageNum});
 			},
@@ -101,11 +103,23 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getSports: function() {
 				return httpGet('/pitches/sports', {});
 			},
+			getTournaments: function(params) {
+		        return httpGet('/tournaments', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
+		    },
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
 			},
+			getUserComments: function(id, params) {
+				return httpGet('/users/' + id + '/comments', {pageNum: params.pageNum});
+			},
+			getUserProfile: function(id) {
+				return httpGet('/users/' + id, {});
+			},
 			hasRelationshipWithClub: function(id) {
 				return httpGet('/clubs/' + id + '/has-relationship', {});
+			},
+			hasRelationshipWithUser: function(id) {
+				return httpGet('/users/' + id + '/has-relationship', {});
 			},
 			joinEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});

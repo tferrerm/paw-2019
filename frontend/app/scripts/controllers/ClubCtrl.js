@@ -103,5 +103,53 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$location.url('users/' + id);
 		}
 
+		$scope.getCommentsFirstPage = function() {
+			commentParams.pageNum = 1;
+			restService.getClubComments(club.clubid, commentParams)
+			    .then(function(data) {
+					$scope.comments = data.comments;
+					$scope.commentCount = data.commentCount;
+					$scope.commentsLastPageNum = data.pageCount;
+					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+					$scope.commentsPageNum = commentParams.pageNum;
+				});
+		};
+
+		$scope.getCommentsPrevPage = function() {
+			commentParams.pageNum--;
+			restService.getClubComments(club.clubid, commentParams)
+			    .then(function(data) {
+					$scope.comments = data.comments;
+					$scope.commentCount = data.commentCount;
+					$scope.commentsLastPageNum = data.pageCount;
+					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+					$scope.commentsPageNum = commentParams.pageNum;
+				});
+		};
+
+		$scope.getCommentsNextPage = function() {
+			commentParams.pageNum++;
+			restService.getClubComments(club.clubid, commentParams)
+			    .then(function(data) {
+					$scope.comments = data.comments;
+					$scope.commentCount = data.commentCount;
+					$scope.commentsLastPageNum = data.pageCount;
+					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+					$scope.commentsPageNum = commentParams.pageNum;
+				});
+		};
+
+		$scope.getCommentsLastPage = function() {
+			commentParams.pageNum = $scope.commentsLastPageNum;
+			restService.getClubComments(club.clubid, commentParams)
+			    .then(function(data) {
+					$scope.comments = data.comments;
+					$scope.commentCount = data.commentCount;
+					$scope.commentsLastPageNum = data.pageCount;
+					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+					$scope.commentsPageNum = commentParams.pageNum;
+				});
+		};
+
 	}]);
 });

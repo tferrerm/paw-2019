@@ -8,7 +8,7 @@ define([], function() {
     gt_zero:'Must be greater than zero',
     future_date_required:'Date cannot be in the past!',
     sport_matcher:'Sport Matcher',
-    user_greeting:'Hello {0}!',
+    user_greeting:'Hello {{name}}!',
     remember_me:'Remember Me',
     login:'Login',
     register:'Register',

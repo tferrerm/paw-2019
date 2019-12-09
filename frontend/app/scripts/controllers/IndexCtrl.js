@@ -27,5 +27,9 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			$scope.isLoggedIn = authService.isLoggedIn();
 			$scope.loggedUser = authService.getLoggedUser();
 		});
+
+		$scope.goToProfile = function(id) {
+			$location.url('users/' + id);
+		}
 	}]);
 });

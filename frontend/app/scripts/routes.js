@@ -61,6 +61,16 @@ define([], function() {
                         return restService.getPitch(params.id);
                     }]
                 }
+            },
+            '/users/:id' : {
+                templateUrl: '/views/profile.html',
+                controller: 'ProfileCtrl',
+                resolve: {
+                    user: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getUserProfile(params.id);
+                    }]
+                }
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */
