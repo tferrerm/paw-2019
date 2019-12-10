@@ -82,7 +82,15 @@ define([], function() {
                 resolve: {
                     tournament: ['$route', 'restService', function($route, restService) {
                         var params = $route.current.params;
-                        return restService.getTournament(params.id); // REDIRECCIONAR A INSCRIPTION ACA?
+                        return restService.getTournament(params.id);
+                    }],
+                    teams: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournamentTeams(params.id);
+                    }],
+                    round: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournamentRound(params.id, {});
                     }]
                 }
             },

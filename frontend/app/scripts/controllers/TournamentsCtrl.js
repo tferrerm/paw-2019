@@ -8,8 +8,12 @@ define(['frontend'], function(frontend) {
 
 		updateTournaments(params);
 
-		$scope.goToTournament = function (id) {
-			$location.url('tournaments/' + id);
+		$scope.goToTournament = function (tournament) {
+			if(tournament.inscriptionSuccess) {
+				$location.url('tournaments/' + tournament.tournamentid);
+			} else {
+				$location.url('tournaments/' + tournament.tournamentid + '/inscription');
+			}
 		};
 
 		$scope.getFirstPage = function () {

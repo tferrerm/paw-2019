@@ -64,7 +64,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				
 				if($scope.isAdmin) {
 					restService.createTournament($scope.club.clubid, $scope.tournament).then(function(data) {
-						$location.url('tournaments/' + data.tournamentid);
+						$location.url('tournaments/' + data.tournamentid + '/inscription');
 					});
 
 				}

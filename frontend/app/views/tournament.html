@@ -16,63 +16,77 @@
 				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'teams' | translate}}</span>
 				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'score' | translate}}</span>
 			</div>
-			<!--<c:forEach var="teamEntry" items="${teamsScoresMap}">
-					<div class="custom-row">
-							<div class="justify-center flex-1"><spring:message code="${teamEntry.key.teamName}"/></div>
-							<div class="justify-center flex-1"><c:out value="${teamEntry.value}"/></div>
-					</div>
-			</c:forEach>-->
+			<div ng-repeat="team in teams | orderBy: '-teamScore' " class="custom-row">
+				<a ng-click="goToTournamentTeam(team.teamid)" class="custom-row">
+					<div class="justify-center flex-1">{{team.teamName | translate}}</div>
+					<div class="justify-center flex-1">{{team.teamScore}}</div>
+				</a>
+			</div>
 		</div>
 		<div class="tbl profile-cont">
-			<span class="event-info-label notice">{{'round' | translate}} {{currRoundPage}}</span>
+			<span ng-if="roundPageNum == currentRound" class="event-info-label notice">{{'round' | translate}} {{roundPageNum}} - {{'current' | translate}}</span>
+			<span ng-if="roundPageNum != currentRound" class="event-info-label notice">{{'round' | translate}} {{roundPageNum}}</span>
 			<span>
 				{{'date' | translate}}:
-				<!--<fmt:timeZone value="AR">
-						<fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-						<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-				</fmt:timeZone>
-				<fmt:timeZone value="AR">
-						<fmt:parseDate value="${roundEvents[0].endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
-						<fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
-				</fmt:timeZone>-->
+				{{roundEvents[0].startsAt | date:'EEEE d, MMM yyyy H:mm' : 'GMT-3'}} -
+				{{roundEvents[0].endsAt | date:'H:mm' : 'GMT-3'}}
 			</span>
-			<!--<c:forEach var="event" items="${roundEvents}">
-					<cr:set var="eventid" scope="page" value="${event.eventId}"/>
-					<div class="flex pitch-item w-100 justify-center">
-										<span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
-										<c:choose>
-												<c:when test="${eventsHaveResult[eventid]}">
-														<div class="score score-tournament">
-																<span><c:out value="${event.firstTeamScore}"/></span>
-																<span><c:out value="${event.secondTeamScore}"/></span>
-														</div>
-												</c:when>
-												<c:otherwise>
-														<div class="score score-tournament">
-																<span>-</span>
-																<span>-</span>
-														</div>
-												</c:otherwise>
-										</c:choose>
-										<span class="event-info-label"><spring:message code="${event.secondTeam.teamName}"/></span>
-							<a class="ml-30" href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+			<div ng-repeat="event in roundEvents">
+				<div class="flex pitch-item w-100 justify-center">
+					<span class="event-info-label">{{event.pitch.name | translate}}</span>
+					<span class="event-info-label">{{event.firstTeam.teamName | translate}}</span>
+					<div ng-if="!isAdmin">
+						<div ng-if="event.firstTeamScore != null">
+							<div class="score score-tournament">
+								<span>{{event.firstTeamScore}}</span>
+								<span>{{event.secondTeamScore}}</span>
+							</div>
+						</div>
+						<div ng-if="event.firstTeamScore == null">
+							<div class="score score-tournament">
+								<span>-</span>
+								<span>-</span>
+							</div>
+						</div>
 					</div>
-			</c:forEach>-->
+					<div ng-if="isAdmin">
+						<form ng-submit = setTournamentResultSubmit(event) name="tournamentResultForm" method="post" novalidate>
+                            <div class="score score-tournament" ng-if="parseDate(event.endsAt) <= now">
+                            	<input class="form-control" type="number" ng-min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
+                            	<input class="form-control" type="number" ng-min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
+                            	<div class="justify-center">
+									<button type="submit" class="btn btn-primary minw-150 btn-primary">{{'upload_score' | translate}}</button>
+								</div>
+                            </div>
+                            <div class="score score-tournament" ng-if="parseDate(event.endsAt) > now">
+                            	<span>-</span>
+								<span>-</span>
+                            </div>
+                        </form>
+					</div>
+					<span class="event-info-label">{{event.secondTeam.teamName | translate}}</span>
+					<a class="ml-30" ng-click="goToTournamentEvent(event.eventid)">
+						<button type="button" class="btn btn-primary view-event">
+							{{'view_event' | translate}}
+						</button>
+					</a>
+				</div>
+			</div>
 			<div class="table-navigator w-100 justify-center">
-				<div ng-hide="round == 1">
+				<div ng-hide="roundPageNum == 1">
 					<a ng-click="getFirstPage()">
 						<button type="button" class="btn btn-secondary">
 							{{'first' | translate}}
 						</button>
 					</a>
-					<a ng-click="getPreviousPage()">
+					<a ng-click="getPrevPage()">
 						<button type="button" class="btn btn-secondary">
 							{{'back' | translate}}
 						</button>
 					</a>
 				</div>
-				<span class="flex create-event">{{'showing_pages' | translate}} {{currRoundPage}} {{'of' | translate}} {{maxRoundPage}}</span>
-				<div ng-hide="round == lastPageNum">
+				<span class="flex create-event">{{'showing_pages' | translate}} {{roundPageNum}} {{'of' | translate}} {{tournament.rounds}}</span>
+				<div ng-hide="roundPageNum == tournament.rounds">
 					<a ng-click="getNextPage()">
 						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 					</a>

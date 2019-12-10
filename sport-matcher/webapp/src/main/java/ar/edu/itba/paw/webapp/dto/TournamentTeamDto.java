@@ -8,7 +8,7 @@ public class TournamentTeamDto {
 	private String teamName;
 	private int teamScore;
 	
-	public static TournamentTeamDto ofEvents(TournamentTeam team) {
+	public static TournamentTeamDto ofTeam(TournamentTeam team) {
 		TournamentTeamDto dto = new TournamentTeamDto();
 		dto.teamid = team.getTeamid();
 		dto.teamName = team.getTeamName();

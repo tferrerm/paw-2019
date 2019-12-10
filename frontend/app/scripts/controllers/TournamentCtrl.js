@@ -1,58 +1,76 @@
 'use strict';
 define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('TournamentCtrl', ['$scope', '$location', 'restService', 'tournament', function ($scope, $location, restService, tournament) {
-		
+	frontend.controller('TournamentCtrl', ['$scope', '$location', 'restService', 'tournament', 'teams', 'round', function ($scope, $location, restService, tournament, teams, round) {
 		$scope.tournament = tournament;
-		if(tournament.inscriptionSuccess) {
+		$scope.teams = teams.teams;
+		$scope.roundEvents = round.events;
+		$scope.currentRound = round.currentRound;
+		$scope.roundPageNum = round.round;
+		$scope.now = Date.parse(new Date());
+		var params = {roundPageNum: round.round};
 
-		} else {
-			$location.url('tournaments/' + tournament.tournamentid + '/inscription');
-		}
-		/*currentRound
-		teamsScoresMap
-		currRoundPage
-		roundEvents
-		maxRoundPage
-		params: round
-		var params = {pageNum: 1};
+		$scope.goToTournamentEvent = function (id) {
+			//$location.url('tournament/' + id);
+		};
 
-		$scope.now = new Date();
-
-		updateTournaments(params);
-
-		$scope.goToTournament = function (id) {
-			$location.url('tournament/' + id);
+		$scope.goToTournamentTeam = function (id) {
+			//$location.url('tournament/' + id);
 		};
 
 		$scope.getFirstPage = function () {
-			params.pageNum = 1;
-			updateTournaments(params);
+			params.roundPageNum = 1;
+			updateRound(params);
 		};
 
 		$scope.getPrevPage = function () {
-			params.pageNum--;
-			updateTournaments(params);
+			params.roundPageNum--;
+			updateRound(params);
 		};
 
 		$scope.getNextPage = function () {
-			params.pageNum++;
-			updateTournaments(params);
+			params.roundPageNum++;
+			updateRound(params);
 		};
 
 		$scope.getLastPage = function () {
-			params.pageNum = $scope.lastPageNum;
-			updateTournaments(params);
+			params.roundPageNum = tournament.rounds;
+			updateRound(params);
 		};
 
-		function updateTournaments(params) {
-			restService.getTournaments(params).then(function(data) {
-				$scope.tournaments = data.tournaments;
-				$scope.tournamentCount = data.tournamentCount;
-				$scope.lastPageNum = data.lastPageNum;
-				$scope.initialPageIndex = data.initialPageIndex;
-				$scope.pageNum = params.pageNum;
+		function updateRound(params) {
+			restService.getTournamentRound(tournament.tournamentid, params).then(function(data) {
+				$scope.roundEvents = data.events;
+				$scope.currentRound = data.currentRound;
+				$scope.roundPageNum = params.roundPageNum;
 			});
-		}*/
+		}
+
+		function updateTeams() {
+			restService.getTournamentTeams(tournament.tournamentid).then(function(data) {
+				$scope.teams = data.teams;
+			});
+		}
+
+		$scope.setTournamentResultSubmit = function(event) {
+			//checkPasswordsMatch();
+			//if ($scope.createEventForm.$valid) {
+				//$scope.duplicateEmailError = false;
+				
+				if($scope.isAdmin) {
+					restService.setTournamentEventResult(tournament.tournamentClub.clubid, tournament.tournamentid, event.eventid, event).then(function(data) {
+						updateTeams();
+						updateRound(params);
+					});
+
+				}
+
+			//}
+		};
+
+		$scope.parseDate = function(date) {
+			return Date.parse(date);
+		}
+
 	}]);
 })

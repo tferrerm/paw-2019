@@ -118,6 +118,12 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getTournament: function(id) {
 		        return httpGet('/tournaments/' + id, {});
 		    },
+		    getTournamentRound: function(id, params) {
+		        return httpGet('/tournaments/' + id + '/round', {roundPageNum: params.roundPageNum});
+		    },
+		    getTournamentTeams: function(id) {
+		        return httpGet('/tournaments/' + id + '/teams', {});
+		    },
 		    getTournamentTeamsInscriptions: function(id) {
 		    	return httpGet('/tournaments/' + id + '/inscription', {});
 		    },
@@ -163,6 +169,13 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('lastname', userData.lastname);
 				//formData.append('picture', userData.picture);
 				return httpPost('/users', formData, {});
+			},
+			setTournamentEventResult: function(clubid, tournamentid, eventid, data) {
+				var resultData = {firstResult: data.firstTeamScore, secondResult: data.secondTeamScore};
+				var formData = new FormData();
+				formData.append('firstResult', resultData.firstResult);
+				formData.append('secondResult', resultData.secondResult);
+				return httpPost('/admin/clubs/' + clubid + '/tournaments/' + tournamentid + '/events/' + eventid + '/result', formData, {});
 			}
 		}
 

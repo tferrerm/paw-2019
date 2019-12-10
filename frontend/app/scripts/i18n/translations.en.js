@@ -211,6 +211,7 @@ define([], function() {
     started:'STARTED',
     go_to_home:'Go to home',
     skip_login:'Want to skip this?',
+    current:'Current'
 
 };
 });

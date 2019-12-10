@@ -6,7 +6,7 @@ public class TournamentTeamCollectionDto {
 	
 	private List<TournamentTeamDto> teams;
 	
-	public static TournamentTeamCollectionDto ofEvents(List<TournamentTeamDto> teams) {
+	public static TournamentTeamCollectionDto ofTeams(List<TournamentTeamDto> teams) {
 		TournamentTeamCollectionDto dto = new TournamentTeamCollectionDto();
 		dto.teams = teams;
 		

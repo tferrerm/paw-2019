@@ -33,7 +33,10 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.FullTournamentDto;
 import ar.edu.itba.paw.webapp.dto.TournamentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentDto;
+import ar.edu.itba.paw.webapp.dto.TournamentEventCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentEventDto;
+import ar.edu.itba.paw.webapp.dto.TournamentTeamCollectionDto;
+import ar.edu.itba.paw.webapp.dto.TournamentTeamDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
@@ -168,7 +171,7 @@ public class TournamentController extends BaseController {
         //mav.addObject("firstTeamMembers", ts.findTeamMembers(tournamentEvent.getFirstTeam()));
         //mav.addObject("secondTeamMembers", ts.findTeamMembers(tournamentEvent.getSecondTeam()));
         return Response.ok(TournamentEventDto.ofTournamentEvent(
-        		tournamentEvent, false)).build(); // VER SI ES PARTICIPANTE
+        		tournamentEvent/*, false*/)).build(); // VER SI ES PARTICIPANTE
     }
     
     @GET
@@ -193,8 +196,38 @@ public class TournamentController extends BaseController {
         ts.findTeamMembers(tournamentEvent.getFirstTeam()) : ts.findTeamMembers(tournamentEvent.getSecondTeam());
         return null;
     }
-
     
+    @GET
+    @Path("/{id}/teams")
+    public Response retrieveTournamentTeams(@PathParam("id") long tournamentid)
+    		throws TournamentNotFoundException {
+
+    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	
+    	return Response.ok(TournamentTeamCollectionDto.ofTeams(
+    			tournament.getTeams().stream().map(TournamentTeamDto::ofTeam).collect(Collectors.toList()))
+    		).build();
+    }
+    
+    @GET
+    @Path("/{id}/round")
+    public Response retrieveTournamentRound(@PathParam("id") long tournamentid,
+    	@QueryParam("roundPageNum") final Integer roundPage) throws TournamentNotFoundException {
+    	
+    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	
+    	int currentRound = ts.getCurrentRound(tournament);
+    	Integer roundPageNum = roundPage;
+    	if(roundPageNum == null)
+    		roundPageNum = currentRound;
+    	
+        List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPageNum);
+    	
+    	return Response.ok(TournamentEventCollectionDto.ofEvents(roundEvents.stream()
+    			.map(TournamentEventDto::ofTournamentEvent).collect(Collectors.toList()), roundPageNum, currentRound)
+    		).build();
+    }
+
 //	@ExceptionHandler({ TournamentEventNotFoundException.class })
 //	private ModelAndView tournamentEventNotFound() {
 //		return new ModelAndView("404");
