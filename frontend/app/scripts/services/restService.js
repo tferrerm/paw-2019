@@ -130,11 +130,17 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			joinEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});
 			},
+			joinTeam: function(tournamentid, teamid) {
+				return httpPost('/tournaments/' + tournamentid + '/team/' + teamid + '/join', {}, {});
+			},
 			kickUser: function(pitchid, eventid, userid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/kick-user/' + userid, {}, {});
 			},
 			leaveEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/leave', {}, {});
+			},
+			leaveTeam: function(id) {
+				return httpPost('/tournaments/' + id + '/leave', {}, {});
 			},
 			register: function(data) {
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};

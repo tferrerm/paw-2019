@@ -46,8 +46,8 @@
 								</div>
 							</div>
 							<div class="flex flex-grow justify-center">
-								<div ng-if="!userJoined && (tournament.teamSize > teamPair[0].inscriptions.length)">
-									<a ng-click="joinTeam(teamPair[0].teamid)">
+								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[0].inscriptions.length)">
+									<a ng-click="joinTeam(tournament.tournamentid, teamPair[0].teamid)">
 										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
 									</a>
 								</div>
@@ -68,8 +68,8 @@
 								</div>
 							</div>
 							<div class="flex flex-grow justify-center">
-								<div ng-if="!userJoined && (tournament.teamSize > teamPair[1].inscriptions.length)">
-									<a ng-click="joinTeam(teamPair[1].teamid)">
+								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[1].inscriptions.length)">
+									<a ng-click="joinTeam(tournament.tournamentid, teamPair[1].teamid)">
 										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
 									</a>
 								</div>
@@ -83,11 +83,11 @@
 			<span class="form-error notice">
 				<spring:message code="user_busy_error"/>
 			</span>
-		</c:if>
-		<c:if test="${userJoined}">
-			<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
-				<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
-			</form>
 		</c:if>-->
+		<div ng-if="hasJoined">
+			<a ng-click="leaveTeam(tournament.tournamentid)">
+				<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
+			</a>
+		</div>
 	</div>
 </div>

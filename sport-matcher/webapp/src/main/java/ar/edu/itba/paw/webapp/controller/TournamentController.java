@@ -145,6 +145,8 @@ public class TournamentController extends BaseController {
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	List<TournamentTeam> teams = tournament.getTeams().stream().map(t ->
     			ts.findByTeamId(t.getTeamid()).get()).collect(Collectors.toList());
+    	boolean hasJoined = loggedUser() != null ? 
+    			ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false;
     	
     	return Response.ok(TournamentTeamInscriptionsCollectionDto.ofTeams(
     			teams.stream().map(t ->
@@ -152,8 +154,8 @@ public class TournamentController extends BaseController {
 						t,
 						t.getInscriptions().stream().map(InscriptionDto::ofInscription).collect(Collectors.toList())
 					)
-    	    	).collect(Collectors.toList())
-    		)).build();
+    	    	).collect(Collectors.toList()), hasJoined)
+    		).build();
     }
 
     @POST
