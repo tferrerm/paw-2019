@@ -226,6 +226,11 @@ public class TournamentServiceImpl implements TournamentService {
 		}
 		return teamsUsersMap;
 	}
+	
+	@Override
+	public List<User> getTeamMembers(TournamentTeam team) {
+		return td.findTeamMembers(team);
+	}
 
 	@Override
 	public boolean inscriptionEnded(Tournament tournament) {

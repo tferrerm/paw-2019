@@ -81,5 +81,7 @@ public interface TournamentService {
 	public void checkTournamentInscriptions();
 
 	public boolean hasFinished(final int rounds, final int currentRound, final List<TournamentEvent> roundEvents);
+
+	public List<User> getTeamMembers(final TournamentTeam team);
 	
 }

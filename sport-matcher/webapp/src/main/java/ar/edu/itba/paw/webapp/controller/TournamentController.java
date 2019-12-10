@@ -31,12 +31,12 @@ import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.FullTournamentDto;
-import ar.edu.itba.paw.webapp.dto.InscriptionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentDto;
 import ar.edu.itba.paw.webapp.dto.TournamentEventDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsDto;
+import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 
@@ -121,7 +121,7 @@ public class TournamentController extends BaseController {
     			teams.stream().map(t ->
 					TournamentTeamInscriptionsDto.ofTeam(
 						t,
-						t.getInscriptions().stream().map(InscriptionDto::ofInscription).collect(Collectors.toList())
+						ts.getTeamMembers(t).stream().map(UserDto::ofUser).collect(Collectors.toList())
 					)
     	    	).collect(Collectors.toList()), hasJoined)
     		).build();

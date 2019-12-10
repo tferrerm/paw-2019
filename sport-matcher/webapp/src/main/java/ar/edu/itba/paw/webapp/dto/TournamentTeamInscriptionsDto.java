@@ -9,9 +9,9 @@ public class TournamentTeamInscriptionsDto {
 	private long teamid;
 	private String teamName;
 	private int teamScore;
-	private List<InscriptionDto> inscriptions;
+	private List<UserDto> inscriptions;
 	
-	public static TournamentTeamInscriptionsDto ofTeam(TournamentTeam team, List<InscriptionDto> inscriptions) {
+	public static TournamentTeamInscriptionsDto ofTeam(TournamentTeam team, List<UserDto> inscriptions) {
 		TournamentTeamInscriptionsDto dto = new TournamentTeamInscriptionsDto();
 		dto.teamid = team.getTeamid();
 		dto.teamName = team.getTeamName();
@@ -45,11 +45,11 @@ public class TournamentTeamInscriptionsDto {
 		this.teamScore = teamScore;
 	}
 
-	public List<InscriptionDto> getInscriptions() {
+	public List<UserDto> getInscriptions() {
 		return inscriptions;
 	}
 
-	public void setInscriptions(List<InscriptionDto> inscriptions) {
+	public void setInscriptions(List<UserDto> inscriptions) {
 		this.inscriptions = inscriptions;
 	}
 

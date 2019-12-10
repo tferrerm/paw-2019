@@ -36,8 +36,8 @@
 							<div class="flex w-100">
 								<div class="flex flex-column align-center w-100">
 									<div ng-repeat="inscription in teamPair[0].inscriptions">
-										<a class="link-text" ng-click="goToProfile(inscription.inscriptedUser.userid)">
-											{{inscription.inscriptedUser.firstname}} {{inscription.inscriptedUser.lastname}}
+										<a class="link-text" ng-click="goToProfile(inscription.userid)">
+											{{inscription.firstname}} {{inscription.lastname}}
 										</a>
 									</div>
 									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[0].inscriptions.length) track by $index">
@@ -58,8 +58,8 @@
 							<div class="flex w-100">
 								<div class="flex flex-column align-center w-100">
 									<div ng-repeat="inscription in teamPair[1].inscriptions">
-										<a class="link-text" ng-click="goToProfile(inscription.inscriptedUser.userid)">
-											{{inscription.inscriptedUser.firstname}} {{inscription.inscriptedUser.lastname}}
+										<a class="link-text" ng-click="goToProfile(inscription.userid)">
+											{{inscription.firstname}} {{inscription.lastname}}
 										</a>
 									</div>
 									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[1].inscriptions.length) track by $index">
