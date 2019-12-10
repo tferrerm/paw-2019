@@ -28,6 +28,10 @@ define([], function() {
               templateUrl: '/views/pitches.html',
               controller: 'PitchesCtrl'
             },
+            '/tournaments' : {
+              templateUrl: '/views/tournaments.html',
+              controller: 'TournamentsCtrl'
+            },
             '/pitches/:pitchid/events/:eventid' : {
                 templateUrl: '/views/event.html',
                 controller: 'EventCtrl',
