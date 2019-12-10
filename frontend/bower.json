@@ -12,6 +12,9 @@
     "requirejs": "~2.1.11",
     "angular-bootstrap": "^2.5.0"
   },
+  "resolutions": {
+    "angular": "~1.7.0"
+  },
   "devDependencies": {
     "bootstrap": "~3.4.1",
     "angular-mocks": "^1.7.8"
