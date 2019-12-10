@@ -6,7 +6,8 @@
   },
   "devDependencies": {
     "angular-mocks": "1.7.8",
-    "bower": "^1.3.12",
+    "angular-ui-router": "^1.0.23",
+    "bower": "^1.8.8",
     "grunt": "^1.0.4",
     "grunt-autoprefixer": "^0.7.6",
     "grunt-bower-requirejs": "^1.1.0",
@@ -24,7 +25,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-eslint": "^22.0.0",
     "grunt-filerev": "^0.2.1",
-    "grunt-google-cdn": "^0.4.0",
+    "grunt-google-cdn": "^0.4.3",
     "grunt-karma": "^3.0.2",
     "grunt-newer": "^0.7.0",
     "grunt-ng-annotate": "^0.3.0",
@@ -32,12 +33,13 @@
     "grunt-svgmin": "^6.0.0",
     "grunt-usemin": "^3.1.1",
     "grunt-wiredep": "^3.0.1",
+    "jasmine-core": "^3.5.0",
     "karma": "^4.4.1",
     "karma-jasmine": "^2.0.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-requirejs": "^1.1.0",
     "karma-spec-reporter": "0.0.32",
-    "load-grunt-tasks": "^0.4.0",
+    "load-grunt-tasks": "^5.1.0",
     "requirejs": "^2.1.11",
     "time-grunt": "^0.3.1"
   }
