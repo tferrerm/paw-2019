@@ -12,7 +12,7 @@ define(['frontend'], function(frontend) {
       $scope.pageNum = params.pageNum;
       $scope.pageInitialIndex = params.pageInitialIndex;
       $scope.now = new Date();
-    }).catch((error) => alert("Error"));
+    }).catch((error) => alert(error.data || "Error"));
 
     $scope.goToTournament = function (id) {
       $location.url('tournament/' + id);
@@ -26,7 +26,7 @@ define(['frontend'], function(frontend) {
         $scope.lastPageNum = data.pagesCountMatching;
         $scope.initialPageIndex = data.initialPageIndex;
         $scope.pageNum = params.pageNum;
-      }).catch((error) => alert("Error"));
+      }).catch((error) => alert(error.data || "Error"));
     };
 
     $scope.getPrevPage = function () {
@@ -37,7 +37,7 @@ define(['frontend'], function(frontend) {
         $scope.lastPageNum = data.pagesCountMatching;
         $scope.initialPageIndex = data.initialPageIndex;
         $scope.pageNum = params.pageNum;
-      }).catch((error) => alert("Error"));
+      }).catch((error) => alert(error.data || "Error"));
     };
 
     $scope.getNextPage = function () {
@@ -48,7 +48,7 @@ define(['frontend'], function(frontend) {
         $scope.lastPageNum = data.pagesCountMatching;
         $scope.initialPageIndex = data.initialPageIndex;
         $scope.pageNum = params.pageNum;
-      }).catch((error) => alert("Error"));
+      }).catch((error) => alert(error.data || "Error"));
     };
 
     $scope.getLastPage = function () {
@@ -59,7 +59,7 @@ define(['frontend'], function(frontend) {
         $scope.lastPageNum = data.pagesCountMatching;
         $scope.initialPageIndex = data.initialPageIndex;
         $scope.pageNum = params.pageNum;
-      }).catch((error) => alert("Error"));
+      }).catch((error) => alert(error.data || "Error"));
     };
   }]);
 })

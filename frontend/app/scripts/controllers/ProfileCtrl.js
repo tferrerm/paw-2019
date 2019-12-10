@@ -15,7 +15,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    restService.hasRelationshipWithUser(user.userid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
-	    	});
+	    	}).catch((error) => alert(error.data || "Error"));;
 
 	    $scope.goToProfile = function(id) {
 			$location.url('users/' + id);
@@ -38,7 +38,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.commentsLastPageNum = data.pageCount;
 				$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 				$scope.commentsPageNum = commentParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 
 		$scope.getFirstPage = function() {
 			commentParams.pageNum = 1;
@@ -49,7 +49,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				});
+				}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.getPrevPage = function() {
@@ -61,7 +61,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				});
+				}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.getNextPage = function() {
@@ -73,7 +73,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				});
+				}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.getLastPage = function() {
@@ -85,7 +85,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				});
+				}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.commentText = {};
@@ -101,7 +101,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 							$scope.commentsLastPageNum = data.pageCount;
 							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 							$scope.commentsPageNum = commentParams.pageNum;
-						});
+						}).catch((error) => alert(error.data || "Error"));;
 				});
 			//}
 		};
