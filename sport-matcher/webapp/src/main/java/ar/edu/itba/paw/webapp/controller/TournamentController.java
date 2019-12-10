@@ -113,6 +113,7 @@ public class TournamentController extends BaseController {
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	List<TournamentTeam> teams = tournament.getTeams().stream().map(t ->
     			ts.findByTeamId(t.getTeamid()).get()).collect(Collectors.toList());
+    	
     	boolean hasJoined = loggedUser() != null ? 
     			ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false;
     	

@@ -8,19 +8,19 @@ define(['frontend', 'services/restService'], function(frontend) {
 		setTournamentTeamPairs(teamInscriptions.teams);
 
 		$scope.joinTeam = function(tournamentid, teamid) {
-			restService.joinTeam(id).then(function(data) {
+			restService.joinTournament(tournamentid, teamid).then(function(data) {
                 restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
-					$scope.hasJoined = data.teamInscriptions.hasJoined;
-					setTournamentTeamPairs(data.teamInscriptions.teams);
+					$scope.hasJoined = data.hasJoined;
+					setTournamentTeamPairs(data.teams);
                 });
 			});
 		};
 
-		$scope.leaveTeam = function(id) {
-			restService.leaveTeam(id).then(function(data) {
+		$scope.leaveTournament = function(id) {
+			restService.leaveTournament(id).then(function(data) {
                 restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
-					$scope.hasJoined = data.teamInscriptions.hasJoined;
-					setTournamentTeamPairs(data.teamInscriptions.teams);
+					$scope.hasJoined = data.hasJoined;
+					setTournamentTeamPairs(data.teams);
                 });
 			});
 		};
