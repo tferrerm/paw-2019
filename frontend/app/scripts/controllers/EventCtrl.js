@@ -35,20 +35,20 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.kickUser = function(pitchid, eventid, userid) {
 			restService.kickUser(pitchid, eventid, userid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		}
 
 		$scope.leaveEvent = function(pitchid, eventid) {
 			restService.leaveEvent(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.joinEvent = function(pitchid, eventid) {
 			if($scope.isLoggedIn) {
 				restService.joinEvent(pitchid, eventid).then(function(data) {
 					updateEvent(pitchid, eventid);
-				});
+				}).catch((error) => alert(error.data || "Error"));;
 			} else {
 				$scope.showLoginModal();
 			}
@@ -64,7 +64,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			});
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		}
 
 		$scope.$on('user:updated', function() {

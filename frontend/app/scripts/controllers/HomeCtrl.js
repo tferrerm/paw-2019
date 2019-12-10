@@ -27,7 +27,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			if($scope.isLoggedIn) {
 				restService.getUpcomingEvents(authService.getLoggedUser().userid).then(function(data) {
 					$scope.schedule = data.schedule;
-				});
+				}).catch((error) => alert(error.data || "Error"));;
 			}
 		}
 
