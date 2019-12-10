@@ -63,7 +63,7 @@ public class TournamentController extends BaseController {
     	
     	Instant startsAt = null;//ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt();
     	
-    	return Response.ok(FullTournamentDto.ofTournament(tournament, startsAt)).build();
+    	return Response.ok(FullTournamentDto.ofTournament(tournament, tournament.getRounds(), startsAt)).build();
     	
 //    	if(tournament.getInscriptionSuccess()) {
 //			if(roundPage == null) {
@@ -85,50 +85,18 @@ public class TournamentController extends BaseController {
 ////			mav.addObject("hasFinished", ts.hasFinished(tournament.getRounds(), currentRound, roundEvents));
 //			
 //			return null;//mav;
-//			
-//		} else {
-//			//ModelAndView mav = new ModelAndView("tournamentInscription");
-//			//mav.addObject("tournament",  tournament);
-//			//mav.addObject("club", tournament.getTournamentClub());
-//			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
-//			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
-//				@Override
-//				public int compare(TournamentTeam team1, TournamentTeam team2) {
-//					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
-//				}
-//			};
-//			Collections.sort(teams, cmp);
-//		   // mav.addObject("teams", teams);
-//		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
-////		    mav.addObject("teamsUsers", teamsUsers);
-////		    mav.addObject("roundsAmount", tournament.getRounds());
-////		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
-////		    mav.addObject("userBusyError", userBusyError);
-////		    mav.addObject("userJoined", loggedUser() != null ? ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false);
-//		    
-//		    return null;//mav;
-//		}
+
     }
 
     @GET
     public Response retrieveTournaments(@QueryParam("pageNum") final int pageNum) {
 
-        //ModelAndView mav = new ModelAndView("tournamentList");
-        
-	    List<Tournament> tournaments = ts.findBy(pageNum);
+        List<Tournament> tournaments = ts.findBy(pageNum);
 	    
 	    int totalTournamentQty = ts.countTournamentTotal();
 	    int lastPageNum = ts.countTotalTournamentPages();
         int pageInitialIndex = ts.getPageInitialTournamentIndex(pageNum);
-//	    mav.addObject("tournaments", tournaments);
-//	    mav.addObject("tournamentQty", tournaments.size());
-//		mav.addObject("page", pageNum);
-//		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
-//		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
-//		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
-//		mav.addObject("now", Instant.now());
-//        
-//        return null;//mav;
+
         return Response
         		.status(Status.OK)
         		.entity(TournamentCollectionDto.ofTournaments(

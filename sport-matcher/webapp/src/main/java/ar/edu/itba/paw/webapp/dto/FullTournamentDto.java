@@ -12,19 +12,21 @@ public class FullTournamentDto {
 	private Sport sport;
 	private ClubDto tournamentClub;
 	private int maxTeams;
+	private int rounds;
 	private int teamSize;
 	private Instant inscriptionEnd;
 	private boolean inscriptionSuccess;
 	private Instant startsAt;
 	private Instant createdAt;
 	
-	public static FullTournamentDto ofTournament(Tournament tournament, Instant startsAt) {
+	public static FullTournamentDto ofTournament(Tournament tournament, int rounds, Instant startsAt) {
 		FullTournamentDto dto = new FullTournamentDto();
 		dto.tournamentid = tournament.getTournamentid();
 		dto.name = tournament.getName();
 		dto.sport = tournament.getSport();
 		dto.tournamentClub = ClubDto.ofClub(tournament.getTournamentClub());
 		dto.maxTeams = tournament.getMaxTeams();
+		dto.rounds = rounds;
 		dto.teamSize = tournament.getTeamSize();
 		dto.inscriptionEnd = tournament.getEndsInscriptionAt();
 		dto.inscriptionSuccess = tournament.getInscriptionSuccess();
@@ -72,6 +74,14 @@ public class FullTournamentDto {
 
 	public void setMaxTeams(int maxTeams) {
 		this.maxTeams = maxTeams;
+	}
+
+	public int getRounds() {
+		return rounds;
+	}
+
+	public void setRounds(int rounds) {
+		this.rounds = rounds;
 	}
 
 	public int getTeamSize() {

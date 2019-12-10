@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
+import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.controller.BaseController;
+import ar.edu.itba.paw.webapp.dto.TournamentDto;
 import ar.edu.itba.paw.webapp.dto.form.TournamentForm;
 import ar.edu.itba.paw.webapp.dto.form.TournamentResultForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
@@ -197,10 +199,10 @@ public class AdminTournamentController extends BaseController {
     		@FormDataParam("teamSize") String teamSize, @FormDataParam("firstRoundDate") String firstRoundDate,
     		@FormDataParam("startsAtHour") String startsAtHour, @FormDataParam("endsAtHour") String endsAtHour,
     		@FormDataParam("inscriptionEndDate") String inscriptionEndDate)
-    				throws ClubNotFoundException, FormValidationException {
+    				throws ClubNotFoundException, FormValidationException, Exception /* HARDCODEADO HARDCODED ARREGLAR */ {
     	
     	Integer mt = tryInteger(maxTeams);
-    	Integer ts = tryInteger(teamSize);
+    	Integer tsz = tryInteger(teamSize);
     	Instant frd = tryInstantStartOfDay(firstRoundDate, TIME_ZONE);
     	Integer sa = tryInteger(startsAtHour);
     	Integer ea = tryInteger(endsAtHour);
@@ -209,7 +211,7 @@ public class AdminTournamentController extends BaseController {
     	validator.validate(new TournamentForm()
     			.withName(name)
     			.withMaxTeams(mt)
-    			.withTeamSize(ts)
+    			.withTeamSize(tsz)
     			.withtFirstRoundDate(frd)
     			.withStartsAtHour(sa)
     			.withEndsAtHour(ea)
@@ -220,8 +222,8 @@ public class AdminTournamentController extends BaseController {
     	
 //    	try {
 //    		// Only SOCCER Tournaments are supported for now
-//        	tournament = ts.create(form.getName(), Sport.SOCCER, club, maxTeams,
-//        			teamSize, firstRoundDate, startsAt, endsAt, inscriptionEndDate, loggedUser());
+        	tournament = ts.create(name, Sport.SOCCER, club, mt,
+        			tsz, frd, sa, ea, ied, loggedUser());
 //    	} catch(DateInPastException e) {
 //    		return tournamentCreationError("event_in_past", clubId, form);
 //    	} catch(MaximumDateExceededException e) {
@@ -246,7 +248,9 @@ public class AdminTournamentController extends BaseController {
     	
     	LOGGER.debug("Tournament {} created", tournament);
     	
-    	return null;
+    	final URI uri = uriInfo.getAbsolutePathBuilder()
+	    		.path(String.valueOf(tournament.getTournamentid())).build();
+    	return Response.created(uri).entity(TournamentDto.ofTournament(tournament)).build();
     }
     
     @DELETE

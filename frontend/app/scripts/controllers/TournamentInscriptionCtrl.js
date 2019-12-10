@@ -2,8 +2,7 @@
 define(['frontend'], function(frontend) {
 
 	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', 'restService', 'tournament', 'teamInscriptions', function ($scope, $location, restService, tournament, teamInscriptions) {
-		//roundsAmount
-
+		
 		$scope.tournament = tournament;
 		$scope.hasJoined = teamInscriptions.hasJoined;
 		setTournamentTeamPairs(teamInscriptions.teams);
