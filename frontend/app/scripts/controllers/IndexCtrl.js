@@ -10,7 +10,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			{name: 'History', link: "#/history"},
 			{name: 'Clubs', link: "#/clubs"},
 			{name: 'Pitches', link: "#/pitches"},
-			{name: 'Tournaments', link: "#/home"}
+			{name: 'Tournaments', link: "#/tournaments"}
 		]
 
 		$scope.isLoggedIn = authService.isLoggedIn();
