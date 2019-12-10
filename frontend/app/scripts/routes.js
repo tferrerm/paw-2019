@@ -94,6 +94,28 @@ define([], function() {
                     }]
                 }
             },
+            '/tournaments/:tournamentid/events/:eventid' : {
+                templateUrl: '/views/tournamentEvent.html',
+                controller: 'TournamentEventCtrl',
+                resolve: {
+                    tournament: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournament(params.tournamentid);
+                    }],
+                    event: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournamentEvent(params.tournamentid, params.eventid);
+                    }],
+                    firstTeamMembers: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournamentEventFirstTeam(params.tournamentid, params.eventid);
+                    }],
+                    secondTeamMembers: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournamentEventSecondTeam(params.tournamentid, params.eventid);
+                    }]
+                }
+            },
             '/tournaments/:id/inscription' : {
                 templateUrl: '/views/tournamentInscription.html',
                 controller: 'TournamentInscriptionCtrl',

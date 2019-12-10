@@ -10,8 +10,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 		$scope.now = Date.parse(new Date());
 		var params = {roundPageNum: round.round};
 
-		$scope.goToTournamentEvent = function (id) {
-			//$location.url('tournament/' + id);
+		$scope.goToTournamentEvent = function (tournamentid, eventid) {
+			$location.url('tournaments/' + tournamentid + '/events/' + eventid);
 		};
 
 		$scope.goToTournamentTeam = function (id) {

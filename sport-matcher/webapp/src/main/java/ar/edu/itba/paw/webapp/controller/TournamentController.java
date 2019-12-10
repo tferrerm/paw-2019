@@ -39,6 +39,7 @@ import ar.edu.itba.paw.webapp.dto.TournamentTeamCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsDto;
+import ar.edu.itba.paw.webapp.dto.UserCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
@@ -190,11 +191,16 @@ public class TournamentController extends BaseController {
     
     private Response retrieveTeamMembers(long tournamentid, long eventid, int teamNumber)
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
+    	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	
         TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
-        List<User> user = teamNumber == 1 ?
-        ts.findTeamMembers(tournamentEvent.getFirstTeam()) : ts.findTeamMembers(tournamentEvent.getSecondTeam());
-        return null;
+        List<User> teamMembers = teamNumber == 1 ? 
+        		ts.findTeamMembers(tournamentEvent.getFirstTeam()) : 
+        			ts.findTeamMembers(tournamentEvent.getSecondTeam());
+        
+        return Response.ok(UserCollectionDto.ofUsers(teamMembers.stream()
+        		.map(UserDto::ofUser).collect(Collectors.toList()))).build();
     }
     
     @GET

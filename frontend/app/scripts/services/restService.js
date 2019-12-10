@@ -118,6 +118,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getTournament: function(id) {
 		        return httpGet('/tournaments/' + id, {});
 		    },
+		    getTournamentEvent: function(tournamentid, eventid) {
+		        return httpGet('/tournaments/' + tournamentid + '/events/' + eventid, {});
+		    },
+		    getTournamentEventFirstTeam: function(tournamentid, eventid) {
+		        return httpGet('/tournaments/' + tournamentid + '/events/' + eventid + '/first-team-members', {});
+		    },
+		    getTournamentEventSecondTeam: function(tournamentid, eventid) {
+		        return httpGet('/tournaments/' + tournamentid + '/events/' + eventid + '/second-team-members', {});
+		    },
 		    getTournamentRound: function(id, params) {
 		        return httpGet('/tournaments/' + id + '/round', {roundPageNum: params.roundPageNum});
 		    },

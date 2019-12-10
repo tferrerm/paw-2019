@@ -1,0 +1,73 @@
+<div class="main-container">
+	<div class="content-container">
+		<div class="back-link background-dodgerblue">
+			<a class="color-white" ng-click="goToTournament(tournament.tournamentid)"> <<< {{'go_to_tournament' | translate}}</a>
+		</div>
+		<div class="profile-title">
+          <h2>{{event.name}}</h2>
+        </div>
+        <span class="help-message notice w-70 justify-center">{{'event_completed_description' | translate}}</span>
+		<div class="detail-box">
+			<div class="event-detail background-dodgerblue">
+				<div class="color-white event-info-label">{{'event_detail' | translate}}</div>
+			</div>
+			<div>
+				<div class="detail-box-data">{{'tournament' | translate}}: {{tournament.name}}</div>
+				<div class="detail-box-data">{{'club' | translate}}: {{tournament.tournamentClub.name}}</div>
+				<div class="detail-box-data">{{'pitch' | translate}}: {{event.pitch.name}}</div>
+				<div class="detail-box-data">
+					<span>{{'start' | translate}}: {{event.startsAt | date:'EEEE d, MMM yyyy H:mm' : 'GMT-3'}}</span>
+				</div>
+				<div class="detail-box-data">
+					<span>{{'end' | translate}}: {{event.endsAt | date:'EEEE d, MMM yyyy H:mm' : 'GMT-3'}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="tbl">
+			<div class="table-header">
+				<div class="flex-grow justify-center my-events-tbl-sub">
+					<span>{{event.firstTeam.teamName | translate}}</span>
+				</div>
+				<div class="flex-grow justify-center my-events-tbl-sub">
+					<span>{{event.secondTeam.teamName | translate}}</span>
+				</div>
+			</div>
+			<div class="flex-grow w-100">
+				<div class=" flex-grow flex-column right-border w-50">
+					<div class="score">
+							<div ng-if="event.firstTeamScore != null">
+								{{event.firstTeamScore}}
+							</div>
+							<div ng-if="event.firstTeamScore == null">
+								-
+							</div>
+					</div>
+					<div class="team-description">
+						<div class="flex flex-column align-center w-100">
+							<div ng-repeat="user in firstTeamMembers">
+								<a class="link-text" ng-click="goToProfile(user.userid)">{{user.firstname}} {{user.lastname}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="flex-grow flex-column w-50">
+					<div class="score">
+						<div ng-if="event.secondTeamScore != null">
+								{{event.secondTeamScore}}
+							</div>
+							<div ng-if="event.secondTeamScore == null">
+								-
+							</div>
+					</div>
+					<div class="team-description">
+						<div class="flex flex-column align-center w-100">
+							<div ng-repeat="user in secondTeamMembers">
+								<a class="link-text" ng-click="goToProfile(user.userid)">{{user.firstname}} {{user.lastname}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

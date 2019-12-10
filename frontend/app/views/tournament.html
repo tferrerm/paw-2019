@@ -65,7 +65,7 @@
                         </form>
 					</div>
 					<span class="event-info-label">{{event.secondTeam.teamName | translate}}</span>
-					<a class="ml-30" ng-click="goToTournamentEvent(event.eventid)">
+					<a class="ml-30" ng-click="goToTournamentEvent(tournament.tournamentid, event.eventid)">
 						<button type="button" class="btn btn-primary view-event">
 							{{'view_event' | translate}}
 						</button>
