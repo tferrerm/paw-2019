@@ -1,11 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
@@ -34,9 +30,13 @@ import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.TournamentEvent;
 import ar.edu.itba.paw.model.TournamentTeam;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.dto.FullTournamentDto;
+import ar.edu.itba.paw.webapp.dto.InscriptionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.TournamentDto;
 import ar.edu.itba.paw.webapp.dto.TournamentEventDto;
+import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsCollectionDto;
+import ar.edu.itba.paw.webapp.dto.TournamentTeamInscriptionsDto;
 import ar.edu.itba.paw.webapp.exception.TournamentEventNotFoundException;
 import ar.edu.itba.paw.webapp.exception.TournamentNotFoundException;
 
@@ -55,55 +55,59 @@ public class TournamentController extends BaseController {
 	
 	@GET
     @Path("/{id}")
-    public Response retrieveTournament(@PathParam("id") long tournamentid,
-    		@QueryParam("round") final Integer roundPage) 
+    public Response retrieveTournament(@PathParam("id") long tournamentid//,
+    		/*@QueryParam("round") final Integer roundPage*/)
     		throws TournamentNotFoundException {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
-    	if(tournament.getInscriptionSuccess()) {
-			if(roundPage == null) {
-				return Response.status(Status.NOT_FOUND).build();
-			}
-//			mav.addObject("club", tournament.getTournamentClub());
-//			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
-			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
-//			mav.addObject("roundEvents", roundEvents);
-			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
-			for(TournamentEvent event : roundEvents) {
-				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
-			}
-//			mav.addObject("eventsHaveResult", eventsHaveResult);
-//			mav.addObject("currRoundPage", roundPage);
-//			mav.addObject("maxRoundPage", tournament.getRounds());
-			int currentRound = ts.getCurrentRound(tournament);
-//			mav.addObject("currentRound", currentRound);
-//			mav.addObject("hasFinished", ts.hasFinished(tournament.getRounds(), currentRound, roundEvents));
-			
-			return null;//mav;
-			
-		} else {
-			//ModelAndView mav = new ModelAndView("tournamentInscription");
-			//mav.addObject("tournament",  tournament);
-			//mav.addObject("club", tournament.getTournamentClub());
-			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
-			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
-				@Override
-				public int compare(TournamentTeam team1, TournamentTeam team2) {
-					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
-				}
-			};
-			Collections.sort(teams, cmp);
-		   // mav.addObject("teams", teams);
-		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
-//		    mav.addObject("teamsUsers", teamsUsers);
-//		    mav.addObject("roundsAmount", tournament.getRounds());
-//		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
-//		    mav.addObject("userBusyError", userBusyError);
-//		    mav.addObject("userJoined", loggedUser() != null ? ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false);
-		    
-		    return null;//mav;
-		}
+    	Instant startsAt = null;//ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt();
+    	
+    	return Response.ok(FullTournamentDto.ofTournament(tournament, startsAt)).build();
+    	
+//    	if(tournament.getInscriptionSuccess()) {
+//			if(roundPage == null) {
+//				return Response.status(Status.NOT_FOUND).build();
+//			}
+////			mav.addObject("club", tournament.getTournamentClub());
+////			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
+//			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
+////			mav.addObject("roundEvents", roundEvents);
+//			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
+//			for(TournamentEvent event : roundEvents) {
+//				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
+//			}
+////			mav.addObject("eventsHaveResult", eventsHaveResult);
+////			mav.addObject("currRoundPage", roundPage);
+////			mav.addObject("maxRoundPage", tournament.getRounds());
+//			int currentRound = ts.getCurrentRound(tournament);
+////			mav.addObject("currentRound", currentRound);
+////			mav.addObject("hasFinished", ts.hasFinished(tournament.getRounds(), currentRound, roundEvents));
+//			
+//			return null;//mav;
+//			
+//		} else {
+//			//ModelAndView mav = new ModelAndView("tournamentInscription");
+//			//mav.addObject("tournament",  tournament);
+//			//mav.addObject("club", tournament.getTournamentClub());
+//			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
+//			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
+//				@Override
+//				public int compare(TournamentTeam team1, TournamentTeam team2) {
+//					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
+//				}
+//			};
+//			Collections.sort(teams, cmp);
+//		   // mav.addObject("teams", teams);
+//		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
+////		    mav.addObject("teamsUsers", teamsUsers);
+////		    mav.addObject("roundsAmount", tournament.getRounds());
+////		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
+////		    mav.addObject("userBusyError", userBusyError);
+////		    mav.addObject("userJoined", loggedUser() != null ? ts.findUserTeam(tournamentid, loggedUser().getUserid()).isPresent() : false);
+//		    
+//		    return null;//mav;
+//		}
     }
 
     @GET
@@ -131,6 +135,25 @@ public class TournamentController extends BaseController {
         				tournaments.stream().map(t -> TournamentDto.ofTournament(t)).collect(Collectors.toList()),
         				totalTournamentQty, lastPageNum, pageInitialIndex))
         		.build();
+    }
+    
+    @GET
+    @Path("/{id}/inscription")
+    public Response retrieveTournamentInscription(@PathParam("id") long tournamentid)
+    		throws TournamentNotFoundException {
+
+    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	List<TournamentTeam> teams = tournament.getTeams().stream().map(t ->
+    			ts.findByTeamId(t.getTeamid()).get()).collect(Collectors.toList());
+    	
+    	return Response.ok(TournamentTeamInscriptionsCollectionDto.ofTeams(
+    			teams.stream().map(t ->
+					TournamentTeamInscriptionsDto.ofTeam(
+						t,
+						t.getInscriptions().stream().map(InscriptionDto::ofInscription).collect(Collectors.toList())
+					)
+    	    	).collect(Collectors.toList())
+    		)).build();
     }
 
     @POST

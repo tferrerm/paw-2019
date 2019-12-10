@@ -46,6 +46,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Tournament> cq = cb.createQuery(Tournament.class);
 		Root<Tournament> from = cq.from(Tournament.class);
+		from.fetch("tournamentClub");
 		from.fetch("teams", JoinType.LEFT);
 		from.fetch("tournamentEvents", JoinType.LEFT);
 		

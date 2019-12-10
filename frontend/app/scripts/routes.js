@@ -75,6 +75,30 @@ define([], function() {
             '/tournaments' : {
               templateUrl: '/views/tournaments.html',
               controller: 'TournamentsCtrl'
+            },
+            '/tournaments/:id' : {
+                templateUrl: '/views/tournament.html',
+                controller: 'TournamentCtrl',
+                resolve: {
+                    tournament: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournament(params.id); // REDIRECCIONAR A INSCRIPTION ACA?
+                    }]
+                }
+            },
+            '/tournaments/:id/inscription' : {
+                templateUrl: '/views/tournamentInscription.html',
+                controller: 'TournamentInscriptionCtrl',
+                resolve: {
+                    tournament: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournament(params.id);
+                    }],
+                    teamInscriptions: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getTournamentTeamsInscriptions(params.id);
+                    }]
+                }
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

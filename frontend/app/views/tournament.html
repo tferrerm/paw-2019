@@ -1,0 +1,86 @@
+<div class="main-container">
+	<div class="content-container">
+		<div class="profile-title">
+			<h2>{{tournament.name}}</h2>
+		</div>
+		<span class="help-message notice w-70 justify-center">{{'tournament_description' | translate}}</span>
+		<div ng-if="currentRound != null">
+			<div style="width: 60%;margin: 20px 0">
+				<div class="progress">
+					<!--<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${hasFinished ?100 : ((currentRound-1) * 100 / maxRoundPage)}%; background-color: ${hasFinished ? "green" : "dodgerblue"};"></div>-->
+				</div>
+			</div>
+		</div>
+		<div class="tbl">
+			<div class="background-dodgerblue table-header">
+				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'teams' | translate}}</span>
+				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'score' | translate}}</span>
+			</div>
+			<!--<c:forEach var="teamEntry" items="${teamsScoresMap}">
+					<div class="custom-row">
+							<div class="justify-center flex-1"><spring:message code="${teamEntry.key.teamName}"/></div>
+							<div class="justify-center flex-1"><c:out value="${teamEntry.value}"/></div>
+					</div>
+			</c:forEach>-->
+		</div>
+		<div class="tbl profile-cont">
+			<span class="event-info-label notice">{{'round' | translate}} {{currRoundPage}}</span>
+			<span>
+				{{'date' | translate}}:
+				<!--<fmt:timeZone value="AR">
+						<fmt:parseDate value="${roundEvents[0].startsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+						<fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+				</fmt:timeZone>
+				<fmt:timeZone value="AR">
+						<fmt:parseDate value="${roundEvents[0].endsAt}" var="parsedDateTime" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss'Z'" />
+						<fmt:formatDate pattern="HH:mm" value="${ parsedDateTime }" timeZone="GMT-3" />
+				</fmt:timeZone>-->
+			</span>
+			<!--<c:forEach var="event" items="${roundEvents}">
+					<cr:set var="eventid" scope="page" value="${event.eventId}"/>
+					<div class="flex pitch-item w-100 justify-center">
+										<span class="event-info-label"><spring:message code="${event.firstTeam.teamName}"/></span>
+										<c:choose>
+												<c:when test="${eventsHaveResult[eventid]}">
+														<div class="score score-tournament">
+																<span><c:out value="${event.firstTeamScore}"/></span>
+																<span><c:out value="${event.secondTeamScore}"/></span>
+														</div>
+												</c:when>
+												<c:otherwise>
+														<div class="score score-tournament">
+																<span>-</span>
+																<span>-</span>
+														</div>
+												</c:otherwise>
+										</c:choose>
+										<span class="event-info-label"><spring:message code="${event.secondTeam.teamName}"/></span>
+							<a class="ml-30" href="<c:url value="/tournament/${tournament.tournamentid}/event/${eventid}"/>"> <button type="button" class="btn btn-primary view-event"><spring:message code="view_event"/></button></a>
+					</div>
+			</c:forEach>-->
+			<div class="table-navigator w-100 justify-center">
+				<div ng-hide="round == 1">
+					<a ng-click="getFirstPage()">
+						<button type="button" class="btn btn-secondary">
+							{{'first' | translate}}
+						</button>
+					</a>
+					<a ng-click="getPreviousPage()">
+						<button type="button" class="btn btn-secondary">
+							{{'back' | translate}}
+						</button>
+					</a>
+				</div>
+				<span class="flex create-event">{{'showing_pages' | translate}} {{currRoundPage}} {{'of' | translate}} {{maxRoundPage}}</span>
+				<div ng-hide="round == lastPageNum">
+					<a ng-click="getNextPage()">
+						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+					</a>
+					<a ng-click="getLastPage()">
+						<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,7 +1,20 @@
 'use strict';
 define(['frontend'], function(frontend) {
 
-	frontend.controller('TournamentsCtrl', ['$scope', '$location', 'restService', function ($scope, $location, restService) {
+	frontend.controller('TournamentCtrl', ['$scope', '$location', 'restService', 'tournament', function ($scope, $location, restService, tournament) {
+		
+		$scope.tournament = tournament;
+		if(tournament.inscriptionSuccess) {
+
+		} else {
+			$location.url('tournaments/' + tournament.tournamentid + '/inscription');
+		}
+		/*currentRound
+		teamsScoresMap
+		currRoundPage
+		roundEvents
+		maxRoundPage
+		params: round
 		var params = {pageNum: 1};
 
 		$scope.now = new Date();
@@ -9,7 +22,7 @@ define(['frontend'], function(frontend) {
 		updateTournaments(params);
 
 		$scope.goToTournament = function (id) {
-			$location.url('tournaments/' + id);
+			$location.url('tournament/' + id);
 		};
 
 		$scope.getFirstPage = function () {
@@ -40,6 +53,6 @@ define(['frontend'], function(frontend) {
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
 			});
-		}
+		}*/
 	}]);
 })

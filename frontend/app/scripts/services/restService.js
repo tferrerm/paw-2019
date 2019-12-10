@@ -103,6 +103,12 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getSports: function() {
 				return httpGet('/pitches/sports', {});
 			},
+			getTournament: function(id) {
+		        return httpGet('/tournaments/' + id, {});
+		    },
+		    getTournamentTeamsInscriptions: function(id) {
+		    	return httpGet('/tournaments/' + id + '/inscription', {});
+		    },
 			getTournaments: function(params) {
 		        return httpGet('/tournaments', {pageNum: params.pageNum});
 		    },

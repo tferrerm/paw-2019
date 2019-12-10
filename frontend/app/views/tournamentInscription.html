@@ -1,0 +1,93 @@
+<div class="main-container">
+	<div class="content-container">
+		<div class="profile-title">
+			<h2>{{tournament.name}}</h2>
+		</div>
+		<span class="help-message notice w-70 justify-center">{{'tournament_inscription' | translate}}</span>
+		<span class="help-message notice w-70 justify-center">
+			{{'tournament_description_one' | translate}}
+			{{roundsAmount}}
+			{{'tournament_description_two' | translate}}
+			{{tournament.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}
+		</span>
+		<div class="w-50 mv-10">
+			<div class="comment-profile-row">
+				<span class="event-info-label">{{'club' | translate}}</span>
+				<a class="link-text" ng-click="goToClub(tournament.tournamentClub.clubid)">
+					<span>{{tournament.tournamentClub.name}}</span>
+				</a>
+			</div>
+			<div>
+				<span class="event-info-label">{{'end_date' | translate}}<span>
+				<span>
+					{{tournament.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm'}}
+				</span>
+			</div>
+		</div>
+		<div class="detail-container minw-300">
+			<div class="w-100 flex flex-grow justify-center">
+				<h3>{{'teams' | translate}}</h3>
+			</div>
+			<div class="flex-column w-100">
+				<div ng-repeat="teamPair in tournamentTeams">
+					<div class="flex">
+						<div class="team-description minw-100 w-100">
+							<span class="event-info-label">{{teamPair[0].teamName | translate}}</span>
+							<div class="flex w-100">
+								<div class="flex flex-column align-center w-100">
+									<div ng-repeat="inscription in teamPair[0].inscriptions">
+										<a class="link-text" ng-click="goToProfile(inscription.inscriptedUser.userid)">
+											{{inscription.inscriptedUser.firstname}} {{inscription.inscriptedUser.lastname}}
+										</a>
+									</div>
+									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[0].inscriptions.length) track by $index">
+										<span>-</span>
+									</div>
+								</div>
+							</div>
+							<div class="flex flex-grow justify-center">
+								<div ng-if="!userJoined && (tournament.teamSize > teamPair[0].inscriptions.length)">
+									<a ng-click="joinTeam(teamPair[0].teamid)">
+										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="team-description minw-100 w-100">
+							<span class="event-info-label">{{teamPair[1].teamName | translate}}</span>
+							<div class="flex w-100">
+								<div class="flex flex-column align-center w-100">
+									<div ng-repeat="inscription in teamPair[1].inscriptions">
+										<a class="link-text" ng-click="goToProfile(inscription.inscriptedUser.userid)">
+											{{inscription.inscriptedUser.firstname}} {{inscription.inscriptedUser.lastname}}
+										</a>
+									</div>
+									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[1].inscriptions.length) track by $index">
+										<span>-</span>
+									</div>
+								</div>
+							</div>
+							<div class="flex flex-grow justify-center">
+								<div ng-if="!userJoined && (tournament.teamSize > teamPair[1].inscriptions.length)">
+									<a ng-click="joinTeam(teamPair[1].teamid)">
+										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<c:if test="${userBusyError == true}">
+			<span class="form-error notice">
+				<spring:message code="user_busy_error"/>
+			</span>
+		</c:if>
+		<c:if test="${userJoined}">
+			<form class="progress-bar-completion" method="POST" action="<c:url value="/tournament/${tournament.tournamentid}/leave"/>">
+				<button type="submit" class="btn btn-danger join-button"><spring:message code="leave"/></button>
+			</form>
+		</c:if>-->
+	</div>
+</div>
