@@ -17,10 +17,8 @@
 				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'score' | translate}}</span>
 			</div>
 			<div ng-repeat="team in teams | orderBy: '-teamScore' " class="custom-row">
-				<a ng-click="goToTournamentTeam(team.teamid)" class="custom-row">
-					<div class="justify-center flex-1">{{team.teamName | translate}}</div>
-					<div class="justify-center flex-1">{{team.teamScore}}</div>
-				</a>
+				<div class="justify-center flex-1">{{team.teamName | translate}}</div>
+				<div class="justify-center flex-1">{{team.teamScore}}</div>
 			</div>
 		</div>
 		<div class="tbl profile-cont">

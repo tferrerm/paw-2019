@@ -14,10 +14,6 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$location.url('tournaments/' + tournamentid + '/events/' + eventid);
 		};
 
-		$scope.goToTournamentTeam = function (id) {
-			//$location.url('tournament/' + id);
-		};
-
 		$scope.getFirstPage = function () {
 			params.roundPageNum = 1;
 			updateRound(params);

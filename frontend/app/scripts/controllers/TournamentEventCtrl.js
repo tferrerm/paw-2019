@@ -8,8 +8,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 		$scope.firstTeamMembers = firstTeamMembers.users;
 		$scope.secondTeamMembers = secondTeamMembers.users;
 
-		$scope.goToTournament = function() { // VOLVER A LA MISMA RONDA
-
+		$scope.goToTournament = function() {
+			$location.url('tournaments/' + tournament.tournamentid);
 		}
 
 	}]);
