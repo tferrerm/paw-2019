@@ -22,7 +22,7 @@
 					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') <= (now | date: 'dd/MM/yyyy HH:mm:ss') && !tournament.inscriptionSuccess">
 						{{'pending_approval' | translate}}
 					</div>
-					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') <= (now | date: 'dd/MM/yyyy HH:mm:ss') && tournament.inscriptionSuccess">
+					<div ng-if="tournament.inscriptionSuccess">
 						{{'started' | translate}}
 					</div>
 				</div>
