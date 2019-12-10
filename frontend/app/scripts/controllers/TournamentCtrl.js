@@ -1,5 +1,5 @@
 'use strict';
-define(['frontend'], function(frontend) {
+define(['frontend', 'services/restService'], function(frontend) {
 
 	frontend.controller('TournamentCtrl', ['$scope', '$location', 'restService', 'tournament', function ($scope, $location, restService, tournament) {
 		

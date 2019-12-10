@@ -151,5 +151,13 @@ define(['frontend', 'services/restService'], function(frontend) {
 				});
 		};
 
+		$scope.newTournament = function(id) {
+			$location.url('admin/clubs/' + id + '/tournaments/new');
+		}
+
+		$scope.deleteClub = function(id) {
+			// DELETE CLUB
+		};
+
 	}]);
 });

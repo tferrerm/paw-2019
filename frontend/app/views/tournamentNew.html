@@ -1,0 +1,114 @@
+<div class="main-container">
+	<div class="content-container">
+		<h2>{{'create_tournament' | translate}}</h2>
+		<span class="help-message notice w-70 justify-center home-header">{{'new_tournament_description' | translate}}</span>
+		<div class="form-container-tournament">
+			<!--<table class="schedule-table flex">
+                <tr>
+                    <th class="schedule-table-cell-size schedule-table-hours"></th>
+                    <c:forEach var="dayMessage" items="${scheduleHeaders}">
+                        <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
+                    </c:forEach>
+                </tr>
+                <c:set var="hours" value="${minHour}"/>
+                <c:forEach var="row" items="${schedule}">
+                    <tr>
+                        <td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>
+                        <c:forEach var="column" items="${row}">
+                        	<c:choose>
+                                <c:when test="${(pitchQty - column) == 0}">
+                                    <td class="schedule-table background-red schedule-table-cell-size"><c:out value="${pitchQty - column}" /></td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td class="schedule-table background-yellow schedule-table-cell-size"><c:out value="${pitchQty - column}" /></td>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </tr>
+                    <c:set var="hours" value="${hours + 1}"/>
+                </c:forEach>
+            </table>-->
+			
+			<div class="left-space">
+                <form ng-submit = createTournamentSubmit() name="createTournamentForm" method="post" novalidate>
+                    <div class="form-field">
+                        <input class="form-control" type="text" placeholder="{{'name' | translate}}" ng-maxlength="100" name="name" ng-model="tournament.name" required/>
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="number" placeholder="{{'team_number' | translate}}" ng-min="4" ng-max="10" name="maxTeams" ng-model="tournament.maxTeams" required/>
+                        <!--<c:if test="${invalid_team_amount}">
+                            <span class="form-error">
+                                <spring:message code="invalid_team_amount"/>
+                            </span>
+                        </c:if>
+                        <c:if test="${uneven_team_amount}">
+                            <span class="form-error">
+                                <spring:message code="uneven_team_amount"/>
+                            </span>
+                        </c:if>-->
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="number" placeholder="{{'team_size' | translate}}" ng-min="3" ng-max="11" name="teamSize" ng-model="tournament.teamSize" required/>
+                        <!--<c:if test="${invalid_team_size}">
+                            <span class="form-error">
+                                <spring:message code="invalid_team_size"/>
+                            </span>
+                        </c:if>-->
+                    </div>
+                    <div class="form-field flex-space-between">
+                        <div class="form-field-horizontal">
+                            <span>{{'start_date' | translate}}</span>
+                            <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="tournament.selectedDate" required/>
+                            <!--<c:if test="${event_in_past}">
+                                <span class="form-error">
+                                    <spring:message code="event_in_past"/>
+                                </span>
+                            </c:if>
+                            <c:if test="${date_exceeded}">
+                                <span class="form-error">
+                                    <spring:message code="date_exceeded"/>
+                                </span>
+                            </c:if>
+                            <c:if test="${insufficient_pitches}">
+                                <span class="form-error">
+                                    <spring:message code="insufficient_pitches"/>
+                                </span>
+                            </c:if>-->
+                        </div>
+                        <div>
+                            <span>{{'event_startsAt' | translate}}</span>
+                            <select class="form-control" name="startsAtHour" ng-model="tournament.startsAtHour" ng-options="hour for hour in startsAtHours" required></select>
+                            <!--<c:if test="${ends_before_starts}">
+                                <span class="form-error">
+                                    <spring:message code="ends_before_starts"/>
+                                </span>
+                            </c:if>-->
+                        </div>
+                        <div>
+                            <span>{{'event_endsAt' | translate}}</span>
+                            <select class="form-control" name="endsAtHour" ng-model="tournament.endsAtHour" ng-options="hour for hour in endsAtHours" required>
+                            </select>
+                        </div>
+    				</div>
+                    <div class="my-events-tbl-sub">
+                        <span>{{'end_date' | translate}}</span>
+                        <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="tournament.selectedInscriptionDate" required/>
+                        <!--<c:if test="${inscription_date_in_past}">
+                            <span class="form-error">
+                                <spring:message code="inscription_date_in_past"/>
+                            </span>
+                        </c:if>
+                        <c:if test="${inscription_date_exceeded}">
+                            <span class="form-error">
+                                <spring:message code="inscription_date_exceeded"/>
+                            </span>
+                        </c:if>-->
+                    </div>
+                    <div class="justify-center">
+                        <button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+                    </div>
+    			</form>
+			</div>
+		</div>
+	</div>
+</div>

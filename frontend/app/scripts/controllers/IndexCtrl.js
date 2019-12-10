@@ -15,6 +15,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 
 		$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.loggedUser = authService.getLoggedUser();
+		$scope.isAdmin = authService.isAdmin();
 
 		$scope.showRegisterModal = modalService.registerModal;
 		$scope.showLoginModal = modalService.loginModal;
@@ -26,6 +27,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = authService.isLoggedIn();
 			$scope.loggedUser = authService.getLoggedUser();
+			$scope.isAdmin = authService.isAdmin();
 		});
 
 		$scope.goToProfile = function(id) {

@@ -55,6 +55,18 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
 				return httpPost('/pitches/' + pitchid + '/events', formData, {});
 			},
+			createTournament: function(clubid, data) {
+				var tournamentData = {name: data.name, maxTeams: data.maxTeams, teamSize: data.teamSize, firstRoundDate: data.firstRoundDate, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
+				var formData = new FormData();
+				formData.append('name', tournamentData.name);
+				formData.append('maxTeams', tournamentData.maxTeams);
+				formData.append('teamSize', tournamentData.teamSize);
+				formData.append('firstRoundDate', tournamentData.firstRoundDate);
+				formData.append('startsAtHour', tournamentData.startsAtHour);
+				formData.append('endsAtHour', tournamentData.endsAtHour);
+				formData.append('inscriptionEndDate', tournamentData.inscriptionEndDate);
+				return httpPost('/admin/clubs/' + clubid + '/tournaments', formData, {});
+			},
 			deleteEvent: function(id) {
 
 			},

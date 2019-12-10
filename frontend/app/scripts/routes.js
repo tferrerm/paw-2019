@@ -13,20 +13,20 @@ define([], function() {
                 controller: 'AllEventsCtrl'
             },
             '/my-events' : {
-              templateUrl: '/views/myEvents.html',
-              controller: 'MyEventsCtrl'
+                templateUrl: '/views/myEvents.html',
+                controller: 'MyEventsCtrl'
             },
             '/history' : {
-              templateUrl: '/views/history.html',
-              controller: 'HistoryCtrl'
+                templateUrl: '/views/history.html',
+                controller: 'HistoryCtrl'
             },
             '/clubs' : {
-              templateUrl: '/views/clubs.html',
-              controller: 'ClubsCtrl'
+                templateUrl: '/views/clubs.html',
+                controller: 'ClubsCtrl'
             },
             '/pitches' : {
-              templateUrl: '/views/pitches.html',
-              controller: 'PitchesCtrl'
+                templateUrl: '/views/pitches.html',
+                controller: 'PitchesCtrl'
             },
             '/pitches/:pitchid/events/:eventid' : {
                 templateUrl: '/views/event.html',
@@ -97,6 +97,16 @@ define([], function() {
                     teamInscriptions: ['$route', 'restService', function($route, restService) {
                         var params = $route.current.params;
                         return restService.getTournamentTeamsInscriptions(params.id);
+                    }]
+                }
+            },
+            '/admin/clubs/:id/tournaments/new' : {
+                templateUrl: '/views/tournamentNew.html',
+                controller: 'TournamentNewCtrl',
+                resolve: {
+                    club: ['$route', 'restService', function($route, restService) {
+                        var params = $route.current.params;
+                        return restService.getClub(params.id);
                     }]
                 }
             }

@@ -105,5 +105,17 @@
 				</div>
 			</div>
 		</div>
+		<div ng-if="isAdmin" class="club-buttons">
+			<a ng-click="newTournament(club.clubid)">
+				<button type="button" class="btn btn-primary join-button">
+					{{'create_tournament' | translate}}
+				</button>
+			</a>
+			<a ng-click="deleteClub(club.clubid)">
+				<button type="button" class="btn btn-danger join-button">
+					{{'delete_club' | translate}}
+				</button>
+			</a>
+		</div>
 	</div>
 </div>
