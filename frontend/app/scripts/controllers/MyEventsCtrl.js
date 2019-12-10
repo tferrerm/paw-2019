@@ -80,7 +80,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		};
 
 		function updatePastEvents(params) {
-			restService.getMyPastEvents(userid, params).then(function(data) {
+			restService.getMyPastEvents($scope.loggedUser.userid, params).then(function(data) {
 				$scope.pastEvents = data.events;
 				$scope.pastEventCount = data.eventCount;
 				$scope.pastEventsLastPageNum = data.lastPageNum;
@@ -110,7 +110,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		};
 
 		function updatePastEvents(params) {
-			restService.getMyFutureEvents(userid, params).then(function(data) {
+			restService.getMyFutureEvents($scope.loggedUser.userid, params).then(function(data) {
 				$scope.futureEvents = data.events;
 				$scope.futureEventCount = data.eventCount;
 				$scope.futureEventsLastPageNum = data.lastPageNum;

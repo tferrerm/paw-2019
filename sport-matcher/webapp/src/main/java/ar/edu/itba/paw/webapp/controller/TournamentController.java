@@ -61,7 +61,7 @@ public class TournamentController extends BaseController {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
-    	Instant startsAt = null;//ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt();
+    	Instant startsAt = ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt();
     	
     	return Response.ok(FullTournamentDto.ofTournament(tournament, tournament.getRounds(), startsAt)).build();
     	
