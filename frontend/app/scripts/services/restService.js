@@ -53,6 +53,14 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('comment', comment);
 				return httpPost('/users/' + id + '/comment', formData, {});
 			},
+			createClub: function(data) {
+				var clubData = {name: data.name, location: data.location};
+				var formData = new FormData();
+				formData.append('name', clubData.name);
+				formData.append('location', clubData.location);
+
+				return httpPost('/admin/clubs', formData, {});
+			},
 			createEvent: function(pitchid, data) {
 				var eventData = {name: data.name, description: data.description, maxParticipants: data.maxParticipants, date: data.date, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
 				var formData = new FormData();
@@ -64,6 +72,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('endsAtHour', eventData.endsAtHour);
 				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
 				return httpPost('/pitches/' + pitchid + '/events', formData, {});
+			},
+			createPitch: function(clubid, data) {
+				var pitchData = {name: data.name, sport: data.sport /* PICTURE */};
+				var formData = new FormData();
+				formData.append('name', pitchData.name);
+				formData.append('sport', pitchData.sport);
+				/* PICTURE */
+
+				return httpPost('/admin/clubs/' + clubid + '/pitches', formData, {});
 			},
 			createTournament: function(clubid, data) {
 				var tournamentData = {name: data.name, maxTeams: data.maxTeams, teamSize: data.teamSize, firstRoundDate: data.firstRoundDate, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};

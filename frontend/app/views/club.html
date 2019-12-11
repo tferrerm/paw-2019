@@ -28,6 +28,9 @@
 									<div>{{pitch.name}}</div>
 									<div>{{pitch.sport | translate}}</div>
 									<a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
+									<!--<form method="POST" class="no-margin" action="<c:url value="/admin/pitch/${pitch.pitchid}/delete"/>" >
+											<button type="submit" class="btn btn-primary btn-danger"><spring:message code="delete_pitch"/></button>
+										</form>-->
 								</div>
 							</div>
 						</ul>
@@ -51,6 +54,28 @@
 								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
 							</a>
 						</div>
+					</div>
+				</div>
+				<div ng-if="isAdmin" class="status no-margin">
+					<div class="pitch-form-container">
+						<h3>{{'create_pitch' | translate}}</h3>
+						<form ng-submit = createPitchSubmit() name="createPitchForm" method="post" novalidate>
+							<div class="form-field">
+								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="createdPitch.name" required/>
+							</div>
+							<div class="form-field">
+								<label>{{'sport' | translate}}</label>
+								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports"></select>
+							</div>
+							<!--<div class="choose-file">
+								<form:input type="file" accept="image/*" path="pitchPicture" style="display: none" id="pitchPictureButton"/>
+								<button type="button" class="btn btn-secondary"  onclick="document.getElementById('pitchPictureButton').click()"><spring:message code="choose_file"/></button>
+								<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
+							</div>-->
+							<div class="justify-center">
+								<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>

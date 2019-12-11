@@ -5,75 +5,57 @@ define(['frontend', 'services/restService'], function(frontend) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
+
+	    if($scope.isAdmin) {
+			$scope.createdPitch = {};
+			restService.getSports().then(function(data) {
+				$scope.sports = data.sports;
+			});
+		}
 	    
-	    restService.hasRelationshipWithClub($scope.club.clubid)
+	    restService.hasRelationshipWithClub(club.clubid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	});
 
-	    restService.getClubPitches(club.clubid, pitchParams)
-		    .then(function(data) {
-				$scope.pitches = data.pitches;
-				$scope.pitchCount = data.pitchCount;
-				$scope.lastPageNum = data.pageCount;
-				$scope.initialPageIndex = data.initialPageIndex;
-				$scope.pageNum = pitchParams.pageNum;
-			});
+	    updatePitches(club.clubid, pitchParams);
 
-		restService.getClubComments(club.clubid, commentParams)
-		    .then(function(data) {
-				$scope.comments = data.comments;
-				$scope.commentCount = data.commentCount;
-				$scope.commentsLastPageNum = data.pageCount;
-				$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-				$scope.commentsPageNum = commentParams.pageNum;
-			});
+		updateComments(club.clubid, commentParams);
 
 		$scope.$on('user:updated', function() {
-			$scope.hasRelationship = restService.hasRelationshipWithClub($scope.club.clubid);
+			restService.hasRelationshipWithClub(club.clubid)
+		    	.then(function(data) {
+		    		$scope.hasRelationship = data.relationship;
+		    	});
 		});
 
 		$scope.getFirstPage = function() {
 			pitchParams.pageNum = 1;
-			restService.getClubPitches(club.clubid, pitchParams).then(function(data) {
-				$scope.pitches = data.pitches;
-				$scope.pitchCount = data.pitchCount;
-				$scope.lastPageNum = data.pageCount;
-				$scope.initialPageIndex = data.initialPageIndex;
-				$scope.pageNum = pitchParams.pageNum;
-			});
+			updatePitches(club.clubid, pitchParams);
 		};
 
 		$scope.getPrevPage = function() {
 			pitchParams.pageNum--;
-			restService.getClubPitches(club.clubid, pitchParams).then(function(data) {
-				$scope.pitches = data.pitches;
-				$scope.pitchCount = data.pitchCount;
-				$scope.lastPageNum = data.pageCount;
-				$scope.initialPageIndex = data.initialPageIndex;
-				$scope.pageNum = pitchParams.pageNum;
-			});
+			updatePitches(club.clubid, pitchParams);
 		};
 
 		$scope.getNextPage = function() {
 			pitchParams.pageNum++;
-			restService.getClubPitches(club.clubid, pitchParams).then(function(data) {
-				$scope.pitches = data.pitches;
-				$scope.pitchCount = data.pitchCount;
-				$scope.lastPageNum = data.pageCount;
-				$scope.initialPageIndex = data.initialPageIndex;
-				$scope.pageNum = pitchParams.pageNum;
-			});
+			updatePitches(club.clubid, pitchParams);
 		};
 
 		$scope.getLastPage = function() {
 			pitchParams.pageNum = $scope.lastPageNum;
-			restService.getClubPitches(club.clubid, pitchParams).then(function(data) {
+			updatePitches(club.clubid, pitchParams);
+		};
+
+		function updatePitches(clubid, params) {
+			restService.getClubPitches(clubid, params).then(function(data) {
 				$scope.pitches = data.pitches;
 				$scope.pitchCount = data.pitchCount;
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
-				$scope.pageNum = pitchParams.pageNum;
+				$scope.pageNum = params.pageNum;
 			});
 		};
 
@@ -83,14 +65,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			//if ($scope.commentForm.$valid) {
 				restService.commentClub(club.clubid, $scope.commentText.comment).then(function(data) {
 					commentParams.pageNum = 1;
-					restService.getClubComments(club.clubid, commentParams)
-					    .then(function(data) {
-							$scope.comments = data.comments;
-							$scope.commentCount = data.commentCount;
-							$scope.commentsLastPageNum = data.pageCount;
-							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-							$scope.commentsPageNum = commentParams.pageNum;
-						});
+					updateComments(club.clubid, commentParams);
 				});
 			//}
 		};
@@ -105,55 +80,53 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.getCommentsFirstPage = function() {
 			commentParams.pageNum = 1;
-			restService.getClubComments(club.clubid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				});
+			updateComments(club.clubid, commentParams);
 		};
 
 		$scope.getCommentsPrevPage = function() {
 			commentParams.pageNum--;
-			restService.getClubComments(club.clubid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				});
+			updateComments(club.clubid, commentParams);
 		};
 
 		$scope.getCommentsNextPage = function() {
 			commentParams.pageNum++;
-			restService.getClubComments(club.clubid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				});
+			updateComments(club.clubid, commentParams);
 		};
 
 		$scope.getCommentsLastPage = function() {
 			commentParams.pageNum = $scope.commentsLastPageNum;
-			restService.getClubComments(club.clubid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				});
+			updateComments(club.clubid, commentParams);
+		};
+
+		function updateComments(clubid, params) {
+			restService.getClubComments(clubid, params).then(function(data) {
+				$scope.comments = data.comments;
+				$scope.commentCount = data.commentCount;
+				$scope.commentsLastPageNum = data.pageCount;
+				$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+				$scope.commentsPageNum = params.pageNum;
+			});
+		};
+
+		$scope.createPitchSubmit = function() {
+			//checkPasswordsMatch();
+			//if ($scope.createEventForm.$valid) {
+				//$scope.duplicateEmailError = false;
+				
+				if($scope.isAdmin) {
+					restService.createPitch(club.clubid, $scope.createdPitch)
+						.then(function(data) {
+							//var createdEvent = data.event;
+							$location.url('pitches/' + data.pitchid);
+						});
+
+				}
+			//}
 		};
 
 		$scope.newTournament = function(id) {
 			$location.url('admin/clubs/' + id + '/tournaments/new');
-		}
+		};
 
 		$scope.deleteClub = function(id) {
 			// DELETE CLUB

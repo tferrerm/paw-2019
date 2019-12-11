@@ -47,4 +47,20 @@
 			{{'no_results' | translate}}
 		</div>
 	</div>
+	<div ng-if="isAdmin">
+		<h2>{{'create_club' | translate}}</h2>
+		<div class="form-container">
+			<form ng-submit = createClubSubmit() name="createClubForm" method="post" novalidate>
+				<div class="form-field">
+                    <input class="form-control" type="text" placeholder="{{'name' | translate}}" ng-maxlength="100" name="name" ng-model="createdClub.name" required/>
+                </div>
+                <div class="form-field">
+                    <input class="form-control" type="text" placeholder="{{'event_location' | translate}}" ng-maxlength="100" name="location" ng-model="createdClub.location" required/>
+                </div>
+				<div class="justify-center">
+					<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
