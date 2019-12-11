@@ -24,6 +24,21 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				});
 		}
 
+		function httpDelete(path, params) {
+			var headers = {};
+			headers = addAuthHeader(headers);
+
+			params = Object.keys(params).length ? '?' + jQuery.param(params) : '';
+
+			return $http.delete(url + path + params, {headers: headers})
+				.then(function(response) {
+					return response.data;
+				})
+				/*.catch(function(response) {
+					return $q.reject(response);
+				});*/
+		}
+
 		function addAuthHeader(headers) {
 			var authToken = storageService.getAuthToken();
 			if(authToken) {
@@ -43,6 +58,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 		}
 
 		return {
+			cancelEvent: function(id) {
+				// HACER
+			},
 			commentClub: function(id, comment) {
 				var formData = new FormData();
 				formData.append('comment', comment);
@@ -94,8 +112,14 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('inscriptionEndDate', tournamentData.inscriptionEndDate);
 				return httpPost('/admin/clubs/' + clubid + '/tournaments', formData, {});
 			},
+			deleteClub: function(id) {
+				// HACER
+			},
 			deleteEvent: function(id) {
-
+				// HACER
+			},
+			deletePitch: function(id) {
+				// HACER
 			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
