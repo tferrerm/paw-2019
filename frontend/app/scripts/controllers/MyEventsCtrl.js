@@ -15,7 +15,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.pastEventsLastPageNum = data.lastPageNum;
 				$scope.pastEventsInitialPageIndex = data.initialPageIndex;
 				$scope.pastEventsPageNum = pastEventParams.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 
 			restService.getMyFutureEvents($scope.loggedUser.userid, futureEventParams).then(function(data) {
 				$scope.futureEvents = data.events;
@@ -23,7 +23,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.futureEventsLastPageNum = data.lastPageNum;
 				$scope.futureEventsInitialPageIndex = data.initialPageIndex;
 				$scope.futureEventsPageNum = futureEventParams.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 	    } else {
 	    	// REDIRECCIONAR
 	    	alert('LOGIN');
@@ -40,7 +40,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.pastEventsLastPageNum = data.lastPageNum;
 					$scope.pastEventsInitialPageIndex = data.initialPageIndex;
 					$scope.pastEventsPageNum = pastEventParams.pageNum;
-				}).catch((error) => alert(error.data || "Error"));
+				}).catch(function(error) {alert(error.data || " Error")});
 
 				restService.getMyFutureEvents($scope.loggedUser.userid, futureEventParams).then(function(data) {
 					$scope.futureEvents = data.events;
@@ -48,7 +48,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.futureEventsLastPageNum = data.lastPageNum;
 					$scope.futureEventsInitialPageIndex = data.initialPageIndex;
 					$scope.futureEventsPageNum = futureEventParams.pageNum;
-				}).catch((error) => alert(error.data || "Error"));
+				}).catch(function(error) {alert(error.data || " Error")});
 		    } else {
 	    		// REDIRECCIONAR
 	    		alert('LOGIN');
@@ -86,7 +86,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.pastEventsLastPageNum = data.lastPageNum;
 				$scope.pastEventsInitialPageIndex = data.initialPageIndex;
 				$scope.pastEventsPageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		}
 
 		$scope.getFutureEventsFirstPage = function() {
