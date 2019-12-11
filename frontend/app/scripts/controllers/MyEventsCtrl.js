@@ -1,54 +1,31 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('MyEventsCtrl', ['$scope', '$location', 'restService', 'authService', function($scope, $location, restService, authService) {
+	frontend.controller('MyEventsCtrl', ['$scope', '$location', 'restService', 'authService', 'pastEvents', 'futureEvents', function($scope, $location, restService, authService, pastEvents, futureEvents) {
 	    var pastEventParams = {pageNum: 1};
 	    var futureEventParams = {pageNum: 1};
 
-	    $scope.isLoggedIn = authService.isLoggedIn();
 	    if($scope.isLoggedIn) {
-	    	$scope.loggedUser = authService.getLoggedUser();
-    		
-    		restService.getMyPastEvents($scope.loggedUser.userid, pastEventParams).then(function(data) {
-				$scope.pastEvents = data.events;
-				$scope.pastEventCount = data.eventCount;
-				$scope.pastEventsLastPageNum = data.lastPageNum;
-				$scope.pastEventsInitialPageIndex = data.initialPageIndex;
-				$scope.pastEventsPageNum = pastEventParams.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+	    	$scope.pastEvents = pastEvents.events;
+			$scope.pastEventCount = pastEvents.eventCount;
+			$scope.pastEventsLastPageNum = pastEvents.lastPageNum;
+			$scope.pastEventsInitialPageIndex = pastEvents.initialPageIndex;
+			$scope.pastEventsPageNum = pastEventParams.pageNum;
 
-			restService.getMyFutureEvents($scope.loggedUser.userid, futureEventParams).then(function(data) {
-				$scope.futureEvents = data.events;
-				$scope.futureEventCount = data.eventCount;
-				$scope.futureEventsLastPageNum = data.lastPageNum;
-				$scope.futureEventsInitialPageIndex = data.initialPageIndex;
-				$scope.futureEventsPageNum = futureEventParams.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			$scope.futureEvents = futureEvents.events;
+			$scope.futureEventCount = futureEvents.eventCount;
+			$scope.futureEventsLastPageNum = futureEvents.lastPageNum;
+			$scope.futureEventsInitialPageIndex = futureEvents.initialPageIndex;
+			$scope.futureEventsPageNum = futureEventParams.pageNum;
 	    } else {
 	    	// REDIRECCIONAR
 	    	alert('LOGIN');
 	    }
 
 		$scope.$on('user:updated', function() {
-			$scope.isLoggedIn = authService.isLoggedIn();
 		    if($scope.isLoggedIn) {
-		    	$scope.loggedUser = authService.getLoggedUser();
-
-	    		restService.getMyPastEvents($scope.loggedUser.userid, pastEventParams).then(function(data) {
-					$scope.pastEvents = data.events;
-					$scope.pastEventCount = data.eventCount;
-					$scope.pastEventsLastPageNum = data.lastPageNum;
-					$scope.pastEventsInitialPageIndex = data.initialPageIndex;
-					$scope.pastEventsPageNum = pastEventParams.pageNum;
-				}).catch((error) => alert(error.data || "Error"));
-
-				restService.getMyFutureEvents($scope.loggedUser.userid, futureEventParams).then(function(data) {
-					$scope.futureEvents = data.events;
-					$scope.futureEventCount = data.eventCount;
-					$scope.futureEventsLastPageNum = data.lastPageNum;
-					$scope.futureEventsInitialPageIndex = data.initialPageIndex;
-					$scope.futureEventsPageNum = futureEventParams.pageNum;
-				}).catch((error) => alert(error.data || "Error"));
+		    	updatePastEvents(pastEventParams);
+		    	updateFutureEvents(futureEventParams);
 		    } else {
 	    		// REDIRECCIONAR
 	    		alert('LOGIN');
@@ -91,25 +68,25 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 
 		$scope.getFutureEventsFirstPage = function() {
 			futureEventParams.pageNum = 1;
-			updatePastEvents(futureEventParams);
+			updateFutureEvents(futureEventParams);
 		};
 
 		$scope.getFutureEventsPrevPage = function() {
 			futureEventParams.pageNum--;
-			updatePastEvents(futureEventParams);
+			updateFutureEvents(futureEventParams);
 		};
 
 		$scope.getFutureEventsNextPage = function() {
 			futureEventParams.pageNum++;
-			updatePastEvents(futureEventParams);
+			updateFutureEvents(futureEventParams);
 		};
 
 		$scope.getFutureEventsLastPage = function() {
 			futureEventParams.pageNum = $scope.lastPageNum;
-			updatePastEvents(futureEventParams);
+			updateFutureEvents(futureEventParams);
 		};
 
-		function updatePastEvents(params) {
+		function updateFutureEvents(params) {
 			restService.getMyFutureEvents($scope.loggedUser.userid, params).then(function(data) {
 				$scope.futureEvents = data.events;
 				$scope.futureEventCount = data.eventCount;

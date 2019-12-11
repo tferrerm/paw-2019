@@ -31,6 +31,10 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			$scope.isAdmin = authService.isAdmin();
 		});
 
+		$scope.goToEvent = function(pitchid, eventid) {
+			$location.url('pitches/' + pitchid + '/events/' + eventid);
+		};
+
 		$scope.goToClub = function(id) {
 			$location.url('clubs/' + id);
 		};

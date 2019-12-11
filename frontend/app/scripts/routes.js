@@ -10,11 +10,30 @@ define([], function() {
 			},
 			'/events' : {
 				templateUrl: '/views/events.html',
-				controller: 'AllEventsCtrl'
+				controller: 'AllEventsCtrl',
+				resolve: {
+					events: ['$route', 'restService', function($route, restService) {
+						var params = $route.current.params;
+						params.pageNum = 1;
+						return restService.getAllEvents(params);
+					}]
+				}
 			},
-			'/my-events' : {
+			'/my-events' : { // SOLO SI ESTAS LOGEADO
 				templateUrl: '/views/myEvents.html',
-				controller: 'MyEventsCtrl'
+				controller: 'MyEventsCtrl',
+				resolve: {
+					pastEvents: ['$route', 'restService', 'authService', function($route, restService, authService) {
+						var params = $route.current.params;
+						params.pageNum = 1;
+						return restService.getMyPastEvents(authService.getLoggedUser().userid, params);
+					}],
+					futureEvents: ['$route', 'restService', 'authService', function($route, restService, authService) {
+						var params = $route.current.params;
+						params.pageNum = 1;
+						return restService.getMyFutureEvents(authService.getLoggedUser().userid, params);
+					}]
+				}
 			},
 			'/history' : {
 				templateUrl: '/views/history.html',
