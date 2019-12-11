@@ -27,6 +27,12 @@ define(['frontend', 'services/restService'], function(frontend) {
 		    	.then(function(data) {
 		    		$scope.hasRelationship = data.relationship;
 		    	});
+		    if($scope.isAdmin) {
+				$scope.createdPitch = {};
+				restService.getSports().then(function(data) {
+					$scope.sports = data.sports;
+				});
+			}
 		});
 
 		$scope.getFirstPage = function() {
@@ -117,7 +123,9 @@ define(['frontend', 'services/restService'], function(frontend) {
 					restService.createPitch(club.clubid, $scope.createdPitch)
 						.then(function(data) {
 							//var createdEvent = data.event;
-							$location.url('pitches/' + data.pitchid);
+							//$location.url('pitches/' + data.pitchid);
+							pitchParams.pageNum = 1;
+							updatePitches(club.clubid, pitchParams);
 						});
 
 				}
@@ -128,8 +136,19 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$location.url('admin/clubs/' + id + '/tournaments/new');
 		};
 
+		$scope.deletePitch = function(clubid, pitchid) {
+			restService.deletePitch(clubid, pitchid)
+				.then(function(data) {
+					pitchParams.pageNum = 1;
+					updatePitches(club.clubid, pitchParams);
+				})
+		};
+
 		$scope.deleteClub = function(id) {
-			// DELETE CLUB
+			restService.deleteClub(id)
+				.then(function(data) {
+					$location.url('clubs');
+				})
 		};
 
 	}]);

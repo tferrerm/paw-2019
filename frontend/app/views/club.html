@@ -28,9 +28,9 @@
 									<div>{{pitch.name}}</div>
 									<div>{{pitch.sport | translate}}</div>
 									<a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
-									<!--<form method="POST" class="no-margin" action="<c:url value="/admin/pitch/${pitch.pitchid}/delete"/>" >
-											<button type="submit" class="btn btn-primary btn-danger"><spring:message code="delete_pitch"/></button>
-										</form>-->
+									<div ng-if="isAdmin">
+										<a ng-click="deletePitch(club.clubid, pitch.pitchid)"> <button type="button" class="btn btn-primary btn-danger">{{'delete_pitch' | translate}}</button></a>
+									</div>
 								</div>
 							</div>
 						</ul>

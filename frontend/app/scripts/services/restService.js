@@ -113,13 +113,13 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpPost('/admin/clubs/' + clubid + '/tournaments', formData, {});
 			},
 			deleteClub: function(id) {
-				// HACER
+				return httpDelete('/admin/clubs/' + id, {});
 			},
 			deleteEvent: function(id) {
 				// HACER
 			},
-			deletePitch: function(id) {
-				// HACER
+			deletePitch: function(clubid, pitchid) {
+				return httpDelete('/admin/clubs/' + clubid + '/pitches/' + pitchid, {});
 			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
