@@ -11,9 +11,9 @@ define(['controllers/IndexCtrl', 'angular-mocks'], function() {
       controller = $controller('IndexCtrl', { $scope: scope });
     }));
 
-    describe('$scope.welcomeText', function() {
+    describe('$scope.isLoggedIn', function() {
       it('should be well set', function() {
-        expect(scope.welcomeText).toBe('Welcome to your frontend page');
+        expect(scope.isLoggedIn).toBe(false);
       });
 
     });

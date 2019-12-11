@@ -211,8 +211,7 @@ public class UserController extends BaseController {
     @GET
 	@Path("/{id}/picture")
     @Produces(value = {
-    					org.springframework.http.MediaType.IMAGE_PNG_VALUE,
-    					org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
+    					org.springframework.http.MediaType.IMAGE_PNG_VALUE
     				  })
 	public Response getUserProfilePicture(@PathParam("id") long userid) throws IOException {
 		Optional<ProfilePicture> picOptional = pps.findByUserId(userid);

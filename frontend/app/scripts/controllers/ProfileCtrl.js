@@ -12,6 +12,12 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    	$scope.isLoggedUser = false;
 	    }
 
+	    $scope.getUserPicture = function(userid) {
+	    	return restService.getUserProfilePicture(userid);
+	    }
+
+	    
+
 	    restService.hasRelationshipWithUser(user.userid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;

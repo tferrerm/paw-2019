@@ -32,6 +32,16 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return headers;
 		}
 
+		function _arrayBufferToBase64(buffer) {
+		    var binary = '';
+		    var bytes = new Uint8Array(buffer);
+		    var len = bytes.byteLength;
+		    for (var i = 0; i < len; i++) {
+		      binary += String.fromCharCode(bytes[i]);
+		    }
+		    return window.btoa(binary);
+		}
+
 		return {
 			commentClub: function(id, comment) {
 				var formData = new FormData();
@@ -147,6 +157,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			},
 			getUserProfile: function(id) {
 				return httpGet('/users/' + id, {});
+			},
+			getUserProfilePicture: function(id) {
+				var headers = {};
+				headers = addAuthHeader(headers);
+
+				$http({method: 'GET', url: url + '/users/' + id + '/picture', responseType: 'arraybuffer', headers: headers})
+					.then(function(response) {
+				    	return _arrayBufferToBase64(response.data);
+				    });
 			},
 			hasRelationshipWithClub: function(id) {
 				return httpGet('/clubs/' + id + '/has-relationship', {});
