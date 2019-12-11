@@ -42,7 +42,7 @@
 					<div class="flex-1">
 						<div class="event-item-box">
 							<span class="event-info-label">{{'organizer' | translate}} </span>
-							<a class="link-text">{{event.owner.firstname}} {{event.owner.lastname}}</a>
+							<a ng-click="goToProfile(event.owner.userid)" class="link-text">{{event.owner.firstname}} {{event.owner.lastname}}</a>
 						</div>
 						<div class="event-item-box">
 							<span class="event-info-label">{{'event_description' | translate}}</span>
@@ -123,21 +123,30 @@
 				</span>
 			</c:if>-->
 		<div class="club-buttons" ng-if="!inscriptionHasEnded">
-			<div ng-if="event.participant">
-				<a ng-click="leaveEvent(event.pitch.pitchid, event.eventid)">
-					<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
-				</a>
-			</div>
-			<div ng-if="!event.participant && event.inscriptionCount < event.maxParticipants">
-				<a ng-click="joinEvent(event.pitch.pitchid, event.eventid)">
-					<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
-				</a>
+			<div ng-if="!isAdmin">
+				<div ng-if="event.participant">
+					<a ng-click="leaveEvent(event.pitch.pitchid, event.eventid)">
+						<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
+					</a>
+				</div>
+				<div ng-if="!event.participant && event.inscriptionCount < event.maxParticipants">
+					<a ng-click="joinEvent(event.pitch.pitchid, event.eventid)">
+						<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
+					</a>
+				</div>
+				<div class ="cancel-event" ng-if="isOwner">
+					<a ng-click="cancelEvent(event.eventid)">
+						<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
+					</a>
+				</div>
 			</div>
 		</div>
-		<div class ="cancel-event" ng-if="isOwner">
-			<a ng-click="deleteEvent(event.pitch.pitchid, event.eventid)">
-				<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
-			</a>
+		<div ng-if="isAdmin">
+			<div class ="cancel-event" ng-if="isAdmin">
+				<a ng-click="deleteEvent(event.eventid)">
+					<button type="submit" class="btn btn-danger join-button mb-10">{{'delete_event' | translate}}</button>
+				</a>
+			</div>
 		</div>
 	</div>
 </div>
