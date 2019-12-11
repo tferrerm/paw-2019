@@ -13,7 +13,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    }
 
     	restService.getUserProfilePicture(user.userid).then(function(data) {
-    		$scope.picture = data;
+    		$scope.picture = "data:image/png;base64," + _arrayBufferToBase64(data);
+    	}).catch(function(error) {
+    		$scope.picture = "../../images/profile_default.png"
     	});
 
 		function _arrayBufferToBase64(buffer) {

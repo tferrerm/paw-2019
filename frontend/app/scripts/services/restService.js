@@ -47,16 +47,6 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return headers;
 		}
 
-		function _arrayBufferToBase64(buffer) {
-		    var binary = '';
-		    var bytes = new Uint8Array(buffer);
-		    var len = bytes.byteLength;
-		    for (var i = 0; i < len; i++) {
-		      binary += String.fromCharCode(bytes[i]);
-		    }
-		    return window.btoa(binary);
-		}
-
 		return {
 			cancelEvent: function(pitchid, eventid) {
 				return httpDelete('/pitches/' + pitchid + '/events/' + eventid, {});
@@ -205,7 +195,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 
 				return $http({method: 'GET', url: url + '/users/' + id + '/picture', responseType: 'arraybuffer'})
 					.then(function(response) {
-				    	return _arrayBufferToBase64(response.data);
+				    	return response.data;
 				    });
 			},
 			hasRelationshipWithClub: function(id) {
