@@ -32,34 +32,32 @@
 				</div>
 			</div>
 		</div>
-		<div class="table-navigator w-100 justify-center">
-			<div ng-hide="pageNum == 1">
-				<a ng-click="getFirstPage()">
-					<button type="button" class="btn btn-secondary">
-						{{'first' | translate}}
-					</button>
-				</a>
-				<a ng-click="getPrevPage()">
-					<button type="button" class="btn btn-secondary">
-						{{'back' | translate}}
-					</button>
-				</a>
+		<span class="flex justify-center">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
+		<div ng-hide="lastPageNum == 1 || lastPageNum == 0" class="flex-row flex-space-around table-header">
+			<div class="w-100">
+				<div ng-hide="pageNum == 1"  class="flex-row w-100 flex-space-around">
+					<a ng-click="getFirstPage()">
+						<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
+					</a>
+					<a ng-click="getPrevPage()">
+						<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
+					</a>
+				</div>
 			</div>
-		</div>
-		<span class="flex">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
-		<div ng-hide="pageNum == lastPageNum">
-			<a ng-click="getNextPage()">
-				<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-			</a>
-			<a ng-click="getLastPage()">
-				<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-			</a>
+			<div class="w-100">
+				<div ng-hide="pageNum == lastPageNum"  class="flex-row w-100 flex-space-around">
+					<a ng-click="getNextPage()">
+						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+					</a>
+					<a ng-click="getLastPage()">
+						<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+					</a>
+				</div>				
+			</div>
 		</div>
 	</div>
 		<div ng-if="events.length <= 0">
-			<div class="notice">
-				{{'no_results' | translate}}
-			</div>
+			<div class="notice">{{'no_results' | translate}}</div>
 		</div>
 	</div>
 </div>
