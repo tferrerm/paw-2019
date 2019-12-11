@@ -129,6 +129,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			getPitch: function(id) {
 				return httpGet('/pitches/' + id, {});
 			},
+			getPitchPicture: function(id) {
+				var headers = {};
+				headers = addAuthHeader(headers);
+
+				return $http({method: 'GET', url: url + '/pitches/' + id + '/picture', responseType: 'arraybuffer'})
+					.then(function(response) {
+				    	return response.data;
+				    });
+			},
 			getPitches: function(params) {
 				return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
 			},

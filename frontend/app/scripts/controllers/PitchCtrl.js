@@ -10,6 +10,22 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    $scope.schedule = [];
 	    $scope.startsAtHours = [];
 	    $scope.endsAtHours = [];
+
+    	restService.getPitchPicture(pitch.pitchid).then(function(data) {
+    		$scope.picture = "data:image/png;base64," + _arrayBufferToBase64(data);
+    	}).catch(function(error) {
+    		$scope.picture = "../../images/pitch_default.png"
+    	});
+
+			function _arrayBufferToBase64(buffer) {
+		    var binary = '';
+		    var bytes = new Uint8Array(buffer);
+		    var len = bytes.byteLength;
+		    for (var i = 0; i < len; i++) {
+		      binary += String.fromCharCode(bytes[i]);
+		    }
+		    return window.btoa(binary);
+			}
 	    
 	    restService.getHourRange().then(function(data) {
 	    	$scope.minHour = data.minHour;
