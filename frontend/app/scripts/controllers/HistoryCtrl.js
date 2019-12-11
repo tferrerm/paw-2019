@@ -48,7 +48,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		};
 
 		$scope.getPrevPage = function() {
@@ -59,7 +59,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		};
 
 		$scope.getNextPage = function() {
@@ -70,7 +70,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		};
 
 		$scope.getLastPage = function() {
@@ -81,7 +81,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		};
 	}]);
 });

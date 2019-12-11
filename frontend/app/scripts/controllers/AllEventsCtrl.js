@@ -50,7 +50,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));
+			}).catch(function(error) {alert(error.data || " Error")});
 		}
 
   	}]);

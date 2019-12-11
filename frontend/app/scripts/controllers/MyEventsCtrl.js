@@ -63,7 +63,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.pastEventsLastPageNum = data.lastPageNum;
 				$scope.pastEventsInitialPageIndex = data.initialPageIndex;
 				$scope.pastEventsPageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		}
 
 		$scope.getFutureEventsFirstPage = function() {
