@@ -10,7 +10,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.goToTournament = function() {
 			$location.url('tournaments/' + tournament.tournamentid);
-		}
+		};
 
 	}]);
-})
+});

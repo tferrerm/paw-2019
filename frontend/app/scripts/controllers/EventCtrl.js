@@ -6,9 +6,9 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.event = event;
 		$scope.inscriptions = inscriptions.inscriptions;
 
-		var inscriptionEnd = $filter('date')(event.inscriptionEnd, "dd/MM/yyyy HH:mm:ss", "GMT-3");
-		var eventEnd = $filter('date')(event.endsAt, "dd/MM/yyyy HH:mm:ss", "GMT-3");
-		var now = $filter('date')(new Date(), "dd/MM/yyyy HH:mm:ss", "GMT-3");
+		var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+		var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+		var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
 		$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
 		$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
 
@@ -19,25 +19,33 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.kickUser = function(pitchid, eventid, userid) {
 			restService.kickUser(pitchid, eventid, userid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {alert(error.data || " Error")});
-		}
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
+		};
 
 		$scope.leaveEvent = function(pitchid, eventid) {
 			restService.leaveEvent(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.joinEvent = function(pitchid, eventid) {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 				restService.joinEvent(pitchid, eventid).then(function(data) {
 					updateEvent(pitchid, eventid);
-				}).catch(function(error) {alert(error.data || " Error")});
+				}).catch(function(error) {
+alert(error.data || ' Error');
+});
 			} else {
 				$scope.showLoginModal().result.then(function(data) {
 					restService.joinEvent(pitchid, eventid).then(function(data) {
 						updateEvent(pitchid, eventid);
-					}).catch(function(error) {alert(error.data || " Error")});
+					}).catch(function(error) {
+alert(error.data || ' Error');
+});
 				});
 			}
 		};
@@ -55,12 +63,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			});
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 			updateOwner();
 		}
 
 		function updateOwner() {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 				$scope.isOwner = event.owner.userid == $scope.loggedUser.userid;
 			} else {
 				$scope.isOwner = false;

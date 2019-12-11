@@ -21,10 +21,12 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		});
 
 		function updateSchedule() {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 				restService.getUpcomingEvents(authService.getLoggedUser().userid).then(function(data) {
 					$scope.schedule = data.schedule;
-				}).catch(function(error) {alert(error.data || " Error")});
+				}).catch(function(error) {
+alert(error.data || ' Error');
+});
 			}
 		}
 

@@ -6,17 +6,19 @@ define(['frontend', 'services/restService'], function(frontend) {
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
 
-	    if($scope.isAdmin) {
-			$scope.createdPitch = {};
-			restService.getSports().then(function(data) {
-				$scope.sports = data.sports;
-			});
-		}
+	    if ($scope.isAdmin) {
+				$scope.createdPitch = {};
+				restService.getSports().then(function(data) {
+					$scope.sports = data.sports;
+				});
+			}
 	    
 	    restService.hasRelationshipWithClub(club.clubid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
-	    	}).catch(function(error) {alert(error.data || " Error")});
+	    	}).catch(function(error) {
+alert(error.data || ' Error');
+});
 
 	    updatePitches(club.clubid, pitchParams);
 
@@ -27,7 +29,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 		    	.then(function(data) {
 		    		$scope.hasRelationship = data.relationship;
 		    	});
-		    if($scope.isAdmin) {
+		    if ($scope.isAdmin) {
 				$scope.createdPitch = {};
 				restService.getSports().then(function(data) {
 					$scope.sports = data.sports;
@@ -62,7 +64,9 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.commentText = {};
@@ -82,7 +86,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.goToProfile = function(id) {
 			$location.url('users/' + id);
-		}
+		};
 
 		$scope.getCommentsFirstPage = function() {
 			commentParams.pageNum = 1;
@@ -119,7 +123,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			//if ($scope.createEventForm.$valid) {
 				//$scope.duplicateEmailError = false;
 				
-				if($scope.isAdmin) {
+				if ($scope.isAdmin) {
 					restService.createPitch(club.clubid, $scope.createdPitch)
 						.then(function(data) {
 							//var createdEvent = data.event;
@@ -141,14 +145,14 @@ define(['frontend', 'services/restService'], function(frontend) {
 				.then(function(data) {
 					pitchParams.pageNum = 1;
 					updatePitches(club.clubid, pitchParams);
-				})
+				});
 		};
 
 		$scope.deleteClub = function(id) {
 			restService.deleteClub(id)
 				.then(function(data) {
 					$location.url('clubs');
-				})
+				});
 		};
 
 	}]);

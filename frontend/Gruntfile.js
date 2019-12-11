@@ -101,13 +101,16 @@ module.exports = function (grunt) {
     },
 
     eslint: {
+      options: {
+        fix: true
+      },
       all: [
       '<%= yeoman.app %>/scripts/**/*.js',
-      'test/spec/**/*.js',
+      'test/**/*.js',
       'Gruntfile.js'
       ],
       test: [
-      'test/spec/**/*.js'
+      'test/**/*.js'
       ]
     },
 

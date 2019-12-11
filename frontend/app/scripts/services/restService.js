@@ -33,7 +33,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return $http.delete(url + path + params, {headers: headers})
 				.then(function(response) {
 					return response.data;
-				})
+				});
 				/*.catch(function(response) {
 					return $q.reject(response);
 				});*/
@@ -41,7 +41,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 
 		function addAuthHeader(headers) {
 			var authToken = storageService.getAuthToken();
-			if(authToken) {
+			if (authToken) {
 				headers['X-Auth-Token'] = authToken;
 			}
 			return headers;
@@ -245,7 +245,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('secondResult', resultData.secondResult);
 				return httpPost('/admin/clubs/' + clubid + '/tournaments/' + tournamentid + '/events/' + eventid + '/result', formData, {});
 			}
-		}
+		};
 
 	}]);
 
