@@ -3,8 +3,8 @@
 		<h2>{{"choose_tournament" | translate}}</h2>
 	</div>
 	<span class="help-message notice w-70 justify-center">{{"tournament_list_help" | translate}}</span>
-	<div ng-if="tournamentCount > 0">
-		<div class="tbl">
+	<div ng-if="tournamentCount > 0" class="w-90">
+		<div class="tbl w-100">
 			<div class="background-dodgerblue table-header">
 				<span class="justify-center flex-1 color-white mt-10">{{"event_name" | translate}}</span>
 				<span class="justify-center flex-1 color-white mt-10">{{"state" | translate}}</span>
@@ -13,48 +13,54 @@
 				<span class="justify-center flex-1" > </span>
 			</div>
 			
-			<div ng-repeat="tournament in tournaments" class="custom-row">
-				<div>{{tournament.name}}</div>
-				<div>
-					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') > (now | date: 'dd/MM/yyyy HH:mm:ss')">
+			<div ng-repeat="tournament in tournaments" class="tournament-row">
+				<div class="w-30">{{tournament.name}}</div>
+				<div class="flex-column w-30">
+					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') > (now | date: 'dd/MM/yyyy HH:mm:ss')" class="w-100">
 						{{'inscription' | translate}}
 					</div>
-					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') <= (now | date: 'dd/MM/yyyy HH:mm:ss') && !tournament.inscriptionSuccess">
+					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') <= (now | date: 'dd/MM/yyyy HH:mm:ss') && !tournament.inscriptionSuccess" class="w-100">
 						{{'pending_approval' | translate}}
 					</div>
-					<div ng-if="tournament.inscriptionSuccess">
+					<div ng-if="tournament.inscriptionSuccess" class="w-100">
 						{{'started' | translate}}
 					</div>
 				</div>
-				<div>{{tournament.tournamentClub.name}}</div>
-				<div>{{tournament.sport | translate}}</div>
-				<div>
+				<div class="w-30">{{tournament.tournamentClub.name}}</div>
+				<div class="w-30">{{tournament.sport | translate}}</div>
+				<div class="w-30">
 					<a ng-click="goToTournament(tournament)">
 						<button type="button" class="btn btn-primary view-event">{{'view_tournament' | translate}}</button>
 					</a>
 				</div>
 			</div>
-			<div class="table-navigator w-100 justify-center">
-				<div ng-hide="pageNum == 1">
-					<a ng-click="getFirstPage()">
-						<button type="button" class="btn btn-secondary">
-							{{'first' | translate}}
-						</button>
-					</a>
-					<a ng-click="getPreviousPage()">
-						<button type="button" class="btn btn-secondary">
-							{{'back' | translate}}
-						</button>
-					</a>
-				</div>
-				<span class="flex">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + tournaments.length - 1}} {{'of' | translate}} {{tournamentCount}}</span>
-				<div ng-hide="pageNum == lastPageNum">
-					<a ng-click="getNextPage()">
-						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-					</a>
-					<a ng-click="getLastPage()">
-						<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-					</a>
+			<div class="table-navigator w-100 justify-center flex-column">
+				<span class="flex justify-center">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + tournaments.length - 1}} {{'of' | translate}} {{tournamentCount}}</span>
+				<div ng-hide="lastPageNum == 1 || lastPageNum == 0" class="flex-row flex-space-around table-header"></div>
+					<div class="w-100">
+						<div ng-hide="pageNum == 1" class="flex-row w-100 flex-space-around">
+							<a ng-click="getFirstPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'first' | translate}}
+								</button>
+							</a>
+							<a ng-click="getPreviousPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'back' | translate}}
+								</button>
+							</a>
+						</div>
+					</div>
+					<div class="w-100">
+						<div ng-hide="pageNum == lastPageNum" class="flex-row w-100 flex-space-around">
+							<a ng-click="getNextPage()">
+								<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+							</a>
+							<a ng-click="getLastPage()">
+								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+							</a>
+						</div>			
+					</div>
 				</div>
 			</div>
 		</div>
