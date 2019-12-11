@@ -47,8 +47,23 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch((error) => alert(error.data || "Error"));;
+			}).catch(function(error) {alert(error.data || " Error")});
 		}
+
+		$scope.createClubSubmit = function() {
+			//checkPasswordsMatch();
+			//if ($scope.createEventForm.$valid) {
+				//$scope.duplicateEmailError = false;
+				
+				if($scope.isAdmin) {
+					restService.createClub($scope.createdClub).then(function(data) {
+						//var createdEvent = data.event;
+						$location.url('clubs/' + data.clubid);
+					}).catch(function(error) {alert(error.data || " Error")});
+
+				}
+			//}
+		};
 
 	}]);
 });

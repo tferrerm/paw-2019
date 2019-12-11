@@ -2,7 +2,7 @@
 define(['frontend', 'services/authService', 'services/storageService', 'services/restService', 'services/modalService'], function(frontend) {
 
 	frontend.controller('IndexCtrl', ['$scope', '$location', 'authService', 'storageService', 'restService', 'modalService', function($scope, $location, authService, storageService, restService, modalService) {
-		$scope.welcomeText = 'Welcome to your frontend page';
+		$scope.welcomeText = 'Welcome to your frontend page'; // ELIMINAR
 		$scope.sidebarElements = [
 			{name: 'Home', link: "#/home"},
 			{name: 'All events', link: "#/events"},
@@ -31,8 +31,21 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			$scope.isAdmin = authService.isAdmin();
 		});
 
+		$scope.goToEvent = function(pitchid, eventid) {
+			$location.url('pitches/' + pitchid + '/events/' + eventid);
+		};
+
+		$scope.goToClub = function(id) {
+			$location.url('clubs/' + id);
+		};
+
+		$scope.goToPitch = function(id) {
+			$location.url('pitches/' + id);
+		};
+
 		$scope.goToProfile = function(id) {
 			$location.url('users/' + id);
 		}
+
 	}]);
 });

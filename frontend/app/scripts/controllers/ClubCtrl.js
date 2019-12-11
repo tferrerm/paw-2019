@@ -16,7 +16,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    restService.hasRelationshipWithClub(club.clubid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
-	    	}).catch((error) => alert(error.data || "Error"));
+	    	}).catch(function(error) {alert(error.data || " Error")});
 
 	    updatePitches(club.clubid, pitchParams);
 
@@ -62,7 +62,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			}).catch((error) => alert(error.data || "Error"));
+			}).catch(function(error) {alert(error.data || " Error")});
 		};
 
 		$scope.commentText = {};

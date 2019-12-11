@@ -46,7 +46,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		    		}
 		    	})
 		    });
-		}).catch((error) => alert(error.data || "Error"));;
+		}).catch(function(error) {alert(error.data || " Error")});
 
 	    $scope.event = {};
 	    $scope.showLoginModal = modalService.loginModal;
