@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +68,6 @@ import ar.edu.itba.paw.webapp.exception.UserNotFoundException;
 public class UserController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	private static final String DEFAULT_PROFILE_PICTURE = "profile_default.png";
 
 	@Context
 	private	UriInfo	uriInfo;
@@ -215,13 +213,14 @@ public class UserController extends BaseController {
     				  })
 	public Response getUserProfilePicture(@PathParam("id") long userid) throws IOException {
 		Optional<ProfilePicture> picOptional = pps.findByUserId(userid);
+		if(!picOptional.isPresent())
+			return Response.status(Status.NOT_FOUND).build();
 		
 		final CacheControl cache = new CacheControl();
 		cache.setNoTransform(false);
 		cache.setMaxAge(2592000); // 1 month
 		
-		byte[] image = picOptional.isPresent() ? picOptional.get().getData() :
-			IOUtils.toByteArray(new ClassPathResource(DEFAULT_PROFILE_PICTURE).getInputStream());
+		byte[] image = picOptional.get().getData();
 		
 		return Response.ok(image).cacheControl(cache).build();
 		

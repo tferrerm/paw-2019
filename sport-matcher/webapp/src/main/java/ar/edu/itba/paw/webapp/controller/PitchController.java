@@ -15,13 +15,12 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.EventService;
@@ -45,7 +44,6 @@ import ar.edu.itba.paw.webapp.exception.PitchNotFoundException;
 public class PitchController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PitchController.class);
-	private static final String DEFAULT_PITCH_PICTURE = "pitch_default.png";
 	
 	@Context
 	private	UriInfo	uriInfo;
@@ -100,20 +98,21 @@ public class PitchController extends BaseController {
 	
 	@GET
     @Produces(value = {
-			org.springframework.http.MediaType.IMAGE_PNG_VALUE,
-			org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
+			org.springframework.http.MediaType.IMAGE_PNG_VALUE
 		  })
 	@Path("/{id}/picture")
 	public Response getPitchPicture(@PathParam("id") long pitchid) throws IOException {
 		Optional<PitchPicture> picOptional = pps.findByPitchId(pitchid);
+		if(!picOptional.isPresent()) {
+			LOGGER.debug("Picture for pitch #{} is not present", pitchid);
+			return Response.status(Status.NOT_FOUND).build();
+		}
 
 		final CacheControl cache = new CacheControl();
 		cache.setNoTransform(false);
 		cache.setMaxAge(2592000); // 1 month
 		
-		byte[] image = picOptional.isPresent() ? picOptional.get().getData()
-				: IOUtils.toByteArray(new ClassPathResource(DEFAULT_PITCH_PICTURE).getInputStream());
-		LOGGER.debug("Image for pitch {} presence: {}", pitchid, picOptional.isPresent());
+		byte[] image = picOptional.get().getData();
 		
 		return Response.ok(image).cacheControl(cache).build();
 	}
