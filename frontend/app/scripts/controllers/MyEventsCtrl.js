@@ -52,7 +52,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		};
 
 		$scope.getPastEventsLastPage = function() {
-			pastEventParams.pageNum = $scope.lastPageNum;
+			pastEventParams.pageNum = $scope.pastEventsLastPageNum;
 			updatePastEvents(pastEventParams);
 		};
 
@@ -82,7 +82,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		};
 
 		$scope.getFutureEventsLastPage = function() {
-			futureEventParams.pageNum = $scope.lastPageNum;
+			futureEventParams.pageNum = $scope.futureEventsLastPageNum;
 			updateFutureEvents(futureEventParams);
 		};
 
