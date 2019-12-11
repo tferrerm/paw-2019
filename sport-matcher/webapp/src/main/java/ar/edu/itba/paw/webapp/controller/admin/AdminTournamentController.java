@@ -76,58 +76,6 @@ public class AdminTournamentController extends BaseController {
 	@Autowired
 	private FormValidator validator;
 	
-	/*@GET
-	@Path("/{id}")
-    public Response retrieveTournament(@PathParam("id") long tournamentid,
-    		@QueryParam("round") final Integer roundPage) 
-    		throws TournamentNotFoundException {
-		
-		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
-		
-		if(roundPage == null) {
-			return retrieveTournament(tournamentid, ts.getMinRoundForResultInput(tournament), form);
-		}
-		
-		if(tournament.getInscriptionSuccess()) {
-			//ModelAndView mav = new ModelAndView("admin/tournament");
-//			mav.addObject("tournament",  tournament);
-//			mav.addObject("club", tournament.getTournamentClub());
-//			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
-			
-			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
-			// mav.addObject("roundEvents", roundEvents);
-			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
-			for(TournamentEvent event : roundEvents) {
-				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
-			}
-//			mav.addObject("eventsHaveResult", eventsHaveResult);
-//			mav.addObject("roundInPast", roundEvents.get(0).getEndsAt().compareTo(Instant.now()) <= 0);
-//			
-//			mav.addObject("currRoundPage", roundPage);
-//			mav.addObject("maxRoundPage", tournament.getRounds());
-			
-			return null;//mav;
-		} else {
-			//ModelAndView mav = new ModelAndView("admin/tournamentInscription");
-			//mav.addObject("tournament",  tournament);
-			//mav.addObject("club", tournament.getTournamentClub());
-			List<TournamentTeam> teams = new ArrayList<>(tournament.getTeams());
-			Comparator<TournamentTeam> cmp = new Comparator<TournamentTeam>() {
-				@Override
-				public int compare(TournamentTeam team1, TournamentTeam team2) {
-					return ((Long)team1.getTeamid()).compareTo(team2.getTeamid());
-				}
-			};
-			Collections.sort(teams, cmp);
-//		    mav.addObject("teams", teams);
-//		    mav.addObject("roundsAmount", tournament.getRounds());
-//		    mav.addObject("startsAt", ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt());
-		    Map<Long, List<User>> teamsUsers = ts.mapTeamMembers(tournamentid);
-		    //mav.addObject("teamsUsers", teamsUsers);
-		    return null;//mav;
-		}
-    }*/
-	
 	@POST
 	@Path("/{id}/events/{eventId}/result")
     public Response setTournamentEventResult(@PathParam("clubId") long clubid,
@@ -146,24 +94,6 @@ public class AdminTournamentController extends BaseController {
 
 		ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
 	    return Response.status(Status.NO_CONTENT).build();
-	}
-	
-	@GET
-	@Path("/{pageNum}")
-	public Response retrieveEvents(@PathParam("clubId") long clubid, @PathParam("pageNum") final int pageNum) {
-		
-		//ModelAndView mav = new ModelAndView("admin/tournamentList");
-		
-		List<Tournament> tournaments = ts.findBy(pageNum);
-//		mav.addObject("tournaments", tournaments);
-//		mav.addObject("tournamentQty", tournaments.size());
-//		mav.addObject("page", pageNum);
-//		mav.addObject("pageInitialIndex", ts.getPageInitialTournamentIndex(pageNum));
-//		mav.addObject("totalTournamentQty", ts.countTournamentTotal());
-//		mav.addObject("lastPageNum", ts.countTotalTournamentPages());
-//		mav.addObject("now", Instant.now());
-		
-		return null;//mav;
 	}
 	
 	@GET
@@ -255,7 +185,7 @@ public class AdminTournamentController extends BaseController {
     
     @DELETE
     @Path("/{id}")
-	public Response deleteEvent(@PathParam("id") final long tournamentid)
+	public Response deleteTournament(@PathParam("id") final long tournamentid)
 			throws TournamentNotFoundException, InscriptionDateInPastException {
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	Map<Long, List<User>> teamsMap = ts.mapTeamMembers(tournamentid);

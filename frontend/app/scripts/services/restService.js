@@ -24,6 +24,21 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				});
 		}
 
+		function httpDelete(path, params) {
+			var headers = {};
+			headers = addAuthHeader(headers);
+
+			params = Object.keys(params).length ? '?' + jQuery.param(params) : '';
+
+			return $http.delete(url + path + params, {headers: headers})
+				.then(function(response) {
+					return response.data;
+				})
+				/*.catch(function(response) {
+					return $q.reject(response);
+				});*/
+		}
+
 		function addAuthHeader(headers) {
 			var authToken = storageService.getAuthToken();
 			if(authToken) {
@@ -43,6 +58,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 		}
 
 		return {
+			cancelEvent: function(id) {
+				// HACER
+			},
 			commentClub: function(id, comment) {
 				var formData = new FormData();
 				formData.append('comment', comment);
@@ -52,6 +70,14 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				var formData = new FormData();
 				formData.append('comment', comment);
 				return httpPost('/users/' + id + '/comment', formData, {});
+			},
+			createClub: function(data) {
+				var clubData = {name: data.name, location: data.location};
+				var formData = new FormData();
+				formData.append('name', clubData.name);
+				formData.append('location', clubData.location);
+
+				return httpPost('/admin/clubs', formData, {});
 			},
 			createEvent: function(pitchid, data) {
 				var eventData = {name: data.name, description: data.description, maxParticipants: data.maxParticipants, date: data.date, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
@@ -65,6 +91,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
 				return httpPost('/pitches/' + pitchid + '/events', formData, {});
 			},
+			createPitch: function(clubid, data) {
+				var pitchData = {name: data.name, sport: data.sport /* PICTURE */};
+				var formData = new FormData();
+				formData.append('name', pitchData.name);
+				formData.append('sport', pitchData.sport);
+				/* PICTURE */
+
+				return httpPost('/admin/clubs/' + clubid + '/pitches', formData, {});
+			},
 			createTournament: function(clubid, data) {
 				var tournamentData = {name: data.name, maxTeams: data.maxTeams, teamSize: data.teamSize, firstRoundDate: data.firstRoundDate, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
 				var formData = new FormData();
@@ -77,8 +112,14 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('inscriptionEndDate', tournamentData.inscriptionEndDate);
 				return httpPost('/admin/clubs/' + clubid + '/tournaments', formData, {});
 			},
+			deleteClub: function(id) {
+				return httpDelete('/admin/clubs/' + id, {});
+			},
 			deleteEvent: function(id) {
-
+				// HACER
+			},
+			deletePitch: function(clubid, pitchid) {
+				return httpDelete('/admin/clubs/' + clubid + '/pitches/' + pitchid, {});
 			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
