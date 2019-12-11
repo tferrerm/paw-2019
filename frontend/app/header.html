@@ -2,20 +2,20 @@
   	<h1 class="title">SportMatcher</h1>
   	<div>
         <div ng-if="isLoggedIn">
-            <a ng-click="goToProfile(loggedUser.userid)">
+            <a ng-click="goToProfile(loggedUser.userid)" class="background-color-transparent">
                 <img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
             </a>
             <span class="color-white username">{{loggedUser.username}}</span>
-            <a ng-click="logout()">
+            <a ng-click="logout()" class="background-color-white">
             	{{'logout' | translate}}
             </a>
         </div>
         <div ng-if="!isLoggedIn">
-          	<a ng-click="showLoginModal()" class="mt-30">
+          	<a ng-click="showLoginModal()" class="mt-30 background-color-white">
             	{{'login' | translate}}
             </a>
-            {{'or' | translate}}
-            <a ng-click="showRegisterModal()">
+            <span class="color-white">{{'or' | translate}}</span>
+            <a ng-click="showRegisterModal()" class="background-color-white">
             	{{'register' | translate}}
             </a>
         </div>
