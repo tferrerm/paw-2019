@@ -7,7 +7,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		$scope.isLoggedIn = authService.isLoggedIn();
 	    if ($scope.isLoggedIn) {
 	    	$scope.loggedUser = authService.getLoggedUser();
-	    	$scope.isLoggedUser = $scope.loggedUser.userid == user.userid;
+	    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
 	    } else {
 	    	$scope.isLoggedUser = false;
 	    }
@@ -43,7 +43,7 @@ alert(error.data || ' Error');
 			$scope.isLoggedIn = authService.isLoggedIn();
 			if ($scope.isLoggedIn) {
 		    	$scope.loggedUser = authService.getLoggedUser();
-		    	$scope.isLoggedUser = $scope.loggedUser.userid == user.userid;
+		    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
 		    } else {
 		    	$scope.isLoggedUser = false;
 		    }

@@ -71,7 +71,7 @@ alert(error.data || ' Error');
 
 		function updateOwner() {
 			if ($scope.isLoggedIn) {
-				$scope.isOwner = event.owner.userid == $scope.loggedUser.userid;
+				$scope.isOwner = event.owner.userid === $scope.loggedUser.userid;
 			} else {
 				$scope.isOwner = false;
 			}

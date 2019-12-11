@@ -32,10 +32,10 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    	$scope.maxHour = data.maxHour;
 	    	
 	    	for (var i = $scope.minHour; i <= $scope.maxHour; i++) {
-	    		if (i != $scope.maxHour) {
+	    		if (i !== $scope.maxHour) {
 	    			$scope.startsAtHours.push(i);
 	    		}
-	    		if (i != $scope.minHour) {
+	    		if (i !== $scope.minHour) {
 	    			$scope.endsAtHours.push(i);
 	    		}
 	    	}
