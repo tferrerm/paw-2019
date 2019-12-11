@@ -9,7 +9,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    restService.hasRelationshipWithClub($scope.club.clubid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
-	    	});
+	    	}).catch((error) => alert(error.data || "Error"));
 
 	    restService.getClubPitches(club.clubid, pitchParams)
 		    .then(function(data) {
@@ -18,7 +18,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));
 
 		restService.getClubComments(club.clubid, commentParams)
 		    .then(function(data) {
@@ -27,7 +27,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.commentsLastPageNum = data.pageCount;
 				$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 				$scope.commentsPageNum = commentParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));
 
 		$scope.$on('user:updated', function() {
 			$scope.hasRelationship = restService.hasRelationshipWithClub($scope.club.clubid);
@@ -41,7 +41,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));
 		};
 
 		$scope.getPrevPage = function() {
@@ -52,7 +52,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));
 		};
 
 		$scope.getNextPage = function() {
@@ -63,7 +63,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));
 		};
 
 		$scope.getLastPage = function() {
@@ -74,7 +74,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));
 		};
 
 		$scope.commentText = {};
@@ -91,7 +91,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 							$scope.commentsPageNum = commentParams.pageNum;
 						});
-				});
+				}).catch((error) => alert(error.data || "Error"));
 			//}
 		};
 

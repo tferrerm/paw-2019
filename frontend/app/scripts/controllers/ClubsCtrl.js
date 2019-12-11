@@ -25,7 +25,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.getPrevPage = function() {
@@ -36,7 +36,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.getNextPage = function() {
@@ -47,7 +47,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.getLastPage = function() {
@@ -58,7 +58,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		};
 
 		$scope.filterClubs = function() {
@@ -70,7 +70,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			});
+			}).catch((error) => alert(error.data || "Error"));;
 		}
 
 	}]);
