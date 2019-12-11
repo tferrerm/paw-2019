@@ -135,7 +135,7 @@
 					</a>
 				</div>
 				<div class ="cancel-event" ng-if="isOwner">
-					<a ng-click="cancelEvent(event.eventid)">
+					<a ng-click="cancelEvent(event.pitch.pitchid, event.eventid)">
 						<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
 					</a>
 				</div>

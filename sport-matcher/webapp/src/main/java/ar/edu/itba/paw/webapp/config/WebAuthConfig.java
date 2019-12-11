@@ -72,7 +72,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 	                .antMatchers(HttpMethod.PATCH).permitAll()
 	                .antMatchers(HttpMethod.HEAD).permitAll()
 	                .antMatchers(HttpMethod.OPTIONS).permitAll()
-	                .antMatchers(HttpMethod.DELETE).access("hasRole('ROLE_ADMIN')")
+	                .antMatchers(HttpMethod.DELETE).permitAll()
 	                .antMatchers("/user/create").permitAll()
 	                .antMatchers("/user/**").access("hasRole('ROLE_USER')")
 	                .antMatchers("/user/login").permitAll()
