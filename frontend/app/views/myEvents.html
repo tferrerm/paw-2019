@@ -24,18 +24,16 @@
 					</a>
 				</div>
 				<span class="flex justify-center mv-5">{{'showing_items' | translate}} {{pastEventsInitialPageIndex}}-{{pastEventsInitialPageIndex + pastEvents.length - 1}} {{'of' | translate}} {{pastEventCount}}</span>
-				<div ng-hide="pastEventsLastPageNum == 0 || pastEventsLastPageNum == 1" class="flex-row flex-space-around">
-					<div class="table-navigator w-100 justify-center">
-						<div ng-hide="pastEventsPageNum == 1" class="flex-row">
-							<a ng-click="getPastEventsFirstPage()">
-								<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
-							</a>
-							<a ng-click="getPastEventsPrevPage()">
-								<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
-							</a>
-						</div>
+				<div ng-hide="pastEventsLastPageNum == 1 || pastEventsLastPageNum == 0" class="flex-row flex-space-around table-header">
+					<div ng-hide="pastEventsPageNum == 1" class="flex-row w-100 flex-space-around">
+						<a ng-click="getPastEventsFirstPage()">
+							<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
+						</a>
+						<a ng-click="getPastEventsPrevPage()">
+							<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
+						</a>
 					</div>
-					<div ng-hide="pastEventsPageNum == pastEventsLastPageNum" class="flex-row">
+					<div ng-hide="pastEventsPageNum == pastEventsLastPageNum" class="flex-row w-100 flex-space-around">
 						<a ng-click="getPastEventsNextPage()">
 							<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 						</a>
@@ -66,18 +64,16 @@
 					</a>
 				</div>
 				<span class="flex justify-center mv-5">{{'showing_items' | translate}} {{futureEventsInitialPageIndex}}-{{futureEventsInitialPageIndex + futureEvents.length - 1}} {{'of' | translate}} {{futureEventCount}}</span>
-				<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around">
-					<div class="table-navigator w-100 justify-center">
-						<div ng-hide="futureEventsPageNum == 1" class="flex-row">
-							<a ng-click="getFutureEventsFirstPage()">
-								<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
-							</a>
-							<a ng-click="getFutureEventsPrevPage()">
-								<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
-							</a>
-						</div>
+				<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around  table-header">
+					<div ng-hide="futureEventsPageNum == 1" class="flex-row w-100 flex-space-around">
+						<a ng-click="getFutureEventsFirstPage()">
+							<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
+						</a>
+						<a ng-click="getFutureEventsPrevPage()">
+							<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
+						</a>
 					</div>
-					<div ng-hide="futureEventsPageNum == futureEventsLastPageNum" class="flex-row">
+					<div ng-hide="futureEventsPageNum == futureEventsLastPageNum" class="flex-row w-100 flex-space-around">
 						<a ng-click="getFutureEventsNextPage()">
 							<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 						</a>
