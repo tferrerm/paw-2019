@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('ProfileCtrl', ['$scope', '$location', 'restService', 'authService', 'user', function($scope, $location, restService, authService, user) {
+	frontend.controller('ProfileCtrl', ['$http', 'url', '$scope', '$location', 'restService', 'authService', 'user', function($http, url, $scope, $location, restService, authService, user) {
 		var commentParams = {pageNum: 1};
 		$scope.user = user;
 		$scope.isLoggedIn = authService.isLoggedIn();
@@ -12,11 +12,19 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    	$scope.isLoggedUser = false;
 	    }
 
-	    $scope.getUserPicture = function(userid) {
-	    	return restService.getUserProfilePicture(userid);
-	    }
+    	restService.getUserProfilePicture(user.userid).then(function(data) {
+    		$scope.picture = data;
+    	});
 
-	    
+		function _arrayBufferToBase64(buffer) {
+		    var binary = '';
+		    var bytes = new Uint8Array(buffer);
+		    var len = bytes.byteLength;
+		    for (var i = 0; i < len; i++) {
+		      binary += String.fromCharCode(bytes[i]);
+		    }
+		    return window.btoa(binary);
+		}
 
 	    restService.hasRelationshipWithUser(user.userid)
 	    	.then(function(data) {

@@ -162,7 +162,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				var headers = {};
 				headers = addAuthHeader(headers);
 
-				$http({method: 'GET', url: url + '/users/' + id + '/picture', responseType: 'arraybuffer', headers: headers})
+				return $http({method: 'GET', url: url + '/users/' + id + '/picture', responseType: 'arraybuffer'})
 					.then(function(response) {
 				    	return _arrayBufferToBase64(response.data);
 				    });
