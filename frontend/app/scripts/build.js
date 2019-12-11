@@ -24,7 +24,9 @@ require.config({
         tab: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab',
         tooltip: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip',
         transition: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition',
-        'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls'
+        'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
+        'angular-mocks': '../../bower_components/angular-mocks/angular-mocks',
+        async: '../../bower_components/async/dist/async'
     },
     shim: {
         angular: {

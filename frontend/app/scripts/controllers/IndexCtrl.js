@@ -13,6 +13,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			{name: 'Tournaments', link: "#/tournaments"}
 		]
 
+		$scope.isLoggedIn = false;
 		$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.loggedUser = authService.getLoggedUser();
 		$scope.isAdmin = authService.isAdmin();
