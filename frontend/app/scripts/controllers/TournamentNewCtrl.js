@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('TournamentNewCtrl', ['$scope', '$filter', '$location', 'restService', 'club', function ($scope, $filter, $location, restService, club) {
+	frontend.controller('TournamentNewCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'club', function ($scope, $filter, $location, restService, authService, club) {
 		
 		$scope.minHour = 0;
 		$scope.maxHour = 0;

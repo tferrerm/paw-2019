@@ -1,7 +1,7 @@
 <div class="main-container">
 	<div class="content-container">
 		<div class="back-link background-dodgerblue">
-			<a class="color-white" ng-click="goToTournament(tournament.tournamentid)"> <<< {{'go_to_tournament' | translate}}</a>
+			<a class="color-white" ng-click="goToTournament(tournament.tournamentid)"> &lt;&lt;&lt; {{'go_to_tournament' | translate}}</a>
 		</div>
 		<div class="profile-title">
           <h2>{{event.name}}</h2>
@@ -53,11 +53,11 @@
 				<div class="flex-grow flex-column w-50">
 					<div class="score">
 						<div ng-if="event.secondTeamScore != null">
-								{{event.secondTeamScore}}
-							</div>
-							<div ng-if="event.secondTeamScore == null">
-								-
-							</div>
+							{{event.secondTeamScore}}
+						</div>
+						<div ng-if="event.secondTeamScore == null">
+							-
+						</div>
 					</div>
 					<div class="team-description">
 						<div class="flex flex-column align-center w-100">

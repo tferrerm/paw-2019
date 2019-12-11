@@ -1,12 +1,10 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('HomeCtrl', ['$scope', '$location', 'restService', 'authService', function($scope, $location, restService, authService) {
+	frontend.controller('HomeCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', function($scope, $filter, $location, restService, authService) {
 		
 		$scope.noParticipations = false;
     	$scope.scheduleHeaders = [];
-
-		$scope.isLoggedIn = authService.isLoggedIn();
 
 		updateSchedule();
 
@@ -19,7 +17,6 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		};
 
 		$scope.$on('user:updated', function() {
-			$scope.isLoggedIn = authService.isLoggedIn();
 			updateSchedule();
 		});
 
@@ -30,6 +27,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				});
 			}
 		}
+
+		//$scope.now = ($filter('date')(new Date(), "EEEE"));
+		//$scope.weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 	}]);
 });
