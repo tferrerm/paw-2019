@@ -5,12 +5,14 @@ define(['routes',
 	'angular',
 	'angular-route',
 	'angular-bootstrap',
+	'angular-sanitize',
 	'bootstrap',
 	'angular-translate'],
 	function(config, dependencyResolverFor, i18n) {
 		var frontend = angular.module('frontend', [
 			'ngRoute',
 			'pascalprecht.translate',
+			'ngSanitize',
 			'ui.bootstrap'
 		]);
 		frontend
@@ -50,6 +52,7 @@ define(['routes',
 
 					$translateProvider.translations('preferredLanguage', i18n);
 					$translateProvider.preferredLanguage('preferredLanguage');
+					$translateProvider.useSanitizeValueStrategy('escapeParameters');
 
 					//$locationProvider.html5Mode(false);
            			$locationProvider.hashPrefix('');

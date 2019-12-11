@@ -40,7 +40,9 @@ require.config({
       transition: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition',
       'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
       'angular-mocks': '../../bower_components/angular-mocks/angular-mocks',
-      async: '../../bower_components/async/dist/async'
+      async: '../../bower_components/async/dist/async',
+      'angular-sanitize': '../../bower_components/angular-sanitize/angular-sanitize',
+      ngSanitize: '../../bower_components/ngSanitize/index'
   },
   shim: {
       angular: {
@@ -83,7 +85,12 @@ require.config({
           deps: [
               'angular'
           ]
-      }
+      },
+      'angular-sanitize': {
+            deps: [
+                'angular'
+            ]
+        }
   },
   packages: [
 

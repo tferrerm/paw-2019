@@ -77,7 +77,7 @@
 					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
 					<h5 class="pitch-info-label vote-balance">{{event.voteBalance}}</h5>
 				</div>
-				<div class="voting-buttons" ng-if="loggedUser != null && loggedUser.userid != event.owner.userid">
+				<!--<div class="voting-buttons" ng-if="loggedUser != null && loggedUser.userid != event.owner.userid">
 					<c:choose>
 						<div ng-if="event.userVote > 0">
 							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
@@ -104,7 +104,7 @@
 							</form>
 						</div>
 					</c:choose>
-				</div>
+				</div>-->
 			</div>
 		</div>
 			<!--<c:if test="${eventFullError == true}">
