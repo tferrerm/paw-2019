@@ -51,7 +51,6 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-    width: 90%;
     list-style: none;
     background-color: white;
 }
@@ -76,12 +75,13 @@
 }
   
 .home-evs-container {
-    width: 90%;
-    background-color: white;
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    flex-direction: column;
 }
   
 .home-evs-group {
-    width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
