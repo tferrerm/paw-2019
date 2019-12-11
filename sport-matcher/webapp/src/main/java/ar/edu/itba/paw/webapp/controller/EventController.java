@@ -150,10 +150,13 @@ public class EventController extends BaseController {
     @Path("/{id}")
 	public Response deleteEvent(@PathParam("id") final long id, @PathParam("pitchId") long pitchid)
 			throws EventNotFoundException, PitchNotFoundException, UserNotAuthorizedException, DateInPastException {
+    	System.out.println("Hola");
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+		System.out.println("Hola2");
 		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
 		es.cancelEvent(event, loggedUser().getUserid());
+		System.out.println("Hola3");
 		for(User inscriptedUser : inscriptedUsers) {
 			if(inscriptedUser != event.getOwner())
 				ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());

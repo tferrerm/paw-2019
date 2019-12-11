@@ -11,26 +11,10 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		var now = $filter('date')(new Date(), "dd/MM/yyyy HH:mm:ss", "GMT-3");
 		$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
 		$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
-		$scope.isLoggedIn = authService.isLoggedIn();
+
 		$scope.showLoginModal = modalService.loginModal;
 
-		if($scope.isLoggedIn) {
-			$scope.isOwner = event.owner.userid == authService.getLoggedUser().userid;
-		} else {
-			$scope.isOwner = false;
-		}
-
-		$scope.goToClub = function(id) {
-			$location.url('clubs/' + id);
-		};
-
-		$scope.goToPitch = function(id) {
-			$location.url('pitches/' + id);
-		};
-
-		$scope.goToProfile = function(id) {
-			$location.url('users/' + id);
-		}
+		updateOwner();
 
 		$scope.kickUser = function(pitchid, eventid, userid) {
 			restService.kickUser(pitchid, eventid, userid).then(function(data) {
@@ -50,12 +34,19 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 					updateEvent(pitchid, eventid);
 				}).catch((error) => alert(error.data || "Error"));;
 			} else {
-				$scope.showLoginModal();
+				$scope.showLoginModal().result.then(function(data) {
+					restService.joinEvent(pitchid, eventid).then(function(data) {
+						updateEvent(pitchid, eventid);
+					}).catch((error) => alert(error.data || "Error"));;
+				});
 			}
 		};
 
-		$scope.deleteEvent = function(pitchid, eventid) {
-			restService.deleteEvent(pitchid, eventid);
+		$scope.cancelEvent = function(pitchid, eventid) {
+			restService.cancelEvent(pitchid, eventid)
+				.then(function(data) {
+					$location.url('events');
+				});
 		};
 
 		function updateEvent(pitchid, eventid) {
@@ -65,10 +56,26 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
 			}).catch((error) => alert(error.data || "Error"));;
+			updateOwner();
 		}
 
+		function updateOwner() {
+			if($scope.isLoggedIn) {
+				$scope.isOwner = event.owner.userid == $scope.loggedUser.userid;
+			} else {
+				$scope.isOwner = false;
+			}
+		}
+
+		$scope.deleteEvent = function(eventid) {
+			restService.deleteEvent(eventid)
+				.then(function(data) {
+					$location.url('events');
+				});
+		};
+
 		$scope.$on('user:updated', function() {
-			$route.reload();
+			updateOwner();
 		});
 
   	}]);

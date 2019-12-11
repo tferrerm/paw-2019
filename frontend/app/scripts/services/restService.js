@@ -58,8 +58,8 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 		}
 
 		return {
-			cancelEvent: function(id) {
-				// HACER
+			cancelEvent: function(pitchid, eventid) {
+				return httpDelete('/pitches/' + pitchid + '/events/' + eventid, {});
 			},
 			commentClub: function(id, comment) {
 				var formData = new FormData();
@@ -116,7 +116,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				return httpDelete('/admin/clubs/' + id, {});
 			},
 			deleteEvent: function(id) {
-				// HACER
+				return httpDelete('/admin/events/' + id, {});
 			},
 			deletePitch: function(clubid, pitchid) {
 				return httpDelete('/admin/clubs/' + clubid + '/pitches/' + pitchid, {});
