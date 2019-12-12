@@ -2,9 +2,37 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
   describe('All Events Controller', function () {
     var $controller, $rootScope;
 
-    var TEST_EVENT = { id: 1, name: 'Event 1'};
-    var TEST_EVENT_ARRAY = [{id: 2, name: 'Event 2'},{id: 3, name: 'Event 3'}];
-    var TEST_EVENT_COUNT = 2;
+    var TEST_EVENT_ARRAY = [{
+      createdAt: "2019-12-12T15:01:14.392Z",
+      description: "Partido de tenis",
+      endsAt: "2019-12-18T19:00:00Z",
+      eventid: 1,
+      inscriptionCount: 0,
+      inscriptionEnd: "2019-12-17T01:04:00Z",
+      maxParticipants: 2,
+      name: "Partido",
+      owner: {
+        firstname: "Santiago",
+        lastname: "Swinnen",
+        role: "admin",
+        userid: 1,
+        username: "santiagoswinnen@hotmail.com"
+      },
+      pitch: {
+        club: {
+          clubid: 1,
+          createdAt: "2019-12-12T14:55:18.752Z",
+          location: "Buenos Aires",
+          name: "Club",
+        },
+        createdAt: "2019-12-12T14:55:30.421Z",
+        name: "Court 1",
+        pitchid: 1,
+        sport: "TENNIS",
+        startsAt: "2019-12-18T14:00:00Z"
+      }
+    }];
+    var TEST_EVENT_COUNT = 1;
     var TEST_LAST_PAGE_NUM = 1;
     var TEST_INITIAL_PAGE_INDEX = 0;
     var TEST_PAGE_NUM = 1;
@@ -58,11 +86,11 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         expect($scope.eventCount).toBeDefined();
       });
 
-      it('should equal 2', function () {
+      it('should equal 1', function () {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.scheduleHeaders.length).toBe(2);
+        expect($scope.scheduleHeaders.length).toBe(1);
       });
 
     });
