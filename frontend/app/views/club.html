@@ -59,7 +59,7 @@
 				<div ng-if="isAdmin" class="status no-margin">
 					<div class="pitch-form-container">
 						<h3>{{'create_pitch' | translate}}</h3>
-						<form ng-submit = createPitchSubmit() name="createPitchForm" method="post" novalidate>
+						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post" novalidate>
 							<div class="form-field">
 								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="createdPitch.name" required/>
 							</div>
@@ -67,11 +67,10 @@
 								<label>{{'sport' | translate}}</label>
 								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports"></select>
 							</div>
-							<!--<div class="choose-file">
-								<form:input type="file" accept="image/*" path="pitchPicture" style="display: none" id="pitchPictureButton"/>
-								<button type="button" class="btn btn-secondary"  onclick="document.getElementById('pitchPictureButton').click()"><spring:message code="choose_file"/></button>
-								<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
-							</div>-->
+							<div>
+								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" required="">
+							</div>
+							<img ngf-src="picture">
 							<div class="justify-center">
 								<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
 							</div>

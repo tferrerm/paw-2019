@@ -27,7 +27,8 @@ require.config({
         'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
         'angular-mocks': '../../bower_components/angular-mocks/angular-mocks',
         async: '../../bower_components/async/lib/async',
-        'angular-sanitize': '../../bower_components/angular-sanitize/angular-sanitize'
+        'angular-sanitize': '../../bower_components/angular-sanitize/angular-sanitize',
+        'ng-file-upload': '../../bower_components/ng-file-upload/ng-file-upload'
     },
     shim: {
         angular: {
@@ -67,6 +68,11 @@ require.config({
             ]
         },
         'angular-sanitize': {
+            deps: [
+                'angular'
+            ]
+        },
+        'ng-file-upload': {
             deps: [
                 'angular'
             ]

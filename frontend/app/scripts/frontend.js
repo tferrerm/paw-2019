@@ -7,13 +7,15 @@ define(['routes',
 	'angular-bootstrap',
 	'angular-sanitize',
 	'bootstrap',
-	'angular-translate'],
+	'angular-translate',
+	'ng-file-upload'],
 	function(config, dependencyResolverFor, i18n) {
 		var frontend = angular.module('frontend', [
 			'ngRoute',
 			'pascalprecht.translate',
 			'ngSanitize',
-			'ui.bootstrap'
+			'ui.bootstrap',
+			'ngFileUpload'
 		]);
 		frontend
 			.config(

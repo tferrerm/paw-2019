@@ -81,10 +81,11 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
 				return httpPost('/pitches/' + pitchid + '/events', formData, {});
 			},
-			createPitch: function(clubid, data) {
+			createPitch: function(clubid, data, picture) {
 				var pitchData = {name: data.name, sport: data.sport /* PICTURE */};
 				var formData = new FormData();
 				formData.append('pitchForm', new Blob([JSON.stringify(pitchData)], {type: 'application/json'}));
+				formData.append('picture', picture);
 				// formData.append('sport', pitchData.sport);
 				/* PICTURE */
 
@@ -231,13 +232,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			leaveTournament: function(id) {
 				return httpPost('/tournaments/' + id + '/leave', {}, {});
 			},
-			register: function(data) {
+			register: function(data, picture) {
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
 				var formData = new FormData();
 				formData.append('username', userData.username);
 				formData.append('password', userData.password);
 				formData.append('firstname', userData.firstname);
 				formData.append('lastname', userData.lastname);
+
+				formData.append('picture', picture);
 				//formData.append('picture', userData.picture);
 				return httpPost('/users', formData, {});
 			},

@@ -18,8 +18,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	}).catch(function(error) {
-alert(error.data || ' Error');
-});
+				alert(error.data || ' Error');
+			});
 
 	    updatePitches(club.clubid, pitchParams);
 
@@ -67,8 +67,8 @@ alert(error.data || ' Error');
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
 			}).catch(function(error) {
-alert(error.data || ' Error');
-});
+				alert(error.data || ' Error');
+			});
 		};
 
 		$scope.commentText = {};
@@ -119,21 +119,29 @@ alert(error.data || ' Error');
 				$scope.commentsPageNum = params.pageNum;
 			});
 		};
-
-		$scope.createPitchSubmit = function() {
+		
+		$scope.createPitchSubmit = function(picture) {
 			//checkPasswordsMatch();
 			//if ($scope.createEventForm.$valid) {
-				//$scope.duplicateEmailError = false;
-				
+			//$scope.duplicateEmailError = false;
 				if ($scope.isAdmin) {
-					restService.createPitch(club.clubid, $scope.createdPitch)
-						.then(function(data) {
-							//var createdEvent = data.event;
-							//$location.url('pitches/' + data.pitchid);
-							pitchParams.pageNum = 1;
-							updatePitches(club.clubid, pitchParams);
-						});
-
+					var xhr = new XMLHttpRequest();
+					xhr.open('GET', picture.$ngfBlobUrl);
+					xhr.responseType = 'blob';
+					xhr.onload = function(e) {
+					if (this.status == 200) {
+					    var blobFileData = this.response;
+					    
+					    restService.createPitch(club.clubid, $scope.createdPitch, blobFileData)
+							.then(function(data) {
+								//var createdEvent = data.event;
+								//$location.url('pitches/' + data.pitchid);
+								pitchParams.pageNum = 1;
+								updatePitches(club.clubid, pitchParams);
+							});
+					  }
+					};
+					xhr.send();
 				}
 			//}
 		};
