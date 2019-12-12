@@ -30,7 +30,11 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				updateEvent(pitchid, eventid);
 				updateInscriptions(pitchid, eventid);
 			}).catch(function(error) {
-				alert(error.data || ' Error');
+				if (error.status === 403) {
+					if (error.data.error === 'InscriptionClosed') {
+						$scope.inscriptionClosedError = true;
+					}
+				}
 			});
 		};
 

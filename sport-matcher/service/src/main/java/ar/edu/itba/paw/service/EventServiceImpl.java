@@ -340,7 +340,7 @@ public class EventServiceImpl implements EventService {
 		if(owner.getUserid() == kickedUserId)
 			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot kick from event if inscription is closed");
+			throw new DateInPastException("InscriptionClosed");
 		}
 		idao.deleteInscription(event.getEventId(), kickedUserId);
 	}

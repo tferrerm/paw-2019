@@ -6,7 +6,7 @@ import ar.edu.itba.paw.exception.EntityNotFoundException;
 public class UserNotFoundException extends EntityNotFoundException {
 
 	public UserNotFoundException() {
-		super("The requested user was not found.");
+		super("UserNotFound");
 	}
 
 }

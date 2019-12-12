@@ -217,7 +217,8 @@ define([], function() {
     cancel_action:'Cancel',
     inscription_closed_error:'Inscription has already closed',
     error_pitch_not_found:'Pitch not found',
-    error_event_not_found:'Event not found'
+    error_event_not_found:'Event not found',
+    error_user_not_found:'User not found'
 
 };
 });

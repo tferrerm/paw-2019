@@ -80,7 +80,7 @@ public class EventController extends BaseController {
     @GET
     @Path("/{id}")
     public Response retrieveElement(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
-    		throws EventNotFoundException, PitchNotFoundException {
+    		throws EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
 
     	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
@@ -133,7 +133,7 @@ public class EventController extends BaseController {
     		@PathParam("id") long eventid,
     		@PathParam("pitchId") long pitchid,
     		@PathParam("userId") long kickedUserId)
-    		throws UserNotAuthorizedException, EntityNotFoundException, UserNotFoundException, DateInPastException {
+    		throws UserNotAuthorizedException, EntityNotFoundException, DateInPastException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);

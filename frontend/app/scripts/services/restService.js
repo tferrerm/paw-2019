@@ -66,6 +66,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 					case 'EventNotFound':
 						error = 'error_event_not_found';
 						break;
+					case 'UserNotFound':
+						error = 'error_user_not_found';
+						break;
 				}
 				errorService.setError(error);
 				$location.url('/404');
