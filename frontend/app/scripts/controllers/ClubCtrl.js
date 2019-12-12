@@ -134,8 +134,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 								pitchParams.pageNum = 1;
 								updatePitches(club.clubid, pitchParams);
 							});
-					});
-				}
+						});
+					};
 		};
 
 		$scope.newTournament = function(id) {
