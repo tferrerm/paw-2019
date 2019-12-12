@@ -17,9 +17,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 						$uibModalInstance.close(true);
 					}).catch(function(error) {
 					  if (error.status === 401) {
-					    $scope.invalidCredentials = true
+					    $scope.invalidCredentials = true;
 					  } else {
-					    alert(error || " Error")
+					    alert(error || ' Error');
 					  }
         });
 			}
