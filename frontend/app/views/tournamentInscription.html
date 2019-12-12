@@ -46,7 +46,7 @@
 								</div>
 							</div>
 							<div class="flex flex-grow justify-center">
-								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[0].inscriptions.length) && !isAdmin">
+								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[0].inscriptions.length) && !isAdmin && !inscriptionHasEnded">
 									<a ng-click="joinTeam(tournament.tournamentid, teamPair[0].teamid)">
 										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
 									</a>
@@ -68,7 +68,7 @@
 								</div>
 							</div>
 							<div class="flex flex-grow justify-center">
-								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[1].inscriptions.length) && !isAdmin"">
+								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[1].inscriptions.length) && !isAdmin && !inscriptionHasEnded"">
 									<a ng-click="joinTeam(tournament.tournamentid, teamPair[1].teamid)">
 										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
 									</a>
@@ -99,7 +99,7 @@
 				{{'inscription_closed_error' | translate}}
 			</span>
 		</div>
-		<div ng-if="hasJoined">
+		<div ng-if="hasJoined && !inscriptionHasEnded">
 			<a ng-click="leaveTournament(tournament.tournamentid)">
 				<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
 			</a>

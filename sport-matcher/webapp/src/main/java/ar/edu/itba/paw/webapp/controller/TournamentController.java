@@ -124,16 +124,16 @@ public class TournamentController extends BaseController {
     }
     
     @POST
-    @Path("/{id}/leave")
+    @Path("/{id}/leave") // Y SI NO ESTOY UNIDO?
     public Response leaveTournament(@PathParam("id") long tournamentid) 
-    		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
+    		throws UserBusyException, TournamentNotFoundException, InscriptionClosedException {
+    	
     	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
-        try {
-			ts.leaveTournament(tournamentid, loggedUser().getUserid());
-		} catch (InscriptionClosedException e) {
-		}
+		ts.leaveTournament(tournamentid, loggedUser().getUserid());
+		
+		LOGGER.debug("User {} left Tournament {}", loggedUser(), tournamentid);
         
-        return Response.status(Status.NO_CONTENT).build();//new ModelAndView("redirect:/tournament/" + tournamentid);
+        return Response.status(Status.NO_CONTENT).build();
     }
 
     @GET

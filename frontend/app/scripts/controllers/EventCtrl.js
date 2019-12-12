@@ -50,7 +50,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 						$scope.inscriptionHasEnded = true;
 					}
 				}
-		});
+			});
 		};
 
 		$scope.joinEvent = function(pitchid, eventid) {
