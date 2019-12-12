@@ -69,10 +69,10 @@ define(['routes',
 						//$rootScope.isViewLoading = false;
 						document.body.scrollTop = document.documentElement.scrollTop = 0;
 					});
-					$rootScope.$on('$routeChangeError', function() {
+					//$rootScope.$on('$routeChangeError', function() {
 						//$rootScope.isViewLoading = false;
-						$location.path('/404');
-					});
+					//	$location.path('/404');
+					//});
 				}])
 			.value('url', 'http://localhost:8080/webapp');
 		return frontend;

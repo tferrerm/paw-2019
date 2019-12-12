@@ -215,7 +215,9 @@ define([], function() {
     are_you_sure:'Are you sure you want to delete?',
     delete_action:'Delete',
     cancel_action:'Cancel',
-    inscription_closed_error:'Inscription has already closed'
+    inscription_closed_error:'Inscription has already closed',
+    error_pitch_not_found:'Pitch not found',
+    error_event_not_found:'Event not found'
 
 };
 });

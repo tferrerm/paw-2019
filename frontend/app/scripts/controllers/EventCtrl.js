@@ -38,8 +38,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			restService.leaveEvent(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
 				updateInscriptions(pitchid, eventid);
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		};
 
@@ -59,8 +57,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 						} else if (error.data.error === 'AlreadyJoined') {
 							$scope.alreadyJoinedError = true;
 						}
-					} else if (error.status === 404) {
-			    		$location.path('/404');
 					}
 				});
 			} else {
@@ -79,8 +75,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 							} else if (error.data.error === 'AlreadyJoined') {
 								$scope.alreadyJoinedError = true;
 							}
-						} else if (error.status === 404) {
-				    		$location.path('/404');
 						}
 					});
 				});

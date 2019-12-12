@@ -94,7 +94,6 @@ public class EventController extends BaseController {
         		.collect(Collectors.counting());
         	isParticipant = count > 0;
         }
-//        mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
         int voteBalance = es.getVoteBalance(event.getEventId());
         int userVote = 0;
         if (loggedUser() != null) {
@@ -123,6 +122,7 @@ public class EventController extends BaseController {
     public Response leaveEvent(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
     		throws DateInPastException, EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
+    	es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		es.leaveEvent(id, loggedUser().getUserid());
         return Response.status(Status.NO_CONTENT).build();
     }

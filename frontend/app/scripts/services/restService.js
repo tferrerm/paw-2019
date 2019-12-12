@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
+define(['frontend', 'jquery', 'services/storageService', 'services/errorService'], function(frontend) {
 
-	frontend.factory('restService', ['$http','$rootScope', 'url', 'storageService', function($http, $rootScope, url, storageService) {
+	frontend.factory('restService', ['$http','$rootScope', '$location', '$q', 'url', 'storageService', 'errorService', function($http, $rootScope, $location, $q, url, storageService, errorService) {
 
 		function httpGet(path, params) {
 			var headers = {};
@@ -11,6 +11,10 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return $http.get(url + path + params, {headers: headers})
 				.then(function(response) { 
 					return response.data; 
+				})
+				.catch(function(response) {
+					errorRedirect(response);
+					return $q.reject(response);
 				});
 		}
 
@@ -21,6 +25,10 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return $http.post(url + path, data, {transformRequest: angular.identity, headers: headers})
 				.then(function(response) { 
 					return response.data; 
+				})
+				.catch(function(response) {
+					errorRedirect(response);
+					return $q.reject(response);
 				});
 		}
 
@@ -33,10 +41,11 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return $http.delete(url + path + params, {headers: headers})
 				.then(function(response) {
 					return response.data;
-				});
-				/*.catch(function(response) {
+				})
+				.catch(function(response) {
+					errorRedirect(response);
 					return $q.reject(response);
-				});*/
+				});
 		}
 
 		function addAuthHeader(headers) {
@@ -45,6 +54,22 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				headers['X-Auth-Token'] = authToken;
 			}
 			return headers;
+		}
+
+		function errorRedirect(response) {
+			if (response.status === 404) {
+				var error;
+				switch (response.data.error) {
+					case 'PitchNotFound':
+						error = 'error_pitch_not_found';
+						break;
+					case 'EventNotFound':
+						error = 'error_event_not_found';
+						break;
+				}
+				errorService.setError(error);
+				$location.url('/404');
+			}
 		}
 
 		return {
