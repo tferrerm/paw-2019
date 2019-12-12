@@ -84,8 +84,8 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			createPitch: function(clubid, data) {
 				var pitchData = {name: data.name, sport: data.sport /* PICTURE */};
 				var formData = new FormData();
-				formData.append('name', pitchData.name);
-				formData.append('sport', pitchData.sport);
+				formData.append('pitchForm', new Blob([JSON.stringify(pitchData)], {type: 'application/json'}));
+				// formData.append('sport', pitchData.sport);
 				/* PICTURE */
 
 				return httpPost('/admin/clubs/' + clubid + '/pitches', formData, {});
