@@ -34,7 +34,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
     }];
     var TEST_EVENT_COUNT = 1;
     var TEST_LAST_PAGE_NUM = 1;
-    var TEST_INITIAL_PAGE_INDEX = 0;
+    var TEST_INITIAL_PAGE_INDEX = 1;
     var TEST_PAGE_NUM = 1;
 
     beforeEach(inject(function (_$controller_, _$rootScope_) {
@@ -60,11 +60,11 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         expect($scope.events).toBeDefined();
       });
 
-      it('should contain two events ', function () {
+      it('should contain two one event ', function () {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.event.length).toBe(2);
+        expect($scope.event.length).toBe(1);
       });
 
       it('should not have duplicate ids ', function () {
@@ -75,6 +75,13 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
           $scope.event.map(function (e) {
             return e.id
           }).filter(function(v,i) { return $scope.event.indexOf(v) === i }).equal($scope.event.length));
+      });
+
+      it('should have the field pitch defined', function () {
+        var $scope = {};
+        buildController($scope);
+
+        expect($scope.event.pitch).toBeDefined();
       });
     });
 
@@ -90,7 +97,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.scheduleHeaders.length).toBe(1);
+        expect($scope.scheduleHeaders.length).equal(1);
       });
 
     });
@@ -103,12 +110,32 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         expect($scope.pageNum).toBeDefined();
       });
 
+      it('should equal 1', function () {
+        var $scope = {};
+        buildController($scope);
+
+        expect($scope.scheduleHeaders.length).equal(1);
+      });
+
+    });
+
+    describe('$scope.lastPageNum', function () {
+      it('should be defined', function () {
+        var $scope = {};
+        buildController($scope);
+
+        expect($scope.lastPageNum).toBeDefined();
+      });
+
       it('should equal 2', function () {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.scheduleHeaders.length).toBe(2);
+        expect($scope.lastPageNum).equal(2);
       });
+
+
+
 
     });
   })
