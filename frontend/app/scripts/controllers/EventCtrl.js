@@ -75,6 +75,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 		$scope.$on('user:updated', function() {
+			updateEvent(event.pitch.pitchid, event.eventid);
 			updateOwner();
 		});
 

@@ -24,9 +24,9 @@
 								<div class="event-item-box">
 									<span class="event-info-label">{{'date' | translate}}</span>
 									<span class="just-row">
-										<span>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}</span>
+										<span>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'GMT-3'}}</span>
 											<span>-</span>
-										<span>{{event.endsAt | date:'HH:mm' : 'UTC'}}</span>
+										<span>{{event.endsAt | date:'HH:mm' : 'GMT-3'}}</span>
 									</span>
 								</div>
 								<div class="event-item-box">
@@ -36,7 +36,7 @@
 						</div>
 						<div class="event-item-box">
 							<span class="event-info-label">{{'end_date' | translate}}</span>
-							<span>{{event.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}</span>
+							<span>{{event.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm' : 'GMT-3'}}</span>
 						</div>
 					</div>
 					<div class="flex-1">
@@ -77,34 +77,32 @@
 					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
 					<h5 class="pitch-info-label vote-balance">{{event.voteBalance}}</h5>
 				</div>
-				<!--<div class="voting-buttons" ng-if="loggedUser != null && loggedUser.userid != event.owner.userid">
-					<c:choose>
-						<div ng-if="event.userVote > 0">
-							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
-								<button type="submit" class="btn btn-danger join-button">{{'downvote' | translate}}</button>
-							</form>
-							<div>
-								<button type="submit" class="btn btn-success join-button vote-balance" disabled="true">{{'upvoted' | translate}}</button>
-							</div>
+				<div class="voting-buttons" ng-if="loggedUser.userid != event.owner.userid">
+					<div ng-if="event.userVote > 0">
+						<a ng-click="downvote(event.pitch.pitchid, event.eventid)">
+							<button type="submit" class="btn btn-danger join-button vote-balance mb-10">{{'downvote' | translate}}</button>
+						</a>
+						<div>
+							<button type="submit" class="btn btn-success join-button vote-balance mb-10" ng-disabled="true">{{'upvoted' | translate}}</button>
 						</div>
-						<div ng-if="event.userVote < 0">
-							<div>
-								<button type="submit" class="btn btn-danger join-button" disabled="true">{{'downvoted' | translate}}</button>
-							</div>
-							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
-								<button type="submit" class="btn btn-success join-button vote-balance">{{'upvote' | translate}}</button>
-							</form>
+					</div>
+					<div ng-if="event.userVote < 0">
+						<div>
+							<button type="submit" class="btn btn-danger join-button vote-balance mb-10" ng-disabled="true">{{'downvoted' | translate}}</button>
 						</div>
-						<div ng-if="event.userVote == 0">
-							<form method="POST" action="<c:url value="/event/${event.eventId}/downvote"/>">
-								<button type="submit" class="btn btn-danger join-button">{{'downvote' | translate}}</button>
-							</form>
-							<form method="POST" action="<c:url value="/event/${event.eventId}/upvote"/>">
-								<button type="submit" class="btn btn-success join-button vote-balance">{{'upvote' | translate}}</button>
-							</form>
-						</div>
-					</c:choose>
-				</div>-->
+						<a ng-click="upvote(event.pitch.pitchid, event.eventid)">
+							<button type="submit" class="btn btn-success join-button vote-balance mb-10">{{'upvote' | translate}}</button>
+						</a>
+					</div>
+					<div ng-if="event.userVote == 0">
+						<a ng-click="downvote(event.pitch.pitchid, event.eventid)">
+							<button type="submit" class="btn btn-danger join-button vote-balance mb-10">{{'downvote' | translate}}</button>
+						</a>
+						<a ng-click="upvote(event.pitch.pitchid, event.eventid)">
+							<button type="submit" class="btn btn-success join-button vote-balance mb-10">{{'upvote' | translate}}</button>
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 			<!--<c:if test="${eventFullError == true}">
