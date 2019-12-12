@@ -5,15 +5,17 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		var commentParams = {pageNum: 1};
 		$scope.user = user;
 		$scope.isLoggedIn = authService.isLoggedIn();
-	    if($scope.isLoggedIn) {
+	    if ($scope.isLoggedIn) {
 	    	$scope.loggedUser = authService.getLoggedUser();
-	    	$scope.isLoggedUser = $scope.loggedUser.userid == user.userid;
+	    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
 	    } else {
 	    	$scope.isLoggedUser = false;
 	    }
 
     	restService.getUserProfilePicture(user.userid).then(function(data) {
-    		$scope.picture = data;
+    		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
+    	}).catch(function(error) {
+    		$scope.picture = '../../images/profile_default.png';
     	});
 
 		function _arrayBufferToBase64(buffer) {
@@ -29,17 +31,19 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    restService.hasRelationshipWithUser(user.userid)
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
-	    	}).catch(function(error) {alert(error.data || " Error")});
+	    	}).catch(function(error) {
+alert(error.data || ' Error');
+});
 
 	    $scope.goToProfile = function(id) {
 			$location.url('users/' + id);
-		}
+		};
 
 		$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = authService.isLoggedIn();
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 		    	$scope.loggedUser = authService.getLoggedUser();
-		    	$scope.isLoggedUser = $scope.loggedUser.userid == user.userid;
+		    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
 		    } else {
 		    	$scope.isLoggedUser = false;
 		    }
@@ -52,7 +56,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.commentsLastPageNum = data.pageCount;
 				$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 				$scope.commentsPageNum = commentParams.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 
 		$scope.getFirstPage = function() {
 			commentParams.pageNum = 1;
@@ -63,7 +69,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {alert(error.data || " Error")});
+				}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.getPrevPage = function() {
@@ -75,7 +83,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {alert(error.data || " Error")});
+				}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.getNextPage = function() {
@@ -87,7 +97,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {alert(error.data || " Error")});
+				}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.getLastPage = function() {
@@ -99,7 +111,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {alert(error.data || " Error")});
+				}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.commentText = {};
@@ -115,7 +129,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 							$scope.commentsLastPageNum = data.pageCount;
 							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 							$scope.commentsPageNum = commentParams.pageNum;
-						}).catch(function(error) {alert(error.data || " Error")});
+						}).catch(function(error) {
+alert(error.data || ' Error');
+});
 				});
 			//}
 		};

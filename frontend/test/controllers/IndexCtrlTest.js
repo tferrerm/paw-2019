@@ -1,3 +1,5 @@
+'use strict';
+
 define(['controllers/IndexCtrl', 'angular-mocks'], function() {
 
   describe('Index Controller test', function() {
@@ -8,7 +10,7 @@ define(['controllers/IndexCtrl', 'angular-mocks'], function() {
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = $rootScope.$new();
-      controller = $controller('IndexCtrl', { $scope: scope });
+      controller = $controller('IndexCtrl', {$scope: scope});
     }));
 
     describe('$scope.isLoggedIn', function() {

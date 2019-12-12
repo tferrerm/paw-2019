@@ -18,7 +18,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					.then(function() {
 						//$scope.loggingIn = false;
 						$uibModalInstance.close(true);
-					}).catch(function(error) {alert(error.data || " Error")});
+					}).catch(function(error) {
+alert(error.data || ' Error');
+});
 			}
 		};
 
@@ -29,10 +31,10 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		    r.onloadend = function(e) {
 		      var data = e.target.result;
 		      //send your binary data via $http or $resource or do anything else with it
-		    }
+		    };
 
 		    r.readAsBinaryString(f);
-		}
+		};
 
 	}]);
 

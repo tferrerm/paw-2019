@@ -12,20 +12,22 @@ define(['frontend'], function(frontend) {
 			},
 			setUser: function(usr, rememberMe) {
 				user = usr;
-				if(rememberMe)
+				if (rememberMe) {
 					$window.localStorage.setItem('session.user', JSON.stringify(usr));
-				else
+				} else {
 					$window.sessionStorage.setItem('session.user', JSON.stringify(usr));
+				}
 			},
 			getAuthToken: function() {
 				return authToken;
 			},
 			setAuthToken: function(token, rememberMe) {
 				authToken = token;
-				if(rememberMe)
+				if (rememberMe) {
 					$window.localStorage.setItem('session.authToken', JSON.stringify(token));
-				else
+				} else {
 					$window.sessionStorage.setItem('session.authToken', JSON.stringify(token));
+				}
 			},
 			destroy: function() {
 				this.setUser(null, false);

@@ -15,7 +15,9 @@ define(['frontend', 'services/restService'], function(frontend) {
     	
 		restService.getSports().then(function(data) {
 			$scope.sports = data.sports;
-		}).catch((error) => alert(error.data || "Error"));
+		}).catch(function(error) {
+			alert(error.data || 'Error');
+		});
 
 		$scope.getFirstPage = function() {
 			params.pageNum = 1;
@@ -41,7 +43,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			params = $scope.filters;
 			params.pageNum = 1;
 			updateEvents(params);
-		}
+		};
 
 		function updateEvents(params) {
 			restService.getAllEvents(params).then(function(data) {
@@ -50,8 +52,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
-		}
+			}).catch(function(error) {
+				alert(error.data || 'Error');
+			});
+		};
 
   	}]);
 

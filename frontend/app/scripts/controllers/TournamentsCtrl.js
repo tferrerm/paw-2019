@@ -9,7 +9,7 @@ define(['frontend'], function(frontend) {
 		updateTournaments(params);
 
 		$scope.goToTournament = function (tournament) {
-			if(tournament.inscriptionSuccess) {
+			if (tournament.inscriptionSuccess) {
 				$location.url('tournaments/' + tournament.tournamentid);
 			} else {
 				$location.url('tournaments/' + tournament.tournamentid + '/inscription');
@@ -46,4 +46,4 @@ define(['frontend'], function(frontend) {
 			});
 		}
 	}]);
-})
+});

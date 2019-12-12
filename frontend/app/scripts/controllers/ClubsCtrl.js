@@ -4,7 +4,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 	frontend.controller('ClubsCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
 		var params = {pageNum: 1};
 		$scope.filters = {};
-		if($scope.isAdmin) {
+		if ($scope.isAdmin) {
 			$scope.createdClub = {};
 		}
 
@@ -47,7 +47,9 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		}
 
 		$scope.createClubSubmit = function() {
@@ -55,11 +57,13 @@ define(['frontend', 'services/restService'], function(frontend) {
 			//if ($scope.createEventForm.$valid) {
 				//$scope.duplicateEmailError = false;
 				
-				if($scope.isAdmin) {
+				if ($scope.isAdmin) {
 					restService.createClub($scope.createdClub).then(function(data) {
 						//var createdEvent = data.event;
 						$location.url('clubs/' + data.clubid);
-					}).catch(function(error) {alert(error.data || " Error")});
+					}).catch(function(error) {
+alert(error.data || ' Error');
+});
 
 				}
 			//}

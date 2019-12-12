@@ -15,7 +15,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					.then(function() {
 						//$scope.loggingIn = false;
 						$uibModalInstance.close(true);
-					}).catch(function(error) {alert(error.data || " Error")});
+					}).catch(function(error) {
+alert(error.data || ' Error');
+});
 			}
 		};
 

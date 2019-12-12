@@ -53,7 +53,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			//if ($scope.createEventForm.$valid) {
 				//$scope.duplicateEmailError = false;
 				
-				if($scope.isAdmin) {
+				if ($scope.isAdmin) {
 					restService.setTournamentEventResult(tournament.tournamentClub.clubid, tournament.tournamentid, event.eventid, event).then(function(data) {
 						updateTeams();
 						updateRound(params);
@@ -66,7 +66,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 
 		$scope.parseDate = function(date) {
 			return Date.parse(date);
-		}
+		};
 
 	}]);
-})
+});

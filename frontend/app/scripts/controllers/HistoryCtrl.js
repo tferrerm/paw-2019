@@ -5,7 +5,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    var params = {pageNum: 1};
 
 	    $scope.isLoggedIn = authService.isLoggedIn();
-	    if($scope.isLoggedIn) {
+	    if ($scope.isLoggedIn) {
 	    	$scope.loggedUser = authService.getLoggedUser();
     		restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 				$scope.events = data.events;
@@ -21,7 +21,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 
 		$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = authService.isLoggedIn();
-		    if($scope.isLoggedIn) {
+		    if ($scope.isLoggedIn) {
 		    	$scope.loggedUser = authService.getLoggedUser();
 	    		restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 					$scope.events = data.events;
@@ -48,7 +48,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.getPrevPage = function() {
@@ -59,7 +61,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.getNextPage = function() {
@@ -70,7 +74,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 
 		$scope.getLastPage = function() {
@@ -81,7 +87,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		};
 	}]);
 });

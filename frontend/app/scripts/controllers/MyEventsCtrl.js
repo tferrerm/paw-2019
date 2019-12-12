@@ -5,7 +5,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    var pastEventParams = {pageNum: 1};
 	    var futureEventParams = {pageNum: 1};
 
-	    if($scope.isLoggedIn) {
+	    if ($scope.isLoggedIn) {
 	    	$scope.pastEvents = pastEvents.events;
 			$scope.pastEventCount = pastEvents.eventCount;
 			$scope.pastEventsLastPageNum = pastEvents.lastPageNum;
@@ -23,7 +23,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    }
 
 		$scope.$on('user:updated', function() {
-		    if($scope.isLoggedIn) {
+		    if ($scope.isLoggedIn) {
 		    	updatePastEvents(pastEventParams);
 		    	updateFutureEvents(futureEventParams);
 		    } else {
@@ -63,7 +63,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.pastEventsLastPageNum = data.lastPageNum;
 				$scope.pastEventsInitialPageIndex = data.initialPageIndex;
 				$scope.pastEventsPageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		}
 
 		$scope.getFutureEventsFirstPage = function() {

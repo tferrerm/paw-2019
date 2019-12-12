@@ -4,14 +4,14 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 	frontend.controller('IndexCtrl', ['$scope', '$location', 'authService', 'storageService', 'restService', 'modalService', function($scope, $location, authService, storageService, restService, modalService) {
 		$scope.welcomeText = 'Welcome to your frontend page'; // ELIMINAR
 		$scope.sidebarElements = [
-			{name: 'Home', link: "#/home"},
-			{name: 'All events', link: "#/events"},
-			{name: 'My events', link: "#/my-events"},
-			{name: 'History', link: "#/history"},
-			{name: 'Clubs', link: "#/clubs"},
-			{name: 'Pitches', link: "#/pitches"},
-			{name: 'Tournaments', link: "#/tournaments"}
-		]
+			{name: 'Home', link: '#/home'},
+			{name: 'All events', link: '#/events'},
+			{name: 'My events', link: '#/my-events'},
+			{name: 'History', link: '#/history'},
+			{name: 'Clubs', link: '#/clubs'},
+			{name: 'Pitches', link: '#/pitches'},
+			{name: 'Tournaments', link: '#/tournaments'}
+		];
 
 		$scope.isLoggedIn = false;
 		$scope.isLoggedIn = authService.isLoggedIn();
@@ -23,7 +23,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 
 		$scope.logout = function() {
 			authService.logout();
-		}
+		};
 		
 		$scope.$on('user:updated', function() {
 			$scope.isLoggedIn = authService.isLoggedIn();
@@ -45,7 +45,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 
 		$scope.goToProfile = function(id) {
 			$location.url('users/' + id);
-		}
+		};
 
 	}]);
 });
