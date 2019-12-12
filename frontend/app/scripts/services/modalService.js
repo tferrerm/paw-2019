@@ -1,5 +1,5 @@
 'use strict';
-define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/LoginModalCtrl', 'services/restService'], function(frontend) {
+define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/DeleteConfirmModalCtrl', 'controllers/LoginModalCtrl', 'services/restService'], function(frontend) {
 
 	frontend.service('modalService', ['$uibModal', 'restService', function($uibModal, restService) {
 
@@ -15,6 +15,14 @@ define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/LoginModalCtrl
 			return $uibModal.open({
 				templateUrl: 'views/loginModal.html',
 				controller: 'LoginModalCtrl',
+				size: 'md'
+			});
+		};
+
+		this.deleteConfirmModal = function() {
+			return $uibModal.open({
+				templateUrl: 'views/deleteConfirmModal.html',
+				controller: 'DeleteConfirmModalCtrl',
 				size: 'md'
 			});
 		};

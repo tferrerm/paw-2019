@@ -9,7 +9,7 @@ define(['frontend', 'services/restService', 'services/storageService'], function
 				return loggedUser;
 			},
 			isAdmin: function() {
-				return this.isLoggedIn() && loggedUser.role == 'admin';
+				return this.isLoggedIn() && loggedUser.role === 'admin';
 			},
 			isLoggedIn: function() {
 				return !!loggedUser;

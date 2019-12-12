@@ -33,7 +33,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			return $http.delete(url + path + params, {headers: headers})
 				.then(function(response) {
 					return response.data;
-				})
+				});
 				/*.catch(function(response) {
 					return $q.reject(response);
 				});*/
@@ -41,20 +41,10 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 
 		function addAuthHeader(headers) {
 			var authToken = storageService.getAuthToken();
-			if(authToken) {
+			if (authToken) {
 				headers['X-Auth-Token'] = authToken;
 			}
 			return headers;
-		}
-
-		function _arrayBufferToBase64(buffer) {
-		    var binary = '';
-		    var bytes = new Uint8Array(buffer);
-		    var len = bytes.byteLength;
-		    for (var i = 0; i < len; i++) {
-		      binary += String.fromCharCode(bytes[i]);
-		    }
-		    return window.btoa(binary);
 		}
 
 		return {
@@ -121,6 +111,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			deletePitch: function(clubid, pitchid) {
 				return httpDelete('/admin/clubs/' + clubid + '/pitches/' + pitchid, {});
 			},
+			downvote: function(pitchid, eventid) {
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/downvote', {}, {});
+			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
 			},
@@ -138,6 +131,15 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			},
 			getPitch: function(id) {
 				return httpGet('/pitches/' + id, {});
+			},
+			getPitchPicture: function(id) {
+				var headers = {};
+				headers = addAuthHeader(headers);
+
+				return $http({method: 'GET', url: url + '/pitches/' + id + '/picture', responseType: 'arraybuffer'})
+					.then(function(response) {
+				    	return response.data;
+				    });
 			},
 			getPitches: function(params) {
 				return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
@@ -205,7 +207,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 
 				return $http({method: 'GET', url: url + '/users/' + id + '/picture', responseType: 'arraybuffer'})
 					.then(function(response) {
-				    	return _arrayBufferToBase64(response.data);
+				    	return response.data;
 				    });
 			},
 			hasRelationshipWithClub: function(id) {
@@ -245,8 +247,11 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('firstResult', resultData.firstResult);
 				formData.append('secondResult', resultData.secondResult);
 				return httpPost('/admin/clubs/' + clubid + '/tournaments/' + tournamentid + '/events/' + eventid + '/result', formData, {});
+			},
+			upvote: function(pitchid, eventid) {
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/upvote', {}, {});
 			}
-		}
+		};
 
 	}]);
 

@@ -1,0 +1,25 @@
+.tournament-row {
+    border-bottom: 1px lightgrey solid;
+    height: 50px;
+    word-break: break-word;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+  
+.tournament-row:hover {
+    background-color: lightgrey;
+}
+  
+.tournament-row:last-child {
+    border-bottom: none;
+}
+
+.tournament-row div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+  

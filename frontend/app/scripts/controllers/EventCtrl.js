@@ -6,9 +6,9 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.event = event;
 		$scope.inscriptions = inscriptions.inscriptions;
 
-		var inscriptionEnd = $filter('date')(event.inscriptionEnd, "dd/MM/yyyy HH:mm:ss", "GMT-3");
-		var eventEnd = $filter('date')(event.endsAt, "dd/MM/yyyy HH:mm:ss", "GMT-3");
-		var now = $filter('date')(new Date(), "dd/MM/yyyy HH:mm:ss", "GMT-3");
+		var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+		var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+		var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
 		$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
 		$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
 
@@ -16,67 +16,111 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 
 		updateOwner();
 
+		$scope.$on('user:updated', function() {
+			updateEvent(event.pitch.pitchid, event.eventid);
+			updateOwner();
+		});
+
+		if ($scope.isOwner || $scope.isAdmin) {
+			$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+		}
+
 		$scope.kickUser = function(pitchid, eventid, userid) {
 			restService.kickUser(pitchid, eventid, userid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {alert(error.data || " Error")});
-		}
+				updateInscriptions(pitchid, eventid);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
+		};
 
 		$scope.leaveEvent = function(pitchid, eventid) {
 			restService.leaveEvent(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {alert(error.data || " Error")});
+				updateInscriptions(pitchid, eventid);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
 		};
 
 		$scope.joinEvent = function(pitchid, eventid) {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 				restService.joinEvent(pitchid, eventid).then(function(data) {
 					updateEvent(pitchid, eventid);
-				}).catch(function(error) {alert(error.data || " Error")});
+					updateInscriptions(pitchid, eventid);
+				}).catch(function(error) {
+					alert(error.data || ' Error');
+				});
 			} else {
 				$scope.showLoginModal().result.then(function(data) {
 					restService.joinEvent(pitchid, eventid).then(function(data) {
 						updateEvent(pitchid, eventid);
-					}).catch(function(error) {alert(error.data || " Error")});
+						updateInscriptions(pitchid, eventid);
+					}).catch(function(error) {
+						alert(error.data || ' Error');
+					});
 				});
 			}
 		};
 
 		$scope.cancelEvent = function(pitchid, eventid) {
-			restService.cancelEvent(pitchid, eventid)
-				.then(function(data) {
-					$location.url('events');
-				});
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.cancelEvent(pitchid, eventid)
+					.then(function(data) {
+						$location.url('events');
+					});
+			});
+			
 		};
 
 		function updateEvent(pitchid, eventid) {
 			restService.getEvent(pitchid, eventid).then(function(data) {
 				event = Object.assign(event, data);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
 			});
+		}
+
+		function updateInscriptions(pitchid, eventid) {
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
-			}).catch(function(error) {alert(error.data || " Error")});
-			updateOwner();
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
 		}
 
 		function updateOwner() {
-			if($scope.isLoggedIn) {
-				$scope.isOwner = event.owner.userid == $scope.loggedUser.userid;
+			if ($scope.isLoggedIn) {
+				$scope.isOwner = event.owner.userid === $scope.loggedUser.userid;
 			} else {
 				$scope.isOwner = false;
 			}
 		}
 
 		$scope.deleteEvent = function(eventid) {
-			restService.deleteEvent(eventid)
-				.then(function(data) {
-					$location.url('events');
-				});
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.deleteEvent(eventid)
+					.then(function(data) {
+						$location.url('events');
+					});
+			});
 		};
 
-		$scope.$on('user:updated', function() {
-			updateOwner();
-		});
+		$scope.upvote = function(pitchid, eventid) {
+			restService.upvote(pitchid, eventid).then(function(data) {
+				updateEvent(pitchid, eventid);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
+		};
+
+		$scope.downvote = function(pitchid, eventid) {
+			restService.downvote(pitchid, eventid).then(function(data) {
+				updateEvent(pitchid, eventid);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
+		};
 
   	}]);
 

@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('AllEventsCtrl', ['$scope', '$location', 'restService', 'events', function($scope, $location, restService, events) {
+	frontend.controller('AllEventsCtrl', ['$scope', '$filter', '$location', 'restService', 'events', function($scope, $filter, $location, restService, events) {
 		var params = {pageNum: 1};
 		
 		$scope.events = events.events;
@@ -15,7 +15,13 @@ define(['frontend', 'services/restService'], function(frontend) {
     	
 		restService.getSports().then(function(data) {
 			$scope.sports = data.sports;
-		}).catch((error) => alert(error.data || "Error"));
+		}).catch(function(error) {
+			alert(error.data || 'Error');
+		});
+
+		$scope.$watch('filters.selectedDate', function (newValue) {
+			$scope.filters.date = $filter('date')(newValue, 'yyyy-MM-dd');
+		});
 
 		$scope.getFirstPage = function() {
 			params.pageNum = 1;
@@ -41,7 +47,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 			params = $scope.filters;
 			params.pageNum = 1;
 			updateEvents(params);
-		}
+		};
 
 		function updateEvents(params) {
 			restService.getAllEvents(params).then(function(data) {
@@ -50,8 +56,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
-		}
+			}).catch(function(error) {
+				alert(error.data || 'Error');
+			});
+		};
 
   	}]);
 

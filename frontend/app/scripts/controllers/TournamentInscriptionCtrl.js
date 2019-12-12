@@ -9,7 +9,7 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		$scope.showLoginModal = modalService.loginModal;
 
 		$scope.joinTeam = function(tournamentid, teamid) {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 				restService.joinTournament(tournamentid, teamid).then(function(data) {
 	                restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
 						$scope.hasJoined = data.hasJoined;
@@ -29,7 +29,7 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		};
 
 		$scope.leaveTournament = function(id) {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 				restService.leaveTournament(id).then(function(data) {
 	                restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
 						$scope.hasJoined = data.hasJoined;
@@ -54,13 +54,13 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 
 		function setTournamentTeamPairs(teamInscriptions) {
 			$scope.tournamentTeams = [];
-			for(var i = 0; i < teamInscriptions.length; i+=2) {
-				$scope.tournamentTeams.push([teamInscriptions[i], teamInscriptions[i+1]]);
+			for (var i = 0; i < teamInscriptions.length; i += 2) {
+				$scope.tournamentTeams.push([teamInscriptions[i], teamInscriptions[i + 1]]);
 			}
 		}
 
 		$scope.$on('user:updated', function() {
-			if($scope.isLoggedIn) {
+			if ($scope.isLoggedIn) {
 		    	restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
 					$scope.hasJoined = data.hasJoined;
 					//setTournamentTeamPairs(data.teams);
@@ -71,4 +71,4 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		});
 
 	}]);
-})
+});

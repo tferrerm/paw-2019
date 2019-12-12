@@ -14,11 +14,11 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    	$scope.minHour = data.minHour;
 	    	$scope.maxHour = data.maxHour;
 	    	
-	    	for(var i = $scope.minHour; i <= $scope.maxHour; i++) {
-	    		if(i != $scope.maxHour) {
+	    	for (var i = $scope.minHour; i <= $scope.maxHour; i++) {
+	    		if (i !== $scope.maxHour) {
 	    			$scope.startsAtHours.push(i);
 	    		}
-	    		if(i != $scope.minHour) {
+	    		if (i !== $scope.minHour) {
 	    			$scope.endsAtHours.push(i);
 	    		}
 	    	}
@@ -50,11 +50,11 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    $scope.tournament = {};
 
 		$scope.$watch('tournament.selectedDate', function (newValue) {
-			$scope.tournament.firstRoundDate = $filter('date')(newValue, "yyyy-MM-dd");
+			$scope.tournament.firstRoundDate = $filter('date')(newValue, 'yyyy-MM-dd');
 		});
 
 		$scope.$watch('tournament.selectedInscriptionDate', function (newValue) {
-			$scope.tournament.inscriptionEndDate = $filter('date')(newValue, "yyyy-MM-ddTHH:mm:ss");
+			$scope.tournament.inscriptionEndDate = $filter('date')(newValue, 'yyyy-MM-ddTHH:mm:ss');
 		});
 
 	    $scope.createTournamentSubmit = function() {
@@ -62,7 +62,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			//if ($scope.createEventForm.$valid) {
 				//$scope.duplicateEmailError = false;
 				
-				if($scope.isAdmin) {
+				if ($scope.isAdmin) {
 					restService.createTournament($scope.club.clubid, $scope.tournament).then(function(data) {
 						$location.url('tournaments/' + data.tournamentid + '/inscription');
 					});
@@ -73,4 +73,4 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		};
 		
 	}]);
-})
+});

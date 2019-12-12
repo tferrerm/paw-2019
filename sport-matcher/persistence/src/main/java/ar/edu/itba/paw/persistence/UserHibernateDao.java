@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
@@ -101,7 +102,7 @@ public class UserHibernateDao implements UserDao {
 		from.fetch("commenter", JoinType.LEFT);
 		from.fetch("receiver", JoinType.LEFT);
 		final TypedQuery<UserComment> query = em.createQuery(
-				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
+				cq.select(from).where(from.get("commentid").in(ids)).distinct(true).orderBy(cb.desc(from.get("createdAt")))
 			);
 		
 		return query.getResultList();

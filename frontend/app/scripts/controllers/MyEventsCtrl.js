@@ -1,34 +1,30 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
 
-	frontend.controller('MyEventsCtrl', ['$scope', '$location', 'restService', 'authService', 'pastEvents', 'futureEvents', function($scope, $location, restService, authService, pastEvents, futureEvents) {
+	frontend.controller('MyEventsCtrl', ['$scope', '$location', '$q', 'restService', 'authService', 'pastEvents', 'futureEvents', function($scope, $location, $q, restService, authService, pastEvents, futureEvents) {
 	    var pastEventParams = {pageNum: 1};
 	    var futureEventParams = {pageNum: 1};
 
-	    if($scope.isLoggedIn) {
-	    	$scope.pastEvents = pastEvents.events;
-			$scope.pastEventCount = pastEvents.eventCount;
-			$scope.pastEventsLastPageNum = pastEvents.lastPageNum;
-			$scope.pastEventsInitialPageIndex = pastEvents.initialPageIndex;
-			$scope.pastEventsPageNum = pastEventParams.pageNum;
+    	$scope.pastEvents = pastEvents.events;
+		$scope.pastEventCount = pastEvents.eventCount;
+		$scope.pastEventsLastPageNum = pastEvents.lastPageNum;
+		$scope.pastEventsInitialPageIndex = pastEvents.initialPageIndex;
+		$scope.pastEventsPageNum = pastEventParams.pageNum;
 
-			$scope.futureEvents = futureEvents.events;
-			$scope.futureEventCount = futureEvents.eventCount;
-			$scope.futureEventsLastPageNum = futureEvents.lastPageNum;
-			$scope.futureEventsInitialPageIndex = futureEvents.initialPageIndex;
-			$scope.futureEventsPageNum = futureEventParams.pageNum;
-	    } else {
-	    	// REDIRECCIONAR
-	    	alert('LOGIN');
-	    }
-
+		$scope.futureEvents = futureEvents.events;
+		$scope.futureEventCount = futureEvents.eventCount;
+		$scope.futureEventsLastPageNum = futureEvents.lastPageNum;
+		$scope.futureEventsInitialPageIndex = futureEvents.initialPageIndex;
+		$scope.futureEventsPageNum = futureEventParams.pageNum;
+	    
 		$scope.$on('user:updated', function() {
-		    if($scope.isLoggedIn) {
+		    if ($scope.isLoggedIn) {
 		    	updatePastEvents(pastEventParams);
 		    	updateFutureEvents(futureEventParams);
 		    } else {
-	    		// REDIRECCIONAR
-	    		alert('LOGIN');
+	    		var defer = $q.defer();
+	    		defer.reject('Access blocked');
+				$location.path('/home');
 	    	}
 		});
 
@@ -63,7 +59,9 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				$scope.pastEventsLastPageNum = data.lastPageNum;
 				$scope.pastEventsInitialPageIndex = data.initialPageIndex;
 				$scope.pastEventsPageNum = params.pageNum;
-			}).catch(function(error) {alert(error.data || " Error")});
+			}).catch(function(error) {
+alert(error.data || ' Error');
+});
 		}
 
 		$scope.getFutureEventsFirstPage = function() {
