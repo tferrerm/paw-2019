@@ -53,32 +53,25 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			},
 			commentClub: function(id, comment) {
 				var formData = new FormData();
-				formData.append('comment', comment);
+				formData.append('commentForm', new Blob([JSON.stringify({comment: comment})], {type: 'application/json'}));
 				return httpPost('/clubs/' + id + '/comment', formData, {});
 			},
 			commentUser: function(id, comment) {
 				var formData = new FormData();
-				formData.append('comment', comment);
+				formData.append('commentForm', new Blob([JSON.stringify({comment: comment})], {type: 'application/json'}));
 				return httpPost('/users/' + id + '/comment', formData, {});
 			},
 			createClub: function(data) {
 				var clubData = {name: data.name, location: data.location};
 				var formData = new FormData();
-				formData.append('name', clubData.name);
-				formData.append('location', clubData.location);
+				formData.append('clubForm', new Blob([JSON.stringify(clubData)], {type: 'application/json'}));
 
 				return httpPost('/admin/clubs', formData, {});
 			},
 			createEvent: function(pitchid, data) {
 				var eventData = {name: data.name, description: data.description, maxParticipants: data.maxParticipants, date: data.date, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
 				var formData = new FormData();
-				formData.append('name', eventData.name);
-				formData.append('description', eventData.description);
-				formData.append('maxParticipants', eventData.maxParticipants);
-				formData.append('date', eventData.date);
-				formData.append('startsAtHour', eventData.startsAtHour);
-				formData.append('endsAtHour', eventData.endsAtHour);
-				formData.append('inscriptionEndDate', eventData.inscriptionEndDate);
+				formData.append('eventForm', new Blob([JSON.stringify(eventData)], {type: 'application/json'}));
 				return httpPost('/pitches/' + pitchid + '/events', formData, {});
 			},
 			createPitch: function(clubid, data, picture) {
@@ -94,13 +87,7 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			createTournament: function(clubid, data) {
 				var tournamentData = {name: data.name, maxTeams: data.maxTeams, teamSize: data.teamSize, firstRoundDate: data.firstRoundDate, startsAtHour: data.startsAtHour, endsAtHour: data.endsAtHour, inscriptionEndDate: data.inscriptionEndDate};
 				var formData = new FormData();
-				formData.append('name', tournamentData.name);
-				formData.append('maxTeams', tournamentData.maxTeams);
-				formData.append('teamSize', tournamentData.teamSize);
-				formData.append('firstRoundDate', tournamentData.firstRoundDate);
-				formData.append('startsAtHour', tournamentData.startsAtHour);
-				formData.append('endsAtHour', tournamentData.endsAtHour);
-				formData.append('inscriptionEndDate', tournamentData.inscriptionEndDate);
+				formData.append('tournamentForm', new Blob([JSON.stringify(tournamentData)], {type: 'application/json'}));
 				return httpPost('/admin/clubs/' + clubid + '/tournaments', formData, {});
 			},
 			deleteClub: function(id) {
@@ -235,20 +222,14 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			register: function(data, picture) {
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
 				var formData = new FormData();
-				formData.append('username', userData.username);
-				formData.append('password', userData.password);
-				formData.append('firstname', userData.firstname);
-				formData.append('lastname', userData.lastname);
-
+				formData.append('userForm', new Blob([JSON.stringify(userData)], {type: 'application/json'}));
 				formData.append('picture', picture);
-				//formData.append('picture', userData.picture);
 				return httpPost('/users', formData, {});
 			},
 			setTournamentEventResult: function(clubid, tournamentid, eventid, data) {
 				var resultData = {firstResult: data.firstTeamScore, secondResult: data.secondTeamScore};
 				var formData = new FormData();
-				formData.append('firstResult', resultData.firstResult);
-				formData.append('secondResult', resultData.secondResult);
+				formData.append('tournamentResultForm', new Blob([JSON.stringify(resultData)], {type: 'application/json'}));
 				return httpPost('/admin/clubs/' + clubid + '/tournaments/' + tournamentid + '/events/' + eventid + '/result', formData, {});
 			},
 			upvote: function(pitchid, eventid) {

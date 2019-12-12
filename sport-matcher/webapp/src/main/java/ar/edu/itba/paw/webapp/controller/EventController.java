@@ -205,10 +205,7 @@ public class EventController extends BaseController {
     		@PathParam("pitchId") long pitchId,
     		@FormDataParam("eventForm") final EventForm form)
     		 throws PitchNotFoundException, FormValidationException, EventCreationException {
-    	
-//    	Integer mp = tryInteger(maxParticipants);
-//    	Integer sa = tryInteger(startsAtHour);
-//    	Integer ea = tryInteger(endsAtHour);
+
     	Instant eventDate = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
     	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	
