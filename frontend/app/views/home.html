@@ -13,7 +13,7 @@
 			</div>
 			<div class="home-all-events">
 				<div ng-repeat="row in schedule" class="home-ev-column">
-					<a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" href="">
+					<a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
 						<span class="event-link">
 							{{event.name}}
 						</span>

@@ -49,7 +49,19 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 					updateEvent(pitchid, eventid);
 					updateInscriptions(pitchid, eventid);
 				}).catch(function(error) {
-					alert(error.data || ' Error');
+					if (error.status === 403) {
+						if (error.data.error === 'UserBusy') {
+							$scope.userBusyError = true;
+						} else if (error.data.error === 'EventFull') {
+							$scope.eventFullError = true;
+						} else if (error.data.error === 'InscriptionClosed') {
+							$scope.inscriptionClosedError = true;
+						} else if (error.data.error === 'AlreadyJoined') {
+							$scope.alreadyJoinedError = true;
+						}
+					} else if (error.status === 404) {
+			    		$location.path('/404');
+					}
 				});
 			} else {
 				$scope.showLoginModal().result.then(function(data) {
@@ -57,7 +69,19 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 						updateEvent(pitchid, eventid);
 						updateInscriptions(pitchid, eventid);
 					}).catch(function(error) {
-						alert(error.data || ' Error');
+						if (error.status === 403) {
+							if (error.data.error === 'UserBusy') {
+								$scope.userBusyError = true;
+							} else if (error.data.error === 'EventFull') {
+								$scope.eventFullError = true;
+							} else if (error.data.error === 'InscriptionClosed') {
+								$scope.inscriptionClosedError = true;
+							} else if (error.data.error === 'AlreadyJoined') {
+								$scope.alreadyJoinedError = true;
+							}
+						} else if (error.status === 404) {
+				    		$location.path('/404');
+						}
 					});
 				});
 			}
@@ -77,7 +101,9 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			restService.getEvent(pitchid, eventid).then(function(data) {
 				event = Object.assign(event, data);
 			}).catch(function(error) {
-				alert(error.data || ' Error');
+				if (error.status === 404) {
+			    	$location.path('/404');
+				}
 			});
 		}
 

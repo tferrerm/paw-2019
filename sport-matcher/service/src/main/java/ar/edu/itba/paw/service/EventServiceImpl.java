@@ -309,7 +309,7 @@ public class EventServiceImpl implements EventService {
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new InscriptionClosedException("Cannot join event if inscription is closed");
+			throw new InscriptionClosedException();
 		}
 		
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {

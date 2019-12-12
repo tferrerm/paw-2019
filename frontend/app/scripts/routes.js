@@ -2,7 +2,7 @@
 
 define([], function() {
 	return {
-		defaultRoutePath: '/home',
+		defaultRoutePath: '/404',
 		routes: {
 			'/home': {
 				templateUrl: '/views/home.html',
@@ -190,6 +190,10 @@ define([], function() {
 						return restService.getClub(params.id);
 					}]
 				}
+			},
+			'/404': {
+				templateUrl: '404.html',
+				controller: 'NotFoundCtrl'
 			}
 			/* ===== yeoman hook ===== */
 			/* Do not remove these commented lines! Needed for auto-generation */

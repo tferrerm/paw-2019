@@ -4,7 +4,7 @@ package ar.edu.itba.paw.exception;
 public class EventFullException extends InscriptionClosedException {
 
 	public EventFullException() {
-		super("Cannot join an event that has reached its maximum participants");
+		super("EventFull");
 	}
 
 }

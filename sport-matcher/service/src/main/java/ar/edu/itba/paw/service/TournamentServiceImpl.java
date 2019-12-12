@@ -169,7 +169,7 @@ public class TournamentServiceImpl implements TournamentService {
 		}
 		
 		if(td.findUserTeam(tournament, user).isPresent()) {
-			throw new UserAlreadyJoinedException(userid, tournamentid);
+			throw new UserAlreadyJoinedException();
 		}
 		
 		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);

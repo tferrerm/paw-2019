@@ -383,13 +383,12 @@ public class EventHibernateDao implements EventDao {
 		int userBusyQueryResult = query.getSingleResult().intValue();
 		
 		if(userBusyQueryResult > 0)
-			throw new UserBusyException("User " + user.getUserid() + " already joined "
-					+ "an event in that period");
+			throw new UserBusyException();
 		
 		try {
 			em.persist(new Inscription(event, user));
 		} catch(EntityExistsException e) {
-			throw new UserAlreadyJoinedException(user.getUserid(), event.getEventId());
+			throw new UserAlreadyJoinedException();
 		}
 	}
 

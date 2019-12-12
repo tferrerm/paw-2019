@@ -57,6 +57,23 @@ define(['routes',
 					//$locationProvider.html5Mode(false);
            			$locationProvider.hashPrefix('');
 				}])
+			.run(
+				['$rootScope',
+				'$location',
+				function($rootScope, $location) {
+					//$rootScope.isViewLoading = false;
+					//$rootScope.$on('$routeChangeStart', function() {
+					//	$rootScope.isViewLoading = true;
+					//});
+					$rootScope.$on('$routeChangeSuccess', function() {
+						//$rootScope.isViewLoading = false;
+						document.body.scrollTop = document.documentElement.scrollTop = 0;
+					});
+					$rootScope.$on('$routeChangeError', function() {
+						//$rootScope.isViewLoading = false;
+						$location.path('/404');
+					});
+				}])
 			.value('url', 'http://localhost:8080/webapp');
 		return frontend;
 	}

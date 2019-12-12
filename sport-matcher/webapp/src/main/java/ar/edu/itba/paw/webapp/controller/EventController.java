@@ -83,11 +83,6 @@ public class EventController extends BaseController {
     		throws EventNotFoundException, PitchNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
 
-    //	Optional<TournamentEvent> tournamentEvent = ts.findTournamentEventById(id);
-    //	if(tournamentEvent.isPresent()) {
-    //		return null;//new ModelAndView("redirect:/tournament/" + tournamentEvent.get().getTournament().getTournamentid() + "/event/" + id);
-    //	}
-
     	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
     	List<Inscription> inscriptions = event.getInscriptions();
 	    User current = loggedUser();
@@ -116,6 +111,7 @@ public class EventController extends BaseController {
     public Response joinEvent(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
     	throws EntityNotFoundException, InscriptionClosedException, EventFullException, UserBusyException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
+    	es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 
     	es.joinEvent(loggedUser().getUserid(), id);
         return Response.status(Status.NO_CONTENT).build();

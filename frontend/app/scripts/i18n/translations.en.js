@@ -214,7 +214,8 @@ define([], function() {
     current:'Current',
     are_you_sure:'Are you sure you want to delete?',
     delete_action:'Delete',
-    cancel_action:'Cancel'
+    cancel_action:'Cancel',
+    inscription_closed_error:'Inscription has already closed'
 
 };
 });

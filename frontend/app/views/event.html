@@ -105,21 +105,26 @@
 				</div>
 			</div>
 		</div>
-			<!--<c:if test="${eventFullError == true}">
+			<div ng-if="userBusyError">
 				<span class="form-error notice">
-					<spring:message code="event_full_error"/>
+					{{'user_busy_error' | translate}}
 				</span>
-			</c:if>
-			<c:if test="${alreadyJoinedError == true}">
+			</div>
+			<div ng-if="alreadyJoinedError">
 				<span class="form-error notice">
-					<spring:message code="already_joined_error"/>
+					{{'already_joined_error' | translate}}
 				</span>
-			</c:if>
-			<c:if test="${userBusyError == true}">
+			</div>
+			<div ng-if="eventFullError">
 				<span class="form-error notice">
-					<spring:message code="user_busy_error"/>
+					{{'event_full_error' | translate}}
 				</span>
-			</c:if>-->
+			</div>
+			<div ng-if="inscriptionClosedError">
+				<span class="form-error notice">
+					{{'inscription_closed_error' | translate}}
+				</span>
+			</div>
 		<div class="club-buttons" ng-if="!inscriptionHasEnded">
 			<div ng-if="!isAdmin">
 				<div ng-if="event.participant">
