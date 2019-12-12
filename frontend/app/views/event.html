@@ -65,7 +65,7 @@
 								<a class="link-text" ng-click="goToProfile(i.inscriptedUser.userid)">
 									<span>{{i.inscriptedUser.firstname}} {{i.inscriptedUser.lastname}}</span>
 								</a>
-								<a type="submit" class="kick-user-btn" ng-if="!eventHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid" ng-click="kickUser(event.pitch.pitchid, event.eventid, i.inscriptedUser.userid)">{{'kick' | translate}}</a>
+								<a type="submit" class="kick-user-btn" ng-if="!inscriptionHasEnded && isOwner && i.inscriptedUser.userid != event.owner.userid" ng-click="kickUser(event.pitch.pitchid, event.eventid, i.inscriptedUser.userid)">{{'kick' | translate}}</a>
 							</div>
 						</ul>
 					</div>

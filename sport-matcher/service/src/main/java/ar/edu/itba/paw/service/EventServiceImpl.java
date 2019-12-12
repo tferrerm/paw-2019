@@ -404,7 +404,7 @@ public class EventServiceImpl implements EventService {
 			throw new UserNotAuthorizedException("Cannot cancel event if now the owner");
 		}
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot cancel event if inscription is closed");
+			throw new DateInPastException("InscriptionClosed");
 		}
 		ed.deleteEvent(event.getEventId());
 	}

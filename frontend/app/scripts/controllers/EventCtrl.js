@@ -33,6 +33,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				if (error.status === 403) {
 					if (error.data.error === 'InscriptionClosed') {
 						$scope.inscriptionClosedError = true;
+						$scope.inscriptionHasEnded = true;
 					}
 				}
 			});
@@ -46,6 +47,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				if (error.status === 403) {
 					if (error.data.error === 'InscriptionClosed') {
 						$scope.inscriptionClosedError = true;
+						$scope.inscriptionHasEnded = true;
 					}
 				}
 		});
@@ -64,6 +66,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 							$scope.eventFullError = true;
 						} else if (error.data.error === 'InscriptionClosed') {
 							$scope.inscriptionClosedError = true;
+							$scope.inscriptionHasEnded = true;
 						} else if (error.data.error === 'AlreadyJoined') {
 							$scope.alreadyJoinedError = true;
 						}
@@ -82,6 +85,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 								$scope.eventFullError = true;
 							} else if (error.data.error === 'InscriptionClosed') {
 								$scope.inscriptionClosedError = true;
+								$scope.inscriptionHasEnded = true;
 							} else if (error.data.error === 'AlreadyJoined') {
 								$scope.alreadyJoinedError = true;
 							}
@@ -96,6 +100,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				restService.cancelEvent(pitchid, eventid)
 					.then(function(data) {
 						$location.url('events');
+					})
+					.catch(function(error) {
+						if (error.status === 403) {
+							if (error.data.error === 'InscriptionClosed') {
+								$scope.inscriptionClosedError = true;
+								$scope.inscriptionHasEnded = true;
+							}
+						}
 					});
 			});
 			
