@@ -105,26 +105,26 @@
 				</div>
 			</div>
 		</div>
-			<div ng-if="userBusyError">
-				<span class="form-error notice">
-					{{'user_busy_error' | translate}}
-				</span>
-			</div>
-			<div ng-if="alreadyJoinedError">
-				<span class="form-error notice">
-					{{'already_joined_error' | translate}}
-				</span>
-			</div>
-			<div ng-if="eventFullError">
-				<span class="form-error notice">
-					{{'event_full_error' | translate}}
-				</span>
-			</div>
-			<div ng-if="inscriptionClosedError">
-				<span class="form-error notice">
-					{{'inscription_closed_error' | translate}}
-				</span>
-			</div>
+		<div ng-if="userBusyError">
+			<span class="form-error notice">
+				{{'user_busy_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="alreadyJoinedError">
+			<span class="form-error notice">
+				{{'already_joined_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="eventFullError">
+			<span class="form-error notice">
+				{{'event_full_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="inscriptionClosedError">
+			<span class="form-error notice">
+				{{'inscription_closed_error' | translate}}
+			</span>
+		</div>
 		<div class="club-buttons" ng-if="!inscriptionHasEnded">
 			<div ng-if="!isAdmin">
 				<div ng-if="event.participant">

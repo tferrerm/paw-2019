@@ -89,9 +89,6 @@ public class PitchController extends BaseController {
 	@Path("/{id}")
 	public Response getPitch(@PathParam("id") final long id) throws PitchNotFoundException {
 		final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
-		//System.out.println(es.getScheduleDaysHeader());
-		//System.out.println(es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-		//System.out.println(es.convertEventListToBooleanSchedule(es.findCurrentEventsInPitch(id)));
 		
 		return Response.ok(PitchDto.ofPitch(pitch)).build();
 	}
@@ -127,7 +124,7 @@ public class PitchController extends BaseController {
 	@Path("/{id}/week-events")
 	public Response getPitchSchedule(@PathParam("id") final long id,
 			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws PitchNotFoundException {
-		//final Pitch pitch = ps.findById(id).orElseThrow(PitchNotFoundException::new);
+		ps.findById(id).orElseThrow(PitchNotFoundException::new);
 		List<Event> weekEvents = es.findCurrentEventsInPitch(id);
 		
 		return Response.ok(EventCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD

@@ -25,7 +25,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
@@ -186,7 +186,7 @@ public class AdminTournamentController extends BaseController {
     @DELETE
     @Path("/{id}")
 	public Response deleteTournament(@PathParam("id") final long tournamentid)
-			throws TournamentNotFoundException, InscriptionDateInPastException {
+			throws TournamentNotFoundException, InscriptionClosedException {
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	Map<Long, List<User>> teamsMap = ts.mapTeamMembers(tournamentid);
     	
@@ -206,7 +206,7 @@ public class AdminTournamentController extends BaseController {
     @Path("/{id}/kick-user/{userId}")
     public Response kickUserFromTournament(
     		@PathParam("id") long tournamentid, @PathParam("userId") long kickedUserId) 
-    				throws UserNotFoundException, TournamentNotFoundException, InscriptionDateInPastException {
+    				throws UserNotFoundException, TournamentNotFoundException, InscriptionClosedException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	User kickedUser = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);

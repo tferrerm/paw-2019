@@ -27,7 +27,7 @@ import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.InvalidTeamAmountException;
 import ar.edu.itba.paw.exception.InvalidTeamSizeException;
@@ -111,7 +111,7 @@ public class TournamentServiceImpl implements TournamentService {
 			final Integer endsAtHour, final Instant inscriptionEndDate, final User user) 
 					throws DateInPastException, MaximumDateExceededException, EndsBeforeStartsException,
 					HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException,
-					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException {
+					InvalidTeamSizeException, InsufficientPitchesException, InscriptionClosedException {
 		
     	Instant firstRoundStartsAt = firstRoundDate.plus(startsAtHour, ChronoUnit.HOURS);
     	Instant firstRoundEndsAt = firstRoundDate.plus(endsAtHour, ChronoUnit.HOURS);
@@ -131,7 +131,7 @@ public class TournamentServiceImpl implements TournamentService {
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException(MIN_HOUR, MAX_HOUR);
     	if(inscriptionEndDate.isBefore(Instant.now()))
-    		throw new InscriptionDateInPastException();
+    		throw new InscriptionClosedException();
     	if(inscriptionEndDate.isAfter((firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS))))
     		throw new MaximumDateExceededException("The inscription cannot close in less than 24 hs before the event starts");
     	
@@ -155,8 +155,8 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void joinTournament(long tournamentid, long teamid, final long userid) 
-			throws UserBusyException, UserAlreadyJoinedException, InscriptionDateInPastException,
-			TeamAlreadyFilledException, UserAlreadyJoinedException {
+			throws UserBusyException, UserAlreadyJoinedException, InscriptionClosedException,
+			TeamAlreadyFilledException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
@@ -165,7 +165,7 @@ public class TournamentServiceImpl implements TournamentService {
 		
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
-			throw new InscriptionDateInPastException();
+			throw new InscriptionClosedException();
 		}
 		
 		if(td.findUserTeam(tournament, user).isPresent()) {
@@ -183,10 +183,10 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void leaveTournament(final long tournamentid, final long userid) 
-			throws InscriptionDateInPastException {
+			throws InscriptionClosedException {
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
-			throw new InscriptionDateInPastException();
+			throw new InscriptionClosedException();
 		}
 		User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
 		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
@@ -196,10 +196,10 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void kickFromTournament(final User kickedUser, final Tournament tournament) 
-			throws InscriptionDateInPastException {
+			throws InscriptionClosedException {
 		TournamentTeam team = td.findUserTeam(tournament, kickedUser).orElseThrow(NoSuchElementException::new); // IF NO ARRANCO
 		if(tournament.getEndsInscriptionAt().isBefore(Instant.now()))
-			throw new InscriptionDateInPastException();
+			throw new InscriptionClosedException();
 		td.deleteTournamentInscriptions(team, kickedUser);
 	}
 	
@@ -335,13 +335,13 @@ public class TournamentServiceImpl implements TournamentService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void deleteTournament(final long tournamentid) throws InscriptionDateInPastException {
+	public void deleteTournament(final long tournamentid) throws InscriptionClosedException {
 		if(tournamentid <= 0) {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		Tournament tournament = findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		if(tournament.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new InscriptionDateInPastException();
+			throw new InscriptionClosedException();
 		}
 		td.deleteTournament(tournamentid);
 	}

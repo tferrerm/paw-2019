@@ -11,46 +11,63 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		$scope.joinTeam = function(tournamentid, teamid) {
 			if ($scope.isLoggedIn) {
 				restService.joinTournament(tournamentid, teamid).then(function(data) {
-	                restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
-						$scope.hasJoined = data.hasJoined;
-						setTournamentTeamPairs(data.teams);
-	                });
+	                updateTeams();
+				}).catch(function(error) {
+					if (error.status === 403) {
+						if (error.data.error === 'UserBusy') {
+							$scope.userBusyError = true;
+						} else if (error.data.error === 'TeamFull') {
+							$scope.teamFullError = true;
+							updateTeams();
+						} else if (error.data.error === 'InscriptionClosed') {
+							$scope.inscriptionClosedError = true;
+							// REDIRIGIR
+						} else if (error.data.error === 'AlreadyJoined') {
+							$scope.alreadyJoinedError = true;
+							updateTeams();
+						}
+					}
 				});
 			} else {
 				$scope.showLoginModal().result.then(function(data) {
 					restService.joinTournament(tournamentid, teamid).then(function(data) {
-		                restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
-							$scope.hasJoined = data.hasJoined;
-							setTournamentTeamPairs(data.teams);
-		                });
+		                updateTeams();
+					}).catch(function(error) {
+						if (error.status === 403) {
+							if (error.data.error === 'UserBusy') {
+								$scope.userBusyError = true;
+							} else if (error.data.error === 'TeamFull') {
+								$scope.teamFullError = true;
+								updateTeams();
+							} else if (error.data.error === 'InscriptionClosed') {
+								$scope.inscriptionClosedError = true;
+								// REDIRIGIR
+							} else if (error.data.error === 'AlreadyJoined') {
+								$scope.alreadyJoinedError = true;
+								updateTeams();
+							}
+						}
 					});
 				});
 			}
 		};
 
 		$scope.leaveTournament = function(id) {
-			if ($scope.isLoggedIn) {
-				restService.leaveTournament(id).then(function(data) {
-	                restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
-						$scope.hasJoined = data.hasJoined;
-						setTournamentTeamPairs(data.teams);
-	                });
-				});
-			} else {
-				$scope.showLoginModal().result.then(function(data) {
-					restService.leaveTournament(id).then(function(data) {
-		                restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
-							$scope.hasJoined = data.hasJoined;
-							setTournamentTeamPairs(data.teams);
-		                });
-					});
-				});
-			}
+			restService.leaveTournament(id).then(function(data) {
+	            updateTeams();
+			});
 		};
 
 		$scope.goToClub = function(id) {
 			$location.url('clubs/' + id);
 		};
+
+		function updateTeams() {
+			restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
+				$scope.hasJoined = data.hasJoined;
+				setTournamentTeamPairs(data.teams);
+            });
+		}
 
 		function setTournamentTeamPairs(teamInscriptions) {
 			$scope.tournamentTeams = [];

@@ -126,8 +126,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		function updateInscriptions(pitchid, eventid) {
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		}
 
@@ -151,16 +149,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.upvote = function(pitchid, eventid) {
 			restService.upvote(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		};
 
 		$scope.downvote = function(pitchid, eventid) {
 			restService.downvote(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		};
 

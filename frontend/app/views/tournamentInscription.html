@@ -79,11 +79,26 @@
 				</div>
 			</div>
 		</div>
-		<!--<c:if test="${userBusyError == true}">
+		<div ng-if="userBusyError">
 			<span class="form-error notice">
-				<spring:message code="user_busy_error"/>
+				{{'user_busy_error' | translate}}
 			</span>
-		</c:if>-->
+		</div>
+		<div ng-if="alreadyJoinedError">
+			<span class="form-error notice">
+				{{'already_joined_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="teamFullError">
+			<span class="form-error notice">
+				{{'team_full_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="inscriptionClosedError">
+			<span class="form-error notice">
+				{{'inscription_closed_error' | translate}}
+			</span>
+		</div>
 		<div ng-if="hasJoined">
 			<a ng-click="leaveTournament(tournament.tournamentid)">
 				<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>

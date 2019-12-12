@@ -165,7 +165,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{eventId}/upvote")
     public Response upvote(@PathParam("eventId") final long eventid, @PathParam("pitchId") long pitchid)
-    	throws EventNotFoundException, PitchNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
+    	throws EntityNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	es.vote(true, ev, loggedUser().getUserid());
@@ -176,7 +176,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{eventId}/downvote")
     public Response downvote(@PathParam("eventId") final long eventid, @PathParam("pitchId") long pitchid)
-    	throws EventNotFoundException, PitchNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
+    	throws EntityNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	es.vote(false, ev, loggedUser().getUserid());
@@ -187,7 +187,7 @@ public class EventController extends BaseController {
     @GET
     @Path("/{id}/inscriptions")
     public Response getInscriptions(@PathParam("id") final long eventid, @PathParam("pitchId") long pitchid)
-    		throws EventNotFoundException, PitchNotFoundException {
+    		throws EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	return Response.ok(InscriptionCollectionDto.ofInscriptions(ev.getInscriptions().stream()

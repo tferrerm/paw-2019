@@ -216,9 +216,12 @@ define([], function() {
     delete_action:'Delete',
     cancel_action:'Cancel',
     inscription_closed_error:'Inscription has already closed',
+    team_full_error:'Team has no vacancies left',
     error_pitch_not_found:'Pitch not found',
     error_event_not_found:'Event not found',
-    error_user_not_found:'User not found'
+    error_user_not_found:'User not found',
+    error_club_not_found:'Club not found',
+    error_tournament_not_found:'Tournament not found'
 
 };
 });
