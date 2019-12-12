@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('AllEventsCtrl', ['$scope', '$location', 'restService', 'events', function($scope, $location, restService, events) {
+	frontend.controller('AllEventsCtrl', ['$scope', '$filter', '$location', 'restService', 'events', function($scope, $filter, $location, restService, events) {
 		var params = {pageNum: 1};
 		
 		$scope.events = events.events;
@@ -17,6 +17,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 			$scope.sports = data.sports;
 		}).catch(function(error) {
 			alert(error.data || 'Error');
+		});
+
+		$scope.$watch('filters.selectedDate', function (newValue) {
+			$scope.filters.date = $filter('date')(newValue, 'yyyy-MM-dd');
 		});
 
 		$scope.getFirstPage = function() {
