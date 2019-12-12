@@ -85,7 +85,7 @@ public class UserHibernateDao implements UserDao {
 	@Override
 	public List<UserComment> getCommentsByUser(final long userid, final int pageNum) {
 		String idQueryString = "SELECT commentid FROM user_comments "
-				+ " WHERE dest_userid = :userid";
+				+ " WHERE dest_userid = :userid ORDER BY created_at DESC";
 		Query idQuery = em.createNativeQuery(idQueryString);
 		idQuery.setParameter("userid", userid);
 		idQuery.setFirstResult((pageNum - 1) * MAX_ROWS);
