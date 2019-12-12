@@ -10,6 +10,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 				$scope.createdPitch = {};
 				restService.getSports().then(function(data) {
 					$scope.sports = data.sports;
+					$scope.createdPitch.sport = $scope.sports[0];
 				});
 			}
 	    
@@ -33,6 +34,7 @@ alert(error.data || ' Error');
 				$scope.createdPitch = {};
 				restService.getSports().then(function(data) {
 					$scope.sports = data.sports;
+					$scope.createdPitch.sport = $scope.sports[0];
 				});
 			}
 		});
