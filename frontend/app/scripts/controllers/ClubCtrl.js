@@ -1,18 +1,19 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/modalService'], function(frontend) {
 
-	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'club', function($scope, $location, restService, club) {
+	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'modalService', 'club', function($scope, $location, restService, modalService, club) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
 
 	    if ($scope.isAdmin) {
-				$scope.createdPitch = {};
-				restService.getSports().then(function(data) {
-					$scope.sports = data.sports;
-					$scope.createdPitch.sport = $scope.sports[0];
-				});
-			}
+			$scope.createdPitch = {};
+			restService.getSports().then(function(data) {
+				$scope.sports = data.sports;
+				$scope.createdPitch.sport = $scope.sports[0];
+			});
+			$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+		}
 	    
 	    restService.hasRelationshipWithClub(club.clubid)
 	    	.then(function(data) {
@@ -143,18 +144,22 @@ alert(error.data || ' Error');
 		};
 
 		$scope.deletePitch = function(clubid, pitchid) {
-			restService.deletePitch(clubid, pitchid)
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.deletePitch(clubid, pitchid)
 				.then(function(data) {
 					pitchParams.pageNum = 1;
 					updatePitches(club.clubid, pitchParams);
 				});
+			});
 		};
 
 		$scope.deleteClub = function(id) {
-			restService.deleteClub(id)
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.deleteClub(id)
 				.then(function(data) {
 					$location.url('clubs');
 				});
+			});
 		};
 
 	}]);

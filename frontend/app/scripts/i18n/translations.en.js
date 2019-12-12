@@ -211,7 +211,10 @@ define([], function() {
     started:'STARTED',
     go_to_home:'Go to home',
     skip_login:'Want to skip this?',
-    current:'Current'
+    current:'Current',
+    are_you_sure:'Are you sure you want to delete?',
+    delete_action:'Delete',
+    cancel_action:'Cancel'
 
 };
 });

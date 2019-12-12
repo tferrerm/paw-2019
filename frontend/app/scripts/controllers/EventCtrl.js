@@ -21,6 +21,10 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			updateOwner();
 		});
 
+		if ($scope.isOwner || $scope.isAdmin) {
+			$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+		}
+
 		$scope.kickUser = function(pitchid, eventid, userid) {
 			restService.kickUser(pitchid, eventid, userid).then(function(data) {
 				updateEvent(pitchid, eventid);
@@ -60,10 +64,13 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 		$scope.cancelEvent = function(pitchid, eventid) {
-			restService.cancelEvent(pitchid, eventid)
-				.then(function(data) {
-					$location.url('events');
-				});
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.cancelEvent(pitchid, eventid)
+					.then(function(data) {
+						$location.url('events');
+					});
+			});
+			
 		};
 
 		function updateEvent(pitchid, eventid) {
@@ -91,10 +98,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		}
 
 		$scope.deleteEvent = function(eventid) {
-			restService.deleteEvent(eventid)
-				.then(function(data) {
-					$location.url('events');
-				});
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.deleteEvent(eventid)
+					.then(function(data) {
+						$location.url('events');
+					});
+			});
 		};
 
 		$scope.upvote = function(pitchid, eventid) {
