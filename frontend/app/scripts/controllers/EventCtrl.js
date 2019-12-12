@@ -16,36 +16,45 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 
 		updateOwner();
 
+		$scope.$on('user:updated', function() {
+			updateEvent(event.pitch.pitchid, event.eventid);
+			updateOwner();
+		});
+
 		$scope.kickUser = function(pitchid, eventid, userid) {
 			restService.kickUser(pitchid, eventid, userid).then(function(data) {
 				updateEvent(pitchid, eventid);
+				updateInscriptions(pitchid, eventid);
 			}).catch(function(error) {
-alert(error.data || ' Error');
-});
+				alert(error.data || ' Error');
+			});
 		};
 
 		$scope.leaveEvent = function(pitchid, eventid) {
 			restService.leaveEvent(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
+				updateInscriptions(pitchid, eventid);
 			}).catch(function(error) {
-alert(error.data || ' Error');
-});
+				alert(error.data || ' Error');
+			});
 		};
 
 		$scope.joinEvent = function(pitchid, eventid) {
 			if ($scope.isLoggedIn) {
 				restService.joinEvent(pitchid, eventid).then(function(data) {
 					updateEvent(pitchid, eventid);
+					updateInscriptions(pitchid, eventid);
 				}).catch(function(error) {
-alert(error.data || ' Error');
-});
+					alert(error.data || ' Error');
+				});
 			} else {
 				$scope.showLoginModal().result.then(function(data) {
 					restService.joinEvent(pitchid, eventid).then(function(data) {
 						updateEvent(pitchid, eventid);
+						updateInscriptions(pitchid, eventid);
 					}).catch(function(error) {
-alert(error.data || ' Error');
-});
+						alert(error.data || ' Error');
+					});
 				});
 			}
 		};
@@ -60,13 +69,17 @@ alert(error.data || ' Error');
 		function updateEvent(pitchid, eventid) {
 			restService.getEvent(pitchid, eventid).then(function(data) {
 				event = Object.assign(event, data);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
 			});
+		}
+
+		function updateInscriptions(pitchid, eventid) {
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
 			}).catch(function(error) {
-alert(error.data || ' Error');
-});
-			updateOwner();
+				alert(error.data || ' Error');
+			});
 		}
 
 		function updateOwner() {
@@ -84,10 +97,21 @@ alert(error.data || ' Error');
 				});
 		};
 
-		$scope.$on('user:updated', function() {
-			updateEvent(event.pitch.pitchid, event.eventid);
-			updateOwner();
-		});
+		$scope.upvote = function(pitchid, eventid) {
+			restService.upvote(pitchid, eventid).then(function(data) {
+				updateEvent(pitchid, eventid);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
+		};
+
+		$scope.downvote = function(pitchid, eventid) {
+			restService.downvote(pitchid, eventid).then(function(data) {
+				updateEvent(pitchid, eventid);
+			}).catch(function(error) {
+				alert(error.data || ' Error');
+			});
+		};
 
   	}]);
 

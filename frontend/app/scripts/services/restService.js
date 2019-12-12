@@ -111,6 +111,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 			deletePitch: function(clubid, pitchid) {
 				return httpDelete('/admin/clubs/' + clubid + '/pitches/' + pitchid, {});
 			},
+			downvote: function(pitchid, eventid) {
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/downvote', {}, {});
+			},
 			getAllEvents: function(params) {
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
 			},
@@ -244,6 +247,9 @@ define(['frontend', 'jquery', 'services/storageService'], function(frontend) {
 				formData.append('firstResult', resultData.firstResult);
 				formData.append('secondResult', resultData.secondResult);
 				return httpPost('/admin/clubs/' + clubid + '/tournaments/' + tournamentid + '/events/' + eventid + '/result', formData, {});
+			},
+			upvote: function(pitchid, eventid) {
+				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/upvote', {}, {});
 			}
 		};
 

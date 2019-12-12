@@ -77,7 +77,7 @@
 					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
 					<h5 class="pitch-info-label vote-balance">{{event.voteBalance}}</h5>
 				</div>
-				<div class="voting-buttons" ng-if="loggedUser.userid != event.owner.userid">
+				<div class="voting-buttons" ng-if="isLoggedIn && loggedUser.userid != event.owner.userid">
 					<div ng-if="event.userVote > 0">
 						<a ng-click="downvote(event.pitch.pitchid, event.eventid)">
 							<button type="submit" class="btn btn-danger join-button vote-balance mb-10">{{'downvote' | translate}}</button>
