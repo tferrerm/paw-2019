@@ -1,48 +1,31 @@
 define(['controllers/HomeCtrl', 'angular-mocks'], function() {
   describe('Home Controller', function () {
-    var $controller, $rootScope;
+    var controller, scope;
 
-    beforeEach(inject(function (_$controller_, _$rootScope_) {
-      $controller = _$controller_;
-      $rootScope = _$rootScope_;
+    beforeEach(module('frontend'));
+
+    beforeEach(inject(function($injector, $rootScope, $controller) {
+      scope = $rootScope.$new();
+      controller = $controller('HomeCtrl', {$scope: scope});
     }));
-
-    var buildController = function ($scope, routeParams) {
-      return $controller('HomeCtrl', {
-        noParticipations: false,
-        scheduleHeaders: []
-      });
-    };
 
     describe('$scope.noParticipations', function () {
       it('should be defined', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.noParticipations).toBeDefined();
+        expect(scope.noParticipations).toBeDefined();
       });
 
       it('should be false', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.noParticipations).toBeFalse();
+        expect(scope.noParticipations).toBeFalse();
       });
     });
 
     describe('$scope.scheduleHeaders', function () {
       it('should be defined', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.scheduleHeaders).toBeDefined();
+        expect(scope.scheduleHeaders).toBeDefined();
       });
 
       it('should be empty', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.scheduleHeaders.length).toBe(0);
+        expect(scope.scheduleHeaders.length).toBe(0);
       });
 
     });

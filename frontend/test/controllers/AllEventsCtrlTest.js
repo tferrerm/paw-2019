@@ -1,6 +1,6 @@
 define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
   describe('All Events Controller', function () {
-    var $controller, $rootScope;
+    var controller, scope;
 
     var TEST_EVENT_ARRAY = [{
       createdAt: "2019-12-12T15:01:14.392Z",
@@ -37,51 +37,41 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
     var TEST_INITIAL_PAGE_INDEX = 1;
     var TEST_PAGE_NUM = 1;
 
-    beforeEach(inject(function (_$controller_, _$rootScope_) {
-      $controller = _$controller_;
-      $rootScope = _$rootScope_;
-    }));
+    beforeEach(module('frontend'));
 
-    var buildController = function ($scope, routeParams) {
-      return $controller('AllEventsCtrl', {
-        events: TEST_EVENT_ARRAY,
-        eventCount: TEST_EVENT_COUNT,
+    beforeEach(inject(function($injector, $rootScope, $controller) {
+      scope = {
+        clubs: TEST_EVENT_ARRAY,
+        clubCount: TEST_EVENT_COUNT,
         lastPageNum:TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM
-      });
-    };
+      };
+      controller = $controller('AllEventsCtrl', {$scope: scope});
+    }));
+
 
     describe('$scope.events', function () {
       it('should be defined', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.events).toBeDefined();
+        expect(scope.events).toBeDefined();
       });
 
       it('should contain two one event ', function () {
-        var $scope = {};
-        buildController($scope);
 
-        expect($scope.events.length).toBe(1);
+        expect(scope.events.length).toBe(1);
       });
 
       it('should not have duplicate ids ', function () {
-        var $scope = {};
-        buildController($scope);
 
         expect(
-          $scope.events.map(function (e) {
+          scope.events.map(function (e) {
             return e.eventid
-          }).filter(function(v,i) { return $scope.events.indexOf(v) === i }).equal($scope.events.length));
+          }).filter(function(v,i) { return scope.events.indexOf(v) === i }).equal(scope.events.length));
       });
 
       it('should have the field pitch defined', function () {
-        var $scope = {};
-        buildController($scope);
 
-        $scope.events.forEach(function (event) {
+        scope.events.forEach(function (event) {
           expect(event.pitch).toBeDefined();
         })
       });
@@ -89,51 +79,34 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
 
     describe('$scope.eventCount', function () {
       it('should be defined', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.eventCount).toBeDefined();
+        expect(scope.eventCount).toBeDefined();
       });
 
       it('should equal 1', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.eventCount).equal(1);
+        expect(scope.eventCount).equal(1);
       });
 
     });
 
     describe('$scope.pageNum', function () {
       it('should be defined', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.pageNum).toBeDefined();
+        expect(scope.pageNum).toBeDefined();
       });
 
       it('should equal 1', function () {
-        var $scope = {};
-        buildController($scope);
 
-        expect($scope.pageNum).equal(1);
+        expect(scope.pageNum).equal(1);
       });
 
     });
 
     describe('$scope.lastPageNum', function () {
       it('should be defined', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.lastPageNum).toBeDefined();
+        expect(scope.lastPageNum).toBeDefined();
       });
 
       it('should equal 1', function () {
-        var $scope = {};
-        buildController($scope);
-
-        expect($scope.lastPageNum).equal(1);
+        expect(scope.lastPageNum).equal(1);
       });
     });
   })
