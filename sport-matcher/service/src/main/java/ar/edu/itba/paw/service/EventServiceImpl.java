@@ -325,7 +325,7 @@ public class EventServiceImpl implements EventService {
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot leave event if inscription is closed");
+			throw new DateInPastException("InscriptionClosed");
 		}
 		idao.deleteInscription(eventid, userid);
 	}

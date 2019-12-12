@@ -32,7 +32,15 @@ public class PitchHibernateDao implements PitchDao {
 
 	@Override
 	public Optional<Pitch> findById(long pitchid) {
-		return Optional.of(em.find(Pitch.class, pitchid));
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Pitch> cq = cb.createQuery(Pitch.class);
+		Root<Pitch> from = cq.from(Pitch.class);
+		
+		final TypedQuery<Pitch> query = em.createQuery(
+				cq.select(from).where(cb.equal(from.get("pitchid"), pitchid))
+			);
+		
+		return query.getResultList().stream().findFirst();
 	}
 
 	@SuppressWarnings("unchecked")

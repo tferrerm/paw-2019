@@ -38,7 +38,13 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			restService.leaveEvent(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
 				updateInscriptions(pitchid, eventid);
-			});
+			}).catch(function(error) {
+				if (error.status === 403) {
+					if (error.data.error === 'InscriptionClosed') {
+						$scope.inscriptionClosedError = true;
+					}
+				}
+		});
 		};
 
 		$scope.joinEvent = function(pitchid, eventid) {
