@@ -19,6 +19,9 @@
 			<div class="justify-center">
 				<button type="submit" class="btn btn-primary submit-btn">{{'login' | translate}}</button>
 			</div>
+      <div ng-if="invalidCredentials">
+        <div class="form-error login-error">{{'login_error' | translate}}</div>
+      </div>
 			<!--<c:if test="${error == true}">
 				<div class="form-error login-error"><spring:message code="login_error"/></div>
 			</c:if>-->
