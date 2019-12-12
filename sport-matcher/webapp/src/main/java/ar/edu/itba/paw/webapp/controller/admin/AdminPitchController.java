@@ -68,16 +68,11 @@ public class AdminPitchController extends BaseController {
 		Sport s = Sport.valueOf(pitchForm.getSport());
 		Pitch pitch;
 		
-		try {
-			byte[] pictureBytes = {};
-			if(pictureForm != null && pictureForm.getBytes() != null)
-				pictureBytes = pictureForm.getBytes();
-			pitch = ps.create(c, pitchForm.getName(), s, pictureBytes);
-			LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
-		} catch(Exception e) {
-			LOGGER.error("Error reading pitch picture {}", e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-		}
+		byte[] pictureBytes = {};
+		if(pictureForm != null && pictureForm.getBytes() != null)
+			pictureBytes = pictureForm.getBytes();
+		pitch = ps.create(c, pitchForm.getName(), s, pictureBytes);
+		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 		
 		final URI uri = uriInfo.getBaseUriBuilder().path("/pitches/" + pitch.getPitchid()).build();
 		return Response.created(uri).entity(PitchDto.ofPitch(pitch)).build();

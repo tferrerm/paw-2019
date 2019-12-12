@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -199,43 +200,30 @@ public class EventController extends BaseController {
     }
     
     @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createEvent(
     		@PathParam("pitchId") long pitchId,
-    		@FormDataParam("name") final String name,
-    		@FormDataParam("description") final String description,
-    		@FormDataParam("maxParticipants") final String maxParticipants,
-    		@FormDataParam("date") final String date,
-    		@FormDataParam("startsAtHour") final String startsAtHour,
-    		@FormDataParam("endsAtHour") final String endsAtHour,
-    		@FormDataParam("inscriptionEndDate") final String inscriptionEndDate)
+    		@FormDataParam("eventForm") final EventForm form)
     		 throws PitchNotFoundException, FormValidationException, EventCreationException {
     	
-    	Integer mp = tryInteger(maxParticipants);
-    	Integer sa = tryInteger(startsAtHour);
-    	Integer ea = tryInteger(endsAtHour);
-    	Instant eventDate = tryInstantStartOfDay(date, TIME_ZONE);
-    	Instant inscriptionEnd = tryDateTimeToInstant(inscriptionEndDate, TIME_ZONE);
+//    	Integer mp = tryInteger(maxParticipants);
+//    	Integer sa = tryInteger(startsAtHour);
+//    	Integer ea = tryInteger(endsAtHour);
+    	Instant eventDate = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
+    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	
-    	LOGGER.debug("date: {}, eventDate: {}", date, eventDate);
-    	LOGGER.debug("inscription: {}, inscriptionDate: {}", inscriptionEndDate, inscriptionEnd);
+    	LOGGER.debug("date: {}, eventDate: {}", eventDate, eventDate);
+    	LOGGER.debug("inscription: {}, inscriptionDate: {}", form.getInscriptionEndDate(), inscriptionEndDate);
     	
-    	validator.validate(
-    		new EventForm()
-    		.withName(name)
-    		.withDescription(description)
-    		.withMaxParticipants(mp)
-    		.withDate(eventDate)
-    		.withStartsAtHour(sa)
-    		.withEndsAtHour(ea)
-    		.withInscriptionEndDate(inscriptionEnd)
-    	);
+    	validator.validate(form);
     	
 
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
     	Event ev = null;
 //    	try {
-	    	ev = es.create(name, loggedUser(), p, description,
-	    			mp, eventDate, sa, ea, inscriptionEnd);
+	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+	    			form.getMaxParticipants(), eventDate, form.getStartsAtHour(),
+	    			form.getEndsAtHour(), inscriptionEndDate);
 //    	} catch(EndsBeforeStartsException e) {
 //    		return eventCreationError("ends_before_starts", pitchId, form);
 //    	} catch(DateInPastException e) { // NOOOO!!!!

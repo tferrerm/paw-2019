@@ -20,16 +20,14 @@ public class ClubForm {
 		return name;
 	}
 
-	public ClubForm withName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	public String getLocation() { return location; }
 
-	public ClubForm withLocation(String location) {
+	public void setLocation(String location) {
 		this.location = location;
-		return this;
 	}
 	
 }

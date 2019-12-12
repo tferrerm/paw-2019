@@ -24,46 +24,32 @@ public class UserForm {
 	@Pattern(regexp = "[a-zA-Z]+")
 	@Size(max = 100)
 	private String lastname;
-	
-	//private MultipartFile profilePicture;
 
 	public String getUsername() {
 		return username;
 	}
 
-	public UserForm withUsername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
-		return this;
 	}
 
 	public String getPassword() {
 		return password;
 	}
-	public UserForm withPassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
-		return this;
 	}
 
 	public String getFirstname() { return firstname; }
 
-	public UserForm withFirstname(String firstname) {
+	public void setFirstname(String firstname) {
 		this.firstname = firstname;
-		return this;
 	}
 
 	public String getLastname() { return lastname; }
 
-	public UserForm withLastname(String lastname) {
+	public void setLastname(String lastname) {
 		this.lastname = lastname;
-		return this;
 	}
-
-//	public MultipartFile getProfilePicture() {
-//		return profilePicture;
-//	}
-//
-//	public void setProfilePicture(MultipartFile profilePicture) {
-//		this.profilePicture = profilePicture;
-//	}
 
 }

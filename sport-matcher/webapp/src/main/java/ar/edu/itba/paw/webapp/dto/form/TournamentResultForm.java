@@ -14,18 +14,16 @@ public class TournamentResultForm {
 		return firstResult;
 	}
 
-	public TournamentResultForm withFirstResult(Integer firstResult) {
+	public void setFirstResult(Integer firstResult) {
 		this.firstResult = firstResult;
-		return this;
 	}
 
 	public Integer getSecondResult() {
 		return secondResult;
 	}
 
-	public TournamentResultForm withSecondResult(Integer secondResult) {
+	public void setSecondResult(Integer secondResult) {
 		this.secondResult = secondResult;
-		return this;
 	}
 	
 }

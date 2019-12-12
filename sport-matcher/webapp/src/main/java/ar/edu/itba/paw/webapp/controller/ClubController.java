@@ -108,13 +108,12 @@ public class ClubController extends BaseController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/{id}/comment")
     public Response comment(@PathParam("id") long clubId,
-    		@FormDataParam("comment") final String commentContent)
+    		@FormDataParam("commentForm") final CommentForm form)
     				throws UserNotAuthorizedException, ClubNotFoundException, FormValidationException {
-		
-		final CommentForm form = new CommentForm().withComment(commentContent);
+
 		validator.validate(form);
 
-		final ClubComment comment = cs.createComment(loggedUser().getUserid(), clubId, commentContent);
+		final ClubComment comment = cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
 
 		final URI uri = uriInfo.getAbsolutePathBuilder()
 				.path(clubId + "/comments/" + comment.getCommentId()).build();

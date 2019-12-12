@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.net.URI;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -44,41 +45,19 @@ public class AdminClubController extends BaseController {
 	@Autowired
 	private FormValidator validator;
 
-//
-//	@GET
-//	@Path("/{pageNum}")
-//	public ModelAndView clubs(
-//			@PathParam("pageNum") int pageNum) {
-
-//		
-//		ModelAndView mav = new ModelAndView("admin/clubList");
-//        
-//        List<Club> clubs = cs.findBy(
-//				Optional.ofNullable(clubName), 
-//        		Optional.ofNullable(location), 
-//        		pageNum);
-//        
-//        Integer totalClubQty = cs.countFilteredClubs(Optional.ofNullable(clubName), 
-//        		Optional.ofNullable(location));
-//        mav.addObject("totalClubQty", totalClubQty);
-//        mav.addObject("lastPageNum", cs.countClubPages(totalClubQty));
-//        
-//		return mav;
-//	}
-//
     @POST
-	public Response createClub(@FormDataParam("name") final String name,
-			@FormDataParam("location") final String location) throws FormValidationException {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response createClub(@FormDataParam("clubForm") ClubForm form)
+			throws FormValidationException {
 
-    	validator.validate(new ClubForm().withName(name).withLocation(location));
+    	validator.validate(form);
 		
-		final Club c = cs.create(name, location);
+		final Club c = cs.create(form.getName(), form.getLocation());
 		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 
 		final URI uri = uriInfo.getBaseUriBuilder().path("/clubs/" + c.getClubid()).build();
 		return Response.created(uri).entity(ClubDto.ofClub(c)).build();
 	}
-//
 
     @DELETE
 	@Path("/{id}")
