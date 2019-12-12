@@ -1,3 +1,5 @@
+'use strict';
+
 define(['controllers/IndexCtrl', 'angular-mocks'], function() {
 
   describe('Index Controller test', function() {
