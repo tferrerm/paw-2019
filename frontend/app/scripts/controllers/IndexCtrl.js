@@ -57,5 +57,9 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			$location.url('users/' + id);
 		};
 
+		$scope.goToHome = function() {
+			$location.url('home');
+		};
+
 	}]);
 });
