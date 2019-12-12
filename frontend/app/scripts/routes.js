@@ -23,6 +23,16 @@ define([], function() {
 				templateUrl: '/views/myEvents.html',
 				controller: 'MyEventsCtrl',
 				resolve: {
+					validate: ['$q', '$location', 'authService', function($q, $location, authService) {
+					  	var defer = $q.defer();
+						if (authService.isLoggedIn() && !authService.isAdmin()) {
+						  	defer.resolve();
+						} else {
+						  	defer.reject('Access blocked');
+						  	$location.path('/home');
+						}
+
+					}],
 					pastEvents: ['$route', 'restService', 'authService', function($route, restService, authService) {
 						var params = $route.current.params;
 						params.pageNum = 1;
@@ -37,7 +47,19 @@ define([], function() {
 			},
 			'/history' : {
 				templateUrl: '/views/history.html',
-				controller: 'HistoryCtrl'
+				controller: 'HistoryCtrl',
+				resolve: {
+					validate: ['$q', '$location', 'authService', function($q, $location, authService) {
+					  	var defer = $q.defer();
+						if (authService.isLoggedIn() && !authService.isAdmin()) {
+						  	defer.resolve();
+						} else {
+						  	defer.reject('Access blocked');
+						  	$location.path('/home');
+						}
+
+					}]
+				}
 			},
 			'/clubs' : {
 				templateUrl: '/views/clubs.html',
