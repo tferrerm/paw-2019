@@ -59,7 +59,7 @@
 				<div ng-if="isAdmin" class="status no-margin">
 					<div class="pitch-form-container">
 						<h3>{{'create_pitch' | translate}}</h3>
-						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post" novalidate>
+						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post">
 							<div class="form-field">
 								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="createdPitch.name" required/>
 							</div>
@@ -68,7 +68,7 @@
 								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports"></select>
 							</div>
 							<div>
-								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" required="">
+								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" required="" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}">
 							</div>
 							<img ngf-src="picture">
 							<div class="justify-center">

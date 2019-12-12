@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService'], function(frontend) {
 
-	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'club', function($scope, $location, restService, club) {
+	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'club', 'Upload', function($scope, $location, restService, club, Upload) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
@@ -125,25 +125,17 @@ define(['frontend', 'services/restService'], function(frontend) {
 			//if ($scope.createEventForm.$valid) {
 			//$scope.duplicateEmailError = false;
 				if ($scope.isAdmin) {
-					var xhr = new XMLHttpRequest();
-					xhr.open('GET', picture.$ngfBlobUrl);
-					xhr.responseType = 'blob';
-					xhr.onload = function(e) {
-					if (this.status == 200) {
-					    var blobFileData = this.response;
-					    
-					    restService.createPitch(club.clubid, $scope.createdPitch, blobFileData)
+					// CHEQUEAR SI picture es undefined (si subieron imagen mala)
+					Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
+						restService.createPitch(club.clubid, $scope.createdPitch, blob)
 							.then(function(data) {
 								//var createdEvent = data.event;
 								//$location.url('pitches/' + data.pitchid);
 								pitchParams.pageNum = 1;
 								updatePitches(club.clubid, pitchParams);
 							});
-					  }
-					};
-					xhr.send();
+					});
 				}
-			//}
 		};
 
 		$scope.newTournament = function(id) {
