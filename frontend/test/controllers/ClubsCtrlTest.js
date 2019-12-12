@@ -1,38 +1,20 @@
-define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
-  describe('All Events Controller', function () {
+define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
+  describe('Clubs Controller', function () {
     var $controller, $rootScope;
 
-    var TEST_EVENT_ARRAY = [{
-      createdAt: "2019-12-12T15:01:14.392Z",
-      description: "Partido de tenis",
-      endsAt: "2019-12-18T19:00:00Z",
-      eventid: 1,
-      inscriptionCount: 0,
-      inscriptionEnd: "2019-12-17T01:04:00Z",
-      maxParticipants: 2,
-      name: "Partido",
-      owner: {
-        firstname: "Santiago",
-        lastname: "Swinnen",
-        role: "admin",
-        userid: 1,
-        username: "santiagoswinnen@hotmail.com"
-      },
-      pitch: {
-        club: {
-          clubid: 1,
-          createdAt: "2019-12-12T14:55:18.752Z",
-          location: "Buenos Aires",
-          name: "Club",
-        },
-        createdAt: "2019-12-12T14:55:30.421Z",
-        name: "Court 1",
-        pitchid: 1,
-        sport: "TENNIS",
-        startsAt: "2019-12-18T14:00:00Z"
-      }
-    }];
-    var TEST_EVENT_COUNT = 1;
+    var TEST_CLUB_ARRAY = [{
+      clubid: 1,
+      createdAt: "2019-12-12T14:55:18.752Z",
+      location: "Buenos Aires",
+      name: "Argentina"
+    },
+      {
+        clubid: 2,
+        createdAt: "2019-13-12T14:55:18.752Z",
+        location: "Buenos Aires",
+        name: "Club"
+      }];
+    var TEST_CLUB_COUNT = 2;
     var TEST_LAST_PAGE_NUM = 1;
     var TEST_INITIAL_PAGE_INDEX = 1;
     var TEST_PAGE_NUM = 1;
@@ -43,9 +25,9 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
     }));
 
     var buildController = function ($scope, routeParams) {
-      return $controller('AllEventsCtrl', {
-        events: TEST_EVENT_ARRAY,
-        eventCount: TEST_EVENT_COUNT,
+      return $controller('ClubsCtrl', {
+        clubs: TEST_CLUB_ARRAY,
+        clubCount: TEST_CLUB_COUNT,
         lastPageNum:TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM
@@ -57,14 +39,14 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.events).toBeDefined();
+        expect($scope.clubs).toBeDefined();
       });
 
-      it('should contain two one event ', function () {
+      it('should contain one event ', function () {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.events.length).toBe(1);
+        expect($scope.clubs.length).equal(1);
       });
 
       it('should not have duplicate ids ', function () {
@@ -72,34 +54,34 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         buildController($scope);
 
         expect(
-          $scope.events.map(function (e) {
-            return e.eventid
-          }).filter(function(v,i) { return $scope.events.indexOf(v) === i }).equal($scope.events.length));
+          $scope.clubs.map(function (e) {
+            return e.clubid
+          }).filter(function(v,i) { return $scope.clubs.indexOf(v) === i }).equal($scope.clubs.length));
       });
 
-      it('should have the field pitch defined', function () {
+      it('should have the field location defined', function () {
         var $scope = {};
         buildController($scope);
 
-        $scope.events.forEach(function (event) {
-          expect(event.pitch).toBeDefined();
+        $scope.clubs.forEach(function (club) {
+          expect(club.location).toBeDefined();
         })
       });
     });
 
-    describe('$scope.eventCount', function () {
+    describe('$scope.clubCount', function () {
       it('should be defined', function () {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.eventCount).toBeDefined();
+        expect($scope.clubCount).toBeDefined();
       });
 
-      it('should equal 1', function () {
+      it('should equal 2', function () {
         var $scope = {};
         buildController($scope);
 
-        expect($scope.eventCount).equal(1);
+        expect($scope.eventCount).equal(2);
       });
 
     });
