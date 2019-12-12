@@ -4,19 +4,25 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	frontend.controller('ProfileCtrl', ['$http', 'url', '$scope', '$location', 'restService', 'authService', 'user', function($http, url, $scope, $location, restService, authService, user) {
 		var commentParams = {pageNum: 1};
 		$scope.user = user;
-		$scope.isLoggedIn = authService.isLoggedIn();
 	    if ($scope.isLoggedIn) {
-	    	$scope.loggedUser = authService.getLoggedUser();
 	    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
+	    	if (!$scope.isLoggedUser) {
+	    		restService.getUserProfilePicture(user.userid).then(function(data) {
+		    		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
+		    	}).catch(function(error) {
+		    		$scope.picture = '../../images/profile_default.png';
+		    	});
+	    	} else {
+	    		$scope.picture = $scope.profilePicture;
+	    	}
 	    } else {
 	    	$scope.isLoggedUser = false;
+	    	restService.getUserProfilePicture(user.userid).then(function(data) {
+	    		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
+	    	}).catch(function(error) {
+	    		$scope.picture = '../../images/profile_default.png';
+	    	});
 	    }
-
-    	restService.getUserProfilePicture(user.userid).then(function(data) {
-    		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
-    	}).catch(function(error) {
-    		$scope.picture = '../../images/profile_default.png';
-    	});
 
 		function _arrayBufferToBase64(buffer) {
 		    var binary = '';
