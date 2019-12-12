@@ -5,20 +5,17 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		
 		$scope.event = event;
 		$scope.inscriptions = inscriptions.inscriptions;
-
-		var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-		var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-		var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-		$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
-		$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
-
 		$scope.showLoginModal = modalService.loginModal;
 
 		updateOwner();
+		updateDates();
 
 		$scope.$on('user:updated', function() {
 			updateEvent(event.pitch.pitchid, event.eventid);
 			updateOwner();
+			if ($scope.isOwner || $scope.isAdmin) {
+				$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+			}
 		});
 
 		if ($scope.isOwner || $scope.isAdmin) {
@@ -116,10 +113,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		function updateEvent(pitchid, eventid) {
 			restService.getEvent(pitchid, eventid).then(function(data) {
 				event = Object.assign(event, data);
-			}).catch(function(error) {
-				if (error.status === 404) {
-			    	$location.path('/404');
-				}
+				updateDates();
 			});
 		}
 
@@ -142,6 +136,13 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				restService.deleteEvent(eventid)
 					.then(function(data) {
 						$location.url('events');
+					}).catch(function(error) {
+						if (error.status === 403) {
+							if (error.data.error === 'EventStarted') {
+								$scope.eventStartedError = true;
+								$scope.eventHasStarted = true;
+							}
+						}
 					});
 			});
 		};
@@ -157,6 +158,16 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				updateEvent(pitchid, eventid);
 			});
 		};
+
+		function updateDates() {
+			var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var eventStart = $filter('date')(event.startsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
+			$scope.eventHasStarted = Date.parse(eventStart) < Date.parse(now);
+			$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
+		}
 
   	}]);
 

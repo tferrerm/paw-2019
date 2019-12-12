@@ -8,5 +8,9 @@ public class EventNotFoundException extends EntityNotFoundException {
 	public EventNotFoundException() {
 		super("EventNotFound");
 	}
+	
+	public EventNotFoundException(String msg) {
+		super(msg);
+	}
 
 }

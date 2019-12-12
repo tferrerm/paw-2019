@@ -75,6 +75,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 					case 'TournamentNotFound':
 						error = 'error_tournament_not_found';
 						break;
+					case 'TournamentEventNotFound':
+						error = 'error_tournament_event_not_found';
+						break;
 				}
 				errorService.setError(error);
 				$location.url('/404');

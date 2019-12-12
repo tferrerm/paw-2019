@@ -141,12 +141,12 @@ public class TournamentController extends BaseController {
     public Response retrieveTournamentEvent(@PathParam("id") long tournamentid,
     		@PathParam("eventId") long eventid) 
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
-        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	
+        ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
         TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
-        //mav.addObject("firstTeamMembers", ts.findTeamMembers(tournamentEvent.getFirstTeam()));
-        //mav.addObject("secondTeamMembers", ts.findTeamMembers(tournamentEvent.getSecondTeam()));
+        
         return Response.ok(TournamentEventDto.ofTournamentEvent(
-        		tournamentEvent/*, false*/)).build(); // VER SI ES PARTICIPANTE
+        		tournamentEvent)).build();
     }
     
     @GET
@@ -166,7 +166,7 @@ public class TournamentController extends BaseController {
     private Response retrieveTeamMembers(long tournamentid, long eventid, int teamNumber)
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
     	
-    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
         TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
         List<User> teamMembers = teamNumber == 1 ? 

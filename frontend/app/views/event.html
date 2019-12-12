@@ -125,6 +125,11 @@
 				{{'inscription_closed_error' | translate}}
 			</span>
 		</div>
+		<div ng-if="eventStartedError">
+			<span class="form-error notice">
+				{{'event_started_error' | translate}}
+			</span>
+		</div>
 		<div class="club-buttons" ng-if="!inscriptionHasEnded">
 			<div ng-if="!isAdmin">
 				<div ng-if="event.participant">
@@ -145,7 +150,7 @@
 			</div>
 		</div>
 		<div ng-if="isAdmin">
-			<div class ="cancel-event" ng-if="isAdmin">
+			<div class ="cancel-event" ng-if="isAdmin && !eventHasStarted">
 				<a ng-click="deleteEvent(event.eventid)">
 					<button type="submit" class="btn btn-danger join-button mb-10">{{'delete_event' | translate}}</button>
 				</a>

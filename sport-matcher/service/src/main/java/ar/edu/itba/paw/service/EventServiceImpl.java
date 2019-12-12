@@ -388,7 +388,7 @@ public class EventServiceImpl implements EventService {
 		}
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		if(event.getStartsAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot delete event if it has already started");
+			throw new DateInPastException("EventStarted");
 		}
 		ed.deleteEvent(eventid);
 	}
