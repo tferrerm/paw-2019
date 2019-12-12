@@ -214,6 +214,7 @@ public class ClubHibernateDao implements ClubDao {
 		from.fetch("club", JoinType.LEFT);
 		final TypedQuery<ClubComment> query = em.createQuery(
 				cq.select(from).where(from.get("commentid").in(ids)).distinct(true)
+					.orderBy(cb.desc(from.get("createdAt")))
 			);
 		
 		return query.getResultList();
