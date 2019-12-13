@@ -2,10 +2,14 @@ package ar.edu.itba.paw.persistence;
 
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -25,12 +29,23 @@ public class UserHibernateDaoTest {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private DataSource ds;
+	
+	private JdbcTemplate jdbcTemplate;
 
 	private static final long USERID = 1;
 	private static final String USERNAME = "user@name.com";
 	private static final String FIRSTNAME = "first";
 	private static final String LASTNAME = "last";
 	private static final String PASSWORD = "12345678";
+	
+	@Before
+	public void setUp() {
+		jdbcTemplate = new JdbcTemplate(ds);
+		jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
+	}
 
 	@Transactional
 	@Rollback
@@ -49,6 +64,9 @@ public class UserHibernateDaoTest {
 
 	@Test
 	public void testFindById() {
+		jdbcTemplate.execute("INSERT INTO users (userid,username,firstname,lastname,password,role,created_at) VALUES ("
+				+ USERID + ",'" + USERNAME + "','" + FIRSTNAME + "','" + LASTNAME + "','" +
+				PASSWORD + "','" + Role.ROLE_USER + "',CURRENT_TIMESTAMP(1));");
 		final Optional<User> user = userDao.findById(USERID);
 		Assert.assertTrue(user.isPresent());
 		Assert.assertEquals(USERID, user.get().getUserid());
@@ -60,6 +78,9 @@ public class UserHibernateDaoTest {
 
 	@Test
 	public void testFindByUsername() {
+		jdbcTemplate.execute("INSERT INTO users (userid,username,firstname,lastname,password,role,created_at) VALUES ("
+				+ USERID + ",'" + USERNAME + "','" + FIRSTNAME + "','" + LASTNAME + "','" +
+				PASSWORD + "','" + Role.ROLE_USER + "',CURRENT_TIMESTAMP(1));");
 		final Optional<User> user = userDao.findByUsername(USERNAME);
 		Assert.assertTrue(user.isPresent());
 		Assert.assertEquals(USERNAME, user.get().getUsername());

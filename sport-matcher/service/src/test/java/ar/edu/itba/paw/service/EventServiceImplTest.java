@@ -90,16 +90,11 @@ public class EventServiceImplTest {
 		Assert.assertEquals(EVENT_1, e);
 	}
 	
-	@Test
+	@Test(expected = DateInPastException.class)
 	public void createWithPastDate() throws Exception {
-		try {
-			es.create(NAME_1, USER, PITCH, DESCRIPTION,
-					1, NOW.minus(2, ChronoUnit.DAYS),
-					10, 11, NOW.minus(4, ChronoUnit.DAYS));
-			Assert.assertTrue(false);
-		} catch(Exception e) {
-			Assert.assertEquals(DateInPastException.class, e.getClass());
-		}
+		es.create(NAME_1, USER, PITCH, DESCRIPTION,
+				1, NOW.minus(2, ChronoUnit.DAYS),
+				10, 11, NOW.minus(4, ChronoUnit.DAYS));
 	}
 	
 	@Test(expected = MaximumDateExceededException.class)

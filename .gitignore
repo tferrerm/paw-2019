@@ -45,6 +45,7 @@ persistence/target
 model/target
 service/target
 
+node
 node_modules
 bower_components
 .tmp
