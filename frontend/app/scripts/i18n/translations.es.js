@@ -225,6 +225,7 @@ define([], function() {
     error_user_not_found:'Usuario no encontrado',
     error_club_not_found:'Club no encontrado',
     error_tournament_not_found:'Torneo no encontrado',
-    error_tournament_event_not_found:'Evento de torneo no encontrado'
+    error_tournament_event_not_found:'Evento de torneo no encontrado',
+    form_required:'Campo requerido'
 };
 });
