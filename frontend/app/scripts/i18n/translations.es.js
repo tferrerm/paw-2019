@@ -81,6 +81,7 @@ define([], function() {
     delete_event:'Eliminar evento'
     delete_pitch:'Eliminar cancha'
     delete_club:'Eliminar club'
+    delete_tournament:'Eliminar torneo'
     all_clubs:'Clubes'
     view_club:'Ver club'
     administrator:'Administrador'
