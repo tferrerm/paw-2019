@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/modalService'], function(frontend) {
 
-	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'club', 'Upload', function($scope, $location, restService, club, Upload) {
+	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'modalService', 'club', 'Upload', function($scope, $location, restService, modalService, club, Upload) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;

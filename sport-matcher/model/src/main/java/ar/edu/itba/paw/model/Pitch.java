@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import java.time.Instant;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -45,7 +46,7 @@ public class Pitch {
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "pitch")
 	private List<Event> pitchEvents;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "belongsTo")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "belongsTo", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private PitchPicture pitchPicture;
 	
 	/*package*/ Pitch() {

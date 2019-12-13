@@ -61,7 +61,7 @@ public class User {
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "receiver")
 	private List<UserComment> comments;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "addedBy")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "addedBy", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private ProfilePicture profilePicture;
 	
 	/*package*/ User() {

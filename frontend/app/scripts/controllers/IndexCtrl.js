@@ -27,7 +27,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {
 	    		$scope.profilePicture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
 	    	}).catch(function(error) {
-	    		$scope.profilePicture = '../../images/profile_default.jpg';
+	    		$scope.profilePicture = '../../images/profile_default.png';
 	    	});
     	}
 
@@ -50,7 +50,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 				restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {
 		    		$scope.profilePicture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
 		    	}).catch(function(error) {
-		    		$scope.profilePicture = '../../images/profile_default.jpg';
+		    		$scope.profilePicture = '../../images/profile_default.png';
 		    	});
 	    	}
 		});
