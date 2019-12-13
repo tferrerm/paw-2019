@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
@@ -321,7 +322,7 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void leaveEvent(final long eventid, final long userid) throws DateInPastException {
+	public void leaveEvent(final long eventid, final long userid) throws DateInPastException, EntityNotFoundException {
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
@@ -333,7 +334,7 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
-		throws UserNotAuthorizedException, DateInPastException {
+		throws UserNotAuthorizedException, DateInPastException, EntityNotFoundException {
 		ud.findById(kickedUserId).orElseThrow(NoSuchElementException::new);
 		if(owner.getUserid() != event.getOwner().getUserid())
 			throw new UserNotAuthorizedException("User is not the owner of the event.");

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
@@ -45,7 +46,7 @@ public interface TournamentService {
 			TeamAlreadyFilledException, InscriptionClosedException;
 	
 	public void leaveTournament(final long tournamentid, final long userid) 
-			throws InscriptionClosedException;
+			throws InscriptionClosedException, EntityNotFoundException;
 	
 	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionClosedException;
 	

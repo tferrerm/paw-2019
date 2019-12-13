@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -124,9 +125,9 @@ public class TournamentController extends BaseController {
     }
     
     @POST
-    @Path("/{id}/leave") // Y SI NO ESTOY UNIDO?
+    @Path("/{id}/leave")
     public Response leaveTournament(@PathParam("id") long tournamentid) 
-    		throws UserBusyException, TournamentNotFoundException, InscriptionClosedException {
+    		throws UserBusyException, InscriptionClosedException, EntityNotFoundException {
     	
     	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		ts.leaveTournament(tournamentid, loggedUser().getUserid());

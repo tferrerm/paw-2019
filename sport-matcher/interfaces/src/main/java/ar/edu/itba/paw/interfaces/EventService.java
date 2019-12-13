@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
@@ -129,10 +130,10 @@ public interface EventService {
 	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException;
 
-	public void leaveEvent(final long eventid, final long userid) throws DateInPastException;
+	public void leaveEvent(final long eventid, final long userid) throws DateInPastException, EntityNotFoundException;
 
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
-			throws UserNotAuthorizedException, DateInPastException;
+			throws UserNotAuthorizedException, DateInPastException, EntityNotFoundException;
 
 	public String[] getScheduleDaysHeader();
 

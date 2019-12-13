@@ -119,11 +119,12 @@ public class EventController extends BaseController {
 
 
     @POST
-    @Path("/{id}/leave") // Y SI NO ESTOY UNIDO?
+    @Path("/{id}/leave")
     public Response leaveEvent(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
     		throws DateInPastException, EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+    	loggedUser().getUserid();
 		es.leaveEvent(id, loggedUser().getUserid());
         return Response.status(Status.NO_CONTENT).build();
     }

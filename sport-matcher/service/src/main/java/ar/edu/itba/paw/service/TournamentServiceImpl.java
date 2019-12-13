@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
@@ -183,13 +184,13 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void leaveTournament(final long tournamentid, final long userid) 
-			throws InscriptionClosedException {
+			throws InscriptionClosedException, EntityNotFoundException {
 		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
 			throw new InscriptionClosedException();
 		}
 		User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
-		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(NoSuchElementException::new);
+		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(EntityNotFoundException::new);
 		td.deleteTournamentInscriptions(team, user);
 	}
 	
