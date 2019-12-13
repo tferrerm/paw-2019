@@ -22,14 +22,13 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
     beforeEach(module('frontend'));
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
-      // scope = $rootScope.$new();
       scope = {
         clubs: TEST_CLUB_ARRAY,
         clubCount: TEST_CLUB_COUNT,
         lastPageNum:TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM
-      }
+      };
       controller = $controller('ClubsCtrl', {$scope: scope});
     }));
 
@@ -43,10 +42,12 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        expect(
-          scope.clubs.map(function (e) {
-            return e.clubid
-          }).filter(function(v,i) { return scope.clubs.indexOf(v) === i }).toBe(scope.clubs.length));
+        const ids = scope.clubs.map(function (club) {return club.clubid})
+        var isDuplicate = ids.some(function(item, idx){
+          return ids.indexOf(item) !== idx
+        });
+
+        expect(isDuplicate).toBe(false);
       });
 
       it('should have the field location defined', function () {

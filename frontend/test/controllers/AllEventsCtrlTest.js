@@ -39,8 +39,6 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
 
     beforeEach(module('frontend'));
 
-
-
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = {
         events: TEST_EVENT_ARRAY,
@@ -52,19 +50,16 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
       controller = $controller('AllEventsCtrl', {$scope: scope});
     }));
 
-
     describe('$scope.events', function () {
       it('should be defined', function () {
         expect(scope.events).toBeDefined();
       });
 
       it('should contain two one event ', function () {
-
         expect(scope.events.length).toBe(1);
       });
 
       it('should not have duplicate ids ', function () {
-
         expect(
           scope.events.map(function (e) {
             return e.eventid
