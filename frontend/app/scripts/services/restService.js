@@ -166,7 +166,8 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				var headers = {};
 				headers = addAuthHeader(headers);
 
-				return $http({method: 'GET', url: url + '/pitches/' + id + '/picture', responseType: 'arraybuffer'})
+				return $http({method: 'GET', url: url + '/pitches/' + id + '/picture',
+          responseType: 'arraybuffer', headers: headers})
 					.then(function(response) {
 				    	return response.data;
 				    });
@@ -217,7 +218,7 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 		        return httpGet('/tournaments/' + id + '/teams', {});
 		    },
 		    getTournamentTeamsInscriptions: function(id) {
-		    	return httpGet('/tournaments/' + id + '/inscription', {});
+		    	return httpGet('/tournaments/' + id + '/inscriptions', {});
 		    },
 			getTournaments: function(params) {
 		        return httpGet('/tournaments', {pageNum: params.pageNum});
@@ -235,7 +236,8 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				var headers = {};
 				headers = addAuthHeader(headers);
 
-				return $http({method: 'GET', url: url + '/users/' + id + '/picture', responseType: 'arraybuffer'})
+				return $http({method: 'GET', url: url + '/users/' + id + '/picture',
+          responseType: 'arraybuffer', headers: headers})
 					.then(function(response) {
 				    	return response.data;
 				    });
@@ -250,7 +252,7 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/join', {}, {});
 			},
 			joinTournament: function(tournamentid, teamid) {
-				return httpPost('/tournaments/' + tournamentid + '/team/' + teamid + '/join', {}, {});
+				return httpPost('/tournaments/' + tournamentid + '/teams/' + teamid + '/join', {}, {});
 			},
 			kickUser: function(pitchid, eventid, userid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/kick-user/' + userid, {}, {});

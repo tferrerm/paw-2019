@@ -76,7 +76,7 @@ define(['routes',
 					//	$location.path('/404');
 					//});
 				}])
-			.value('url', 'http://localhost:8080/webapp');
+			.value('url', 'http://localhost:8080/webapp/api');
 		return frontend;
 	}
 );

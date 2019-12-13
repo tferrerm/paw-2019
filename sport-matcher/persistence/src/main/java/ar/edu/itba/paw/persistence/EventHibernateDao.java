@@ -359,7 +359,7 @@ public class EventHibernateDao implements EventDao {
 		int eventOverlapQueryResult = query.getSingleResult().intValue();
 		
 		if(eventOverlapQueryResult > 0)
-			throw new EventOverlapException("Pitch is already taken in the chosen time period");
+			throw new EventOverlapException("EventOverlap");
 		
 		final Event event = new Event(name, owner, pitch, description, maxParticipants, startsAt, endsAt, inscriptionEndDate);
 		em.persist(event);

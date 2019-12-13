@@ -75,12 +75,12 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		$scope.commentText = {};
 
 		$scope.commentSubmit = function() {
-			//if ($scope.commentForm.$valid) {
+			if ($scope.commentForm.$valid) {
 				restService.commentClub(club.clubid, $scope.commentText.comment).then(function(data) {
 					commentParams.pageNum = 1;
 					updateComments(club.clubid, commentParams);
 				});
-			//}
+			}
 		};
 
 		$scope.goToPitch = function(id) {

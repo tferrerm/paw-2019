@@ -27,11 +27,11 @@
         <div>
             <span class="notice justify-center home-header">{{'event_creation_description' | translate}}</span>
             <div class="tbl-no-flex profile-cont profile-second">
-                <!--<c:if test="${event_overlap == true}">
+                <div ng-if="eventOverlapError">
                     <span class="form-error notice">
-                        <spring:message code="event_overlap"/>
+                        {{'event_overlap' | translate}}
                     </span>
-                </c:if>-->
+                </div>
 
                 <div class="create-event">
                     <div class="flex-column">
@@ -66,63 +66,78 @@
                         <h2 class="create-event-title">{{'create_event' | translate}}</h2>
                         <form ng-submit = createEventSubmit() name="createEventForm" method="post" novalidate>
                             <div class="form-field">
-                                <input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="event.name" required/>
+                                <input class="form-control" type="text" placeholder="{{'event_name' | translate}}" name="name" ng-model="event.name" required maxlength="100"/>
+                                <div ng-show="(createEventForm.name.$touched ||  createEventForm.$submitted)">
+                                    <span ng-show="createEventForm.name.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
                             </div>
                             <div class="form-field">
-                                <input class="form-control" type="text" placeholder="{{'event_description' | translate}}" ng-maxlength="500" name="description" ng-model="event.description" required/>
+                                <input class="form-control" type="text" placeholder="{{'event_description' | translate}}" maxlength="500" name="description" ng-model="event.description"/>
                             </div>
                             <div class="form-field">
-                                <input class="form-control" type="number" placeholder="{{'event_max_participants' | translate}}" ng-min="1" ng-max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
+                                <input class="form-control" type="number" placeholder="{{'event_max_participants' | translate}}" min="1" max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
+                                <div ng-show="(createEventForm.maxParticipants.$touched ||  createEventForm.$submitted)">
+                                    <span ng-show="createEventForm.maxParticipants.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
                             </div>
                             <div class="form-field flex-space-between">
                                 <div class="form-field-horizontal">
                                     <span>{{'new_event_date' | translate}}</span>
                                     <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="event.selectedDate" required/>
-                                    <!--<c:if test="${invalid_date_format == true}">
+                                    <div ng-show="(createEventForm.date.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.date.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
+                                    <div ng-if="dateError">
                                         <span class="form-error">
-                                            <spring:message code="invalid_date_format"/>
+                                            {{'event_in_past' | translate}}
                                         </span>
-                                    </c:if>
-                                    <c:if test="${event_in_past == true}">
+                                    </div>
+                                    <div ng-if="maximumStartDateExceededError">
                                         <span class="form-error">
-                                            <spring:message code="event_in_past"/>
+                                            {{'date_exceeded' | translate}}
                                         </span>
-                                    </c:if>
-                                    <c:if test="${date_exceeded == true}">
-                                        <span class="form-error">
-                                            <spring:message code="date_exceeded"/>
-                                        </span>
-                                    </c:if>-->
+                                    </div>
                                 </div>
                                 <div>
                                     <span>{{'event_startsAt' | translate}}</span>
                                     <select class="form-control" name="startsAtHour" ng-model="event.startsAtHour" ng-options="hour for hour in startsAtHours" required>
+                                        <option></option>
                                     </select>
-                                    <!--<c:if test="${ends_before_starts == true}">
+                                    <div ng-show="(createEventForm.startsAtHour.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.startsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
+                                    <div ng-if="endsBeforeStartsError">
                                         <span class="form-error">
-                                            <spring:message code="ends_before_starts"/>
+                                            {{'ends_before_starts' | translate}}
                                         </span>
-                                    </c:if>-->
+                                    </div>
                                 </div>
                                 <div>
                                     <span>{{'event_endsAt' | translate}}</span>
                                     <select class="form-control" name="endsAtHour" ng-model="event.endsAtHour" ng-options="hour for hour in endsAtHours" required>
+                                        <option></option>
                                     </select>
+                                    <div ng-show="(createEventForm.endsAtHour.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.endsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="my-events-tbl-sub">
                                 <span>{{'end_date' | translate}}</span>
                                 <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
-                                <!--<c:if test="${inscription_date_in_past}">
+                                <div ng-show="(createEventForm.inscriptionEndDate.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
+                                <div ng-if="inscriptionDateError">
                                     <span class="form-error">
-                                        <spring:message code="inscription_date_in_past"/>
+                                        {{'inscription_date_in_past' | translate}}
                                     </span>
-                                </c:if>
-                                <c:if test="${inscription_date_exceeded}">
+                                </div>
+                                <div ng-if="maximumInscriptionDateExceededError">
                                     <span class="form-error">
-                                        <spring:message code="inscription_date_exceeded"/>
+                                        {{'inscription_date_exceeded' | translate}}
                                     </span>
-                                </c:if>-->
+                                </div>
                             </div>
                             <div class="justify-center">
                                 <button type="submit" class="btn btn-primary submit-btn">{{'create' | translate}}</button>

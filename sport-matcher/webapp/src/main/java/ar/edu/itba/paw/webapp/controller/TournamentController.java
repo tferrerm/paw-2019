@@ -89,8 +89,8 @@ public class TournamentController extends BaseController {
     }
     
     @GET
-    @Path("/{id}/inscription")
-    public Response retrieveTournamentInscription(@PathParam("id") long tournamentid)
+    @Path("/{id}/inscriptions")
+    public Response retrieveTournamentInscriptions(@PathParam("id") long tournamentid)
     		throws TournamentNotFoundException {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -111,7 +111,7 @@ public class TournamentController extends BaseController {
     }
 
     @POST
-    @Path("/{id}/team/{teamId}/join")
+    @Path("/{id}/teams/{teamId}/join")
     public Response joinTeam(@PathParam("id") long tournamentid, @PathParam("teamId") long teamid) 
     		throws UserAlreadyJoinedException, TournamentNotFoundException, InscriptionClosedException,
     			TeamAlreadyFilledException, UserBusyException {

@@ -86,45 +86,66 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 	    $scope.createEventSubmit = function() {
-			//checkPasswordsMatch();
-			//if ($scope.createEventForm.$valid) {
-				//$scope.duplicateEmailError = false;
-				
+			if ($scope.createEventForm.$valid) {
+				resetErrors();
 				if ($scope.isLoggedIn) {
 					restService.createEvent($scope.pitch.pitchid, $scope.event).then(function(data) {
-						//var createdEvent = data.event;
 						$location.url('pitches/' + $scope.pitch.pitchid + '/events/' + data.eventid);
 					}).catch(function(error) {
-						console.log(error);
-						if (error.status === 422) {
-							// if tiene cv
-							angular.forEach(error.data.constraintViolations, function(message, propertyPath) {
-	  							switch (propertyPath) {
-	  								case 'date':
-	  									$scope.dateError = true;
-	  									break;
-	  								case 'inscriptionEndDate':
-	  									$scope.inscriptionDateError = true;
-	  									break;
-	  								default:
-	  							}
-							});
-							// else me la tiro el service
-						}
-						// if chequear errores de service
+						validateForm(error);
 					});
 
 				} else {
 					$scope.showLoginModal().result.then(function(data) {
 						restService.createEvent($scope.pitch.pitchid, $scope.event).then(function(data) {
-							//var createdEvent = data.event;
 							$location.url('pitches/' + $scope.pitch.pitchid + '/events/' + data.eventid);
+						}).catch(function(error) {
+							validateForm(error);
 						});
 					});
 					
 				}
-			//}
+			}
 		};
+
+		function validateForm(error) {
+			if (error.status === 422) {
+				if (error.data.constraintViolations != null) {
+					/* Controller violation */
+					angular.forEach(error.data.constraintViolations, function(cv) {
+							switch (cv.propertyPath) {
+								case 'date':
+									$scope.dateError = true;
+									break;
+								case 'inscriptionEndDate':
+									$scope.inscriptionDateError = true;
+									break;
+								default:
+							}
+					});
+				} else {
+					/* Service violation */
+					if (error.data.error === 'EndsBeforeStarts') {
+						$scope.endsBeforeStartsError = true;
+					} else if (error.data.error === 'MaximumStartDateExceeded') {
+						$scope.maximumStartDateExceededError = true;
+					} else if (error.data.error === 'MaximumInscriptionDateExceeded') {
+						$scope.maximumInscriptionDateExceededError = true;
+					} else if (error.data.error === 'EventOverlap') {
+						$scope.eventOverlapError = true;
+					}
+				}
+			}
+		}
+
+		function resetErrors() {
+			$scope.dateError = false;
+			$scope.inscriptionDateError = false;
+			$scope.endsBeforeStartsError = false;
+			$scope.maximumStartDateExceededError = false;
+			$scope.maximumInscriptionDateExceededError = false;
+			$scope.eventOverlapError = false;
+		}
 
 		var now = ($filter('date')(new Date(), 'EEEE'));
 		var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -132,6 +153,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		var indexOfToday = weekDays.indexOf(now);
 		$scope.dayHeaders = minDays.slice(indexOfToday, 7).concat(minDays.slice(0, indexOfToday));
 
+		
 
 	}]);
 });
