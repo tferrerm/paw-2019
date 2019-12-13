@@ -46,5 +46,5 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
       });
 
     });
-  })
-})
+  });
+});
