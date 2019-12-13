@@ -60,7 +60,10 @@ public class AdminPitchController extends BaseController {
 	public Response createPitch(@PathParam("clubId") final long clubId,
 			@FormDataParam("pitchForm") PitchForm pitchForm, @BeanParam PictureForm pictureForm)
 				throws ClubNotFoundException, PictureProcessingException, FormValidationException {
-
+		if(pitchForm == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+		
 		LOGGER.debug("{} {} {}", pitchForm.getName(), pitchForm.getSport());
 		validator.validate(pitchForm);
 

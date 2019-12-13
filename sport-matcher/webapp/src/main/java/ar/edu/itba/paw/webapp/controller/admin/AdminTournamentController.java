@@ -84,7 +84,10 @@ public class AdminTournamentController extends BaseController {
     		@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
     		@FormDataParam("tournamentResultForm") final TournamentResultForm form)
     				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException {
-
+		if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+		
     	validator.validate(form);
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -125,7 +128,10 @@ public class AdminTournamentController extends BaseController {
     public Response createTournament(@PathParam("clubId") long clubId,
     		@FormDataParam("tournamentForm") final TournamentForm form)
     				throws ClubNotFoundException, FormValidationException, Exception /* HARDCODEADO HARDCODED ARREGLAR */ {
-
+		if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+		
     	Instant firstRoundDate = tryInstantStartOfDay(form.getFirstRoundDate(), TIME_ZONE);
     	Instant inscriptionEndsAt = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	

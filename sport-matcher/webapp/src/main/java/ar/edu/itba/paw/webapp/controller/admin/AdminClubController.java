@@ -49,7 +49,10 @@ public class AdminClubController extends BaseController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response createClub(@FormDataParam("clubForm") ClubForm form)
 			throws FormValidationException {
-
+    	if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+    	
     	validator.validate(form);
 		
 		final Club c = cs.create(form.getName(), form.getLocation());
