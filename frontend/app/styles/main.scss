@@ -201,6 +201,11 @@ a.color-white {
   align-self: flex-end;
 }
 
+.align-self-start {
+  display: flex;
+  align-self: flex-start;
+}
+
 .average-min-height {
   min-height: 60%
 }
@@ -781,7 +786,6 @@ div.background-dodgerblue {
 }
 
 .tbl {
-  width: 85%;
   margin: 10px 20px;
 }
 
