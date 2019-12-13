@@ -79,9 +79,12 @@
 				</div>
 			</div>
 			<div class="tbl profile-cont club-comments flex-1">
-				<div ng-if="hasRelationship" class="w-100">
+				<div ng-show="hasRelationship" class="w-100">
 					<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
-						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="commentText.comment" required/>
+						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" maxlength="500" name="comment" ng-model="commentText.comment" required/>
+						<div ng-show="(commentForm.comment.$touched ||  commentForm.$submitted)">
+                            <span ng-show="commentForm.comment.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                        </div>
 						<div class="justify-center">
 							<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
 						</div>
