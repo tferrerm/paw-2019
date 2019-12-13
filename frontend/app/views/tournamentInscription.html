@@ -39,6 +39,7 @@
 										<a class="link-text" ng-click="goToProfile(inscription.userid)">
 											{{inscription.firstname}} {{inscription.lastname}}
 										</a>
+										<a type="submit" class="kick-user-btn" ng-if="isAdmin && !inscriptionHasEnded" ng-click="kickUser(tournament.tournamentClub.clubid, tournament.tournamentid, inscription.userid)">{{'kick' | translate}}</a>
 									</div>
 									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[0].inscriptions.length) track by $index">
 										<span>-</span>

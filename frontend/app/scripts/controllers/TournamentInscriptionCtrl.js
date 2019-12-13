@@ -70,6 +70,19 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 			});
 		};
 
+		$scope.kickUser = function(clubid, tournamentid, userid) {
+			restService.kickUserFromTournament(clubid, tournamentid, userid).then(function(data) {
+				updateTeams();
+			}).catch(function(error) {
+				if (error.status === 403) {
+					if (error.data.error === 'InscriptionClosed') {
+						$scope.inscriptionClosedError = true;
+						$scope.inscriptionHasEnded = true;
+					}
+				}
+			});
+		};
+
 		$scope.deleteTournament = function(clubid, tournamentid) {
 			$scope.showDeleteConfirmModal().result.then(function(data) {
 				restService.deleteTournament(clubid, tournamentid)

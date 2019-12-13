@@ -255,6 +255,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 			kickUser: function(pitchid, eventid, userid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/kick-user/' + userid, {}, {});
 			},
+			kickUserFromTournament: function(clubid, tournamentid, userid) {
+				return httpPost('/admin/clubs/' + clubid + '/tournaments/' + tournamentid + '/kick-user/' + userid, {}, {});
+			},
 			leaveEvent: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/leave', {}, {});
 			},

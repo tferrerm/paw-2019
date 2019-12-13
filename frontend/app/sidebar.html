@@ -1,7 +1,7 @@
 <div id="sidebar" class="sidebar">
   <ul>
     <li ng-repeat="element in sidebarElements" class="minh-25">
-      <a href="{{element.link}}">{{element.name}}</a>
+      <a href="{{element.link}}">{{element.name | translate}}</a>
     </li>
   </ul>
 <!--        <c:if test="${loggedUser != null}">-->

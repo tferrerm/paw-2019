@@ -2,13 +2,13 @@
 define(['frontend', 'services/authService', 'services/storageService', 'services/restService', 'services/modalService'], function(frontend) {
 
 	frontend.controller('IndexCtrl', ['$scope', '$filter', '$location', 'authService', 'storageService', 'restService', 'modalService', function($scope, $filter, $location, authService, storageService, restService, modalService) {
-		$scope.welcomeText = 'Welcome to your frontend page'; // ELIMINAR
+		
 		$scope.sidebarElements = [
-			{name: 'Home', link: '#/home'},
-			{name: 'All events', link: '#/events'},
-			{name: 'Clubs', link: '#/clubs'},
-			{name: 'Pitches', link: '#/pitches'},
-			{name: 'Tournaments', link: '#/tournaments'}
+			{name: 'home', link: '#/home'},
+			{name: 'allEvents', link: '#/events'},
+			{name: 'all_clubs', link: '#/clubs'},
+			{name: 'pitches', link: '#/pitches'},
+			{name: 'tournaments', link: '#/tournaments'}
 		];
 
 		$scope.isLoggedIn = authService.isLoggedIn();
@@ -16,8 +16,8 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		$scope.isAdmin = authService.isAdmin();
 
 		if ($scope.isLoggedIn && !$scope.isAdmin) {
-			$scope.sidebarElements.push({name: 'My events', link: '#/my-events'});
-			$scope.sidebarElements.push({name: 'History', link: '#/history'});
+			$scope.sidebarElements.push({name: 'myEvents', link: '#/my-events'});
+			$scope.sidebarElements.push({name: 'history', link: '#/history'});
 		}
 
 		$scope.showRegisterModal = modalService.registerModal;
@@ -40,11 +40,11 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			$scope.loggedUser = authService.getLoggedUser();
 			$scope.isAdmin = authService.isAdmin();
 			if ($scope.isLoggedIn && !$scope.isAdmin) {
-				$scope.sidebarElements.push({name: 'My events', link: '#/my-events'});
-				$scope.sidebarElements.push({name: 'History', link: '#/history'});
+				$scope.sidebarElements.push({name: 'myEvents', link: '#/my-events'});
+				$scope.sidebarElements.push({name: 'history', link: '#/history'});
 			} else {
-				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!My events'});
-				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!History'});
+				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!myEvents'});
+				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!history'});
 			}
 			if ($scope.isLoggedIn) {
 				restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {

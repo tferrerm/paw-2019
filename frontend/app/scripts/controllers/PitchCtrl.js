@@ -94,6 +94,24 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 					restService.createEvent($scope.pitch.pitchid, $scope.event).then(function(data) {
 						//var createdEvent = data.event;
 						$location.url('pitches/' + $scope.pitch.pitchid + '/events/' + data.eventid);
+					}).catch(function(error) {
+						console.log(error);
+						if (error.status === 422) {
+							// if tiene cv
+							angular.forEach(error.data.constraintViolations, function(message, propertyPath) {
+	  							switch (propertyPath) {
+	  								case 'date':
+	  									$scope.dateError = true;
+	  									break;
+	  								case 'inscriptionEndDate':
+	  									$scope.inscriptionDateError = true;
+	  									break;
+	  								default:
+	  							}
+							});
+							// else me la tiro el service
+						}
+						// if chequear errores de service
 					});
 
 				} else {
