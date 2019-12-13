@@ -214,28 +214,13 @@ public class EventController extends BaseController {
     	
     	validator.validate(form);
     	
-
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
     	Event ev = null;
-//    	try {
-	    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
-	    			form.getMaxParticipants(), eventDate, form.getStartsAtHour(),
-	    			form.getEndsAtHour(), inscriptionEndDate);
-//    	} catch(EndsBeforeStartsException e) {
-//    		return eventCreationError("ends_before_starts", pitchId, form);
-//    	} catch(DateInPastException e) { // NOOOO!!!!
-//    		return eventCreationError("event_in_past", pitchId, form);
-//    	} catch(MaximumDateExceededException e) {
-//    		return eventCreationError("date_exceeded", pitchId, form);
-//    	} catch(EventOverlapException e) {
-//    		return eventCreationError("event_overlap", pitchId, form);
-//    	} catch(HourOutOfRangeException e) {
-//    		return eventCreationError("hour_out_of_range", pitchId, form);
-//    	} catch(InscriptionDateInPastException e) { // NO!!!!!
-//    		return eventCreationError("inscription_date_in_past", pitchId, form);
-//    	} catch(InscriptionDateExceededException e) {
-//    		return eventCreationError("inscription_date_exceeded", pitchId, form);
-//    	}
+    	
+    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+    			form.getMaxParticipants(), eventDate, form.getStartsAtHour(),
+    			form.getEndsAtHour(), inscriptionEndDate);
+    	
 	    final URI uri = uriInfo.getAbsolutePathBuilder()
 	    		.path(String.valueOf(ev.getEventId())).build();
     	return Response.created(uri).entity(EventDto.ofEvent(ev, false)).build();

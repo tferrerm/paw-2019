@@ -278,15 +278,17 @@ public class EventServiceImpl implements EventService {
 		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
 
 		if(startsAtDate.isBefore(Instant.now()))
-			throw new DateInPastException("Cannot create event starting in past date");
-    	if(startsAtDate.compareTo(aWeeksTime()) > 0)
-    		throw new MaximumDateExceededException();
+			throw new DateInPastException("StartsInPast");
+		if(inscriptionEndDate.isBefore(Instant.now()))
+			throw new DateInPastException("InscriptionInPast");
+    	if(startsAtDate.compareTo(aWeeksTime().minus(1, ChronoUnit.HOURS)) > 0)
+    		throw new MaximumDateExceededException("MaximumStartDateExceeded");
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException(MIN_HOUR, MAX_HOUR);
     	if(inscriptionEndDate.isAfter((startsAtDate.minus(INSCRIPTION_END_FROM_EVENT_DAY_DIFFERENCE, ChronoUnit.DAYS))))
-    		throw new MaximumDateExceededException("The inscription cannot close in less than 24 hs before the event starts");
+    		throw new MaximumDateExceededException("MaximumInscriptionDateExceeded");
 
 		return ed.create(name, owner, pitch, description, maxParticipants, 
 				startsAtDate, date.plus(endsAtHour, ChronoUnit.HOURS), inscriptionEndDate);
