@@ -9,6 +9,10 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		$scope.showLoginModal = modalService.loginModal;
 		updateInscriptionEnded();
 
+		if ($scope.isAdmin) {
+			$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+		}
+
 		$scope.joinTeam = function(tournamentid, teamid) {
 			if ($scope.isLoggedIn) {
 				restService.joinTournament(tournamentid, teamid).then(function(data) {
@@ -66,8 +70,20 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 			});
 		};
 
-		$scope.goToClub = function(id) {
-			$location.url('clubs/' + id);
+		$scope.deleteTournament = function(clubid, tournamentid) {
+			$scope.showDeleteConfirmModal().result.then(function(data) {
+				restService.deleteTournament(clubid, tournamentid)
+				.then(function(data) {
+					$location.url('tournaments');
+				}).catch(function(error) {
+					if (error.status === 403) {
+						if (error.data.error === 'InscriptionClosed') {
+							$scope.inscriptionClosedError = true;
+							updateInscriptionEnded();
+						}
+					}
+				});
+			});
 		};
 
 		function updateTeams() {

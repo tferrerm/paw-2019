@@ -136,6 +136,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 			deletePitch: function(clubid, pitchid) {
 				return httpDelete('/admin/clubs/' + clubid + '/pitches/' + pitchid, {});
 			},
+			deleteTournament: function(clubid, tournamentid) {
+				return httpDelete('/admin/clubs/' + clubid + '/tournaments/' + tournamentid, {});
+			},
 			downvote: function(pitchid, eventid) {
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/downvote', {}, {});
 			},
