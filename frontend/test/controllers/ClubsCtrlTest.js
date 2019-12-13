@@ -33,20 +33,20 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       controller = $controller('ClubsCtrl', {$scope: scope});
     }));
 
-    describe('$scope.events', function () {
+    describe('$scope.clubs', function () {
       it('should be defined', function () {
         expect(scope.clubs).toBeDefined();
       });
 
-      it('should contain one event ', function () {
-        expect(scope.clubs.length).equal(1);
+      it('should contain two clubs ', function () {
+        expect(scope.clubs.length).toBe(2);
       });
 
       it('should not have duplicate ids ', function () {
         expect(
           scope.clubs.map(function (e) {
             return e.clubid
-          }).filter(function(v,i) { return scope.clubs.indexOf(v) === i }).equal(scope.clubs.length));
+          }).filter(function(v,i) { return scope.clubs.indexOf(v) === i }).toBe(scope.clubs.length));
       });
 
       it('should have the field location defined', function () {
@@ -62,7 +62,7 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       });
 
       it('should equal 2', function () {
-        expect(scope.eventCount).equal(2);
+        expect(scope.clubCount).toBe(2);
       });
 
     });
@@ -73,7 +73,7 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       });
 
       it('should equal 1', function () {
-        expect(scope.pageNum).equal(1);
+        expect(scope.pageNum).toBe(1);
       });
 
     });
@@ -84,7 +84,7 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       });
 
       it('should equal 1', function () {
-        expect(scope.lastPageNum).equal(1);
+        expect(scope.lastPageNum).toBe(1);
       });
     });
   })

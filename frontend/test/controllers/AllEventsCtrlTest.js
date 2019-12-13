@@ -39,10 +39,12 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
 
     beforeEach(module('frontend'));
 
+
+
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = {
-        clubs: TEST_EVENT_ARRAY,
-        clubCount: TEST_EVENT_COUNT,
+        events: TEST_EVENT_ARRAY,
+        eventCount: TEST_EVENT_COUNT,
         lastPageNum:TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM
@@ -66,7 +68,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         expect(
           scope.events.map(function (e) {
             return e.eventid
-          }).filter(function(v,i) { return scope.events.indexOf(v) === i }).equal(scope.events.length));
+          }).filter(function(v,i) { return scope.events.indexOf(v) === i }).toBe(scope.events.length));
       });
 
       it('should have the field pitch defined', function () {
@@ -83,7 +85,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
       });
 
       it('should equal 1', function () {
-        expect(scope.eventCount).equal(1);
+        expect(scope.eventCount).toBe(1);
       });
 
     });
@@ -95,7 +97,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
 
       it('should equal 1', function () {
 
-        expect(scope.pageNum).equal(1);
+        expect(scope.pageNum).toBe(1);
       });
 
     });
@@ -106,7 +108,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
       });
 
       it('should equal 1', function () {
-        expect(scope.lastPageNum).equal(1);
+        expect(scope.lastPageNum).toBe(1);
       });
     });
   })
