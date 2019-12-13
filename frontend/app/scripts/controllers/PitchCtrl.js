@@ -1,5 +1,5 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService', 'services/modalService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/modalService', 'directives/tooltip'], function(frontend) {
 
 	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'modalService', 'pitch', function($scope, $filter, $location, restService, authService, modalService, pitch) {
     	
@@ -58,7 +58,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		    		var endHourIndex = endsDate.getHours() - $scope.minHour - 1;
 		    		
 		    		for (var i = startHourIndex; i <= endHourIndex; i++) {
-		    			$scope.schedule[i][eventDayIndex] = {name: event.name, maxParticipants: event.maxParticipants, inscriptionCount: event.inscriptionCount};
+		    			$scope.schedule[i][eventDayIndex] = {eventid: event.eventid, pitchid: event.pitch.pitchid, name: event.name, maxParticipants: event.maxParticipants, inscriptionCount: event.inscriptionCount};
 		    		}
 		    	});
 		    });
