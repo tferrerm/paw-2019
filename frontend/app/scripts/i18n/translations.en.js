@@ -224,7 +224,8 @@ define([], function() {
     error_user_not_found:'User not found',
     error_club_not_found:'Club not found',
     error_tournament_not_found:'Tournament not found',
-    error_tournament_event_not_found:'Tournament event not found'
+    error_tournament_event_not_found:'Tournament event not found',
+    form_required:'Field required'
 
 };
 });

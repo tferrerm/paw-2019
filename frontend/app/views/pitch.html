@@ -57,20 +57,29 @@
                     </table>
                     <div class="flex flex-column create-event-form">
                         <h2 class="create-event-title">{{'create_event' | translate}}</h2>
-                        <form ng-submit = createEventSubmit() name="createEventForm" method="post">
+                        <form ng-submit = createEventSubmit() name="createEventForm" method="post" novalidate>
                             <div class="form-field">
-                                <input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="event.name" required/>
+                                <input class="form-control" type="text" placeholder="{{'event_name' | translate}}" name="name" ng-model="event.name" required maxlength="100"/>
+                                <div ng-show="(createEventForm.name.$touched ||  createEventForm.$submitted)">
+                                    <span ng-show="createEventForm.name.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
                             </div>
                             <div class="form-field">
-                                <input class="form-control" type="text" placeholder="{{'event_description' | translate}}" ng-maxlength="500" name="description" ng-model="event.description"/>
+                                <input class="form-control" type="text" placeholder="{{'event_description' | translate}}" maxlength="500" name="description" ng-model="event.description"/>
                             </div>
                             <div class="form-field">
-                                <input class="form-control" type="number" placeholder="{{'event_max_participants' | translate}}" ng-min="1" ng-max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
+                                <input class="form-control" type="number" placeholder="{{'event_max_participants' | translate}}" min="1" max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
+                                <div ng-show="(createEventForm.maxParticipants.$touched ||  createEventForm.$submitted)">
+                                    <span ng-show="createEventForm.maxParticipants.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
                             </div>
                             <div class="form-field flex-space-between">
                                 <div class="form-field-horizontal">
                                     <span>{{'new_event_date' | translate}}</span>
                                     <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="event.selectedDate" required/>
+                                    <div ng-show="(createEventForm.date.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.date.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
                                     <div ng-if="dateError">
                                         <span class="form-error">
                                             {{'event_in_past' | translate}}
@@ -87,6 +96,9 @@
                                     <select class="form-control" name="startsAtHour" ng-model="event.startsAtHour" ng-options="hour for hour in startsAtHours" required>
                                         <option></option>
                                     </select>
+                                    <div ng-show="(createEventForm.startsAtHour.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.startsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
                                     <div ng-if="endsBeforeStartsError">
                                         <span class="form-error">
                                             {{'ends_before_starts' | translate}}
@@ -98,11 +110,17 @@
                                     <select class="form-control" name="endsAtHour" ng-model="event.endsAtHour" ng-options="hour for hour in endsAtHours" required>
                                         <option></option>
                                     </select>
+                                    <div ng-show="(createEventForm.endsAtHour.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.endsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="my-events-tbl-sub">
                                 <span>{{'end_date' | translate}}</span>
                                 <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
+                                <div ng-show="(createEventForm.inscriptionEndDate.$touched ||  createEventForm.$submitted)">
+                                        <span ng-show="createEventForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    </div>
                                 <div ng-if="inscriptionDateError">
                                     <span class="form-error">
                                         {{'inscription_date_in_past' | translate}}
