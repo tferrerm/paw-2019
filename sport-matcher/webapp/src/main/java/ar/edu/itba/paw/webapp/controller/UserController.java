@@ -159,7 +159,10 @@ public class UserController extends BaseController {
     public Response comment(@PathParam("id") long userId, 
     		@FormDataParam("commentForm") final CommentForm form)
 			throws UserNotAuthorizedException, UserNotFoundException, FormValidationException {
-
+    	if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+    	
     	validator.validate(form);
 
 		UserComment comment = us.createComment(loggedUser().getUserid(), userId, form.getComment());
@@ -175,6 +178,9 @@ public class UserController extends BaseController {
 	public Response createUser(@FormDataParam("userForm") final UserForm form,
 							   @BeanParam final PictureForm profilePicture)
 			throws FormValidationException, UserAlreadyExistsException, PictureProcessingException {
+    	if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
     	
     	validator.validate(form);
 

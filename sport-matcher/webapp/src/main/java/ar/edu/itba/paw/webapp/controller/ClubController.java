@@ -17,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -110,7 +111,10 @@ public class ClubController extends BaseController {
     public Response comment(@PathParam("id") long clubId,
     		@FormDataParam("commentForm") final CommentForm form)
     				throws UserNotAuthorizedException, ClubNotFoundException, FormValidationException {
-
+		if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+		
 		validator.validate(form);
 
 		final ClubComment comment = cs.createComment(loggedUser().getUserid(), clubId, form.getComment());
