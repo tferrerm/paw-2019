@@ -1,5 +1,5 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService', 'services/modalService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/modalService', 'directives/tooltip'], function(frontend) {
 
 	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'modalService', 'pitch', function($scope, $filter, $location, restService, authService, modalService, pitch) {
     	
@@ -58,7 +58,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		    		var endHourIndex = endsDate.getHours() - $scope.minHour - 1;
 		    		
 		    		for (var i = startHourIndex; i <= endHourIndex; i++) {
-		    			$scope.schedule[i][eventDayIndex] = {name: event.name, maxParticipants: event.maxParticipants, inscriptionCount: event.inscriptionCount};
+		    			$scope.schedule[i][eventDayIndex] = {eventid: event.eventid, pitchid: event.pitch.pitchid, name: event.name, maxParticipants: event.maxParticipants, inscriptionCount: event.inscriptionCount};
 		    		}
 		    	});
 		    });
@@ -94,6 +94,24 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 					restService.createEvent($scope.pitch.pitchid, $scope.event).then(function(data) {
 						//var createdEvent = data.event;
 						$location.url('pitches/' + $scope.pitch.pitchid + '/events/' + data.eventid);
+					}).catch(function(error) {
+						console.log(error);
+						if (error.status === 422) {
+							// if tiene cv
+							angular.forEach(error.data.constraintViolations, function(message, propertyPath) {
+	  							switch (propertyPath) {
+	  								case 'date':
+	  									$scope.dateError = true;
+	  									break;
+	  								case 'inscriptionEndDate':
+	  									$scope.inscriptionDateError = true;
+	  									break;
+	  								default:
+	  							}
+							});
+							// else me la tiro el service
+						}
+						// if chequear errores de service
 					});
 
 				} else {

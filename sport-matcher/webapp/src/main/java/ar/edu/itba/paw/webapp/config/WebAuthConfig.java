@@ -111,7 +111,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/favicon.ico", "/index.html", "/images/**", "/scripts/**",
+                .antMatchers("/favicon.ico", "/index.html", "/404.html", "/header.html",
+                		"/sidebar.html", "/images/**", "/scripts/**",
                 		"/styles/**", "/views/**", "/bower_components/**");
     }
     

@@ -274,9 +274,11 @@ public class EventServiceImpl implements EventService {
 			final String description, final int maxParticipants, final Instant date, 
 			final int startsAtHour, final int endsAtHour, final Instant inscriptionEndDate) 
 					throws 	MaximumDateExceededException, EndsBeforeStartsException, 
-							EventOverlapException, HourOutOfRangeException {
+							EventOverlapException, HourOutOfRangeException, DateInPastException {
 		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
 
+		if(startsAtDate.isBefore(Instant.now()))
+			throw new DateInPastException("Cannot create event starting in past date");
     	if(startsAtDate.compareTo(aWeeksTime()) > 0)
     		throw new MaximumDateExceededException();
     	if(endsAtHour <= startsAtHour)

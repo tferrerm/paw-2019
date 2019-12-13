@@ -8,7 +8,7 @@
 			{{'tournament_description_one' | translate}}
 			{{tournament.rounds}}
 			{{'tournament_description_two' | translate}}
-			{{tournament.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}
+			{{tournament.startsAt | date:'EEEE d, MMM yyyy HH:mm'}}
 		</span>
 		<div class="w-50 mv-10">
 			<div class="comment-profile-row">
@@ -39,6 +39,7 @@
 										<a class="link-text" ng-click="goToProfile(inscription.userid)">
 											{{inscription.firstname}} {{inscription.lastname}}
 										</a>
+										<a type="submit" class="kick-user-btn" ng-if="isAdmin && !inscriptionHasEnded" ng-click="kickUser(tournament.tournamentClub.clubid, tournament.tournamentid, inscription.userid)">{{'kick' | translate}}</a>
 									</div>
 									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[0].inscriptions.length) track by $index">
 										<span>-</span>

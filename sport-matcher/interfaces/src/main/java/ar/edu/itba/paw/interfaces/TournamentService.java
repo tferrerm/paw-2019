@@ -48,7 +48,7 @@ public interface TournamentService {
 	public void leaveTournament(final long tournamentid, final long userid) 
 			throws InscriptionClosedException, EntityNotFoundException;
 	
-	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionClosedException;
+	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionClosedException, EntityNotFoundException;
 	
 	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
 

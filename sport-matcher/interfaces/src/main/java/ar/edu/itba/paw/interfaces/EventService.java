@@ -125,7 +125,7 @@ public interface EventService {
 	public Event create(final String name, final User owner, final Pitch pitch, final String description,
 			final int maxParticipants, final Instant date, final int startsAtHour,
 			final int endsAtHour, final Instant inscriptionEndDate) throws MaximumDateExceededException, EndsBeforeStartsException,
-											EventOverlapException, HourOutOfRangeException;
+											EventOverlapException, HourOutOfRangeException, DateInPastException;
 
 	public void joinEvent(final long userid, final long eventid)
 			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException;

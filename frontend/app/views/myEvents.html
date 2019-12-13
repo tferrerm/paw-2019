@@ -19,7 +19,7 @@
 								<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
 								<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
 								<span class="flex flex-1 justify-center home-header">
-									<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}</div>
+									<div>{{event.startsAt | date:'EEEE d, MMM yyyy'}}</div>
 								</span>
 							</div>
 						</a>
@@ -56,14 +56,14 @@
 			</div>
 			<div class="flex-grow w-100">
 				<div class="events-column flex-grow flex-column">
-					<div ng-repeat="event in futureEvents" ng-class="event.inscriptionCount === event.maxParticipants ? 'background-green' : 'background-color-white'">
+					<div ng-repeat="event in futureEvents" ng-class="event.inscriptionCount === event.maxParticipants ? 'background-light-green' : 'background-color-white'">
 						<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
 							<div class="my-event-item">
 								<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
 								<div>{{event.inscriptionCount}}/{{event.maxParticipants}}</div>
 								<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
 								<span class="flex flex-1 justify-center home-header">
-									<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}</div>
+									<div>{{event.startsAt | date:'EEEE d H:mm, MMM yyyy'}}</div>
 								</span>
 							</div>
 						</a>

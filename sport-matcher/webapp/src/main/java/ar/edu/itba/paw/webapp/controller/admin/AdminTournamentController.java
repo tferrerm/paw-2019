@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -83,13 +84,13 @@ public class AdminTournamentController extends BaseController {
     public Response setTournamentEventResult(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
     		@FormDataParam("tournamentResultForm") final TournamentResultForm form)
-    				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException {
+    				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException, ClubNotFoundException {
 		if(form == null) {
     		return Response.status(Status.BAD_REQUEST).build();
     	}
 		
     	validator.validate(form);
-		
+    	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 
 		ts.postTournamentEventResult(tournament, eventid, form.getFirstResult(), form.getSecondResult());
@@ -176,8 +177,10 @@ public class AdminTournamentController extends BaseController {
     
     @DELETE
     @Path("/{id}")
-	public Response deleteTournament(@PathParam("id") final long tournamentid)
-			throws TournamentNotFoundException, InscriptionClosedException {
+	public Response deleteTournament(@PathParam("clubId") long clubid, @PathParam("id") final long tournamentid)
+			throws TournamentNotFoundException, InscriptionClosedException, ClubNotFoundException {
+    	
+    	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	Map<Long, List<User>> teamsMap = ts.mapTeamMembers(tournamentid);
     	
@@ -195,10 +198,11 @@ public class AdminTournamentController extends BaseController {
     
     @POST
     @Path("/{id}/kick-user/{userId}")
-    public Response kickUserFromTournament(
+    public Response kickUserFromTournament(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("userId") long kickedUserId) 
-    				throws UserNotFoundException, TournamentNotFoundException, InscriptionClosedException {
+    				throws InscriptionClosedException, EntityNotFoundException {
     	
+    	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	User kickedUser = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
     	

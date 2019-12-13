@@ -197,8 +197,8 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void kickFromTournament(final User kickedUser, final Tournament tournament) 
-			throws InscriptionClosedException {
-		TournamentTeam team = td.findUserTeam(tournament, kickedUser).orElseThrow(NoSuchElementException::new); // IF NO ARRANCO
+			throws InscriptionClosedException, EntityNotFoundException {
+		TournamentTeam team = td.findUserTeam(tournament, kickedUser).orElseThrow(EntityNotFoundException::new);
 		if(tournament.getEndsInscriptionAt().isBefore(Instant.now()))
 			throw new InscriptionClosedException();
 		td.deleteTournamentInscriptions(team, kickedUser);

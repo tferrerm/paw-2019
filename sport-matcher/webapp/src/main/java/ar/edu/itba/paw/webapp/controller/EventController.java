@@ -201,7 +201,7 @@ public class EventController extends BaseController {
     public Response createEvent(
     		@PathParam("pitchId") long pitchId,
     		@FormDataParam("eventForm") final EventForm form)
-    		 throws PitchNotFoundException, FormValidationException, EventCreationException {
+    		 throws PitchNotFoundException, FormValidationException, EventCreationException, DateInPastException {
     	if(form == null) {
     		return Response.status(Status.BAD_REQUEST).build();
     	}

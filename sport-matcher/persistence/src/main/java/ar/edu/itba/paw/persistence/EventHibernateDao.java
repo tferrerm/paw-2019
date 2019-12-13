@@ -147,7 +147,7 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public Integer countByUserInscriptions(boolean futureEvents, long userid) {
 		StringBuilder queryString = new StringBuilder("SELECT count(i) FROM Inscription AS i WHERE "
-				+ " i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt ");
+				+ " i.inscriptedUser.userid = :userid AND i.tournamentTeam = NULL AND i.inscriptionEvent.startsAt ");
 		queryString.append((futureEvents) ? " > :now " : " <= :now ");
 		
 		TypedQuery<Long> query = em.createQuery(queryString.toString(), Long.class);
