@@ -34,27 +34,34 @@
                 </c:if>-->
 
                 <div class="create-event">
-                    <table class="schedule-table flex"><thead></thead>
-                        <!--<tr>
-                            <th class="schedule-table-cell-size schedule-table-hours"></th>
-                            <c:forEach var="dayMessage" items="${scheduleHeaders}">
-                                <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
-                            </c:forEach>
-                        </tr>-->
-                        <!--<c:set var="hours" value="${minHour}"/>-->
-                        <tbody >
-                            <tr ng-repeat="row in schedule track by $index">
+                    <div class="flex-column">
+                        <div class="flex-row flex-1 flex-space-around">
+                            <span ng-repeat="header in dayHeaders">
+                                {{header | translate}}
+                            </span>
+                        </div>
+                        <table class="schedule-table flex"><thead></thead>
+                            <!--<tr>
+                                <th class="schedule-table-cell-size schedule-table-hours"></th>
+                                <c:forEach var="dayMessage" items="${scheduleHeaders}">
+                                    <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
+                                </c:forEach>
+                            </tr>-->
+                            <!--<c:set var="hours" value="${minHour}"/>-->
+                            <tbody >
+                                <tr ng-repeat="row in schedule track by $index">
 
-                                <!--<td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>-->
-                                
-                                    <!--<td ng-if="cell != null" class="schedule-table background-red schedule-table-cell-size"/>
-                                    <td ng-if="cell == null" class="schedule-table background-green schedule-table-cell-size"/>-->
-                                    <td ng-repeat="cell in row track by $index" ng-class="cell == null ? 'schedule-table background-green schedule-table-cell-size' : (cell.maxParticipants == cell.inscriptionCount? 'schedule-table background-red schedule-table-cell-size' : 'schedule-table background-yellow schedule-table-cell-size')" title="{{cell.name}}" data-toggle="tooltip" data-placement="top" tooltip tooltip-append-to-body="true" data-container="body">
-                                    </td>
-                                
-                            </tr></tbody>
-                            <!--<c:set var="hours" value="${hours + 1}"/>-->
-                    </table>
+                                    <!--<td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>-->
+                                    
+                                        <!--<td ng-if="cell != null" class="schedule-table background-red schedule-table-cell-size"/>
+                                        <td ng-if="cell == null" class="schedule-table background-green schedule-table-cell-size"/>-->
+                                        <td ng-repeat="cell in row track by $index" ng-class="cell == null ? 'schedule-table background-green schedule-table-cell-size' : (cell.maxParticipants == cell.inscriptionCount? 'schedule-table background-red schedule-table-cell-size' : 'schedule-table background-yellow schedule-table-cell-size')" title="{{cell.name}}" data-toggle="tooltip" data-placement="top" tooltip tooltip-append-to-body="true" data-container="body">
+                                        </td>
+                                    
+                                </tr></tbody>
+                                <!--<c:set var="hours" value="${hours + 1}"/>-->
+                        </table>
+                    </div>
                     <div class="flex flex-column create-event-form">
                         <h2 class="create-event-title">{{'create_event' | translate}}</h2>
                         <form ng-submit = createEventSubmit() name="createEventForm" method="post" novalidate>

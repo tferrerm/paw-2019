@@ -126,5 +126,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			//}
 		};
 
+		var now = ($filter('date')(new Date(), 'EEEE'));
+		var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var minDays = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
+		var indexOfToday = weekDays.indexOf(now);
+		$scope.dayHeaders = minDays.slice(indexOfToday, 7).concat(minDays.slice(0, indexOfToday));
+
+
 	}]);
 });
