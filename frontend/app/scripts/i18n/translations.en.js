@@ -80,6 +80,7 @@ define([], function() {
     delete_event:'Delete event',
     delete_pitch:'Delete pitch',
     delete_club:'Delete club',
+    delete_tournament:'Delete tournament',
     all_clubs:'All Clubs',
     view_club:'View Club',
     administrator:'Administrator',

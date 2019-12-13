@@ -150,7 +150,7 @@
 			</div>
 		</div>
 		<div ng-if="isAdmin">
-			<div class ="cancel-event" ng-if="isAdmin && !eventHasStarted">
+			<div class ="cancel-event" ng-if="!eventHasStarted">
 				<a ng-click="deleteEvent(event.eventid)">
 					<button type="submit" class="btn btn-danger join-button mb-10">{{'delete_event' | translate}}</button>
 				</a>

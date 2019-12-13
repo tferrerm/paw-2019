@@ -104,5 +104,12 @@
 				<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
 			</a>
 		</div>
+		<div ng-if="isAdmin">
+			<div class ="cancel-event" ng-if="!inscriptionHasEnded">
+				<a ng-click="deleteTournament(tournament.tournamentClub.clubid, tournament.tournamentid)">
+					<button type="submit" class="btn btn-danger join-button mb-10">{{'delete_tournament' | translate}}</button>
+				</a>
+			</div>
+		</div>
 	</div>
 </div>

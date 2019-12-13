@@ -11,7 +11,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				//$scope.duplicateEmailError = false;
 				//$scope.loggingIn = true;
 
-				authService.login($scope.user.username, $scope.user.password, true)
+				authService.login($scope.user.username, $scope.user.password, $scope.user.rememberMe)
           			.then(function() {
 						//$scope.loggingIn = false;
 						$uibModalInstance.close(true);
