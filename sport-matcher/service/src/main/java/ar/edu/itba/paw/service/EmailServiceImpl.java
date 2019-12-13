@@ -65,8 +65,10 @@ public class EmailServiceImpl implements EmailService {
 	public void userRegistered(final User user, final Locale locale) {
 
 		final Context ctx = new Context(locale);
-		String username = user.getFirstname() + " " + user.getLastname();
-		ctx.setVariable("email_body", ems.getMessage("user_registered_body", new Object[]{username}, locale));
+		ctx.setVariable("email_body", ems.getMessage("user_registered_body", new Object[]{
+				user.getFirstname(),
+				user.getLastname()
+		}, locale));
 
 		sendMail(user,locale,"user_registered_title", ctx, USER_REGISTERED_TEMPLATE,null);
 	}
@@ -74,45 +76,53 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void youWereKicked(User kickedUser, Event event, final Locale locale) {
 		final Context ctx = new Context(locale);
-		String eventName = event.getName();
-		String kickedUserName = kickedUser.getFirstname() + " " + kickedUser.getLastname();
-		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("user_kicked_body", new Object[]{kickedUserName, eventName}, locale));
+		ctx.setVariable("event_name", event.getName());
+		ctx.setVariable("email_body", ems.getMessage("user_kicked_body", new Object[]{
+				kickedUser.getFirstname(),
+				kickedUser.getLastname(),
+				event.getName()
+			}, locale));
 
-		sendMail(kickedUser, locale, "user_kicked_title",ctx, YOU_WERE_KICKED_TEMPLATE, new Object[]{eventName});
+		sendMail(kickedUser, locale, "user_kicked_title",ctx, YOU_WERE_KICKED_TEMPLATE, new Object[]{event.getName()});
 	}
 
 	@Override
 	public void youWereKicked(User kickedUser, Tournament tournament, Locale locale) {
 		final Context ctx = new Context(locale);
-		String tournamentName = tournament.getName();
-		String userName = kickedUser.getFirstname() + " " + kickedUser.getLastname();
-		ctx.setVariable("tournament_name", tournamentName);
-		ctx.setVariable("email_body", ems.getMessage("tour_kicked_body", new Object[]{userName, tournamentName}, locale));
+		ctx.setVariable("tournament_name", tournament.getName());
+		ctx.setVariable("email_body", ems.getMessage("tour_kicked_body", new Object[]{
+				kickedUser.getFirstname(),
+				kickedUser.getLastname(),
+				tournament.getName()
+			}, locale));
 
-		sendMail(kickedUser, locale, "tour_kicked_title", ctx, TOURNAMENT_KICKED_TEMPLATE, new Object[]{tournamentName});
+		sendMail(kickedUser, locale, "tour_kicked_title", ctx, TOURNAMENT_KICKED_TEMPLATE, new Object[]{tournament.getName()});
 	}
 
 	@Override
 	public void tournamentStarted(final User user, final Tournament tournament, final Locale locale) {
 		final Context ctx = new Context(locale);
-		String tournamentName = tournament.getName();
-		String userName = user.getFirstname() + " " + user.getLastname();
-		ctx.setVariable("tournament_name", tournamentName);
-		ctx.setVariable("email_body", ems.getMessage("tournament_started_body", new Object[]{userName, tournamentName}, locale));
+		ctx.setVariable("tournament_name", tournament.getName());
+		ctx.setVariable("email_body", ems.getMessage("tournament_started_body", new Object[]{
+				user.getFirstname(),
+				user.getLastname(),
+				tournament.getName()
+			}, locale));
 
-		sendMail(user, locale, "tournament_started_title", ctx, TOURNAMENT_STARTED_TEMPLATE, new Object[]{tournamentName});
+		sendMail(user, locale, "tournament_started_title", ctx, TOURNAMENT_STARTED_TEMPLATE, new Object[]{tournament.getName()});
 	}
 
 	@Override
 	public void eventStarted(final User user, final Event event, final Locale locale) {
 		final Context ctx = new Context(locale);
-		String eventName = event.getName();
-		String userName = user.getFirstname() + " " + user.getLastname();
-		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("event_started_body", new Object[]{userName, eventName}, locale));
+		ctx.setVariable("event_name", event.getName());
+		ctx.setVariable("email_body", ems.getMessage("event_started_body", new Object[]{
+				user.getFirstname(),
+				user.getLastname(),
+				event.getName()
+			}, locale));
 
-		sendMail(user, locale, "event_started_title", ctx, EVENT_STARTED_TEMPLATE, new Object[]{eventName});
+		sendMail(user, locale, "event_started_title", ctx, EVENT_STARTED_TEMPLATE, new Object[]{event.getName()});
 	}
 
 	@Override
@@ -123,9 +133,11 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void tournamentCancelled(User user, String tournamentName, Locale locale) {
 		final Context ctx = new Context(locale);
-		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("tournament_name", tournamentName);
-		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{userName, tournamentName}, locale));
+		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{
+				user.getFirstname(),
+				user.getLastname(),
+				tournamentName}, locale));
 
 		sendMail(user, locale, "tournament_cancelled_title", ctx, TOURNAMENT_CANCELLED_TEMPLATE, new Object[]{tournamentName});
 	}
@@ -138,9 +150,11 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void eventCancelled(User user, String eventName, Locale locale) {
 		final Context ctx = new Context(locale);
-		String userName = user.getFirstname() + " " + user.getLastname();
 		ctx.setVariable("event_name", eventName);
-		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{userName, eventName}, locale));
+		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{
+				user.getFirstname(),
+				user.getLastname(),
+				eventName}, locale));
 		sendMail(user, locale, "event_cancelled_title",ctx, EVENT_CANCELLED_TEMPLATE, new Object[]{eventName});
 	}
 
