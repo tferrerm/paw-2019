@@ -16,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
