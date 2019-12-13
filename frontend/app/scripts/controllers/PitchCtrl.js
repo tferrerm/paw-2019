@@ -14,7 +14,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
     	restService.getPitchPicture(pitch.pitchid).then(function(data) {
     		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
     	}).catch(function(error) {
-    		$scope.picture = '../../images/pitch_default.png';
+    		$scope.picture = '../../images/pitch_default.jpg';
     	});
 
 			function _arrayBufferToBase64(buffer) {
