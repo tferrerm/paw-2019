@@ -212,5 +212,18 @@ define([], function() {
     started:'COMENZADO'
     go_to_home:'Ir al home'
     skip_login:'¿Quieres saltar esto por ahora?'
+    current:'Actual',
+    are_you_sure:'¿Está seguro de que desea eliminar?',
+    delete_action:'Eliminar',
+    cancel_action:'Cancelar',
+    inscription_closed_error:'La inscripción ya ha cerrado',
+    team_full_error:'No quedan vacantes en el equipo',
+    event_started_error:'El evento ya ha comenzado',
+    error_pitch_not_found:'Cancha no encontrada',
+    error_event_not_found:'Evento no encontrado',
+    error_user_not_found:'Usuario no encontrado',
+    error_club_not_found:'Club no encontrado',
+    error_tournament_not_found:'Torneo no encontrado',
+    error_tournament_event_not_found:'Evento de torneo no encontrado'
 };
 });
