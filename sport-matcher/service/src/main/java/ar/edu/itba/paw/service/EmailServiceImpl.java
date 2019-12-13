@@ -137,7 +137,8 @@ public class EmailServiceImpl implements EmailService {
 		ctx.setVariable("email_body", ems.getMessage("tournament_cancelled_body", new Object[]{
 				user.getFirstname(),
 				user.getLastname(),
-				tournamentName}, locale));
+				tournamentName
+			}, locale));
 
 		sendMail(user, locale, "tournament_cancelled_title", ctx, TOURNAMENT_CANCELLED_TEMPLATE, new Object[]{tournamentName});
 	}
@@ -154,7 +155,8 @@ public class EmailServiceImpl implements EmailService {
 		ctx.setVariable("email_body", ems.getMessage("event_cancelled_body", new Object[]{
 				user.getFirstname(),
 				user.getLastname(),
-				eventName}, locale));
+				eventName
+			}, locale));
 		sendMail(user, locale, "event_cancelled_title",ctx, EVENT_CANCELLED_TEMPLATE, new Object[]{eventName});
 	}
 
