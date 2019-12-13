@@ -9,7 +9,7 @@ import ar.edu.itba.paw.webapp.dto.exception.ExceptionDto;
 import ar.edu.itba.paw.webapp.http.CustomStatus;
 
 @Provider
-public class PitcureProcessingExceptionHandler implements ExceptionMapper<PictureProcessingException> {
+public class PictureProcessingExceptionHandler implements ExceptionMapper<PictureProcessingException> {
 
 	@Override
 	public Response toResponse(PictureProcessingException exception) {
