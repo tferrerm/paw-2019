@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -77,22 +78,18 @@ public class AdminTournamentController extends BaseController {
 	private FormValidator validator;
 	
 	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/{id}/events/{eventId}/result")
     public Response setTournamentEventResult(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
-    		@FormDataParam("firstResult") String first, @FormDataParam("secondResult") String second)
+    		@FormDataParam("tournamentResultForm") final TournamentResultForm form)
     				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException {
 
-		Integer firstResult = tryInteger(first);
-    	Integer secondResult = tryInteger(second);
-    	
-    	validator.validate(new TournamentResultForm()
-    			.withFirstResult(firstResult)
-    			.withSecondResult(secondResult));
+    	validator.validate(form);
 		
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 
-		ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
+		ts.postTournamentEventResult(tournament, eventid, form.getFirstResult(), form.getSecondResult());
 	    return Response.status(Status.NO_CONTENT).build();
 	}
 	
@@ -124,36 +121,24 @@ public class AdminTournamentController extends BaseController {
     }
     
 	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createTournament(@PathParam("clubId") long clubId,
-    		@FormDataParam("name") String name, @FormDataParam("maxTeams") String maxTeams,
-    		@FormDataParam("teamSize") String teamSize, @FormDataParam("firstRoundDate") String firstRoundDate,
-    		@FormDataParam("startsAtHour") String startsAtHour, @FormDataParam("endsAtHour") String endsAtHour,
-    		@FormDataParam("inscriptionEndDate") String inscriptionEndDate)
+    		@FormDataParam("tournamentForm") final TournamentForm form)
     				throws ClubNotFoundException, FormValidationException, Exception /* HARDCODEADO HARDCODED ARREGLAR */ {
+
+    	Instant firstRoundDate = tryInstantStartOfDay(form.getFirstRoundDate(), TIME_ZONE);
+    	Instant inscriptionEndsAt = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	
-    	Integer mt = tryInteger(maxTeams);
-    	Integer tsz = tryInteger(teamSize);
-    	Instant frd = tryInstantStartOfDay(firstRoundDate, TIME_ZONE);
-    	Integer sa = tryInteger(startsAtHour);
-    	Integer ea = tryInteger(endsAtHour);
-    	Instant ied = tryDateTimeToInstant(inscriptionEndDate, TIME_ZONE);
-    	
-    	validator.validate(new TournamentForm()
-    			.withName(name)
-    			.withMaxTeams(mt)
-    			.withTeamSize(tsz)
-    			.withtFirstRoundDate(frd)
-    			.withStartsAtHour(sa)
-    			.withEndsAtHour(ea)
-    			.withInscriptionEndDate(ied));
+    	validator.validate(form);
     	
     	Club club = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = null;
     	
 //    	try {
 //    		// Only SOCCER Tournaments are supported for now
-        	tournament = ts.create(name, Sport.SOCCER, club, mt,
-        			tsz, frd, sa, ea, ied, loggedUser());
+        	tournament = ts.create(form.getName(), Sport.SOCCER, club, form.getMaxTeams(),
+        			form.getTeamSize(), firstRoundDate, form.getStartsAtHour(),
+        			form.getEndsAtHour(), inscriptionEndsAt, loggedUser());
 //    	} catch(DateInPastException e) {
 //    		return tournamentCreationError("event_in_past", clubId, form);
 //    	} catch(MaximumDateExceededException e) {

@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.dto.form;
 
-import java.time.Instant;
-
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -22,7 +20,7 @@ public class EventForm {
 	private Integer maxParticipants;
 	
 	@FutureDate(startOfDay = true)
-	private Instant date;
+	private String date;
 
 	@IntegerRange(min = 0, max = 23)
 	private Integer startsAtHour;
@@ -31,69 +29,62 @@ public class EventForm {
 	private Integer endsAtHour;
 	
 	@FutureDate
-	private Instant inscriptionEndDate;
+	private String inscriptionEndDate;
 
 	public String getName() {
 		return name;
 	}
 
-	public EventForm withName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public EventForm withDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
-		return this;
 	}
 
 	public Integer getMaxParticipants() {
 		return maxParticipants;
 	}
 
-	public EventForm withMaxParticipants(Integer maxParticipants) {
+	public void setMaxParticipants(Integer maxParticipants) {
 		this.maxParticipants = maxParticipants;
-		return this;
 	}
 
-	public Instant getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public EventForm withDate(Instant date) {
+	public void setDate(String date) {
 		this.date = date;
-		return this;
 	}
 
 	public Integer getStartsAtHour() {
 		return startsAtHour;
 	}
 
-	public EventForm withStartsAtHour(Integer startsAtHour) {
+	public void setStartsAtHour(Integer startsAtHour) {
 		this.startsAtHour = startsAtHour;
-		return this;
 	}
 
 	public Integer getEndsAtHour() {
 		return endsAtHour;
 	}
 
-	public EventForm withEndsAtHour(Integer endsAtHour) {
+	public void setEndsAtHour(Integer endsAtHour) {
 		this.endsAtHour = endsAtHour;
-		return this;
 	}
 
-	public Instant getInscriptionEndDate() {
+	public String getInscriptionEndDate() {
 		return inscriptionEndDate;
 	}
 
-	public EventForm withInscriptionEndDate(Instant inscriptionEndDate) {
+	public void setInscriptionEndDate(String inscriptionEndDate) {
 		this.inscriptionEndDate = inscriptionEndDate;
-		return this;
 	}
 	
 }

@@ -11,7 +11,6 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 			{name: 'Tournaments', link: '#/tournaments'}
 		];
 
-		$scope.isLoggedIn = false;
 		$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.loggedUser = authService.getLoggedUser();
 		$scope.isAdmin = authService.isAdmin();
@@ -23,6 +22,14 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 
 		$scope.showRegisterModal = modalService.registerModal;
 		$scope.showLoginModal = modalService.loginModal;
+
+		if ($scope.isLoggedIn) {
+			restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {
+	    		$scope.profilePicture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
+	    	}).catch(function(error) {
+	    		$scope.profilePicture = '../../images/profile_default.jpg';
+	    	});
+    	}
 
 		$scope.logout = function() {
 			authService.logout();
@@ -39,6 +46,13 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!My events'});
 				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!History'});
 			}
+			if ($scope.isLoggedIn) {
+				restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {
+		    		$scope.profilePicture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
+		    	}).catch(function(error) {
+		    		$scope.profilePicture = '../../images/profile_default.jpg';
+		    	});
+	    	}
 		});
 
 		$scope.goToEvent = function(pitchid, eventid) {
@@ -60,6 +74,16 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		$scope.goToHome = function() {
 			$location.url('home');
 		};
+
+		function _arrayBufferToBase64(buffer) {
+		    var binary = '';
+		    var bytes = new Uint8Array(buffer);
+		    var len = bytes.byteLength;
+		    for (var i = 0; i < len; i++) {
+		      binary += String.fromCharCode(bytes[i]);
+		    }
+		    return window.btoa(binary);
+		}
 
 	}]);
 });

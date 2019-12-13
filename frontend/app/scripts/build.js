@@ -71,6 +71,11 @@ require.config({
             deps: [
                 'angular'
             ]
+        },
+        'ng-file-upload': {
+            deps: [
+                'angular'
+            ]
         }
     },
     packages: [

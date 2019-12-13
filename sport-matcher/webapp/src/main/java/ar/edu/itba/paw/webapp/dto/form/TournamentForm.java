@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.dto.form;
 
-import java.time.Instant;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -24,7 +22,7 @@ public class TournamentForm {
 	private Integer teamSize;
 	
 	@FutureDate(startOfDay = true)
-	private Instant firstRoundDate;
+	private String firstRoundDate;
 	
 	@IntegerRange(min = 0, max = 23)
 	private Integer startsAtHour;
@@ -33,69 +31,62 @@ public class TournamentForm {
 	private Integer endsAtHour;
 	
 	@FutureDate
-	private Instant inscriptionEndDate;
+	private String inscriptionEndDate;
 
 	public String getName() {
 		return name;
 	}
 
-	public TournamentForm withName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	public Integer getMaxTeams() {
 		return maxTeams;
 	}
 
-	public TournamentForm withMaxTeams(Integer maxTeams) {
+	public void setMaxTeams(Integer maxTeams) {
 		this.maxTeams = maxTeams;
-		return this;
 	}
 
 	public Integer getTeamSize() {
 		return teamSize;
 	}
 
-	public TournamentForm withTeamSize(Integer teamSize) {
+	public void setTeamSize(Integer teamSize) {
 		this.teamSize = teamSize;
-		return this;
 	}
 
-	public Instant getFirstRoundDate() {
+	public String getFirstRoundDate() {
 		return firstRoundDate;
 	}
 
-	public TournamentForm withtFirstRoundDate(Instant firstRoundDate) {
+	public void setFirstRoundDate(String firstRoundDate) {
 		this.firstRoundDate = firstRoundDate;
-		return this;
 	}
 
 	public Integer getStartsAtHour() {
 		return startsAtHour;
 	}
 
-	public TournamentForm withStartsAtHour(Integer startsAtHour) {
+	public void setStartsAtHour(Integer startsAtHour) {
 		this.startsAtHour = startsAtHour;
-		return this;
 	}
 
 	public Integer getEndsAtHour() {
 		return endsAtHour;
 	}
 
-	public TournamentForm withEndsAtHour(Integer endsAtHour) {
+	public void setEndsAtHour(Integer endsAtHour) {
 		this.endsAtHour = endsAtHour;
-		return this;
 	}
 
-	public Instant getInscriptionEndDate() {
+	public String getInscriptionEndDate() {
 		return inscriptionEndDate;
 	}
 
-	public TournamentForm withInscriptionEndDate(Instant inscriptionEndDate) {
+	public void setInscriptionEndDate(String inscriptionEndDate) {
 		this.inscriptionEndDate = inscriptionEndDate;
-		return this;
 	}
 
 }

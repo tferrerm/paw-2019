@@ -63,8 +63,8 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		    	});
 		    });
 		}).catch(function(error) {
-alert(error.data || ' Error');
-});
+			alert(error.data || ' Error');
+		});
 
 	    $scope.event = {};
 	    $scope.showLoginModal = modalService.loginModal;

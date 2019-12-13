@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,7 @@ import ar.edu.itba.paw.model.Pitch;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.dto.PitchDto;
+import ar.edu.itba.paw.webapp.dto.form.PictureForm;
 import ar.edu.itba.paw.webapp.dto.form.PitchForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
@@ -56,28 +56,23 @@ public class AdminPitchController extends BaseController {
 	private	UriInfo	uriInfo;
 	
 	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response createPitch(@PathParam("clubId") final long clubId,
-			@FormDataParam("name") String name,	@FormDataParam("sport") String sport,
-			@FormDataParam("picture") InputStream picture)
+			@FormDataParam("pitchForm") PitchForm pitchForm, @BeanParam PictureForm pictureForm)
 				throws ClubNotFoundException, PictureProcessingException, FormValidationException {
 
-		validator.validate(new PitchForm().withName(name).withSport(sport));
-		
-		//final MultipartFile pitchPicture = form.getPitchPicture();
+		LOGGER.debug("{} {} {}", pitchForm.getName(), pitchForm.getSport());
+		validator.validate(pitchForm);
+
 		Club c = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
-		Sport s = Sport.valueOf(sport);
+		Sport s = Sport.valueOf(pitchForm.getSport());
 		Pitch pitch;
 		
-		try {
-			byte[] pictureBytes = {};
-			if(picture != null)
-				pictureBytes = IOUtils.toByteArray(picture);
-			pitch = ps.create(c, name, s, pictureBytes);
-			LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
-		} catch(IOException e) {
-			LOGGER.error("Error reading pitch picture {}", e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-		}
+		byte[] pictureBytes = {};
+		if(pictureForm != null && pictureForm.getBytes() != null)
+			pictureBytes = pictureForm.getBytes();
+		pitch = ps.create(c, pitchForm.getName(), s, pictureBytes);
+		LOGGER.debug("Club {} with id {} created", c.getName(), c.getClubid());
 		
 		final URI uri = uriInfo.getBaseUriBuilder().path("/pitches/" + pitch.getPitchid()).build();
 		return Response.created(uri).entity(PitchDto.ofPitch(pitch)).build();

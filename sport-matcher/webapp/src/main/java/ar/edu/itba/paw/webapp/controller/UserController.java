@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -22,7 +22,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +55,7 @@ import ar.edu.itba.paw.webapp.dto.UserCommentCollectionDto;
 import ar.edu.itba.paw.webapp.dto.UserCommentDto;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
+import ar.edu.itba.paw.webapp.dto.form.PictureForm;
 import ar.edu.itba.paw.webapp.dto.form.UserForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.CommentNotFoundException;
@@ -157,13 +157,12 @@ public class UserController extends BaseController {
 	@Path("/{id}/comment")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response comment(@PathParam("id") long userId, 
-    		@FormDataParam("comment") final String commentContent)
+    		@FormDataParam("commentForm") final CommentForm form)
 			throws UserNotAuthorizedException, UserNotFoundException, FormValidationException {
 
-    	CommentForm cf = new CommentForm().withComment(commentContent);
-    	validator.validate(cf);
+    	validator.validate(form);
 
-		UserComment comment = us.createComment(loggedUser().getUserid(), userId, commentContent);
+		UserComment comment = us.createComment(loggedUser().getUserid(), userId, form.getComment());
 
 		final URI uri = uriInfo.getAbsolutePathBuilder()
 				.path(userId + "/comments/" + comment.getCommentId()).build();
@@ -173,32 +172,23 @@ public class UserController extends BaseController {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = { MediaType.APPLICATION_JSON })
-	public Response createUser(@FormDataParam("username") final String username,
-							   @FormDataParam("password") final String password,
-							   @FormDataParam("firstname") final String firstname,
-							   @FormDataParam("lastname") final String lastname,
-							   @FormDataParam("picture") final InputStream profilePicture)
+	public Response createUser(@FormDataParam("userForm") final UserForm form,
+							   @BeanParam final PictureForm profilePicture)
 			throws FormValidationException, UserAlreadyExistsException, PictureProcessingException {
     	
-    	validator.validate(new UserForm()
-    			.withUsername(username)
-    			.withPassword(password)
-    			.withFirstname(firstname)
-    			.withLastname(lastname));
+    	validator.validate(form);
 
 		final User user;		
-		final String encodedPassword = passwordEncoder.encode(password);
-		
-		try {
-			byte[] picture = {};
-			if(profilePicture != null)
-				picture = IOUtils.toByteArray(profilePicture);
-			user = us.create(username, firstname, lastname,
-					encodedPassword, Role.ROLE_USER, picture);
-		} catch(IOException e) {
-			LOGGER.error("Error reading profile picture from {}: {}", username, e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-		}
+		final String encodedPassword = passwordEncoder.encode(form.getPassword());
+
+		byte[] picture = {};
+		if(profilePicture != null && profilePicture.getBytes() != null)
+			picture = profilePicture.getBytes();
+		else
+			LOGGER.debug("User {} registering with empty picture", form.getUsername());
+
+		user = us.create(form.getUsername(), form.getFirstname(), form.getLastname(),
+				encodedPassword, Role.ROLE_USER, picture);
 		
 		ems.userRegistered(user, LocaleContextHolder.getLocale());
 

@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/modalService'], function(frontend) {
 
-	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'modalService', 'club', function($scope, $location, restService, modalService, club) {
+	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'club', 'Upload', function($scope, $location, restService, club, Upload) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
@@ -19,8 +19,8 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	}).catch(function(error) {
-alert(error.data || ' Error');
-});
+				alert(error.data || ' Error');
+			});
 
 	    updatePitches(club.clubid, pitchParams);
 
@@ -68,8 +68,8 @@ alert(error.data || ' Error');
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
 			}).catch(function(error) {
-alert(error.data || ' Error');
-});
+				alert(error.data || ' Error');
+			});
 		};
 
 		$scope.commentText = {};
@@ -120,23 +120,23 @@ alert(error.data || ' Error');
 				$scope.commentsPageNum = params.pageNum;
 			});
 		};
-
-		$scope.createPitchSubmit = function() {
+		
+		$scope.createPitchSubmit = function(picture) {
 			//checkPasswordsMatch();
 			//if ($scope.createEventForm.$valid) {
-				//$scope.duplicateEmailError = false;
-				
+			//$scope.duplicateEmailError = false;
 				if ($scope.isAdmin) {
-					restService.createPitch(club.clubid, $scope.createdPitch)
-						.then(function(data) {
-							//var createdEvent = data.event;
-							//$location.url('pitches/' + data.pitchid);
-							pitchParams.pageNum = 1;
-							updatePitches(club.clubid, pitchParams);
+					// CHEQUEAR SI picture es undefined (si subieron imagen mala)
+					Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
+						restService.createPitch(club.clubid, $scope.createdPitch, blob)
+							.then(function(data) {
+								//var createdEvent = data.event;
+								//$location.url('pitches/' + data.pitchid);
+								pitchParams.pageNum = 1;
+								updatePitches(club.clubid, pitchParams);
+							});
 						});
-
-				}
-			//}
+					};
 		};
 
 		$scope.newTournament = function(id) {
