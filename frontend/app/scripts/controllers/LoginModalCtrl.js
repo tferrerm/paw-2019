@@ -15,7 +15,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					  	if (error.status === 401) {
 					    	$scope.invalidCredentials = true;
 						}
-        			});
+        	});
 			}
 		};
 
