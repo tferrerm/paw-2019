@@ -1,7 +1,16 @@
-<div class="main-container round">
+<div class="main-container  border-radius-20 background-color-white">
 	<div class="content-container justify-center">
-		<span>{{'are_you_sure' | translate}}</span>
-		<a class="link-text" ng-click="confirmDelete()">{{'delete_action' | translate}}</a>
-		<a class="link-text" ng-click="cancelDelete()">{{'cancel_action' | translate}}</a>
+		<div class="background-red-opacity w-100 border-top-radius-20">
+			<h1 class="event-info-label color-black justify-center mt-30">{{'delete_confirmation' | translate}}</h1>
+		</div>
+		<span class="comment-text mv-10">{{'delete_message' | translate}}</span>
+		<div class="flex-row w-50 flex-space-between mv-20">
+			<a class="link-text" ng-click="confirmDelete()">
+				<button type="button" class="btn btn-primary btn-danger">{{'delete_action' | translate}}</button>
+			</a>
+			<a class="link-text" ng-click="cancelDelete()">
+				<button type="button" class="btn btn-primary btn-success">{{'cancel_action' | translate}}</button>
+			</a>
+		</div>
 	</div>
 </div>

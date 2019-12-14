@@ -9,7 +9,7 @@
     background-color: transparent;
 }
 
-.loginModal .modal-footer {}
+//.loginModal .modal-footer {}
 
 .registerModal .modal-dialog {
     width: 70%;
@@ -22,15 +22,17 @@
     background-color: transparent;
 }
 
-.registerModal .modal-footer {}
+//.registerModal .modal-footer {}
 
 .deleteConfirmModal .modal-dialog {
+    width: 40%;
     display: flex;
     justify-content: center;
 }
 
 .deleteConfirmModal .modal-content {
+    width: 100%;
     background-color: transparent;
 }
 
-.deleteConfirmModal .modal-footer {}
+//.deleteConfirmModal .modal-footer {}
