@@ -43,8 +43,7 @@ public class PitchPictureServiceImpl implements PitchPictureService {
 			byte[] convertedPicture = ps.convert(data, MAX_WIDTH, MAX_HEIGHT);
 			ppd.create(pitch, convertedPicture);
 		} catch(IllegalArgumentException | IOException e) {
-			throw new PictureProcessingException("The pitch picture could not be processed. " + 
-					e.getMessage());
+			throw new PictureProcessingException("PictureProcessingError");
 		}
 	}
 

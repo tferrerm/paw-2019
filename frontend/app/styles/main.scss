@@ -67,7 +67,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 }
 
 .side-and-content {
-  height: 100%;
+  flex-grow: 1;
   display: flex;
 }
 

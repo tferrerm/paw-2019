@@ -44,8 +44,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 			byte[] convertedPicture = ps.convert(data, MAX_WIDTH, MAX_HEIGHT);
 			ppd.create(user, convertedPicture);
 		} catch(IllegalArgumentException | IOException e) {
-			throw new PictureProcessingException("The profile picture could not be processed. " + 
-					e.getMessage());
+			throw new PictureProcessingException("PictureProcessingError");
 		}
 	}
 
