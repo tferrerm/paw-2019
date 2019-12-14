@@ -3,7 +3,7 @@
 		<h2>{{'myParticipations' | translate }}</h2>
 	</div>
 	<span class="help-message notice w-70 justify-center">{{'history_help' | translate }}</span>
-	<div ng-if="events.length > 0">
+	<div ng-if="events.length > 0" class="w-100">
 		<div class="tbl">
 			<div class="table-header background-dodgerblue">
 				<div class="flex-grow justify-center my-events-tbl-sub">
@@ -13,7 +13,7 @@
 					<span class="event-info-label color-white">{{'event_location' | translate }}</span>
 				</div>
 				<div class="flex-grow justify-center my-events-tbl-sub">
-					<span class="event-info-label color-white">{{'event_startsAt' | translate }}</span>
+					<span class="event-info-label color-white">{{'new_event_date' | translate }}</span>
 				</div>
 			</div>
 			<div class="flex-grow w-100">
@@ -24,7 +24,7 @@
 								<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
 								<span class="flex flex-1 justify-center home-header">{{event.pitch.club.location}}</span>
 								<span class="flex flex-1 justify-center home-header">
-									<div>{{event.startsAt | date:'EEEE d, MMM yyyy' : 'UTC'}}</div>
+									<div>{{event.startsAt | date:'EEEE d, MMM yyyy'}}</div>
 								</span>
 							</div>
 						</a>

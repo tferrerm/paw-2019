@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
@@ -273,17 +274,21 @@ public class EventServiceImpl implements EventService {
 			final String description, final int maxParticipants, final Instant date, 
 			final int startsAtHour, final int endsAtHour, final Instant inscriptionEndDate) 
 					throws 	MaximumDateExceededException, EndsBeforeStartsException, 
-							EventOverlapException, HourOutOfRangeException {
+							EventOverlapException, HourOutOfRangeException, DateInPastException {
 		Instant startsAtDate = date.plus(startsAtHour, ChronoUnit.HOURS);
 
-    	if(startsAtDate.compareTo(aWeeksTime()) > 0)
-    		throw new MaximumDateExceededException();
+		if(startsAtDate.isBefore(Instant.now()))
+			throw new DateInPastException("StartsInPast");
+		if(inscriptionEndDate.isBefore(Instant.now()))
+			throw new DateInPastException("InscriptionInPast");
+    	if(startsAtDate.compareTo(aWeeksTime().minus(1, ChronoUnit.HOURS)) > 0)
+    		throw new MaximumDateExceededException("MaximumStartDateExceeded");
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException(MIN_HOUR, MAX_HOUR);
     	if(inscriptionEndDate.isAfter((startsAtDate.minus(INSCRIPTION_END_FROM_EVENT_DAY_DIFFERENCE, ChronoUnit.DAYS))))
-    		throw new MaximumDateExceededException("The inscription cannot close in less than 24 hs before the event starts");
+    		throw new MaximumDateExceededException("MaximumInscriptionDateExceeded");
 
 		return ed.create(name, owner, pitch, description, maxParticipants, 
 				startsAtDate, date.plus(endsAtHour, ChronoUnit.HOURS), inscriptionEndDate);
@@ -309,7 +314,7 @@ public class EventServiceImpl implements EventService {
 		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new InscriptionClosedException("Cannot join event if inscription is closed");
+			throw new InscriptionClosedException();
 		}
 		
 		if(countParticipants(event.getEventId()) + 1 > event.getMaxParticipants()) {
@@ -321,11 +326,11 @@ public class EventServiceImpl implements EventService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void leaveEvent(final long eventid, final long userid) throws DateInPastException {
+	public void leaveEvent(final long eventid, final long userid) throws DateInPastException, EntityNotFoundException {
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		ud.findById(userid).orElseThrow(NoSuchElementException::new);
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot leave event if inscription is closed");
+			throw new DateInPastException("InscriptionClosed");
 		}
 		idao.deleteInscription(eventid, userid);
 	}
@@ -333,14 +338,14 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
-		throws UserNotAuthorizedException, DateInPastException {
+		throws UserNotAuthorizedException, DateInPastException, EntityNotFoundException {
 		ud.findById(kickedUserId).orElseThrow(NoSuchElementException::new);
 		if(owner.getUserid() != event.getOwner().getUserid())
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		if(owner.getUserid() == kickedUserId)
 			throw new UserNotAuthorizedException("Owner cannot be kicked from the event. Must leave instead.");
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot kick from event if inscription is closed");
+			throw new DateInPastException("InscriptionClosed");
 		}
 		idao.deleteInscription(event.getEventId(), kickedUserId);
 	}
@@ -388,7 +393,7 @@ public class EventServiceImpl implements EventService {
 		}
 		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
 		if(event.getStartsAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot delete event if it has already started");
+			throw new DateInPastException("EventStarted");
 		}
 		ed.deleteEvent(eventid);
 	}
@@ -404,7 +409,7 @@ public class EventServiceImpl implements EventService {
 			throw new UserNotAuthorizedException("Cannot cancel event if now the owner");
 		}
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
-			throw new DateInPastException("Cannot cancel event if inscription is closed");
+			throw new DateInPastException("InscriptionClosed");
 		}
 		ed.deleteEvent(event.getEventId());
 	}

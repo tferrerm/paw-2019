@@ -172,8 +172,7 @@ public class TournamentHibernateDao implements TournamentDao {
 		int userBusyQueryResult = query.getSingleResult().intValue();
 		
 		if(userBusyQueryResult > 0)
-			throw new UserBusyException("User " + user.getUserid() + " already joined "
-					+ "an event in that period");
+			throw new UserBusyException();
 		
 		/* Creates an inscription for every tournament round */
 		List<TournamentEvent> tournamentEvents = findTournamentEventsByTeam(tournament, team);
@@ -181,7 +180,7 @@ public class TournamentHibernateDao implements TournamentDao {
 			try {
 				em.persist(new Inscription(tournamentEvent, user, team));
 			} catch(EntityExistsException e) {
-				throw new UserAlreadyJoinedException(user.getUserid(), tournamentEvent.getEventId());
+				throw new UserAlreadyJoinedException();
 			}
 		}
 	}

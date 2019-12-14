@@ -45,9 +45,12 @@
 			</div>
 		</div>
 		<div class="tbl profile-cont">
-			<div ng-if="hasRelationship">
+			<div ng-show="hasRelationship">
 				<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
-					<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="commentText.comment" required/>
+					<input class="form-control" type="text" placeholder="{{'comment' | translate}}" maxlength="500" name="comment" ng-model="commentText.comment" required/>
+					<div ng-show="(commentForm.comment.$touched ||  commentForm.$submitted)">
+                        <span ng-show="commentForm.comment.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                    </div>
 					<div class="justify-center">
 						<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
 					</div>
@@ -59,7 +62,7 @@
 					<a class="link-text ml-10" ng-click="goToProfile(cmt.commenter.userid)">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
 				</div>
 				<span class="comment-text ml-10">{{cmt.comment}}</span>
-				<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>
+				<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm'}}</div>
 			</div>
 			<div class="table-navigator">
 				<div ng-if="comments.length > 0">

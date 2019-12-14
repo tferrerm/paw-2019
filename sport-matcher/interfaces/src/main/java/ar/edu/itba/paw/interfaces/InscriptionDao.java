@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Inscription;
 import ar.edu.itba.paw.model.User;
@@ -34,7 +35,7 @@ public interface InscriptionDao {
 	 */
 	public int vote(final boolean isUpvote, final long eventid, final long userid);
 	
-	public void deleteInscription(final long eventid, final long userid);
+	public void deleteInscription(final long eventid, final long userid) throws EntityNotFoundException;
 
 	/**
 	 * Returns true if the commenter and receiver have an Inscription for a common past Event

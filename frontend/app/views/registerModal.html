@@ -7,9 +7,9 @@
 		</div>
 		<div class="registration-form-container mt-30 mr-40">
 			<div class="form-container mb-35">
-				<form ng-submit = registerSubmit() name="registerForm" method="post" novalidate>
+				<form ng-submit = registerSubmit(picture) name="registerForm" method="post">
 					<div>
-						<input  class="form-control" type="text" placeholder="{{'username' | translate}}" name="username" ng-model="user.username" required ng-maxlength="100"/>
+						<input  class="form-control" type="email" placeholder="{{'username' | translate}}" name="username" ng-model="user.username" required ng-maxlength="100"/>
 						<!--<form:errors path="username" cssClass="form-error" element="span"/>
 						<c:if test="${duplicateUsername != null}">
 						<div class="form-error">
@@ -36,12 +36,9 @@
 						<!--<form:errors path="repeatPassword" cssClass="form-error" element="span"/>-->
 					</div>
 					<div>
-						<label path="profilePicture" style="display: flex; margin-bottom: 5px">{{'profile_picture' | translate}} </label>
-						<input id="pictureUpload" class="image-input" type="file" accept="image/*" ng-file-read="user.picture" ng-model="__" name="picture">
-						<!--<input type="file" accept="image/*" name="profilePicture" style="display: none" id="profilePictureButton" ng-model="user.picture"/>
-						<button type="button" class="btn btn-secondary" ng-click="uploadFile()">{{'choose_file' | translate}}</button>
-						<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay">{{'no_file' | translate}}</span>-->
+						<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" required="" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}">
 					</div>
+					<img ngf-src="picture">
 
 
 					<!--<c:if test="${fileErrorMessage != null}">

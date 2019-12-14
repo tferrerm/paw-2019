@@ -59,7 +59,7 @@
 				<div ng-if="isAdmin" class="status no-margin">
 					<div class="pitch-form-container">
 						<h3>{{'create_pitch' | translate}}</h3>
-						<form ng-submit = createPitchSubmit() name="createPitchForm" method="post" novalidate>
+						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post">
 							<div class="form-field">
 								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="createdPitch.name" required/>
 							</div>
@@ -67,11 +67,10 @@
 								<label>{{'sport' | translate}}</label>
 								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports"></select>
 							</div>
-							<!--<div class="choose-file">
-								<form:input type="file" accept="image/*" path="pitchPicture" style="display: none" id="pitchPictureButton"/>
-								<button type="button" class="btn btn-secondary"  onclick="document.getElementById('pitchPictureButton').click()"><spring:message code="choose_file"/></button>
-								<span style="padding-left: 20px; font-size: 16px" id="filenameDisplay"><spring:message code="no_file"/></span>
-							</div>-->
+							<div>
+								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" required="" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}">
+							</div>
+							<img ngf-src="picture">
 							<div class="justify-center">
 								<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
 							</div>
@@ -80,9 +79,12 @@
 				</div>
 			</div>
 			<div class="tbl profile-cont club-comments flex-1">
-				<div ng-if="hasRelationship" class="w-100">
+				<div ng-show="hasRelationship" class="w-100">
 					<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
-						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" ng-maxlength="500" name="comment" ng-model="commentText.comment" required/>
+						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" maxlength="500" name="comment" ng-model="commentText.comment" required/>
+						<div ng-show="(commentForm.comment.$touched ||  commentForm.$submitted)">
+                            <span ng-show="commentForm.comment.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                        </div>
 						<div class="justify-center">
 							<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
 						</div>
@@ -94,7 +96,7 @@
 						<a class="link-text ml-10" ng-click="goToProfile(cmt.commenter.userid)">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>
 					</div>
 					<span class="comment-text ml-10">{{cmt.comment}}</span>
-					<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm' : 'UTC'}}</div>
+					<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm'}}</div>
 				</div>
 				<div class="table-navigator">
 					<div ng-if="comments.length > 0">

@@ -3,7 +3,6 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 
 	frontend.controller('HomeCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', function($scope, $filter, $location, restService, authService) {
 		
-		$scope.noParticipations = false;
     	$scope.scheduleHeaders = [];
 
 		updateSchedule();
@@ -24,14 +23,20 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			if ($scope.isLoggedIn) {
 				restService.getUpcomingEvents(authService.getLoggedUser().userid).then(function(data) {
 					$scope.schedule = data.schedule;
+					var eventCount = data.schedule[0].eventCount + data.schedule[1].eventCount + data.schedule[2].eventCount + data.schedule[3].eventCount + data.schedule[4].eventCount + data.schedule[5].eventCount + data.schedule[6].eventCount;
+					$scope.noParticipations = false;
+					// TODO $scope.noParticipations = eventCount === 0;
 				}).catch(function(error) {
 alert(error.data || ' Error');
 });
 			}
 		}
 
-		//$scope.now = ($filter('date')(new Date(), "EEEE"));
-		//$scope.weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var now = ($filter('date')(new Date(), 'EEEE'));
+		var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var minDays = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
+		var indexOfToday = weekDays.indexOf(now);
+		$scope.scheduleHeaders = minDays.slice(indexOfToday, 7).concat(minDays.slice(0, indexOfToday));
 
 	}]);
 });

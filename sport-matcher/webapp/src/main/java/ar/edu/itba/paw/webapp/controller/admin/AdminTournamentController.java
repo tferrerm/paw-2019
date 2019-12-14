@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,8 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
@@ -77,22 +79,21 @@ public class AdminTournamentController extends BaseController {
 	private FormValidator validator;
 	
 	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/{id}/events/{eventId}/result")
     public Response setTournamentEventResult(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
-    		@FormDataParam("firstResult") String first, @FormDataParam("secondResult") String second)
-    				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException {
-
-		Integer firstResult = tryInteger(first);
-    	Integer secondResult = tryInteger(second);
-    	
-    	validator.validate(new TournamentResultForm()
-    			.withFirstResult(firstResult)
-    			.withSecondResult(secondResult));
+    		@FormDataParam("tournamentResultForm") final TournamentResultForm form)
+    				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException, ClubNotFoundException {
+		if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
 		
+    	validator.validate(form);
+    	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 
-		ts.postTournamentEventResult(tournament, eventid, firstResult, secondResult);
+		ts.postTournamentEventResult(tournament, eventid, form.getFirstResult(), form.getSecondResult());
 	    return Response.status(Status.NO_CONTENT).build();
 	}
 	
@@ -124,36 +125,27 @@ public class AdminTournamentController extends BaseController {
     }
     
 	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createTournament(@PathParam("clubId") long clubId,
-    		@FormDataParam("name") String name, @FormDataParam("maxTeams") String maxTeams,
-    		@FormDataParam("teamSize") String teamSize, @FormDataParam("firstRoundDate") String firstRoundDate,
-    		@FormDataParam("startsAtHour") String startsAtHour, @FormDataParam("endsAtHour") String endsAtHour,
-    		@FormDataParam("inscriptionEndDate") String inscriptionEndDate)
+    		@FormDataParam("tournamentForm") final TournamentForm form)
     				throws ClubNotFoundException, FormValidationException, Exception /* HARDCODEADO HARDCODED ARREGLAR */ {
+		if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
+		
+    	Instant firstRoundDate = tryInstantStartOfDay(form.getFirstRoundDate(), TIME_ZONE);
+    	Instant inscriptionEndsAt = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	
-    	Integer mt = tryInteger(maxTeams);
-    	Integer tsz = tryInteger(teamSize);
-    	Instant frd = tryInstantStartOfDay(firstRoundDate, TIME_ZONE);
-    	Integer sa = tryInteger(startsAtHour);
-    	Integer ea = tryInteger(endsAtHour);
-    	Instant ied = tryDateTimeToInstant(inscriptionEndDate, TIME_ZONE);
-    	
-    	validator.validate(new TournamentForm()
-    			.withName(name)
-    			.withMaxTeams(mt)
-    			.withTeamSize(tsz)
-    			.withtFirstRoundDate(frd)
-    			.withStartsAtHour(sa)
-    			.withEndsAtHour(ea)
-    			.withInscriptionEndDate(ied));
+    	validator.validate(form);
     	
     	Club club = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = null;
     	
 //    	try {
 //    		// Only SOCCER Tournaments are supported for now
-        	tournament = ts.create(name, Sport.SOCCER, club, mt,
-        			tsz, frd, sa, ea, ied, loggedUser());
+        	tournament = ts.create(form.getName(), Sport.SOCCER, club, form.getMaxTeams(),
+        			form.getTeamSize(), firstRoundDate, form.getStartsAtHour(),
+        			form.getEndsAtHour(), inscriptionEndsAt, loggedUser());
 //    	} catch(DateInPastException e) {
 //    		return tournamentCreationError("event_in_past", clubId, form);
 //    	} catch(MaximumDateExceededException e) {
@@ -185,8 +177,10 @@ public class AdminTournamentController extends BaseController {
     
     @DELETE
     @Path("/{id}")
-	public Response deleteTournament(@PathParam("id") final long tournamentid)
-			throws TournamentNotFoundException, InscriptionDateInPastException {
+	public Response deleteTournament(@PathParam("clubId") long clubid, @PathParam("id") final long tournamentid)
+			throws TournamentNotFoundException, InscriptionClosedException, ClubNotFoundException {
+    	
+    	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	Map<Long, List<User>> teamsMap = ts.mapTeamMembers(tournamentid);
     	
@@ -204,10 +198,11 @@ public class AdminTournamentController extends BaseController {
     
     @POST
     @Path("/{id}/kick-user/{userId}")
-    public Response kickUserFromTournament(
+    public Response kickUserFromTournament(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("userId") long kickedUserId) 
-    				throws UserNotFoundException, TournamentNotFoundException, InscriptionDateInPastException {
+    				throws InscriptionClosedException, EntityNotFoundException {
     	
+    	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	User kickedUser = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
     	

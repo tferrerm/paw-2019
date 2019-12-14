@@ -4,7 +4,7 @@ package ar.edu.itba.paw.exception;
 public class EndsBeforeStartsException extends EventCreationException {
 	
 	public EndsBeforeStartsException() {
-		super("The event's end date must be greater to the event's start date");
+		super("EndsBeforeStarts");
 	}
 
 }

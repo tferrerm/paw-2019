@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -12,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.interfaces.InscriptionDao;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.Inscription;
@@ -26,7 +26,7 @@ public class InscriptionHibernateDao implements InscriptionDao {
 	
 	@Override
 	public Optional<Inscription> findByIds(final long eventid, final long userid) {
-		return Optional.of(em.find(Inscription.class, new InscriptionId(eventid, userid)));
+		return Optional.ofNullable(em.find(Inscription.class, new InscriptionId(eventid, userid)));
 	}
 	
 	@Override
@@ -70,9 +70,9 @@ public class InscriptionHibernateDao implements InscriptionDao {
 	}
 	
 	@Override
-	public void deleteInscription(final long eventid, final long userid) {
+	public void deleteInscription(final long eventid, final long userid) throws EntityNotFoundException {
 		Inscription inscription = findByIds(eventid, userid)
-				.orElseThrow(NoSuchElementException::new);
+				.orElseThrow(EntityNotFoundException::new);
 		em.createQuery("DELETE FROM Inscription i WHERE i = :inscription").setParameter("inscription", inscription).executeUpdate();
 	}
 

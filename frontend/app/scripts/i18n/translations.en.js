@@ -80,6 +80,7 @@ define([], function() {
     delete_event:'Delete event',
     delete_pitch:'Delete pitch',
     delete_club:'Delete club',
+    delete_tournament:'Delete tournament',
     all_clubs:'All Clubs',
     view_club:'View Club',
     administrator:'Administrator',
@@ -214,7 +215,17 @@ define([], function() {
     current:'Current',
     are_you_sure:'Are you sure you want to delete?',
     delete_action:'Delete',
-    cancel_action:'Cancel'
+    cancel_action:'Cancel',
+    inscription_closed_error:'Inscription has already closed',
+    team_full_error:'Team has no vacancies left',
+    event_started_error:'Event has already started',
+    error_pitch_not_found:'Pitch not found',
+    error_event_not_found:'Event not found',
+    error_user_not_found:'User not found',
+    error_club_not_found:'Club not found',
+    error_tournament_not_found:'Tournament not found',
+    error_tournament_event_not_found:'Tournament event not found',
+    form_required:'Field required'
 
 };
 });

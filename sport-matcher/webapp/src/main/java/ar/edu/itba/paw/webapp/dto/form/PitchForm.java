@@ -16,33 +16,21 @@ public class PitchForm {
 	
 	@Sport
 	private String sport;
-	
-	// private MultipartFile pitchPicture;
 
 	public String getName() {
 		return name;
 	}
 
-	public PitchForm withName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	public String getSport() {
 		return sport;
 	}
 
-	public PitchForm withSport(String sport) {
+	public void setSport(String sport) {
 		this.sport = sport;
-		return this;
 	}
-	
-//	public MultipartFile getPitchPicture() {
-//		return pitchPicture;
-//	}
-//
-//	public void setPitchPicture(MultipartFile pitchPicture) {
-//		this.pitchPicture = pitchPicture;
-//	}
 	
 }

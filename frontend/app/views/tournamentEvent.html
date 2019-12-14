@@ -7,7 +7,7 @@
           <h2>{{event.name}}</h2>
         </div>
         <span class="help-message notice w-70 justify-center">{{'event_completed_description' | translate}}</span>
-		<div class="detail-box">
+		<div class="detail-box w-70">
 			<div class="event-detail background-dodgerblue">
 				<div class="color-white event-info-label">{{'event_detail' | translate}}</div>
 			</div>
@@ -16,14 +16,14 @@
 				<div class="detail-box-data">{{'club' | translate}}: {{tournament.tournamentClub.name}}</div>
 				<div class="detail-box-data">{{'pitch' | translate}}: {{event.pitch.name}}</div>
 				<div class="detail-box-data">
-					<span>{{'start' | translate}}: {{event.startsAt | date:'EEEE d, MMM yyyy H:mm' : 'GMT-3'}}</span>
+					<span>{{'start' | translate}}: {{event.startsAt | date:'EEEE d, MMM yyyy H:mm'}}</span>
 				</div>
 				<div class="detail-box-data">
-					<span>{{'end' | translate}}: {{event.endsAt | date:'EEEE d, MMM yyyy H:mm' : 'GMT-3'}}</span>
+					<span>{{'end' | translate}}: {{event.endsAt | date:'EEEE d, MMM yyyy H:mm'}}</span>
 				</div>
 			</div>
 		</div>
-		<div class="tbl">
+		<div class="tbl w-70">
 			<div class="table-header">
 				<div class="flex-grow justify-center my-events-tbl-sub">
 					<span>{{event.firstTeam.teamName | translate}}</span>

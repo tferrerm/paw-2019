@@ -66,42 +66,36 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         	.addFilterBefore(corsFilter(), SecurityContextPersistenceFilter.class)
         	.userDetailsService(userDetailsService)
         		.authorizeRequests()
-	        		.antMatchers(HttpMethod.GET).permitAll()
-	                .antMatchers(HttpMethod.POST).permitAll()
-	                .antMatchers(HttpMethod.PUT).permitAll()
-	                .antMatchers(HttpMethod.PATCH).permitAll()
-	                .antMatchers(HttpMethod.HEAD).permitAll()
-	                .antMatchers(HttpMethod.OPTIONS).permitAll()
-	                .antMatchers(HttpMethod.DELETE).permitAll()
-	                .antMatchers("/user/create").permitAll()
-	                .antMatchers("/user/**").access("hasRole('ROLE_USER')")
-	                .antMatchers("/user/login").permitAll()
-	                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-	                .antMatchers("/event/*/join", "/event/*/leave", "/event/*/upvote", "/event/*/downvote",
-	                		"/event/*/kick-user/*", "/event/*/delete").access("hasRole('ROLE_USER')")
-	                .antMatchers("/event/**", "/events/**").permitAll()
-	                .antMatchers("/club/*/comment").access("hasRole('ROLE_USER')")
-	                .antMatchers("/club/**", "/clubs/**").permitAll()
-	                .antMatchers("/pitch/*/event/create").access("hasRole('ROLE_USER')")
-	                .antMatchers("/pitch/**", "/pitches/**").permitAll()
-	                .antMatchers("/my-events/**").access("hasRole('ROLE_USER')")
-	                .antMatchers("/history/**").access("hasRole('ROLE_USER')")
-	                .antMatchers("/tournament/*/team/*/join", 
-	                		"/tournament/*/leave").access("hasRole('ROLE_USER')")
-	                .antMatchers("/tournament/**", "/tournaments/**").permitAll()
-	                .antMatchers("/home").permitAll()
-	                .antMatchers("/","/index").permitAll()
-	                // POST method restricted unless overridden above, like /user/create/
-	                //.antMatchers(HttpMethod.POST).access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+        			.antMatchers(HttpMethod.OPTIONS).permitAll()
+	                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+	                .antMatchers("/api/users/login").permitAll()
+	                .antMatchers("/api/users/**").authenticated()
+	                .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+	                .antMatchers(HttpMethod.POST, "/api/pitches/*/events/*/join", "/api/pitches/*/events/*/leave", "/api/pitches/*/events/*/upvote",
+	                		"/api/pitches/*/events/*/downvote", "/api/pitches/*/events/*/kick-user/*")
+	                		.access("hasRole('ROLE_USER')")
+	                .antMatchers(HttpMethod.DELETE, "/api/pitches/*/events/*").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+	                .antMatchers("/api/events/**").permitAll()
+	                .antMatchers(HttpMethod.POST, "/api/clubs/*/comment").authenticated()
+	                .antMatchers("/api/clubs/**").permitAll()
+	                .antMatchers(HttpMethod.POST, "/api/pitches/*/events").access("hasRole('ROLE_USER')")
+	                .antMatchers("/api/pitches/**").permitAll()
+	                .antMatchers(HttpMethod.POST, "/api/tournaments/*/teams/*/join",
+	                		"/api/tournaments/*/leave").access("hasRole('ROLE_USER')")
+	                .antMatchers("/api/tournaments/**").permitAll()
+	                .antMatchers("/","/index", "/api").permitAll()
+	                // POST method restricted unless overridden above, like POST /users/login
+	                .antMatchers(HttpMethod.POST).authenticated()
+	                .antMatchers(HttpMethod.DELETE).authenticated()
                 .and().sessionManagement()
                 	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	            .and().formLogin()
 	                .usernameParameter("login_username")
 	                .passwordParameter("login_password")
-	                .loginProcessingUrl("/users/login")
+	                .loginProcessingUrl("/api/users/login")
 	                .successHandler(platformAuthenticationSuccessHandler())
 	                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
+                .and().logout().logoutUrl("/api/users/logout").logoutSuccessUrl("/")
                 .and().exceptionHandling()
                		.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
                 .and().csrf()
@@ -111,7 +105,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/favicon.ico", "/index.html", "/images/**", "/scripts/**",
+                .antMatchers("/favicon.ico", "/index.html", "/404.html", "/header.html",
+                		"/sidebar.html", "/images/**", "/scripts/**",
                 		"/styles/**", "/views/**", "/bower_components/**");
     }
     

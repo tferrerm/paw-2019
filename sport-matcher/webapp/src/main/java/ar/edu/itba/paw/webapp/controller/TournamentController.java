@@ -21,7 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.TeamAlreadyFilledException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
 import ar.edu.itba.paw.exception.UserBusyException;
@@ -59,8 +60,7 @@ public class TournamentController extends BaseController {
 	
 	@GET
     @Path("/{id}")
-    public Response retrieveTournament(@PathParam("id") long tournamentid//,
-    		/*@QueryParam("round") final Integer roundPage*/)
+    public Response retrieveTournament(@PathParam("id") long tournamentid)
     		throws TournamentNotFoundException {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -68,27 +68,6 @@ public class TournamentController extends BaseController {
     	Instant startsAt = ts.findTournamentEventsByRound(tournament.getTournamentid(), 1).get(0).getStartsAt();
     	
     	return Response.ok(FullTournamentDto.ofTournament(tournament, tournament.getRounds(), startsAt)).build();
-    	
-//    	if(tournament.getInscriptionSuccess()) {
-//			if(roundPage == null) {
-//				return Response.status(Status.NOT_FOUND).build();
-//			}
-////			mav.addObject("club", tournament.getTournamentClub());
-////			mav.addObject("teamsScoresMap", ts.getTeamsScores(tournament));
-//			List<TournamentEvent> roundEvents = ts.findTournamentEventsByRound(tournamentid, roundPage);
-////			mav.addObject("roundEvents", roundEvents);
-//			Map<Long, Boolean> eventsHaveResult = new HashMap<>();
-//			for(TournamentEvent event : roundEvents) {
-//				eventsHaveResult.put(event.getEventId(), event.getFirstTeamScore() != null);
-//			}
-////			mav.addObject("eventsHaveResult", eventsHaveResult);
-////			mav.addObject("currRoundPage", roundPage);
-////			mav.addObject("maxRoundPage", tournament.getRounds());
-//			int currentRound = ts.getCurrentRound(tournament);
-////			mav.addObject("currentRound", currentRound);
-////			mav.addObject("hasFinished", ts.hasFinished(tournament.getRounds(), currentRound, roundEvents));
-//			
-//			return null;//mav;
 
     }
 
@@ -110,8 +89,8 @@ public class TournamentController extends BaseController {
     }
     
     @GET
-    @Path("/{id}/inscription")
-    public Response retrieveTournamentInscription(@PathParam("id") long tournamentid)
+    @Path("/{id}/inscriptions")
+    public Response retrieveTournamentInscriptions(@PathParam("id") long tournamentid)
     		throws TournamentNotFoundException {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
@@ -132,34 +111,30 @@ public class TournamentController extends BaseController {
     }
 
     @POST
-    @Path("/{id}/team/{teamId}/join")
+    @Path("/{id}/teams/{teamId}/join")
     public Response joinTeam(@PathParam("id") long tournamentid, @PathParam("teamId") long teamid) 
-    		throws UserAlreadyJoinedException, TournamentNotFoundException {
+    		throws UserAlreadyJoinedException, TournamentNotFoundException, InscriptionClosedException,
+    			TeamAlreadyFilledException, UserBusyException {
     	
-        try {
-			ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
-		} catch (InscriptionDateInPastException e) {
-		} catch (TeamAlreadyFilledException e) {
-		} catch (UserAlreadyJoinedException e) {
-		} catch(UserBusyException e) {
-		}
+    	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
         
         LOGGER.debug("User {} joined Tournament {}", loggedUser(), tournamentid);
         
-        return Response.status(Status.NO_CONTENT).build();//new ModelAndView("redirect:/tournament/" + tournamentid);
+        return Response.status(Status.NO_CONTENT).build();
     }
     
     @POST
     @Path("/{id}/leave")
     public Response leaveTournament(@PathParam("id") long tournamentid) 
-    		throws UserBusyException, UserAlreadyJoinedException, TournamentNotFoundException {
+    		throws UserBusyException, InscriptionClosedException, EntityNotFoundException {
     	
-        try {
-			ts.leaveTournament(tournamentid, loggedUser().getUserid());
-		} catch (InscriptionDateInPastException e) {
-		}
+    	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+		ts.leaveTournament(tournamentid, loggedUser().getUserid());
+		
+		LOGGER.debug("User {} left Tournament {}", loggedUser(), tournamentid);
         
-        return Response.status(Status.NO_CONTENT).build();//new ModelAndView("redirect:/tournament/" + tournamentid);
+        return Response.status(Status.NO_CONTENT).build();
     }
 
     @GET
@@ -167,12 +142,12 @@ public class TournamentController extends BaseController {
     public Response retrieveTournamentEvent(@PathParam("id") long tournamentid,
     		@PathParam("eventId") long eventid) 
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
-        Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	
+        ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
         TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
-        //mav.addObject("firstTeamMembers", ts.findTeamMembers(tournamentEvent.getFirstTeam()));
-        //mav.addObject("secondTeamMembers", ts.findTeamMembers(tournamentEvent.getSecondTeam()));
+        
         return Response.ok(TournamentEventDto.ofTournamentEvent(
-        		tournamentEvent/*, false*/)).build(); // VER SI ES PARTICIPANTE
+        		tournamentEvent)).build();
     }
     
     @GET
@@ -192,7 +167,7 @@ public class TournamentController extends BaseController {
     private Response retrieveTeamMembers(long tournamentid, long eventid, int teamNumber)
     		throws TournamentNotFoundException, TournamentEventNotFoundException {
     	
-    	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
+    	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
         TournamentEvent tournamentEvent = ts.findTournamentEventById(eventid).orElseThrow(TournamentEventNotFoundException::new);
         List<User> teamMembers = teamNumber == 1 ? 

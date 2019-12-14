@@ -5,20 +5,17 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		
 		$scope.event = event;
 		$scope.inscriptions = inscriptions.inscriptions;
-
-		var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-		var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-		var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-		$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
-		$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
-
 		$scope.showLoginModal = modalService.loginModal;
 
 		updateOwner();
+		updateDates();
 
 		$scope.$on('user:updated', function() {
 			updateEvent(event.pitch.pitchid, event.eventid);
 			updateOwner();
+			if ($scope.isOwner || $scope.isAdmin) {
+				$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+			}
 		});
 
 		if ($scope.isOwner || $scope.isAdmin) {
@@ -30,7 +27,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				updateEvent(pitchid, eventid);
 				updateInscriptions(pitchid, eventid);
 			}).catch(function(error) {
-				alert(error.data || ' Error');
+				if (error.status === 403) {
+					if (error.data.error === 'InscriptionClosed') {
+						$scope.inscriptionClosedError = true;
+						$scope.inscriptionHasEnded = true;
+					}
+				}
 			});
 		};
 
@@ -39,7 +41,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				updateEvent(pitchid, eventid);
 				updateInscriptions(pitchid, eventid);
 			}).catch(function(error) {
-				alert(error.data || ' Error');
+				if (error.status === 403) {
+					if (error.data.error === 'InscriptionClosed') {
+						$scope.inscriptionClosedError = true;
+						$scope.inscriptionHasEnded = true;
+					}
+				}
 			});
 		};
 
@@ -49,7 +56,18 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 					updateEvent(pitchid, eventid);
 					updateInscriptions(pitchid, eventid);
 				}).catch(function(error) {
-					alert(error.data || ' Error');
+					if (error.status === 403) {
+						if (error.data.error === 'UserBusy') {
+							$scope.userBusyError = true;
+						} else if (error.data.error === 'EventFull') {
+							$scope.eventFullError = true;
+						} else if (error.data.error === 'InscriptionClosed') {
+							$scope.inscriptionClosedError = true;
+							$scope.inscriptionHasEnded = true;
+						} else if (error.data.error === 'AlreadyJoined') {
+							$scope.alreadyJoinedError = true;
+						}
+					}
 				});
 			} else {
 				$scope.showLoginModal().result.then(function(data) {
@@ -57,7 +75,18 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 						updateEvent(pitchid, eventid);
 						updateInscriptions(pitchid, eventid);
 					}).catch(function(error) {
-						alert(error.data || ' Error');
+						if (error.status === 403) {
+							if (error.data.error === 'UserBusy') {
+								$scope.userBusyError = true;
+							} else if (error.data.error === 'EventFull') {
+								$scope.eventFullError = true;
+							} else if (error.data.error === 'InscriptionClosed') {
+								$scope.inscriptionClosedError = true;
+								$scope.inscriptionHasEnded = true;
+							} else if (error.data.error === 'AlreadyJoined') {
+								$scope.alreadyJoinedError = true;
+							}
+						}
 					});
 				});
 			}
@@ -68,6 +97,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				restService.cancelEvent(pitchid, eventid)
 					.then(function(data) {
 						$location.url('events');
+					})
+					.catch(function(error) {
+						if (error.status === 403) {
+							if (error.data.error === 'InscriptionClosed') {
+								$scope.inscriptionClosedError = true;
+								$scope.inscriptionHasEnded = true;
+							}
+						}
 					});
 			});
 			
@@ -76,16 +113,13 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		function updateEvent(pitchid, eventid) {
 			restService.getEvent(pitchid, eventid).then(function(data) {
 				event = Object.assign(event, data);
-			}).catch(function(error) {
-				alert(error.data || ' Error');
+				updateDates();
 			});
 		}
 
 		function updateInscriptions(pitchid, eventid) {
 			restService.getEventInscriptions(pitchid, eventid).then(function(data) {
 				$scope.inscriptions = data.inscriptions;
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		}
 
@@ -102,6 +136,13 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				restService.deleteEvent(eventid)
 					.then(function(data) {
 						$location.url('events');
+					}).catch(function(error) {
+						if (error.status === 403) {
+							if (error.data.error === 'EventStarted') {
+								$scope.eventStartedError = true;
+								$scope.eventHasStarted = true;
+							}
+						}
 					});
 			});
 		};
@@ -109,18 +150,24 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.upvote = function(pitchid, eventid) {
 			restService.upvote(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		};
 
 		$scope.downvote = function(pitchid, eventid) {
 			restService.downvote(pitchid, eventid).then(function(data) {
 				updateEvent(pitchid, eventid);
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		};
+
+		function updateDates() {
+			var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var eventStart = $filter('date')(event.startsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
+			$scope.eventHasStarted = Date.parse(eventStart) < Date.parse(now);
+			$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);
+		}
 
   	}]);
 

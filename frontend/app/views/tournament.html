@@ -11,7 +11,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="tbl">
+		<div class="tbl w-80">
 			<div class="background-dodgerblue table-header">
 				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'teams' | translate}}</span>
 				<span class="justify-center flex-1 color-white mt-10 event-info-label">{{'score' | translate}}</span>
@@ -21,17 +21,17 @@
 				<div class="justify-center flex-1">{{team.teamScore}}</div>
 			</div>
 		</div>
-		<div class="tbl profile-cont">
+		<div class="tbl profile-cont w-90">
 			<span ng-if="roundPageNum == currentRound" class="event-info-label notice">{{'round' | translate}} {{roundPageNum}} - {{'current' | translate}}</span>
 			<span ng-if="roundPageNum != currentRound" class="event-info-label notice">{{'round' | translate}} {{roundPageNum}}</span>
 			<span>
 				{{'date' | translate}}:
-				{{roundEvents[0].startsAt | date:'EEEE d, MMM yyyy H:mm' : 'GMT-3'}} -
-				{{roundEvents[0].endsAt | date:'H:mm' : 'GMT-3'}}
+				{{roundEvents[0].startsAt | date:'EEEE d, MMM yyyy H:mm'}} -
+				{{roundEvents[0].endsAt | date:'H:mm'}}
 			</span>
-			<div ng-repeat="event in roundEvents">
-				<div class="flex pitch-item w-100 justify-center">
-					<span class="event-info-label">{{event.pitch.name | translate}}</span>
+			<div ng-repeat="event in roundEvents" class="flex pitch-item w-100 justify-center flex-column">
+				<span class="event-info-label align-self-start">{{event.pitch.name | translate}}</span>
+				<div class="flex-row align-center">
 					<span class="event-info-label">{{event.firstTeam.teamName | translate}}</span>
 					<div ng-if="!isAdmin">
 						<div ng-if="event.firstTeamScore != null">
@@ -49,18 +49,18 @@
 					</div>
 					<div ng-if="isAdmin">
 						<form ng-submit = setTournamentResultSubmit(event) name="tournamentResultForm" method="post" novalidate>
-                            <div class="score score-tournament" ng-if="parseDate(event.endsAt) <= now">
-                            	<input class="form-control" type="number" ng-min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
-                            	<input class="form-control" type="number" ng-min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
-                            	<div class="justify-center">
+							<div class="score score-tournament" ng-if="parseDate(event.endsAt) <= now">
+								<input class="form-control" type="number" ng-min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
+								<input class="form-control" type="number" ng-min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
+								<div class="justify-center">
 									<button type="submit" class="btn btn-primary minw-150 btn-primary">{{'upload_score' | translate}}</button>
 								</div>
-                            </div>
-                            <div class="score score-tournament" ng-if="parseDate(event.endsAt) > now">
-                            	<span>-</span>
+							</div>
+							<div class="score score-tournament" ng-if="parseDate(event.endsAt) > now">
 								<span>-</span>
-                            </div>
-                        </form>
+								<span>-</span>
+							</div>
+						</form>
 					</div>
 					<span class="event-info-label">{{event.secondTeam.teamName | translate}}</span>
 					<a class="ml-30" ng-click="goToTournamentEvent(tournament.tournamentid, event.eventid)">
@@ -70,27 +70,31 @@
 					</a>
 				</div>
 			</div>
-			<div class="table-navigator w-100 justify-center">
-				<div ng-hide="roundPageNum == 1">
-					<a ng-click="getFirstPage()">
-						<button type="button" class="btn btn-secondary">
-							{{'first' | translate}}
-						</button>
-					</a>
-					<a ng-click="getPrevPage()">
-						<button type="button" class="btn btn-secondary">
-							{{'back' | translate}}
-						</button>
-					</a>
+			<div class="table-navigator w-100 justify-around flex-row">
+				<div class="flex-1">
+					<div ng-hide="roundPageNum == 1" class="flex-row flex-space-between">
+						<a ng-click="getFirstPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'first' | translate}}
+							</button>
+						</a>
+						<a ng-click="getPrevPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'back' | translate}}
+							</button>
+						</a>
+					</div>
 				</div>
-				<span class="flex create-event">{{'showing_pages' | translate}} {{roundPageNum}} {{'of' | translate}} {{tournament.rounds}}</span>
-				<div ng-hide="roundPageNum == tournament.rounds">
-					<a ng-click="getNextPage()">
-						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-					</a>
-					<a ng-click="getLastPage()">
-						<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-					</a>
+				<span class="flex flex-1 create-event">{{'showing_pages' | translate}} {{roundPageNum}} {{'of' | translate}} {{tournament.rounds}}</span>
+				<div class="flex-1">
+					<div ng-hide="roundPageNum == tournament.rounds" class="flex-row flex-space-between">
+						<a ng-click="getNextPage()">
+							<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+						</a>
+						<a ng-click="getLastPage()">
+							<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

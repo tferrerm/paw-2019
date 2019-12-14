@@ -8,7 +8,7 @@
 			{{'tournament_description_one' | translate}}
 			{{tournament.rounds}}
 			{{'tournament_description_two' | translate}}
-			{{tournament.startsAt | date:'EEEE d, MMM yyyy HH:mm' : 'UTC'}}
+			{{tournament.startsAt | date:'EEEE d, MMM yyyy HH:mm'}}
 		</span>
 		<div class="w-50 mv-10">
 			<div class="comment-profile-row">
@@ -39,6 +39,7 @@
 										<a class="link-text" ng-click="goToProfile(inscription.userid)">
 											{{inscription.firstname}} {{inscription.lastname}}
 										</a>
+										<a type="submit" class="kick-user-btn" ng-if="isAdmin && !inscriptionHasEnded" ng-click="kickUser(tournament.tournamentClub.clubid, tournament.tournamentid, inscription.userid)">{{'kick' | translate}}</a>
 									</div>
 									<div ng-repeat="n in [].constructor(tournament.teamSize - teamPair[0].inscriptions.length) track by $index">
 										<span>-</span>
@@ -46,7 +47,7 @@
 								</div>
 							</div>
 							<div class="flex flex-grow justify-center">
-								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[0].inscriptions.length) && !isAdmin">
+								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[0].inscriptions.length) && !isAdmin && !inscriptionHasEnded">
 									<a ng-click="joinTeam(tournament.tournamentid, teamPair[0].teamid)">
 										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
 									</a>
@@ -68,7 +69,7 @@
 								</div>
 							</div>
 							<div class="flex flex-grow justify-center">
-								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[1].inscriptions.length) && !isAdmin"">
+								<div ng-if="!hasJoined && (tournament.teamSize > teamPair[1].inscriptions.length) && !isAdmin && !inscriptionHasEnded"">
 									<a ng-click="joinTeam(tournament.tournamentid, teamPair[1].teamid)">
 										<button type="submit" class="btn btn-primary view-event">{{'join_team' | translate}}</button>
 									</a>
@@ -79,15 +80,37 @@
 				</div>
 			</div>
 		</div>
-		<!--<c:if test="${userBusyError == true}">
+		<div ng-if="userBusyError">
 			<span class="form-error notice">
-				<spring:message code="user_busy_error"/>
+				{{'user_busy_error' | translate}}
 			</span>
-		</c:if>-->
-		<div ng-if="hasJoined">
+		</div>
+		<div ng-if="alreadyJoinedError">
+			<span class="form-error notice">
+				{{'already_joined_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="teamFullError">
+			<span class="form-error notice">
+				{{'team_full_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="inscriptionClosedError">
+			<span class="form-error notice">
+				{{'inscription_closed_error' | translate}}
+			</span>
+		</div>
+		<div ng-if="hasJoined && !inscriptionHasEnded">
 			<a ng-click="leaveTournament(tournament.tournamentid)">
 				<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
 			</a>
+		</div>
+		<div ng-if="isAdmin">
+			<div class ="cancel-event" ng-if="!inscriptionHasEnded">
+				<a ng-click="deleteTournament(tournament.tournamentClub.clubid, tournament.tournamentid)">
+					<button type="submit" class="btn btn-danger join-button mb-10">{{'delete_tournament' | translate}}</button>
+				</a>
+			</div>
 		</div>
 	</div>
 </div>

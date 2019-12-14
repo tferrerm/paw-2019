@@ -6,7 +6,7 @@ import ar.edu.itba.paw.exception.EntityNotFoundException;
 public class PitchNotFoundException extends EntityNotFoundException {
 
 	public PitchNotFoundException() {
-		super("The requested pitch was not found");
+		super("PitchNotFound");
 	}
 
 }

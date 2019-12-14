@@ -6,7 +6,7 @@ import ar.edu.itba.paw.exception.EntityNotFoundException;
 public class ClubNotFoundException extends EntityNotFoundException {
 
 	public ClubNotFoundException() {
-		super("The requested club was not found");
+		super("ClubNotFound");
 	}
 
 }

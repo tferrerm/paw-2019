@@ -7,6 +7,7 @@ define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/DeleteConfirmM
 			return $uibModal.open({
 				templateUrl: 'views/registerModal.html',
 				controller: 'RegisterModalCtrl',
+				windowClass: 'registerModal',
 				size: 'md'
 			});
 		};
@@ -15,6 +16,7 @@ define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/DeleteConfirmM
 			return $uibModal.open({
 				templateUrl: 'views/loginModal.html',
 				controller: 'LoginModalCtrl',
+				windowClass: 'loginModal',
 				size: 'md'
 			});
 		};
@@ -23,6 +25,7 @@ define(['frontend', 'controllers/RegisterModalCtrl', 'controllers/DeleteConfirmM
 			return $uibModal.open({
 				templateUrl: 'views/deleteConfirmModal.html',
 				controller: 'DeleteConfirmModalCtrl',
+				windowClass: 'deleteConfirmModal',
 				size: 'md'
 			});
 		};

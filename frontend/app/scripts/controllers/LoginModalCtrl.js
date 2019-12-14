@@ -11,17 +11,17 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				//$scope.duplicateEmailError = false;
 				//$scope.loggingIn = true;
 
-				authService.login($scope.user.username, $scope.user.password, true)
-          .then(function() {
+				authService.login($scope.user.username, $scope.user.password, $scope.user.rememberMe)
+          			.then(function() {
 						//$scope.loggingIn = false;
 						$uibModalInstance.close(true);
 					}).catch(function(error) {
-					  if (error.status === 401) {
-					    $scope.invalidCredentials = true;
-					  } else {
-					    alert(error || ' Error');
-					  }
-        });
+					  	if (error.status === 401) {
+					    	$scope.invalidCredentials = true;
+						} else {
+					    	alert(error || ' Error');
+						}
+        			});
 			}
 		};
 

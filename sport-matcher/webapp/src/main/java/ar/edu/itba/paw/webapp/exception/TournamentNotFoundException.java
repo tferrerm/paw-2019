@@ -6,7 +6,7 @@ import ar.edu.itba.paw.exception.EntityNotFoundException;
 public class TournamentNotFoundException extends EntityNotFoundException {
 
 	public TournamentNotFoundException() {
-		super("The requested tournament was not found");
+		super("TournamentNotFound");
 	}
 
 }

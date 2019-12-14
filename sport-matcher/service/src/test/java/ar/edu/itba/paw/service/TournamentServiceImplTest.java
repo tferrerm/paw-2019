@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -110,7 +110,7 @@ public class TournamentServiceImplTest {
 		Assert.assertEquals(TMOCK, t);
 	}
 	
-	@Test(expected = InscriptionDateInPastException.class)
+	@Test(expected = InscriptionClosedException.class)
 	public void createWithPastDateTest() throws Exception {
 		ts.create(
 				TNAME,
@@ -159,7 +159,7 @@ public class TournamentServiceImplTest {
 		);
 	}
 	
-	@Test(expected = InscriptionDateInPastException.class)
+	@Test(expected = InscriptionClosedException.class)
 	public void joinTournamentPreviousInsscrDateTest() throws Exception {
 		Mockito.when(us.findById(Mockito.anyLong())).thenReturn(Optional.of(USER));
 		Mockito.when(td.findById(Mockito.anyLong())).thenReturn(Optional.of(

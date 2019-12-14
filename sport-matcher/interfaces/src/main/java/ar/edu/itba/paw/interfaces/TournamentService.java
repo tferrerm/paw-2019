@@ -7,9 +7,10 @@ import java.util.Optional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
 import ar.edu.itba.paw.exception.EndsBeforeStartsException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
-import ar.edu.itba.paw.exception.InscriptionDateInPastException;
+import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.InvalidTeamAmountException;
 import ar.edu.itba.paw.exception.InvalidTeamSizeException;
@@ -38,16 +39,16 @@ public interface TournamentService {
 			final Integer endsAt, final Instant inscriptionEndDate, final User user) 
 					throws DateInPastException, MaximumDateExceededException, EndsBeforeStartsException, 
 					HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException, 
-					InvalidTeamSizeException, InsufficientPitchesException, InscriptionDateInPastException;
+					InvalidTeamSizeException, InsufficientPitchesException, InscriptionClosedException;
 
 	public void joinTournament(final long tournamentid, final long teamid, final long userid) 
-			throws UserBusyException, UserAlreadyJoinedException, InscriptionDateInPastException, 
-			TeamAlreadyFilledException, UserAlreadyJoinedException;
+			throws UserBusyException, UserAlreadyJoinedException, 
+			TeamAlreadyFilledException, InscriptionClosedException;
 	
 	public void leaveTournament(final long tournamentid, final long userid) 
-			throws InscriptionDateInPastException;
+			throws InscriptionClosedException, EntityNotFoundException;
 	
-	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionDateInPastException;
+	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionClosedException, EntityNotFoundException;
 	
 	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
 
@@ -76,7 +77,7 @@ public interface TournamentService {
 
 	public int countTotalTournamentPages();
 
-	public void deleteTournament(final long tournamentid) throws InscriptionDateInPastException;
+	public void deleteTournament(final long tournamentid) throws InscriptionClosedException;
 	
 	public void checkTournamentInscriptions();
 

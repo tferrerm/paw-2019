@@ -7,13 +7,15 @@ define(['routes',
 	'angular-bootstrap',
 	'angular-sanitize',
 	'bootstrap',
-	'angular-translate'],
+	'angular-translate',
+	'ng-file-upload'],
 	function(config, dependencyResolverFor, i18n) {
 		var frontend = angular.module('frontend', [
 			'ngRoute',
 			'pascalprecht.translate',
 			'ngSanitize',
-			'ui.bootstrap'
+			'ui.bootstrap',
+			'ngFileUpload'
 		]);
 		frontend
 			.config(
@@ -57,7 +59,24 @@ define(['routes',
 					//$locationProvider.html5Mode(false);
            			$locationProvider.hashPrefix('');
 				}])
-			.value('url', 'http://localhost:8080/webapp');
+			.run(
+				['$rootScope',
+				'$location',
+				function($rootScope, $location) {
+					//$rootScope.isViewLoading = false;
+					//$rootScope.$on('$routeChangeStart', function() {
+					//	$rootScope.isViewLoading = true;
+					//});
+					$rootScope.$on('$routeChangeSuccess', function() {
+						//$rootScope.isViewLoading = false;
+						document.body.scrollTop = document.documentElement.scrollTop = 0;
+					});
+					//$rootScope.$on('$routeChangeError', function() {
+						//$rootScope.isViewLoading = false;
+					//	$location.path('/404');
+					//});
+				}])
+			.value('url', 'http://localhost:8080/webapp/api');
 		return frontend;
 	}
 );

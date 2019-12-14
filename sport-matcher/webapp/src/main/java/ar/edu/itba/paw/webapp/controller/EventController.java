@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -80,13 +81,8 @@ public class EventController extends BaseController {
     @GET
     @Path("/{id}")
     public Response retrieveElement(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
-    		throws EventNotFoundException, PitchNotFoundException {
+    		throws EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
-
-    //	Optional<TournamentEvent> tournamentEvent = ts.findTournamentEventById(id);
-    //	if(tournamentEvent.isPresent()) {
-    //		return null;//new ModelAndView("redirect:/tournament/" + tournamentEvent.get().getTournament().getTournamentid() + "/event/" + id);
-    //	}
 
     	Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
     	List<Inscription> inscriptions = event.getInscriptions();
@@ -99,7 +95,6 @@ public class EventController extends BaseController {
         		.collect(Collectors.counting());
         	isParticipant = count > 0;
         }
-//        mav.addObject("has_ended", Instant.now().isAfter(event.getEndsAt()));
         int voteBalance = es.getVoteBalance(event.getEventId());
         int userVote = 0;
         if (loggedUser() != null) {
@@ -116,6 +111,7 @@ public class EventController extends BaseController {
     public Response joinEvent(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
     	throws EntityNotFoundException, InscriptionClosedException, EventFullException, UserBusyException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
+    	es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 
     	es.joinEvent(loggedUser().getUserid(), id);
         return Response.status(Status.NO_CONTENT).build();
@@ -127,6 +123,8 @@ public class EventController extends BaseController {
     public Response leaveEvent(@PathParam("id") long id, @PathParam("pitchId") long pitchid)
     		throws DateInPastException, EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
+    	es.findByEventId(id).orElseThrow(EventNotFoundException::new);
+    	loggedUser().getUserid();
 		es.leaveEvent(id, loggedUser().getUserid());
         return Response.status(Status.NO_CONTENT).build();
     }
@@ -137,7 +135,7 @@ public class EventController extends BaseController {
     		@PathParam("id") long eventid,
     		@PathParam("pitchId") long pitchid,
     		@PathParam("userId") long kickedUserId)
-    		throws UserNotAuthorizedException, EntityNotFoundException, UserNotFoundException, DateInPastException {
+    		throws UserNotAuthorizedException, EntityNotFoundException, DateInPastException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event event = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	User kicked = us.findById(kickedUserId).orElseThrow(UserNotFoundException::new);
@@ -148,15 +146,15 @@ public class EventController extends BaseController {
 
     @DELETE
     @Path("/{id}")
-	public Response deleteEvent(@PathParam("id") final long id, @PathParam("pitchId") long pitchid)
-			throws EventNotFoundException, PitchNotFoundException, UserNotAuthorizedException, DateInPastException {
-    	System.out.println("Hola");
+	public Response cancelEvent(@PathParam("id") final long id, @PathParam("pitchId") long pitchid)
+			throws EntityNotFoundException, UserNotAuthorizedException, DateInPastException {
+    	
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
-		System.out.println("Hola2");
+		
 		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());
 		es.cancelEvent(event, loggedUser().getUserid());
-		System.out.println("Hola3");
+		
 		for(User inscriptedUser : inscriptedUsers) {
 			if(inscriptedUser != event.getOwner())
 				ems.eventCancelled(inscriptedUser, event, LocaleContextHolder.getLocale());
@@ -169,7 +167,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{eventId}/upvote")
     public Response upvote(@PathParam("eventId") final long eventid, @PathParam("pitchId") long pitchid)
-    	throws EventNotFoundException, PitchNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
+    	throws EntityNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	es.vote(true, ev, loggedUser().getUserid());
@@ -180,7 +178,7 @@ public class EventController extends BaseController {
     @POST
     @Path("/{eventId}/downvote")
     public Response downvote(@PathParam("eventId") final long eventid, @PathParam("pitchId") long pitchid)
-    	throws EventNotFoundException, PitchNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
+    	throws EntityNotFoundException, UserNotAuthorizedException, EventNotFinishedException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	es.vote(false, ev, loggedUser().getUserid());
@@ -191,7 +189,7 @@ public class EventController extends BaseController {
     @GET
     @Path("/{id}/inscriptions")
     public Response getInscriptions(@PathParam("id") final long eventid, @PathParam("pitchId") long pitchid)
-    		throws EventNotFoundException, PitchNotFoundException {
+    		throws EntityNotFoundException {
     	ps.findById(pitchid).orElseThrow(PitchNotFoundException::new);
     	Event ev = es.findByEventId(eventid).orElseThrow(EventNotFoundException::new);
     	return Response.ok(InscriptionCollectionDto.ofInscriptions(ev.getInscriptions().stream()
@@ -199,58 +197,30 @@ public class EventController extends BaseController {
     }
     
     @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createEvent(
     		@PathParam("pitchId") long pitchId,
-    		@FormDataParam("name") final String name,
-    		@FormDataParam("description") final String description,
-    		@FormDataParam("maxParticipants") final String maxParticipants,
-    		@FormDataParam("date") final String date,
-    		@FormDataParam("startsAtHour") final String startsAtHour,
-    		@FormDataParam("endsAtHour") final String endsAtHour,
-    		@FormDataParam("inscriptionEndDate") final String inscriptionEndDate)
-    		 throws PitchNotFoundException, FormValidationException, EventCreationException {
+    		@FormDataParam("eventForm") final EventForm form)
+    		 throws PitchNotFoundException, FormValidationException, EventCreationException, DateInPastException {
+    	if(form == null) {
+    		return Response.status(Status.BAD_REQUEST).build();
+    	}
     	
-    	Integer mp = tryInteger(maxParticipants);
-    	Integer sa = tryInteger(startsAtHour);
-    	Integer ea = tryInteger(endsAtHour);
-    	Instant eventDate = tryInstantStartOfDay(date, TIME_ZONE);
-    	Instant inscriptionEnd = tryDateTimeToInstant(inscriptionEndDate, TIME_ZONE);
+    	Instant eventDate = tryInstantStartOfDay(form.getDate(), TIME_ZONE);
+    	Instant inscriptionEndDate = tryDateTimeToInstant(form.getInscriptionEndDate(), TIME_ZONE);
     	
-    	LOGGER.debug("date: {}, eventDate: {}", date, eventDate);
-    	LOGGER.debug("inscription: {}, inscriptionDate: {}", inscriptionEndDate, inscriptionEnd);
+    	LOGGER.debug("date: {}, eventDate: {}", eventDate, eventDate);
+    	LOGGER.debug("inscription: {}, inscriptionDate: {}", form.getInscriptionEndDate(), inscriptionEndDate);
     	
-    	validator.validate(
-    		new EventForm()
-    		.withName(name)
-    		.withDescription(description)
-    		.withMaxParticipants(mp)
-    		.withDate(eventDate)
-    		.withStartsAtHour(sa)
-    		.withEndsAtHour(ea)
-    		.withInscriptionEndDate(inscriptionEnd)
-    	);
+    	validator.validate(form);
     	
-
     	Pitch p = ps.findById(pitchId).orElseThrow(PitchNotFoundException::new);
     	Event ev = null;
-//    	try {
-	    	ev = es.create(name, loggedUser(), p, description,
-	    			mp, eventDate, sa, ea, inscriptionEnd);
-//    	} catch(EndsBeforeStartsException e) {
-//    		return eventCreationError("ends_before_starts", pitchId, form);
-//    	} catch(DateInPastException e) { // NOOOO!!!!
-//    		return eventCreationError("event_in_past", pitchId, form);
-//    	} catch(MaximumDateExceededException e) {
-//    		return eventCreationError("date_exceeded", pitchId, form);
-//    	} catch(EventOverlapException e) {
-//    		return eventCreationError("event_overlap", pitchId, form);
-//    	} catch(HourOutOfRangeException e) {
-//    		return eventCreationError("hour_out_of_range", pitchId, form);
-//    	} catch(InscriptionDateInPastException e) { // NO!!!!!
-//    		return eventCreationError("inscription_date_in_past", pitchId, form);
-//    	} catch(InscriptionDateExceededException e) {
-//    		return eventCreationError("inscription_date_exceeded", pitchId, form);
-//    	}
+    	
+    	ev = es.create(form.getName(), loggedUser(), p, form.getDescription(),
+    			form.getMaxParticipants(), eventDate, form.getStartsAtHour(),
+    			form.getEndsAtHour(), inscriptionEndDate);
+    	
 	    final URI uri = uriInfo.getAbsolutePathBuilder()
 	    		.path(String.valueOf(ev.getEventId())).build();
     	return Response.created(uri).entity(EventDto.ofEvent(ev, false)).build();
