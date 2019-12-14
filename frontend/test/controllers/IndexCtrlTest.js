@@ -10,7 +10,8 @@ define(['controllers/IndexCtrl', 'angular-mocks'], function() {
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = {
-        isLoggedIn: false
+        isLoggedIn: false,
+        $on: function () {}
       };
       controller = $controller('IndexCtrl', {$scope: scope});
     }));

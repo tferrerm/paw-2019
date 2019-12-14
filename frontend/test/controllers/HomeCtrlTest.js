@@ -6,8 +6,9 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = {
-        scheduleHeaders: [{id: 1}],
-        noParticipations: false
+        scheduleHeaders: [],
+        noParticipations: false,
+        $on: function(){},
       };
       controller = $controller('HomeCtrl', {$scope: scope});
     }));
