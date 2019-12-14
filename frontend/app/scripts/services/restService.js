@@ -159,6 +159,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 			getClubs: function(params) {
 				return httpGet('/clubs', {pageNum: params.pageNum, name: params.name, location: params.location});
 			},
+			getClubWeekEvents: function(id) {
+				return httpGet('/admin/clubs/' + id + '/week-events', {});
+			},
 			getPitch: function(id) {
 				return httpGet('/pitches/' + id, {});
 			},
@@ -193,7 +196,7 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 			getMyPastEvents: function(id, params) {
 				return httpGet('/users/' + id + '/past-owned-events', {pageNum: params.pageNum});
 			},
-			getPitchWeekEvents: function(id, params) {
+			getPitchWeekEvents: function(id) {
 				return httpGet('/pitches/' + id + '/week-events', {});
 			},
 			getSports: function() {

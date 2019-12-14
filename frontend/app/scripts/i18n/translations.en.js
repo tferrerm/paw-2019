@@ -193,7 +193,7 @@ define([], function() {
     create_account:'Create account',
     not_account:'Do not have an account?',
     start_date:'Start date',
-    new_tournament_description:'The chart shows the amount of availables soccer pitches in this club for the current week. You must provide an even amount of teams to occupy these.',
+    new_tournament_description:'The chart shows the amount of availables soccer pitches in this club for the current week.',
     event_creation_description:'Check out this pitch\'s available hours this week to create a match!',
     upload_score:'Upload score',
     state:'State',

@@ -3,6 +3,27 @@
 		<h2>{{'create_tournament' | translate}}</h2>
 		<span class="help-message notice w-70 justify-center home-header">{{'new_tournament_description' | translate}}</span>
 		<div class="form-container-tournament w-70">
+            <table class="schedule-table flex"><thead></thead>
+                <!--<tr>
+                    <th class="schedule-table-cell-size schedule-table-hours"></th>
+                    <c:forEach var="dayMessage" items="${scheduleHeaders}">
+                        <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
+                    </c:forEach>
+                </tr>-->
+                <!--<c:set var="hours" value="${minHour}"/>-->
+                <tbody >
+                    <tr ng-repeat="row in schedule track by $index">
+
+                        <!--<td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>-->
+                        
+                            <!--<td ng-if="cell != null" class="schedule-table background-red schedule-table-cell-size"/>
+                            <td ng-if="cell == null" class="schedule-table background-green schedule-table-cell-size"/>-->
+                            <td ng-repeat="cell in row track by $index" ng-class="cell == pitchCount ? 'schedule-table background-red schedule-table-cell-size' : (cell != 0 ? 'schedule-table background-yellow schedule-table-cell-size' : 'schedule-table background-green schedule-table-cell-size')">{{pitchCount - cell}}
+                            </td>
+                        
+                    </tr></tbody>
+                    <!--<c:set var="hours" value="${hours + 1}"/>-->
+            </table>
 			<!--<table class="schedule-table flex">
                 <tr>
                     <th class="schedule-table-cell-size schedule-table-hours"></th>

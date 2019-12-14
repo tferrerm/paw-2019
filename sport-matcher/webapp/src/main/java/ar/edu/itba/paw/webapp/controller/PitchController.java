@@ -122,8 +122,7 @@ public class PitchController extends BaseController {
 	
 	@GET
 	@Path("/{id}/week-events")
-	public Response getPitchSchedule(@PathParam("id") final long id,
-			@QueryParam("pageNum") @DefaultValue("1") int pageNum) throws PitchNotFoundException {
+	public Response getPitchSchedule(@PathParam("id") final long id) throws PitchNotFoundException {
 		ps.findById(id).orElseThrow(PitchNotFoundException::new);
 		List<Event> weekEvents = es.findCurrentEventsInPitch(id);
 		

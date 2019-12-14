@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -33,7 +34,6 @@ import ar.edu.itba.paw.model.User;
 public class ClubHibernateDao implements ClubDao {
 	
 	private static final int MAX_ROWS = 10;
-	private static final int MAX_EVENTS_PER_WEEK = 24 * 7;
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	
 	@PersistenceContext
@@ -263,24 +263,39 @@ public class ClubHibernateDao implements ClubDao {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> findCurrentEventsInClub(final long clubid, final Sport sport) {
 		LocalDate ld = LocalDate.now();
 		// Today at 00:00
 		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
 		// In seven days at 23:00
-		Instant inAWeek = today.plus(7, ChronoUnit.DAYS);
+		Instant inAWeek = today.plus(7, ChronoUnit.DAYS); // ARREGLAR
+
+		Map<String, Object> paramsMap = new HashMap<>();
+		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events NATURAL JOIN pitches "
+				+ " WHERE clubid = :clubid AND sport = :sport AND starts_at > :today AND starts_at < :inAWeek");
+		paramsMap.put("clubid", clubid);
+		paramsMap.put("sport", sport.toString());
+		paramsMap.put("today", Timestamp.from(today));
+		paramsMap.put("inAWeek", Timestamp.from(inAWeek));
 		
-		String queryString = "FROM Event AS e WHERE e.pitch.club.clubid = :clubid AND "
-				+ " e.pitch.sport = :sport AND e.startsAt > :today AND e.startsAt < :inAWeek";
+		Query idQuery = em.createNativeQuery(idQueryString.toString());
+		for(Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+			idQuery.setParameter(entry.getKey(), entry.getValue());
+		}
+		final List<Long> ids = (List<Long>) idQuery.getResultList();
 		
-		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
-		query.setParameter("clubid", clubid);
-		query.setParameter("sport", sport);
-		query.setParameter("today", today);
-		query.setParameter("inAWeek", inAWeek);
-		/* Only for prevention */
-		query.setMaxResults(MAX_EVENTS_PER_WEEK);
+		if(ids.isEmpty())
+			return Collections.emptyList();
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+		Root<Event> from = cq.from(Event.class);
+		from.fetch("inscriptions", JoinType.LEFT);
+		final TypedQuery<Event> query = em.createQuery(
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+			);
 		
 		return query.getResultList();
 	}

@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.controller.admin;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,8 +25,12 @@ import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.model.Club;
+import ar.edu.itba.paw.model.Event;
+import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.webapp.controller.BaseController;
 import ar.edu.itba.paw.webapp.dto.ClubDto;
+import ar.edu.itba.paw.webapp.dto.EventDto;
+import ar.edu.itba.paw.webapp.dto.SoccerClubEventsCollectionDto;
 import ar.edu.itba.paw.webapp.dto.form.ClubForm;
 import ar.edu.itba.paw.webapp.dto.form.validator.FormValidator;
 import ar.edu.itba.paw.webapp.exception.ClubNotFoundException;
@@ -69,6 +76,18 @@ public class AdminClubController extends BaseController {
 		cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
 		cs.deleteClub(clubid);
 		return Response.status(Status.NO_CONTENT).build();
+	}
+    
+    @GET
+	@Path("/{id}/week-events")
+	public Response getClubSchedule(@PathParam("id") final long clubid) throws ClubNotFoundException {
+		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
+		List<Event> weekEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);
+		int pitchCount = club.getClubPitches().stream()
+				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size();
+		
+		return Response.ok(SoccerClubEventsCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD
+				.map(ev -> EventDto.ofEvent(ev, false)).collect(Collectors.toList()), pitchCount)).build();
 	}
 //	
 ////	@ExceptionHandler({ ClubNotFoundException.class })

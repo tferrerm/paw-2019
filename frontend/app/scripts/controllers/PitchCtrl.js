@@ -41,7 +41,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    	}
 	    	
 	    }).then(function(data) {
-	    	restService.getPitchWeekEvents(pitch.pitchid, {}).then(function(data) {
+	    	restService.getPitchWeekEvents(pitch.pitchid).then(function(data) {
 	    		$scope.schedule = Array.apply(null, Array($scope.maxHour - $scope.minHour));
 			    for (var i = 0; i < ($scope.maxHour - $scope.minHour); i++) {
 			    	$scope.schedule[i] = Array.apply(null, Array(7));

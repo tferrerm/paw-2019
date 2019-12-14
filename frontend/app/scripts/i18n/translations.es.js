@@ -194,7 +194,7 @@ define([], function() {
     create_account:'Crear cuenta',
     not_account:'¿No tienes una cuenta?',
     start_date:'Fecha comienzo',
-    new_tournament_description:'La tabla muestra la cantidad de canchas de fútbol disponibles en el club para la semana actual. Debe proveer un número par de equipos para ocuparlas.',
+    new_tournament_description:'La tabla muestra la cantidad de canchas de fútbol disponibles en el club para la semana actual.',
     event_creation_description:'¡Chequea los horarios disponibles para esta cancha durante esta semana para crear tus eventos!',
     upload_score:'Cargar puntaje',
     state:'Estado',
