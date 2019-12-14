@@ -26,8 +26,6 @@ module.exports = function(config) {
     exclude: [
       'app/scripts/build.js',
       'bower_components/**/test/**',
-      'app/scripts/ng-file-upload.js',
-
     ],
 
 
