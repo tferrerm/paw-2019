@@ -26,7 +26,9 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         eventCount: TEST_EVENT_COUNT,
         lastPageNum:TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
-        pageNum: TEST_PAGE_NUM
+        pageNum: TEST_PAGE_NUM,
+        $on: function(){},
+        $watch: function(){},
       };
       controller = $controller('AllEventsCtrl', {$scope: scope});
     }));

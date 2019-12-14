@@ -15,11 +15,11 @@ define(['services/storageService', 'angular-mocks'], function() {
 
     describe('.getUser()', function() {
       it('should be defined', function() {
-expect(storageService.getUser).toBeDefined();
-});
+        expect(storageService.getUser).toBeDefined();
+      });
       it('should be initially null', function() {
-expect(storageService.getUser()).toBeNull();
-});
+        expect(storageService.getUser()).toBeNull();
+      });
       it('should save the user correctly', function() {
         storageService.setUser(TEST_USER);
         expect(storageService.getUser()).toEqual(TEST_USER);

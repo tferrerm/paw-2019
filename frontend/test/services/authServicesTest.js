@@ -16,7 +16,7 @@ define(['services/authService', 'angular-mocks'], function() {
       http = _$httpBackend_;
       q = _$q_;
 
-      http.whenPOST(url + '/login', TEST_CREDENTIALS).respond(200, q.when(''), {headers: {'X-AUTH-TOKEN': TEST_TOKEN}});
+      http.whenPOST(url + '/users/login', TEST_CREDENTIALS).respond(200, q.when(''), {headers: {'X-AUTH-TOKEN': TEST_TOKEN}});
       http.whenGET(url + '/user', undefined, {'X-AUTH-TOKEN': TEST_TOKEN}).respond(200, q.when(TEST_USER));
     }));
 
@@ -42,10 +42,10 @@ define(['services/authService', 'angular-mocks'], function() {
         var loggedIn = false;
         var NEW_CREDS = 'j_username=' + encodeURIComponent(TEST_USERNAME) + '&j_password=' + encodeURIComponent('foo');
 
-        http.expectPOST(url + '/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
+        http.expectPOST(url + '/users/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
         authService.login(TEST_USERNAME, 'foo').catch(function() {
-loggedIn = authService.isLoggedIn();
-});
+        loggedIn = authService.isLoggedIn();
+      });
         http.flush();
         expect(loggedIn).toBe(false);
       });
@@ -60,8 +60,8 @@ loggedIn = authService.isLoggedIn();
         var testUser;
 
         authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {
-testUser = authService.getLoggedUser();
-});
+        testUser = authService.getLoggedUser();
+        });
         http.flush();
         expect(testUser).toEqual(TEST_USER);
       });
@@ -76,7 +76,7 @@ testUser = authService.getLoggedUser();
           }).catch(function() {});
 
         http.flush();
-        expect(testUser).toBeFalsy();
+        expect(testUser).not.toBeTruthy();
       });
     });
 
