@@ -113,15 +113,15 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 				if (error.data.constraintViolations != null) {
 					/* Controller violation */
 					angular.forEach(error.data.constraintViolations, function(cv) {
-							switch (cv.propertyPath) {
-								case 'date':
-									$scope.dateError = true;
-									break;
-								case 'inscriptionEndDate':
-									$scope.inscriptionDateError = true;
-									break;
-								default:
-							}
+						switch (cv.propertyPath) {
+							case 'date':
+								$scope.dateError = true;
+								break;
+							case 'inscriptionEndDate':
+								$scope.inscriptionDateError = true;
+								break;
+							default:
+						}
 					});
 				} else {
 					/* Service violation */

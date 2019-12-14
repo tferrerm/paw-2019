@@ -228,7 +228,10 @@ define([], function() {
     form_required:'Field required',
     name_pattern_error:'Field must contain only letters and/or numbers',
     picture_processing_error:'Error processing image',
-    username_pattern_error:'Invalid username email'
+    username_pattern_error:'Invalid username email',
+    letter_name_pattern_error:'Field must contain only letters',
+    password_length_error:'Password must contain at least 6 characters',
+    duplicate_username_error:'Username already exists'
 
 };
 });

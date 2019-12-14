@@ -5,7 +5,7 @@
 		
 		<form ng-submit = loginSubmit() name="loginForm" method="post" novalidate>
 			<div>
-				<input  class="form-control" type="email" placeholder="{{'username' | translate}}" name="username" ng-model="user.username" required maxlength="100" ng-pattern="usernamePattern"/>
+				<input  class="form-control" type="text" placeholder="{{'username' | translate}}" name="username" ng-model="user.username" required maxlength="100" ng-pattern="usernamePattern"/>
 				<div ng-show="(loginForm.username.$touched ||  loginForm.$submitted)">
                     <span ng-show="loginForm.username.$error.required" class="form-error">{{'form_required' | translate}}</span>
                     <span ng-show="loginForm.username.$error.pattern" class="form-error">{{'username_pattern_error' | translate}}</span>

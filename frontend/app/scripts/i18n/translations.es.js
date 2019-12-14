@@ -12,7 +12,7 @@ define([], function() {
     remember_me:'Recuérdame',
     login:'Iniciar Sesión',
     register:'Registrarse',
-    already_have_account:'¿Ya tiene una cuenta?',
+    already_have_account:'¿Ya tienes una cuenta?',
     username:'Email',
     password:'Contraseña',
     repeat_password:'Repita contraseña',
@@ -229,6 +229,9 @@ define([], function() {
     form_required:'Campo requerido',
     name_pattern_error:'El campo sólo debe contener letras y/o números',
     picture_processing_error:'Error procesando imagen',
-    username_pattern_error:'Email de usuario inválido'
+    username_pattern_error:'Email de usuario inválido',
+    letter_name_pattern_error:'El campo sólo debe contener letras',
+    password_length_error:'La contraseña debe tener al menos 6 carácteres',
+    duplicate_username_error:'El nombre de usuario ya existe'
 };
 });
