@@ -1,12 +1,12 @@
-define(['services/StorageService', 'angular-mocks'], function() {
+define(['services/storageService', 'angular-mocks'], function() {
   describe('Storage Service', function () {
     var storageService;
     var TEST_USER = {name: 'Test user', id: 2};
 
     beforeEach(module('frontend'));
 
-    beforeEach(inject(function ($storageService) {
-      storageService = $storageService;
+    beforeEach(inject(function (_storageService_) {
+      storageService = _storageService_;
     }));
 
     it('should be defined', function() {

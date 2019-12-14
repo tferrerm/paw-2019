@@ -9,11 +9,11 @@ define(['services/restService', 'angular-mocks'], function() {
 
     beforeEach(module('frontend'));
 
-    beforeEach(inject(function ($injector, $restService, $url, $httpBackend, $q) {
-      restService = $restService;
-      url = $url;
-      http = $httpBackend;
-      q = $q;
+    beforeEach(inject(function ($injector, _restService_, _url_, _$httpBackend_, _$q_) {
+      restService = _restService_;
+      url = _url_;
+      http = _$httpBackend_;
+      q = _$q_;
     }));
 
     it('should be defined', function () {
@@ -31,8 +31,8 @@ define(['services/restService', 'angular-mocks'], function() {
         http.whenGET(url + '/events').respond(200, $q.when(TEST_EVENTS));
 
         restService.getAllEvents().then(function(res) {
-response = res;
-});
+        response = res;
+      });
 
         http.flush();
         expect(response).toEqual(TEST_EVENTS);
