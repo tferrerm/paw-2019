@@ -173,7 +173,7 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				    });
 			},
 			getPitches: function(params) {
-				return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
+        return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
 			},
 			getEvent: function(pitchid, eventid) {
 				return httpGet('/pitches/' + pitchid + '/events/' + eventid, {});
@@ -221,7 +221,7 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 		    	return httpGet('/tournaments/' + id + '/inscriptions', {});
 		    },
 			getTournaments: function(params) {
-		        return httpGet('/tournaments', {pageNum: params.pageNum});
+        		return httpGet('/tournaments', {pageNum: params.pageNum});
 		    },
 			getUpcomingEvents: function(id) {
 				return httpGet('/users/' + id + '/future-inscriptions', {});
