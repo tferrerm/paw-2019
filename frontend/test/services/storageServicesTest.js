@@ -1,4 +1,4 @@
-define(['services/StorageService', 'angular-mocks'], function() {
+define(['services/storageService', 'angular-mocks'], function() {
   describe('Storage Service', function () {
     var storageService;
     var TEST_USER = {name: 'Test user', id: 2};
