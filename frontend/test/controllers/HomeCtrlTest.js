@@ -5,7 +5,10 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
     beforeEach(module('frontend'));
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
-      scope = $rootScope.$new();
+      scope = {
+        scheduleHeaders: [{id: 1}],
+        noParticipations: false
+      };
       controller = $controller('HomeCtrl', {$scope: scope});
     }));
 
@@ -15,7 +18,7 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
       });
 
       it('should be false', function () {
-        expect(scope.noParticipations).toBeFalse();
+        expect(scope.noParticipations).toBe(false);
       });
     });
 

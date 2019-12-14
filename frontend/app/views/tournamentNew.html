@@ -2,7 +2,7 @@
 	<div class="content-container">
 		<h2>{{'create_tournament' | translate}}</h2>
 		<span class="help-message notice w-70 justify-center home-header">{{'new_tournament_description' | translate}}</span>
-		<div class="form-container-tournament">
+		<div class="form-container-tournament w-70">
 			<!--<table class="schedule-table flex">
                 <tr>
                     <th class="schedule-table-cell-size schedule-table-hours"></th>
@@ -29,8 +29,8 @@
                 </c:forEach>
             </table>-->
 			
-			<div class="left-space">
-                <form ng-submit = createTournamentSubmit() name="createTournamentForm" method="post" novalidate>
+			<div class="left-space w-90">
+                <form ng-submit = createTournamentSubmit() name="createTournamentForm" method="post" novalidate class="w-100">
                     <div class="form-field">
                         <input class="form-control" type="text" placeholder="{{'name' | translate}}" ng-maxlength="100" name="name" ng-model="tournament.name" required/>
                     </div>
@@ -56,9 +56,9 @@
                         </c:if>-->
                     </div>
                     <div class="form-field flex-space-between">
-                        <div class="form-field-horizontal">
+                        <div class="form-field-horizontal flex-1">
                             <span>{{'start_date' | translate}}</span>
-                            <input class="form-control date-input p-6" type="date" ng-min="currentDate" name="date" ng-model="tournament.selectedDate" required/>
+                            <input class="form-control date-input p-6 w-90" type="date" ng-min="currentDate" name="date" ng-model="tournament.selectedDate" required/>
                             <!--<c:if test="${event_in_past}">
                                 <span class="form-error">
                                     <spring:message code="event_in_past"/>
@@ -75,18 +75,18 @@
                                 </span>
                             </c:if>-->
                         </div>
-                        <div>
+                        <div class="flex-05">
                             <span>{{'event_startsAt' | translate}}</span>
-                            <select class="form-control" name="startsAtHour" ng-model="tournament.startsAtHour" ng-options="hour for hour in startsAtHours" required></select>
+                            <select class="form-control w-90" name="startsAtHour" ng-model="tournament.startsAtHour" ng-options="hour for hour in startsAtHours" required></select>
                             <!--<c:if test="${ends_before_starts}">
                                 <span class="form-error">
                                     <spring:message code="ends_before_starts"/>
                                 </span>
                             </c:if>-->
                         </div>
-                        <div>
+                        <div class="flex-05">
                             <span>{{'event_endsAt' | translate}}</span>
-                            <select class="form-control" name="endsAtHour" ng-model="tournament.endsAtHour" ng-options="hour for hour in endsAtHours" required>
+                            <select class="form-control w-90" name="endsAtHour" ng-model="tournament.endsAtHour" ng-options="hour for hour in endsAtHours" required>
                             </select>
                         </div>
     				</div>

@@ -1,18 +1,38 @@
-//TODO
-.loginModal .modal-dialog {}
+.loginModal .modal-dialog {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+}
 
-.loginModal .modal-content {}
+.loginModal .modal-content {
+    width: 50%;
+    background-color: transparent;
+}
 
 .loginModal .modal-footer {}
 
-.registerModal .modal-dialog {}
+.registerModal .modal-dialog {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
-.registerModal .modal-content {}
+.registerModal .modal-content {
+    width: 50%;
+    background-color: transparent;
+}
 
 .registerModal .modal-footer {}
 
-.deleteConfirmModal .modal-dialog {}
+.deleteConfirmModal .modal-dialog {
+    display: flex;
+    justify-content: center;
+}
 
-.deleteConfirmModal .modal-content {}
+.deleteConfirmModal .modal-content {
+    background-color: transparent;
+}
 
 .deleteConfirmModal .modal-footer {}
