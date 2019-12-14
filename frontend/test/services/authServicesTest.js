@@ -5,7 +5,7 @@ define(['services/authService', 'angular-mocks'], function() {
     var TEST_USER = {id: '1', name: 'User'};
     var TEST_USERNAME = 'user@user.com';
     var TEST_PASSWORD = '123456';
-    var TEST_CREDENTIALS = 'j_username=' + encodeURIComponent(TEST_USERNAME) + '&j_password=' + encodeURIComponent(TEST_PASSWORD);
+    var TEST_CREDENTIALS = 'login_username=' + encodeURIComponent(TEST_USERNAME) + '&login_password=' + encodeURIComponent(TEST_PASSWORD);
     var TEST_TOKEN = 'tok3NT0KENte5t1ngT0k3n';
 
     beforeEach(module('frontend'));
@@ -40,12 +40,12 @@ define(['services/authService', 'angular-mocks'], function() {
 
       it('should NOT log in given an incorrect user or password', function() {
         var loggedIn = false;
-        var NEW_CREDS = 'j_username=' + encodeURIComponent(TEST_USERNAME) + '&j_password=' + encodeURIComponent('foo');
+        var NEW_CREDS = 'login_username=' + encodeURIComponent(TEST_USERNAME) + '&login_password=' + encodeURIComponent('foo');
 
         http.expectPOST(url + '/users/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
         authService.login(TEST_USERNAME, 'foo').catch(function() {
-        loggedIn = authService.isLoggedIn();
-      });
+          loggedIn = authService.isLoggedIn();
+        });
         http.flush();
         expect(loggedIn).toBe(false);
       });

@@ -30,7 +30,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         $on: function(){},
         $watch: function(){},
       };
-      controller = $controller('AllEventsCtrl', {$scope: scope});
+      controller = $controller('AllEventsCtrl', {$scope: scope, events: [TEST_EVENT_ARRAY]});
     }));
 
     describe('$scope.events', function () {
