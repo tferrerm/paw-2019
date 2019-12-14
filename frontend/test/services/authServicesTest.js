@@ -10,11 +10,11 @@ define(['services/authService', 'angular-mocks'], function() {
 
     beforeEach(module('frontend'));
 
-    beforeEach(inject(function($authService, $url, $http, $q) {
-      authService = $authService;
-      url = $url;
-      http = $http;
-      q = $q;
+    beforeEach(inject(function(_authService_, _url_, _$httpBackend_, _$q_) {
+      authService = _authService_;
+      url = _url_;
+      http = _$httpBackend_;
+      q = _$q_;
 
       http.whenPOST(url + '/login', TEST_CREDENTIALS).respond(200, q.when(''), {headers: {'X-AUTH-TOKEN': TEST_TOKEN}});
       http.whenGET(url + '/user', undefined, {'X-AUTH-TOKEN': TEST_TOKEN}).respond(200, q.when(TEST_USER));
@@ -32,14 +32,14 @@ define(['services/authService', 'angular-mocks'], function() {
       it('should log in if user and pass are correct', function() {
         var loggedIn = false;
         authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {
-loggedIn = authService.isLoggedIn();
-});
+        loggedIn = authService.isLoggedIn();
+      });
         http.flush();
         expect(loggedIn).toBe(true);
       });
 
       it('should NOT log in given an incorrect user or password', function() {
-        var loggedIn = true;
+        var loggedIn = false;
         var NEW_CREDS = 'j_username=' + encodeURIComponent(TEST_USERNAME) + '&j_password=' + encodeURIComponent('foo');
 
         http.expectPOST(url + '/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
