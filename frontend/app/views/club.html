@@ -22,7 +22,7 @@
 						<span>{{'no_pitches' | translate}}</span>
 					</div>
 					<div ng-if="pitches.length > 0">
-						<ul>
+						<ul class="padding-0">
 							<div ng-repeat="pitch in pitches">
 								<div class="custom-row flex-space-around club-pitches-list">
 									<div>{{pitch.name}}</div>
@@ -99,12 +99,12 @@
 						<div ng-show="(commentForm.comment.$touched ||  commentForm.$submitted)">
                             <span ng-show="commentForm.comment.$error.required" class="form-error">{{'form_required' | translate}}</span>
                         </div>
-						<div class="justify-center">
+						<div class="justify-center mb-10">
 							<button type="submit" class="btn btn-primary submit-btn btn-primary">{{'comment_action' | translate}}</button>
 						</div>
 					</form>
 				</div>
-				<div ng-repeat="cmt in comments" class="comment-container">
+				<div ng-repeat="cmt in comments" class="comment-container date-separator w-100">
 					<div class="flex-row mv-10">
 						<img class="comment-image" src="../images/profile_default.png" width="40" height="40"/>
 						<a class="link-text ml-10" ng-click="goToProfile(cmt.commenter.userid)">{{cmt.commenter.firstname}} {{cmt.commenter.lastname}}</a>

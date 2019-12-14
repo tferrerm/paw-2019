@@ -14,7 +14,7 @@
 			</div>
 			
 			<div ng-repeat="tournament in tournaments" class="tournament-row">
-				<div class="w-30">{{tournament.name}}</div>
+				<div class="w-30 text-center">{{tournament.name}}</div>
 				<div class="flex-column w-30">
 					<div ng-if="(tournament.inscriptionEnd | date: 'dd/MM/yyyy HH:mm:ss') > (now | date: 'dd/MM/yyyy HH:mm:ss')" class="w-100">
 						{{'inscription' | translate}}
