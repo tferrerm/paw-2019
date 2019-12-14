@@ -12,7 +12,14 @@
 					<h3>{{'status' | translate}} {{'completed' | translate}}</h3>
 				</div>
 				<div class="progress">
-					<!--<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${participant_count * 100 / event.maxParticipants}%; background-color: ${participant_count == event.maxParticipants ? "green" : "dodgerblue"};" aria-valuenow="${participant_count}" aria-valuemin="0" aria-valuemax="${event.maxParticipants}"></div>-->
+						<div
+							class="progress-bar progress-bar-striped progress-bar-animated"
+							role="progressbar"
+							ng-style="event.inscriptionCount == event.maxParticipants ? {'background-color': 'green', 'width': (event.inscriptionCount * 100 / event.maxParticipants) + '%'} : {'background-color': 'dodgerblue', 'width': (event.inscriptionCount * 100 / event.maxParticipants) + '%'}"
+							aria-valuenow="event.inscriptionCount"
+							aria-valuemin="0"
+							aria-valuemax="event.maxParticipants"
+						></div>
 				</div>
 				<h4 class="progress-bar-completion">{{event.inscriptionCount}}/{{event.maxParticipants}}</h4>
 			</div>
