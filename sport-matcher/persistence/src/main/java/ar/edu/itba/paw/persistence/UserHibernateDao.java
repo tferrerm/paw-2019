@@ -115,7 +115,7 @@ public class UserHibernateDao implements UserDao {
 			em.persist(user);
 			em.flush();
 		} catch(PersistenceException e) {
-			throw new UserAlreadyExistsException("User with username " + username + " already exists");
+			throw new UserAlreadyExistsException();
 		}
 		return user;
 	}

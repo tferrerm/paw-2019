@@ -56,19 +56,33 @@
 						</div>
 					</div>
 				</div>
-				<div ng-if="isAdmin" class="status no-margin">
+				<div ng-show="isAdmin" class="status no-margin">
 					<div class="pitch-form-container">
 						<h3>{{'create_pitch' | translate}}</h3>
-						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post">
+						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post" novalidate>
 							<div class="form-field">
-								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" ng-maxlength="100" name="name" ng-model="createdPitch.name" required/>
+								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" maxlength="100" name="name" ng-model="createdPitch.name" ng-pattern="/^[a-zA-Z0-9 ]+$/" required/>
+								<div ng-show="(createPitchForm.name.$touched ||  createPitchForm.$submitted)">
+                                    <span ng-show="createPitchForm.name.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    <span ng-show="createPitchForm.name.$error.pattern" class="form-error">{{'name_pattern_error' | translate}}</span>
+                                </div>
 							</div>
 							<div class="form-field">
 								<label>{{'sport' | translate}}</label>
-								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports"></select>
+								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports" name="sport" required>
+									<option></option>
+								</select>
+								<div ng-show="(createPitchForm.sport.$touched ||  createPitchForm.$submitted)">
+                                    <span ng-show="createPitchForm.sport.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
 							</div>
 							<div>
-								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" required="" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}">
+								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
+								<div ng-if="pictureProcessingError">
+                                    <span class="form-error">
+                                        {{'picture_processing_error' | translate}}
+                                    </span>
+                                </div>
 							</div>
 							<img ngf-src="picture">
 							<div class="justify-center">

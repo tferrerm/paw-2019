@@ -10,7 +10,6 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 			$scope.createdPitch = {};
 			restService.getSports().then(function(data) {
 				$scope.sports = data.sports;
-				$scope.createdPitch.sport = $scope.sports[0];
 			});
 			$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
 		}
@@ -122,21 +121,28 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		};
 		
 		$scope.createPitchSubmit = function(picture) {
-			//checkPasswordsMatch();
-			//if ($scope.createEventForm.$valid) {
-			//$scope.duplicateEmailError = false;
+			$scope.pictureProcessingError = false;
+			if ($scope.createPitchForm.$valid) {
 				if ($scope.isAdmin) {
 					// CHEQUEAR SI picture es undefined (si subieron imagen mala)
 					Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
 						restService.createPitch(club.clubid, $scope.createdPitch, blob)
 							.then(function(data) {
-								//var createdEvent = data.event;
-								//$location.url('pitches/' + data.pitchid);
 								pitchParams.pageNum = 1;
 								updatePitches(club.clubid, pitchParams);
+							}).catch(function(error) {
+								if (error.status === 422) {
+									if (error.data.constraintViolations == null) {
+										/* Service violation */
+										if (error.data.error === 'PictureProcessingError') {
+											$scope.pictureProcessingError = true;
+										}
+									}
+								}
 							});
-						});
-					};
+					});
+				};
+			}
 		};
 
 		$scope.newTournament = function(id) {

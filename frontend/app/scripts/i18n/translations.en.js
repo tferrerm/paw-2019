@@ -225,7 +225,13 @@ define([], function() {
     error_club_not_found:'Club not found',
     error_tournament_not_found:'Tournament not found',
     error_tournament_event_not_found:'Tournament event not found',
-    form_required:'Field required'
+    form_required:'Field required',
+    name_pattern_error:'Field must contain only letters and/or numbers',
+    picture_processing_error:'Error processing image',
+    username_pattern_error:'Invalid username email',
+    letter_name_pattern_error:'Field must contain only letters',
+    password_length_error:'Password must contain at least 6 characters',
+    duplicate_username_error:'Username already exists'
 
 };
 });
