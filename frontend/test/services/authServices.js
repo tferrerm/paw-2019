@@ -5,7 +5,7 @@ define(['services/authService', 'angular-mocks'], function() {
     var TEST_USER = {id: '1', name: 'User'};
     var TEST_USERNAME = 'user@user.com';
     var TEST_PASSWORD = '123456';
-    var TEST_CREDENTIALS = 'j_username='+encodeURIComponent(TEST_USERNAME)+'&j_password='+encodeURIComponent(TEST_PASSWORD);
+    var TEST_CREDENTIALS = 'j_username=' + encodeURIComponent(TEST_USERNAME) + '&j_password=' + encodeURIComponent(TEST_PASSWORD);
     var TEST_TOKEN = 'tok3NT0KENte5t1ngT0k3n';
 
     beforeEach(module('frontend'));
@@ -31,17 +31,21 @@ define(['services/authService', 'angular-mocks'], function() {
 
       it('should log in if user and pass are correct', function() {
         var loggedIn = false;
-        authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {loggedIn = authService.isLoggedIn();});
+        authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {
+loggedIn = authService.isLoggedIn();
+});
         http.flush();
         expect(loggedIn).toBe(true);
       });
 
       it('should NOT log in given an incorrect user or password', function() {
         var loggedIn = true;
-        var NEW_CREDS = 'j_username='+encodeURIComponent(TEST_USERNAME)+'&j_password='+encodeURIComponent( 'foo');
+        var NEW_CREDS = 'j_username=' + encodeURIComponent(TEST_USERNAME) + '&j_password=' + encodeURIComponent('foo');
 
         http.expectPOST(url + '/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
-        authService.login(TEST_USERNAME, 'foo').catch(function() {loggedIn = authService.isLoggedIn();});
+        authService.login(TEST_USERNAME, 'foo').catch(function() {
+loggedIn = authService.isLoggedIn();
+});
         http.flush();
         expect(loggedIn).toBe(false);
       });
@@ -55,7 +59,9 @@ define(['services/authService', 'angular-mocks'], function() {
       it('should return a user if logged in', function() {
         var testUser;
 
-        authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {testUser = authService.getLoggedUser();});
+        authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {
+testUser = authService.getLoggedUser();
+});
         http.flush();
         expect(testUser).toEqual(TEST_USER);
       });
@@ -90,7 +96,7 @@ define(['services/authService', 'angular-mocks'], function() {
 
         http.flush();
         expect(loggedIn && !authService.isLoggedIn()).toBe(true);
-      })
+      });
     });
   });
 });
