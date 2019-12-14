@@ -228,6 +228,7 @@ define([], function() {
     error_tournament_event_not_found:'Evento de torneo no encontrado',
     form_required:'Campo requerido',
     name_pattern_error:'El campo sólo debe contener letras y/o números',
-    picture_processing_error:'Error procesando imagen'
+    picture_processing_error:'Error procesando imagen',
+    username_pattern_error:'Email de usuario inválido'
 };
 });
