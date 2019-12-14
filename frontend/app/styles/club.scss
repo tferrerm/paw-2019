@@ -21,6 +21,24 @@
     align-self: flex-start;
 }
 
+.pitch-creation-image {
+    max-height: 64px;
+    max-width: 256px;
+}
+
+.pitch-creation-image-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 10px;
+}
+
+.pitch-creation-image-input {
+    font-size: 14px;
+    max-height: 30px;
+    max-width: 250px;
+}
+
 .club-description {
     display: flex;
     flex-direction: column;

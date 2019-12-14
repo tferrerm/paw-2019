@@ -46,15 +46,15 @@
 		                    <span ng-show="registerForm.repeatPassword.$error.minlength" class="form-error">{{'password_length_error' | translate}}</span>
 		                </div>
 					</div>
-					<div>
-						<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}">
+					<div class="registration-image-container">
+						<input class="registration-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}">
 						<div ng-if="pictureProcessingError">
                             <span class="form-error">
                                 {{'picture_processing_error' | translate}}
                             </span>
                         </div>
+            <img class="registration-image" ngf-src="picture">
 					</div>
-					<img ngf-src="picture">
 					<div class="justify-center">
 						<button type="submit" class="btn btn-primary submit-btn">{{'register' | translate}}</button>
 					</div>

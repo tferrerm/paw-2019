@@ -13,8 +13,21 @@
   }
   
   .registration-image {
-    min-width: 200px;
-    min-height: 300px;
+    max-height: 64px;
+    max-width: 256px;
+  }
+
+  .registration-image-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 10px;
+  }
+
+  .registration-image-input {
+    font-size: 14px;
+    max-height: 30px;
+    max-width: 250px;
   }
   
   .registration-sport-matcher {

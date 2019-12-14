@@ -14,7 +14,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 				Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
 				    restService.register($scope.user, blob)
 				    .then(function(data) {
-						return authService.login($scope.user.username, $scope.user.password, true);
+						return authService.login($scope.user.username, $scope.user.password, false);
 					}).then(function() {
 						$uibModalInstance.close(true);
 					}).catch(function(error) {

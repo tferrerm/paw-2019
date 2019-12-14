@@ -30,6 +30,7 @@ define(['services/restService', 'angular-mocks'], function() {
 
       it('should return a valid list of events (with params)', function() {
         http.whenGET(url + '/events?pageNum=1&name=&club=&sport=&vacancies=&date=').respond(200, q.when(TEST_EVENTS[0]));
+        http.whenGET('views/home.html').respond(200,q.when([]));
 
         restService.getAllEvents({pageNum: 1}).then(function(resp) {
           response = resp;
@@ -43,16 +44,19 @@ define(['services/restService', 'angular-mocks'], function() {
       var response;
 
       it('should be defined', function() {
+        http.whenGET('views/home.html').respond(200,q.when([]));
         expect(restService.getTournaments).toBeDefined();
       });
 
 
       it('should return a valid list of tournaments (with params)', function() {
-        http.whenGET(url + '/tournaments?tournaments?pageNum=1').respond(200, q.when(TEST_TOURNAMENTS[0]));
+        http.whenGET(url + '/tournaments?pageNum=1').respond(200, q.when(TEST_TOURNAMENTS[0]));
+        http.whenGET('views/home.html').respond(200,q.when([]));
+
 
         restService.getTournaments({pageNum: 1}).then(function(resp) {
-response = resp;
-});
+          response = resp;
+        });
         http.flush();
         expect(response).toEqual(TEST_TOURNAMENTS[0]);
       });
@@ -66,11 +70,12 @@ response = resp;
       });
 
       it('should return a valid list of pitches (with params)', function() {
+        http.whenGET('views/home.html').respond(200,q.when([]));
         http.whenGET(url + '/pitches?pageNum=1&name=&sport=&location=&club=').respond(200, q.when(TEST_PITCHES[0]));
 
         restService.getPitches({pageNum: 1}).then(function(resp) {
-response = resp;
-});
+        response = resp;
+      });
         http.flush();
         expect(response).toEqual(TEST_PITCHES[0]);
       });

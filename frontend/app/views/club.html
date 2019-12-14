@@ -76,15 +76,15 @@
                                     <span ng-show="createPitchForm.sport.$error.required" class="form-error">{{'form_required' | translate}}</span>
                                 </div>
 							</div>
-							<div>
-								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
+							<div class="pitch-creation-image-container">
+								<input class="pitch-creation-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
 								<div ng-if="pictureProcessingError">
                                     <span class="form-error">
                                         {{'picture_processing_error' | translate}}
                                     </span>
                                 </div>
+                <img class="pitch-creation-image" ngf-src="picture">
 							</div>
-							<img ngf-src="picture">
 							<div class="justify-center">
 								<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
 							</div>
