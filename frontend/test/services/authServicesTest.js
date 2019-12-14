@@ -48,12 +48,7 @@ define(['services/authService', 'angular-mocks'], function() {
 
         http.expectPOST(url + '/users/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
 
-        authService.login(TEST_USERNAME, 'foo', false)
-          .then(function (res) {
-            var resp = res;
-          })
-          .catch(function(err) {
-            var res = err.data;
+        authService.login(TEST_USERNAME, 'foo', false).catch(function(response) {
             loggedIn = authService.isLoggedIn();
           });
         http.flush();

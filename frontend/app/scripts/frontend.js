@@ -26,7 +26,8 @@ define(['routes',
 				'$provide',
 				'$translateProvider',
 				'$locationProvider',
-				function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $locationProvider) {
+				'$qProvider',
+				function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $locationProvider, $qProvider) {
 
 					frontend.controller = $controllerProvider.register;
 					frontend.directive = $compileProvider.directive;
@@ -52,6 +53,7 @@ define(['routes',
 						$routeProvider.otherwise({redirectTo: config.defaultRoutePath});
 					}
 
+					$qProvider.errorOnUnhandledRejections(false);
 					$translateProvider.translations('preferredLanguage', i18n);
 					$translateProvider.preferredLanguage('preferredLanguage');
 					$translateProvider.useSanitizeValueStrategy('escapeParameters');
