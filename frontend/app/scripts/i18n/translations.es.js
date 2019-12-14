@@ -227,6 +227,7 @@ define([], function() {
     error_tournament_not_found:'Torneo no encontrado',
     error_tournament_event_not_found:'Evento de torneo no encontrado',
     form_required:'Campo requerido',
-    name_pattern_error:'El campo sólo debe contener letras y/o números'
+    name_pattern_error:'El campo sólo debe contener letras y/o números',
+    picture_processing_error:'Error procesando imagen'
 };
 });

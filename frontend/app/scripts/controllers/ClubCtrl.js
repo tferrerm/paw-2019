@@ -121,6 +121,7 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		};
 		
 		$scope.createPitchSubmit = function(picture) {
+			$scope.pictureProcessingError = false;
 			if ($scope.createPitchForm.$valid) {
 				if ($scope.isAdmin) {
 					// CHEQUEAR SI picture es undefined (si subieron imagen mala)
@@ -129,6 +130,15 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 							.then(function(data) {
 								pitchParams.pageNum = 1;
 								updatePitches(club.clubid, pitchParams);
+							}).catch(function(error) {
+								if (error.status === 422) {
+									if (error.data.constraintViolations == null) {
+										/* Service violation */
+										if (error.data.error === 'PictureProcessingError') {
+											$scope.pictureProcessingError = true;
+										}
+									}
+								}
 							});
 					});
 				};

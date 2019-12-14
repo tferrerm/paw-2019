@@ -78,6 +78,11 @@
 							</div>
 							<div>
 								<input type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {min: 10, max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
+								<div ng-if="pictureProcessingError">
+                                    <span class="form-error">
+                                        {{'picture_processing_error' | translate}}
+                                    </span>
+                                </div>
 							</div>
 							<img ngf-src="picture">
 							<div class="justify-center">

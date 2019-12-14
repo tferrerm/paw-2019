@@ -226,7 +226,8 @@ define([], function() {
     error_tournament_not_found:'Tournament not found',
     error_tournament_event_not_found:'Tournament event not found',
     form_required:'Field required',
-    name_pattern_error:'Field must contain only letters and/or numbers'
+    name_pattern_error:'Field must contain only letters and/or numbers',
+    picture_processing_error:'Error processing image'
 
 };
 });
