@@ -17,7 +17,7 @@ define(['services/authService', 'angular-mocks'], function() {
       q = _$q_;
 
       http.whenGET('views/home.html').respond(200,q.when([]));
-      http.whenGET(url + '/users/profile').respond(200,q.when([]));
+      http.whenGET(url + '/users/profile').respond(200,q.when(TEST_USER));
       http.whenPOST(url + '/users/login', TEST_CREDENTIALS).respond(200, q.when(''), {headers: {'X-AUTH-TOKEN': TEST_TOKEN}});
       http.whenGET(url + '/user', undefined, {'X-AUTH-TOKEN': TEST_TOKEN}).respond(200, q.when(TEST_USER));
     }));
@@ -47,8 +47,8 @@ define(['services/authService', 'angular-mocks'], function() {
         var NEW_CREDS = 'login_username=' + encodeURIComponent(TEST_USERNAME) + '&login_password=' + encodeURIComponent('foo');
 
         http.expectPOST(url + '/users/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
-        authService.login(TEST_USERNAME, TEST_PASSWORD + 'foo', false)
-          .catch(function(response) {
+
+        authService.login(TEST_USERNAME, 'foo', false).catch(function(response) {
             loggedIn = authService.isLoggedIn();
           });
         http.flush();
@@ -65,7 +65,7 @@ define(['services/authService', 'angular-mocks'], function() {
         var testUser;
 
         authService.login(TEST_USERNAME, TEST_PASSWORD, false).then(function() {
-        testUser = authService.getLoggedUser();
+            testUser = authService.getLoggedUser();
         });
         http.flush();
         expect(testUser).toEqual(TEST_USER);
