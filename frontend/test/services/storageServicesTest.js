@@ -23,6 +23,7 @@ define(['services/storageService', 'angular-mocks'], function() {
       it('should save the user correctly', function() {
         storageService.setUser(TEST_USER);
         expect(storageService.getUser()).toEqual(TEST_USER);
+        storageService.setUser(null)
       });
     });
   });

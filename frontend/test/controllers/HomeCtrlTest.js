@@ -6,8 +6,6 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = {
-        scheduleHeaders: [],
-        noParticipations: false,
         $on: function() {}
       };
       controller = $controller('HomeCtrl', {$scope: scope});
@@ -28,8 +26,8 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
         expect(scope.scheduleHeaders).toBeDefined();
       });
 
-      it('should be empty', function () {
-        expect(scope.scheduleHeaders.length).toBe(0);
+      it('schedule headers should have seven items (one per week day)', function () {
+        expect(scope.scheduleHeaders.length).toBe(7);
       });
 
     });

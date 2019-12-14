@@ -32,10 +32,11 @@ define(['services/authService', 'angular-mocks'], function() {
       it('should log in if user and pass are correct', function() {
         var loggedIn = false;
         authService.login(TEST_USERNAME, TEST_PASSWORD).then(function() {
-        loggedIn = authService.isLoggedIn();
-      });
+          loggedIn = authService.isLoggedIn();
+        });
         http.flush();
         expect(loggedIn).toBe(true);
+        authService.logout()
       });
 
       it('should NOT log in given an incorrect user or password', function() {
@@ -64,6 +65,7 @@ define(['services/authService', 'angular-mocks'], function() {
         });
         http.flush();
         expect(testUser).toEqual(TEST_USER);
+        authService.logout()
       });
 
       it('should set the user to something not valid after logout', function() {
