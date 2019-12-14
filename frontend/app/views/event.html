@@ -26,20 +26,18 @@
 			
 			<div>
 				<div class="margin-right flex-row">
-					<div class="flex-05">
-						<div class="double-box">
-								<div class="event-item-box">
-									<span class="event-info-label">{{'date' | translate}}</span>
-									<span class="just-row">
-										<span>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm'}}</span>
-											<span>-</span>
-										<span>{{event.endsAt | date:'HH:mm'}}</span>
-									</span>
-								</div>
-								<div class="event-item-box">
-									<span class="event-info-label">{{'vacancies' | translate}}</span>
-									<span>{{event.maxParticipants - event.inscriptionCount}}</span>
-								</div>
+					<div class="flex-1">
+						<div class="event-item-box">
+							<span class="event-info-label">{{'date' | translate}}</span>
+							<span class="just-row">
+								<span>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm'}}</span>
+									<span>-</span>
+								<span>{{event.endsAt | date:'HH:mm'}}</span>
+							</span>
+						</div>
+						<div class="event-item-box">
+							<span class="event-info-label">{{'vacancies' | translate}}</span>
+							<span>{{event.maxParticipants - event.inscriptionCount}}</span>
 						</div>
 						<div class="event-item-box">
 							<span class="event-info-label">{{'end_date' | translate}}</span>

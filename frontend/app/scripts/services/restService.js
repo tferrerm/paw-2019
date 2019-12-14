@@ -145,7 +145,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				return httpPost('/pitches/' + pitchid + '/events/' + eventid + '/downvote', {}, {});
 			},
 			getAllEvents: function(params) {
-			  if(!params) {return httpGet('/events')}
+			  if (!params) {
+return httpGet('/events');
+}
 				return httpGet('/events', {pageNum: params.pageNum, name: params.name, club: params.club, sport: params.sport, vacancies: params.vacancies, date: params.date});
 			},
 			getClub: function(id) {
@@ -174,7 +176,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				    });
 			},
 			getPitches: function(params) {
-        if(!params) {return httpGet('/pitches')}
+        if (!params) {
+return httpGet('/pitches');
+}
         return httpGet('/pitches', {pageNum: params.pageNum, name: params.name, sport: params.sport, location: params.location, club: params.club});
 			},
 			getEvent: function(pitchid, eventid) {
@@ -223,7 +227,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 		    	return httpGet('/tournaments/' + id + '/inscriptions', {});
 		    },
 			getTournaments: function(params) {
-        if(!params) {return httpGet('/tournaments',{})}
+        if (!params) {
+return httpGet('/tournaments',{});
+}
         return httpGet('/tournaments', {pageNum: params.pageNum});
 		    },
 			getUpcomingEvents: function(id) {

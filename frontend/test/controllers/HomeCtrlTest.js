@@ -8,7 +8,7 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
       scope = {
         scheduleHeaders: [],
         noParticipations: false,
-        $on: function(){},
+        $on: function() {}
       };
       controller = $controller('HomeCtrl', {$scope: scope});
     }));
