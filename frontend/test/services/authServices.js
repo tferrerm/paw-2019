@@ -67,7 +67,7 @@ define(['services/authService', 'angular-mocks'], function() {
           .then(function() {
             authService.logout();
             testUser = authService.getLoggedUser();
-          });
+          }).catch(function() {});
 
         http.flush();
         expect(testUser).toBeFalsy();

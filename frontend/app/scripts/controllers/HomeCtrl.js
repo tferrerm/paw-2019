@@ -27,8 +27,8 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 					$scope.noParticipations = false;
 					// TODO $scope.noParticipations = eventCount === 0;
 				}).catch(function(error) {
-alert(error.data || ' Error');
-});
+            alert(error.data || ' Error');
+				});
 			}
 		}
 
