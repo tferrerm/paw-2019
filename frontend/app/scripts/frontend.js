@@ -56,7 +56,7 @@ define(['routes',
 					$translateProvider.preferredLanguage('preferredLanguage');
 					$translateProvider.useSanitizeValueStrategy('escapeParameters');
 
-					$locationProvider.html5Mode({enabled: true, requireBase: true});
+					// $locationProvider.html5Mode({enabled: true, requireBase: true});
      			$locationProvider.hashPrefix('');
 				}])
 			.run(
