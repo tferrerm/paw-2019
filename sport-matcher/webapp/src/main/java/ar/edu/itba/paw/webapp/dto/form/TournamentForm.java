@@ -15,10 +15,10 @@ public class TournamentForm {
 	@Size(max=100)
 	private String name;
 	
-	@IntegerRange(min = 2, max = 4)
+	@IntegerRange(min = 4, max = 10)
 	private Integer maxTeams;
 
-	@IntegerRange(min = 1, max = 11)
+	@IntegerRange(min = 3, max = 11)
 	private Integer teamSize;
 	
 	@FutureDate(startOfDay = true)

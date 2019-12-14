@@ -167,7 +167,7 @@ define([], function() {
     end_date:'Inscriptions end',
     comment:'Comment',
     invalid_team_amount:'Amount must be in range [4, 10].',
-    uneven_team_amount:'Amount must be even.',
+    uneven_team_amount:'Field must be an even number.',
     invalid_team_size:'Size must be in range [3, 11].',
     inscription_date_in_past:'Must input a future date.',
     inscription_date_exceeded:'Date cannot exceed 1 day before start.',
@@ -225,15 +225,17 @@ define([], function() {
     error_club_not_found:'Club not found',
     error_tournament_not_found:'Tournament not found',
     error_tournament_event_not_found:'Tournament event not found',
-    form_required:'Field required',
-    name_pattern_error:'Field must contain only letters and/or numbers',
+    form_required:'Field required.',
+    name_pattern_error:'Field must contain only letters and/or numbers.',
     picture_processing_error:'Error processing image',
-    username_pattern_error:'Invalid username email',
-    letter_name_pattern_error:'Field must contain only letters',
-    password_length_error:'Password must contain at least 6 characters',
-    duplicate_username_error:'Username already exists',
+    username_pattern_error:'Invalid username email.',
+    letter_name_pattern_error:'Field must contain only letters.',
+    password_length_error:'Password must contain at least 6 characters.',
+    duplicate_username_error:'Username already exists.',
     delete_message:'Are you sure you want to delete this?',
-    delete_confirmation:'Delete Confirmation'
+    delete_confirmation:'Delete Confirmation',
+    min_error:'Field minimum is {{min}}.',
+    max_error:'Field maximum is {{max}}.'
 
 };
 });

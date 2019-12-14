@@ -3,6 +3,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 
 	frontend.controller('TournamentNewCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'club', function ($scope, $filter, $location, restService, authService, club) {
 		
+		$scope.namePattern = '^[a-zA-Z0-9 ]+$';
 		$scope.minHour = 0;
 		$scope.maxHour = 0;
 	    $scope.club = club;
@@ -58,18 +59,62 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		});
 
 	    $scope.createTournamentSubmit = function() {
-			//checkPasswordsMatch();
-			//if ($scope.createEventForm.$valid) {
-				//$scope.duplicateEmailError = false;
-				
+			if ($scope.evenInputTeams() && $scope.createTournamentForm.$valid) {
 				if ($scope.isAdmin) {
+					resetErrors();
 					restService.createTournament($scope.club.clubid, $scope.tournament).then(function(data) {
 						$location.url('tournaments/' + data.tournamentid + '/inscription');
+					}).catch(function(error) {
+						validateForm(error);
 					});
-
 				}
 
-			//}
+			}
+		};
+
+		function validateForm(error) {
+			console.log(error);
+			console.log($scope.tournament.firstRoundDate);
+			if (error.status === 422) {
+				if (error.data.constraintViolations != null) {
+					/* Controller violation */
+					angular.forEach(error.data.constraintViolations, function(cv) {
+						switch (cv.propertyPath) {
+							case 'firstRoundDate':
+								$scope.dateError = true;
+								break;
+							case 'inscriptionEndDate':
+								$scope.inscriptionDateError = true;
+								break;
+							default:
+						}
+					});
+				} else {
+					/* Service violation */
+					if (error.data.error === 'EndsBeforeStarts') {
+						$scope.endsBeforeStartsError = true;
+					} else if (error.data.error === 'MaximumStartDateExceeded') {
+						$scope.maximumStartDateExceededError = true;
+					} else if (error.data.error === 'MaximumInscriptionDateExceeded') {
+						$scope.maximumInscriptionDateExceededError = true;
+					} else if (error.data.error === 'InsufficientPitches') {
+						$scope.insufficientPitchesError = true;
+					}
+				}
+			}
+		}
+
+		function resetErrors() {
+			$scope.dateError = false;
+			$scope.inscriptionDateError = false;
+			$scope.endsBeforeStartsError = false;
+			$scope.maximumStartDateExceededError = false;
+			$scope.maximumInscriptionDateExceededError = false;
+			$scope.insufficientPitchesError = false;
+		}
+
+		$scope.evenInputTeams = function() {
+			return $scope.tournament.maxTeams % 2 === 0;
 		};
 		
 	}]);

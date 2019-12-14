@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,16 +24,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.DateInPastException;
+import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
+import ar.edu.itba.paw.exception.HourOutOfRangeException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
+import ar.edu.itba.paw.exception.InsufficientPitchesException;
+import ar.edu.itba.paw.exception.InvalidTeamAmountException;
+import ar.edu.itba.paw.exception.InvalidTeamSizeException;
+import ar.edu.itba.paw.exception.MaximumDateExceededException;
+import ar.edu.itba.paw.exception.UnevenTeamAmountException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.EmailService;
-import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.TournamentService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Club;
-import ar.edu.itba.paw.model.Event;
 import ar.edu.itba.paw.model.Sport;
 import ar.edu.itba.paw.model.Tournament;
 import ar.edu.itba.paw.model.User;
@@ -55,7 +60,6 @@ public class AdminTournamentController extends BaseController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminTournamentController.class);
 	private static final String TIME_ZONE = "America/Buenos_Aires";
-	private static final int DAY_LIMIT = 7;
 	
 	@Context
 	private	UriInfo	uriInfo;
@@ -65,9 +69,6 @@ public class AdminTournamentController extends BaseController {
 	
 	@Autowired
 	private ClubService cs;
-	
-	@Autowired
-	private EventService es;
 	
 	@Autowired
 	private UserService us;
@@ -96,39 +97,15 @@ public class AdminTournamentController extends BaseController {
 		ts.postTournamentEventResult(tournament, eventid, form.getFirstResult(), form.getSecondResult());
 	    return Response.status(Status.NO_CONTENT).build();
 	}
-	
-	@GET
-	@Path("/tournaments/new")
-    public Response tournamentFormView(@PathParam("clubId") long clubid,
-    		@FormDataParam("newTournamentForm") final TournamentForm form) 
-    				throws ClubNotFoundException {
-		
-		//ModelAndView mav = new ModelAndView("admin/newTournament");
-		Club club = cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
-//		mav.addObject("club", club);
-//		
-//		mav.addObject("availableHours", es.getAvailableHoursMap(MIN_HOUR, MAX_HOUR));
-//		mav.addObject("minHour", MIN_HOUR);
-//		mav.addObject("maxHour", MAX_HOUR);
-		
-		List<Event> clubEvents = cs.findCurrentEventsInClub(clubid, Sport.SOCCER);
-//		mav.addObject("schedule", cs.convertEventListToSchedule(clubEvents, MIN_HOUR, MAX_HOUR, DAY_LIMIT));
-//		mav.addObject("scheduleHeaders", es.getScheduleDaysHeader());
-//		mav.addObject("pitchQty", club.getClubPitches().stream()
-//				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size());
-//		mav.addObject("currentDate", LocalDate.now());
-//		mav.addObject("currentDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-//		mav.addObject("aWeekFromNowDate", LocalDate.now().plus(7, ChronoUnit.DAYS));
-//		mav.addObject("aWeekFromNowDateTime", LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plus(7, ChronoUnit.DAYS));
-    	
-        return null;//mav;
-    }
     
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createTournament(@PathParam("clubId") long clubId,
     		@FormDataParam("tournamentForm") final TournamentForm form)
-    				throws ClubNotFoundException, FormValidationException, Exception /* HARDCODEADO HARDCODED ARREGLAR */ {
+    				throws ClubNotFoundException, FormValidationException, 
+    				DateInPastException, MaximumDateExceededException, EndsBeforeStartsException, 
+    				HourOutOfRangeException, InvalidTeamAmountException, UnevenTeamAmountException, 
+    				InvalidTeamSizeException, InsufficientPitchesException, InscriptionClosedException {
 		if(form == null) {
     		return Response.status(Status.BAD_REQUEST).build();
     	}
@@ -141,32 +118,10 @@ public class AdminTournamentController extends BaseController {
     	Club club = cs.findById(clubId).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = null;
     	
-//    	try {
-//    		// Only SOCCER Tournaments are supported for now
-        	tournament = ts.create(form.getName(), Sport.SOCCER, club, form.getMaxTeams(),
-        			form.getTeamSize(), firstRoundDate, form.getStartsAtHour(),
-        			form.getEndsAtHour(), inscriptionEndsAt, loggedUser());
-//    	} catch(DateInPastException e) {
-//    		return tournamentCreationError("event_in_past", clubId, form);
-//    	} catch(MaximumDateExceededException e) {
-//    		return tournamentCreationError("date_exceeded", clubId, form);
-//    	} catch(EndsBeforeStartsException e) {
-//    		return tournamentCreationError("ends_before_starts", clubId, form);
-//    	} catch(HourOutOfRangeException e) {
-//    		return tournamentCreationError("hour_out_of_range", clubId, form);
-//    	} catch(InvalidTeamAmountException e) {
-//    		return tournamentCreationError("invalid_team_amount", clubId, form);
-//    	} catch(UnevenTeamAmountException e) {
-//    		return tournamentCreationError("uneven_team_amount", clubId, form);
-//    	} catch(InvalidTeamSizeException e) {
-//    		return tournamentCreationError("invalid_team_size", clubId, form);
-//    	} catch(InscriptionDateInPastException e) {
-//    		return tournamentCreationError("inscription_date_in_past", clubId, form);
-//    	} catch(InscriptionDateExceededException e) {
-//    		return tournamentCreationError("inscription_date_exceeded", clubId, form);
-//    	} catch(InsufficientPitchesException e) {
-//    		return tournamentCreationError("insufficient_pitches", clubId, form);
-//    	}
+		/* Only SOCCER Tournaments are supported */
+    	tournament = ts.create(form.getName(), Sport.SOCCER, club, form.getMaxTeams(),
+    			form.getTeamSize(), firstRoundDate, form.getStartsAtHour(),
+    			form.getEndsAtHour(), inscriptionEndsAt, loggedUser());
     	
     	LOGGER.debug("Tournament {} created", tournament);
     	

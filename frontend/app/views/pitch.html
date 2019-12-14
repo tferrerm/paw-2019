@@ -78,6 +78,8 @@
                                 <input class="form-control" type="number" placeholder="{{'event_max_participants' | translate}}" min="1" max="99" name="maxParticipants" ng-model="event.maxParticipants" required/>
                                 <div ng-show="(createEventForm.maxParticipants.$touched ||  createEventForm.$submitted)">
                                     <span ng-show="createEventForm.maxParticipants.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    <span ng-show="createEventForm.maxParticipants.$error.min" class="form-error" translate="min_error" translate-values='{ min: 1}'></span>
+                                    <span ng-show="createEventForm.maxParticipants.$error.max" class="form-error" translate="max_error" translate-values='{ max: 99}'></span>
                                 </div>
                             </div>
                             <div class="form-field flex-space-between">
@@ -126,8 +128,8 @@
                                 <span>{{'end_date' | translate}}</span>
                                 <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
                                 <div ng-show="(createEventForm.inscriptionEndDate.$touched ||  createEventForm.$submitted)">
-                                        <span ng-show="createEventForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
-                                    </div>
+                                    <span ng-show="createEventForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
                                 <div ng-if="inscriptionDateError">
                                     <span class="form-error">
                                         {{'inscription_date_in_past' | translate}}

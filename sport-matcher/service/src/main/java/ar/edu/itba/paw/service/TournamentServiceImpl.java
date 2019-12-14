@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -123,18 +124,16 @@ public class TournamentServiceImpl implements TournamentService {
     		throw new UnevenTeamAmountException();
     	if(teamSize < MIN_TEAM_SIZE || teamSize > MAX_TEAM_SIZE)
     		throw new InvalidTeamSizeException();
-    	if(firstRoundStartsAt.isBefore(Instant.now()))
-    		throw new DateInPastException("Tournament start date is in the past");
-    	if(firstRoundStartsAt.compareTo(aWeeksTime()) > 0)
-    		throw new MaximumDateExceededException();
+    	if(inscriptionEndDate.isBefore(Instant.now()))
+    		throw new DateInPastException("InscriptionInPast");
+    	if(firstRoundStartsAt.compareTo(aWeeksTime().minus(1, ChronoUnit.HOURS)) > 0)
+    		throw new MaximumDateExceededException("MaximumStartDateExceeded");
     	if(endsAtHour <= startsAtHour)
     		throw new EndsBeforeStartsException();
     	if(startsAtHour < MIN_HOUR || startsAtHour >= MAX_HOUR || endsAtHour > MAX_HOUR || endsAtHour <= MIN_HOUR)
     		throw new HourOutOfRangeException(MIN_HOUR, MAX_HOUR);
-    	if(inscriptionEndDate.isBefore(Instant.now()))
-    		throw new InscriptionClosedException();
     	if(inscriptionEndDate.isAfter((firstRoundStartsAt.minus(INSCRIPTION_FIRST_ROUND_DAY_DIFFERENCE, ChronoUnit.DAYS))))
-    		throw new MaximumDateExceededException("The inscription cannot close in less than 24 hs before the event starts");
+    		throw new MaximumDateExceededException("MaximumInscriptionDateExceeded");
     	
     	List<Pitch> availablePitches = cs.getAvailablePitches(club.getClubid(), sport, 
     			firstRoundStartsAt, firstRoundEndsAt, maxTeams/2);
@@ -145,12 +144,12 @@ public class TournamentServiceImpl implements TournamentService {
     			firstRoundEndsAt, inscriptionEndDate, user);
 	}
 	
-	private Instant now() {
-    	return Instant.now().atZone(ZoneId.of(TIME_ZONE)).toInstant();
+	private Instant today() {
+    	return LocalDate.now().atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant();
     }
 	
 	private Instant aWeeksTime() {
-		return now().plus(7, ChronoUnit.DAYS);
+		return today().plus(8, ChronoUnit.DAYS).minus(1, ChronoUnit.HOURS);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class })

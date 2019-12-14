@@ -168,7 +168,7 @@ define([], function() {
     end_date:'Fecha de inscripción límite',
     comment:'Comentario',
     invalid_team_amount:'Cantidad debe estar en el rango [4, 10].',
-    uneven_team_amount:'Cantidad debe ser par.',
+    uneven_team_amount:'Campo debe ser par.',
     invalid_team_size:'Tamaño debe estar en el rango [3, 11].',
     inscription_date_in_past:'Debe introducir una fecha futura.',
     inscription_date_exceeded:'Fecha no debe exceder un día antes del comienzo.',
@@ -226,14 +226,16 @@ define([], function() {
     error_club_not_found:'Club no encontrado',
     error_tournament_not_found:'Torneo no encontrado',
     error_tournament_event_not_found:'Evento de torneo no encontrado',
-    form_required:'Campo requerido',
-    name_pattern_error:'El campo sólo debe contener letras y/o números',
+    form_required:'Campo requerido.',
+    name_pattern_error:'El campo sólo debe contener letras y/o números.',
     picture_processing_error:'Error procesando imagen',
-    username_pattern_error:'Email de usuario inválido',
-    letter_name_pattern_error:'El campo sólo debe contener letras',
-    password_length_error:'La contraseña debe tener al menos 6 carácteres',
-    duplicate_username_error:'El nombre de usuario ya existe',
+    username_pattern_error:'Email de usuario inválido.',
+    letter_name_pattern_error:'El campo sólo debe contener letras.',
+    password_length_error:'La contraseña debe tener al menos 6 carácteres.',
+    duplicate_username_error:'El nombre de usuario ya existe.',
     delete_message:'¿Estás seguro de querrer borrar esto?',
-    delete_confirmation:'Confirmación de Eliminación'
+    delete_confirmation:'Confirmación de Eliminación',
+    min_error:'El mínimo es {{min}}.',
+    max_error:'El máximo es {{max}}.'
 };
 });
