@@ -5,11 +5,11 @@ define([], function() {
 		defaultRoutePath: '/home',
 		routes: {
 			'/home': {
-				templateUrl: '/views/home.html',
+				templateUrl: 'views/home.html',
 				controller: 'HomeCtrl'
 			},
 			'/events' : {
-				templateUrl: '/views/events.html',
+				templateUrl: 'views/events.html',
 				controller: 'AllEventsCtrl',
 				resolve: {
 					events: ['$route', 'restService', function($route, restService) {
@@ -20,7 +20,7 @@ define([], function() {
 				}
 			},
 			'/my-events' : { // SOLO SI ESTAS LOGEADO
-				templateUrl: '/views/myEvents.html',
+				templateUrl: 'views/myEvents.html',
 				controller: 'MyEventsCtrl',
 				resolve: {
 					validate: ['$q', '$location', 'authService', function($q, $location, authService) {
@@ -46,7 +46,7 @@ define([], function() {
 				}
 			},
 			'/history' : {
-				templateUrl: '/views/history.html',
+				templateUrl: 'views/history.html',
 				controller: 'HistoryCtrl',
 				resolve: {
 					validate: ['$q', '$location', 'authService', function($q, $location, authService) {
@@ -62,15 +62,15 @@ define([], function() {
 				}
 			},
 			'/clubs' : {
-				templateUrl: '/views/clubs.html',
+				templateUrl: 'views/clubs.html',
 				controller: 'ClubsCtrl'
 			},
 			'/pitches' : {
-				templateUrl: '/views/pitches.html',
+				templateUrl: 'views/pitches.html',
 				controller: 'PitchesCtrl'
 			},
 			'/pitches/:pitchid/events/:eventid' : {
-				templateUrl: '/views/event.html',
+				templateUrl: 'views/event.html',
 				controller: 'EventCtrl',
 				resolve: {
 					event: ['$route', 'restService', function($route, restService) {
@@ -84,7 +84,7 @@ define([], function() {
 				}
 			},
 			'/clubs/:id' : {
-				templateUrl: '/views/club.html',
+				templateUrl: 'views/club.html',
 				controller: 'ClubCtrl',
 				resolve: {
 					club: ['$route', 'restService', function($route, restService) {
@@ -94,7 +94,7 @@ define([], function() {
 				}
 			},
 			'/pitches/:id' : {
-				templateUrl: '/views/pitch.html',
+				templateUrl: 'views/pitch.html',
 				controller: 'PitchCtrl',
 				resolve: {
 					pitch: ['$route', 'restService', function($route, restService) {
@@ -104,7 +104,7 @@ define([], function() {
 				}
 			},
 			'/users/:id' : {
-				templateUrl: '/views/profile.html',
+				templateUrl: 'views/profile.html',
 				controller: 'ProfileCtrl',
 				resolve: {
 					user: ['$route', 'restService', function($route, restService) {
@@ -114,11 +114,11 @@ define([], function() {
 				}
 			},
 			'/tournaments' : {
-			  templateUrl: '/views/tournaments.html',
+			  templateUrl: 'views/tournaments.html',
 			  controller: 'TournamentsCtrl'
 			},
 			'/tournaments/:id' : {
-				templateUrl: '/views/tournament.html',
+				templateUrl: 'views/tournament.html',
 				controller: 'TournamentCtrl',
 				resolve: {
 					tournament: ['$route', 'restService', function($route, restService) {
@@ -136,7 +136,7 @@ define([], function() {
 				}
 			},
 			'/tournaments/:tournamentid/events/:eventid' : {
-				templateUrl: '/views/tournamentEvent.html',
+				templateUrl: 'views/tournamentEvent.html',
 				controller: 'TournamentEventCtrl',
 				resolve: {
 					tournament: ['$route', 'restService', function($route, restService) {
@@ -158,7 +158,7 @@ define([], function() {
 				}
 			},
 			'/tournaments/:id/inscription' : {
-				templateUrl: '/views/tournamentInscription.html',
+				templateUrl: 'views/tournamentInscription.html',
 				controller: 'TournamentInscriptionCtrl',
 				resolve: {
 					tournament: ['$route', 'restService', function($route, restService) {
@@ -172,7 +172,7 @@ define([], function() {
 				}
 			},
 			'/admin/clubs/:id/tournaments/new' : {
-				templateUrl: '/views/tournamentNew.html',
+				templateUrl: 'views/tournamentNew.html',
 				controller: 'TournamentNewCtrl',
 				resolve: {
 					validate: ['$q', '$location', 'authService', function($q, $location, authService) {

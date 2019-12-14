@@ -56,27 +56,28 @@ define(['routes',
 					$translateProvider.preferredLanguage('preferredLanguage');
 					$translateProvider.useSanitizeValueStrategy('escapeParameters');
 
-					//$locationProvider.html5Mode(false);
-           			$locationProvider.hashPrefix('');
+					$locationProvider.html5Mode({enabled: true, requireBase: true});
+     			$locationProvider.hashPrefix('');
 				}])
 			.run(
 				['$rootScope',
 				'$location',
 				function($rootScope, $location) {
-					//$rootScope.isViewLoading = false;
-					//$rootScope.$on('$routeChangeStart', function() {
-					//	$rootScope.isViewLoading = true;
-					//});
+					// $rootScope.isViewLoading = false;
+					$rootScope.$on('$routeChangeStart', function() {
+						// $rootScope.isViewLoading = true;
+					});
 					$rootScope.$on('$routeChangeSuccess', function() {
-						//$rootScope.isViewLoading = false;
+						// $rootScope.isViewLoading = false;
 						document.body.scrollTop = document.documentElement.scrollTop = 0;
 					});
-					//$rootScope.$on('$routeChangeError', function() {
-						//$rootScope.isViewLoading = false;
-					//	$location.path('/404');
-					//});
+					$rootScope.$on('$routeChangeError', function() {
+						// $rootScope.isViewLoading = false;
+						$location.path('/404');
+					});
 				}])
 			.value('url', 'http://localhost:8080/webapp/api');
+			// .value('url', 'http://pawserver.it.itba.edu.ar/paw-2019a-1/api');
 		return frontend;
 	}
 );
