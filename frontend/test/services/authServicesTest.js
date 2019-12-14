@@ -26,6 +26,7 @@ define(['services/authService', 'angular-mocks'], function() {
 
     describe('.login()', function() {
       it('should be defined', function() {
+        http.whenGET('views/home.html').respond(200,q.when([]));
         expect(authService.login).toBeDefined();
       });
 
@@ -44,9 +45,10 @@ define(['services/authService', 'angular-mocks'], function() {
         var NEW_CREDS = 'login_username=' + encodeURIComponent(TEST_USERNAME) + '&login_password=' + encodeURIComponent('foo');
 
         http.expectPOST(url + '/users/login', NEW_CREDS).respond(401, q.reject({details: 'Authentication Failed'}));
-        authService.login(TEST_USERNAME, 'foo').catch(function() {
-          loggedIn = authService.isLoggedIn();
-        });
+        authService.login(TEST_USERNAME, TEST_PASSWORD + 'foo')
+          .catch(function(response) {
+            loggedIn = authService.isLoggedIn();
+          });
         http.flush();
         expect(loggedIn).toBe(false);
       });
@@ -89,6 +91,7 @@ define(['services/authService', 'angular-mocks'], function() {
 
       it('should logout for the cases when usr was previously logged in', function() {
         var loggedIn;
+        http.whenGET('views/home.html').respond(200,q.when([]));
 
         authService.login(TEST_USERNAME, TEST_PASSWORD)
           .then(function() {

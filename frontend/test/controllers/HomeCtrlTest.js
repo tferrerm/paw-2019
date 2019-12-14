@@ -6,6 +6,7 @@ define(['controllers/HomeCtrl', 'angular-mocks'], function() {
 
     beforeEach(inject(function($injector, $rootScope, $controller) {
       scope = {
+        noParticipations: false,
         $on: function() {}
       };
       controller = $controller('HomeCtrl', {$scope: scope});
