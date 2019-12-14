@@ -231,7 +231,9 @@ define([], function() {
     username_pattern_error:'Invalid username email',
     letter_name_pattern_error:'Field must contain only letters',
     password_length_error:'Password must contain at least 6 characters',
-    duplicate_username_error:'Username already exists'
+    duplicate_username_error:'Username already exists',
+    delete_message:'Are you sure you want to delete this?',
+    delete_confirmation:'Delete Confirmation'
 
 };
 });

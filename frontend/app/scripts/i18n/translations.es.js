@@ -232,6 +232,8 @@ define([], function() {
     username_pattern_error:'Email de usuario inválido',
     letter_name_pattern_error:'El campo sólo debe contener letras',
     password_length_error:'La contraseña debe tener al menos 6 carácteres',
-    duplicate_username_error:'El nombre de usuario ya existe'
+    duplicate_username_error:'El nombre de usuario ya existe',
+    delete_message:'¿Estás seguro de querrer borrar esto?',
+    delete_confirmation:'Confirmación de Eliminación'
 };
 });

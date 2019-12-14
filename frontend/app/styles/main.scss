@@ -243,6 +243,10 @@ div.background-dodgerblue {
   background: red;
 }
 
+.background-red-opacity {
+  background-color: rgba(255,0,0, 0.6);
+}
+
 .background-green {
   background: green;
 }
@@ -257,6 +261,11 @@ div.background-dodgerblue {
 
 .border-radius-20 {
   border-radius: 20px;
+}
+
+.border-top-radius-20 {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .choose-file {
@@ -551,6 +560,10 @@ div.background-dodgerblue {
 
 .mv-10 {
   margin: 10px 0;
+}
+
+.mv-20 {
+  margin: 20px 0;
 }
 
 .margin-right {
