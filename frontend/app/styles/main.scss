@@ -192,7 +192,7 @@ a.color-white {
   align-items: flex-end;
 }
 
-.align-center{
+.align-center {
   align-items: center;
 }
 
@@ -631,6 +631,7 @@ div.background-dodgerblue {
   margin: 15px;
   max-height: 200px;
   max-width: 200px;
+  object-fit: cover;
 }
 
 .progress-bar-completion {
@@ -890,6 +891,10 @@ div.background-dodgerblue {
 
 .w-70 {
   width: 70%;
+}
+
+.w-80 {
+  width: 80%;
 }
 
 .w-90 {

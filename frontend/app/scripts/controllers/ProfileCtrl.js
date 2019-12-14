@@ -125,7 +125,7 @@ alert(error.data || ' Error');
 		$scope.commentText = {};
 
 		$scope.commentSubmit = function() {
-			//if ($scope.commentForm.$valid) {
+			if ($scope.commentForm.$valid) {
 				restService.commentUser(user.userid, $scope.commentText.comment).then(function(data) {
 					commentParams.pageNum = 1;
 					restService.getUserComments(user.userid, commentParams)
@@ -135,11 +135,9 @@ alert(error.data || ' Error');
 							$scope.commentsLastPageNum = data.pageCount;
 							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 							$scope.commentsPageNum = commentParams.pageNum;
-						}).catch(function(error) {
-alert(error.data || ' Error');
-});
+						});
 				});
-			//}
+			}
 		};
 
 	}]);
