@@ -1,3 +1,6 @@
+/* eslint-env es6 */
+'use strict';
+
 define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
   describe('Clubs Controller', function () {
     var controller, scope;
@@ -5,15 +8,15 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
     var TEST_CLUB_ARRAY =
       [{
         clubid: 1,
-        createdAt: "2019-12-12T14:55:18.752Z",
-        location: "Buenos Aires",
-        name: "Argentina"
+        createdAt: '2019-12-12T14:55:18.752Z',
+        location: 'Buenos Aires',
+        name: 'Argentina'
       },
       {
         clubid: 2,
-        createdAt: "2019-13-12T14:55:18.752Z",
-        location: "Buenos Aires",
-        name: "Club"
+        createdAt: '2019-13-12T14:55:18.752Z',
+        location: 'Buenos Aires',
+        name: 'Club'
       }];
     var TEST_CLUB_COUNT = 2;
     var TEST_LAST_PAGE_NUM = 1;
@@ -43,9 +46,11 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.clubs.map(function (club) {return club.clubid})
-        var isDuplicate = ids.some(function(item, idx){
-          return ids.indexOf(item) !== idx
+        const ids = scope.clubs.map(function (club) {
+          return club.clubid;
+        });
+        var isDuplicate = ids.some(function(item, idx) {
+          return ids.indexOf(item) !== idx;
         });
 
         expect(isDuplicate).toBe(false);
@@ -54,7 +59,7 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       it('should have the field location defined', function () {
         scope.clubs.forEach(function (club) {
           expect(club.location).toBeDefined();
-        })
+        });
       });
     });
 
@@ -89,5 +94,5 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
         expect(scope.lastPageNum).toBe(1);
       });
     });
-  })
-})
+  });
+});

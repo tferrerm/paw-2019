@@ -19,7 +19,7 @@ define(['frontend', 'services/restService', 'services/titleService'], function(f
 		restService.getSports().then(function(data) {
 			$scope.sports = data.sports;
 		}).catch(function(error) {
-			alert(error.data || 'Error');
+			$scope.sports = [];
 		});
 
 		$scope.$watch('filters.selectedDate', function (newValue) {

@@ -1,3 +1,5 @@
+'use strict';
+
 define(['controllers/HomeCtrl', 'angular-mocks'], function() {
   describe('Home Controller', function () {
     var controller, scope;

@@ -20,7 +20,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	}).catch(function(error) {
-				alert(error.data || ' Error');
+					$scope.hasRelationship = false;
 			});
 
 	    updatePitches(club.clubid, pitchParams);
@@ -128,7 +128,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 								updatePitches(club.clubid, pitchParams);
 							}).catch(function(error) {
 								if (error.status === 422) {
-									if (error.data.constraintViolations == null) {
+									if (error.data.constraintViolations === null) {
 										/* Service violation */
 										if (error.data.error === 'PictureProcessingError') {
 											$scope.pictureProcessingError = true;
