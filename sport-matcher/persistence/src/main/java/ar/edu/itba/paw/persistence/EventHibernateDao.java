@@ -167,8 +167,10 @@ public class EventHibernateDao implements EventDao {
 		Instant inAWeek = tomorrow.plus(7, ChronoUnit.DAYS);
 
 		Map<String, Object> paramsMap = new HashMap<>();
-		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events "
-				+ " WHERE pitchid = :pitchid AND starts_at > :tomorrow AND starts_at < :inAWeek");
+		StringBuilder idQueryString = new StringBuilder("(SELECT eventid FROM events "
+				+ " WHERE pitchid = :pitchid AND starts_at > :tomorrow AND starts_at < :inAWeek) "
+				+ " UNION (SELECT eventid FROM tournament_events WHERE pitchid = :pitchid AND "
+				+ " starts_at > :tomorrow AND starts_at < :inAWeek)");
 		paramsMap.put("pitchid", pitchid);
 		paramsMap.put("tomorrow", Timestamp.from(tomorrow));
 		paramsMap.put("inAWeek", Timestamp.from(inAWeek));

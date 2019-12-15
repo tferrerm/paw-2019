@@ -3,53 +3,20 @@
 		<h2>{{'create_tournament' | translate}}</h2>
 		<span class="help-message notice w-70 justify-center home-header">{{'new_tournament_description' | translate}}</span>
 		<div class="form-container-tournament w-70">
-            <table class="schedule-table flex"><thead></thead>
-                <!--<tr>
-                    <th class="schedule-table-cell-size schedule-table-hours"></th>
-                    <c:forEach var="dayMessage" items="${scheduleHeaders}">
-                        <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
-                    </c:forEach>
-                </tr>-->
-                <!--<c:set var="hours" value="${minHour}"/>-->
+            <table class="schedule-table flex">
+                <thead>
+                    <tr class="flex-row flex-1 flex-space-around">
+                        <th class="schedule-table-cell-size"></th>
+                        <th class="schedule-table-cell-size text-center" ng-repeat="header in dayHeaders">{{header | translate}}</th>
+                    </tr>
+                </thead>
                 <tbody >
                     <tr ng-repeat="row in schedule track by $index">
-
-                        <!--<td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>-->
-                        
-                            <!--<td ng-if="cell != null" class="schedule-table background-red schedule-table-cell-size"/>
-                            <td ng-if="cell == null" class="schedule-table background-green schedule-table-cell-size"/>-->
-                            <td ng-repeat="cell in row track by $index" ng-class="cell == pitchCount ? 'schedule-table background-red schedule-table-cell-size' : (cell != 0 ? 'schedule-table background-yellow schedule-table-cell-size' : 'schedule-table background-green schedule-table-cell-size')">{{pitchCount - cell}}
-                            </td>
-                        
-                    </tr></tbody>
-                    <!--<c:set var="hours" value="${hours + 1}"/>-->
-            </table>
-			<!--<table class="schedule-table flex">
-                <tr>
-                    <th class="schedule-table-cell-size schedule-table-hours"></th>
-                    <c:forEach var="dayMessage" items="${scheduleHeaders}">
-                        <th class="schedule-table-cell-size"><spring:message code="${dayMessage}"/></th>
-                    </c:forEach>
-                </tr>
-                <c:set var="hours" value="${minHour}"/>
-                <c:forEach var="row" items="${schedule}">
-                    <tr>
-                        <td class="schedule-table-hours"><c:out value="${hours}"/>:00</td>
-                        <c:forEach var="column" items="${row}">
-                        	<c:choose>
-                                <c:when test="${(pitchQty - column) == 0}">
-                                    <td class="schedule-table background-red schedule-table-cell-size"><c:out value="${pitchQty - column}" /></td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td class="schedule-table background-yellow schedule-table-cell-size"><c:out value="${pitchQty - column}" /></td>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
+                        <td class="schedule-table-hours">{{tableHours[$index]}}</td>
+                        <td ng-repeat="cell in row track by $index" ng-class="cell == pitchCount ? 'schedule-table background-red schedule-table-cell-size' : (cell != 0 ? 'schedule-table background-yellow schedule-table-cell-size' : 'schedule-table background-green schedule-table-cell-size')">{{pitchCount - cell}}</td>
                     </tr>
-                    <c:set var="hours" value="${hours + 1}"/>
-                </c:forEach>
-            </table>-->
-			
+                </tbody>
+            </table>			
 			<div class="left-space w-90">
                 <form ng-submit = createTournamentSubmit() name="createTournamentForm" method="post" novalidate class="w-100">
                     <div class="form-field">
