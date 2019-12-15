@@ -1,11 +1,10 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/modalService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', '$filter', 'restService', 'modalService', 'titleService', 'tournament', 'teamInscriptions', function ($scope, $location, $filter, restService, modalService, titleService, tournament, teamInscriptions) {
+	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', '$filter', 'restService', 'modalService', 'titleService', 'tournament', function ($scope, $location, $filter, restService, modalService, titleService, tournament) {
 		
 		$scope.tournament = tournament;
-		$scope.hasJoined = teamInscriptions.hasJoined;
-		setTournamentTeamPairs(teamInscriptions.teams);
+		updateTeams();
 		$scope.showLoginModal = modalService.loginModal;
 		updateInscriptionEnded();
 
@@ -108,10 +107,10 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
             });
 		}
 
-		function setTournamentTeamPairs(teamInscriptions) {
+		function setTournamentTeamPairs(teamInscr) {
 			$scope.tournamentTeams = [];
-			for (var i = 0; i < teamInscriptions.length; i += 2) {
-				$scope.tournamentTeams.push([teamInscriptions[i], teamInscriptions[i + 1]]);
+			for (var i = 0; i < teamInscr.length; i += 2) {
+				$scope.tournamentTeams.push([teamInscr[i], teamInscr[i + 1]]);
 			}
 		}
 

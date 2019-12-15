@@ -134,7 +134,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 								$scope.createdPitch = {};
 							}).catch(function(error) {
 								if (error.status === 422) {
-									if (error.data.constraintViolations == null) {
+									if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
 										/* Service violation */
 										if (error.data.error === 'PictureProcessingError') {
 											$scope.pictureProcessingError = true;

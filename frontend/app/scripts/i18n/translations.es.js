@@ -113,6 +113,18 @@ define([], function() {
     Friday: 'Viernes',
     Saturday: 'Sábado',
     Sunday: 'Domingo',
+    Jan: 'Ene',
+    Feb: 'Feb',
+    Mar: 'Mar',
+    Apr: 'Abr',
+    May: 'May',
+    Jun: 'Jun',
+    Jul: 'Jul',
+    Aug: 'Ago',
+    Sep: 'Sep',
+    Oct: 'Oct',
+    Nov: 'Nov',
+    Dec: 'Dic',
     SOCCER: 'Fútbol',
     TENNIS: 'Tenis',
     BASKETBALL: 'Baloncesto',
@@ -251,6 +263,7 @@ define([], function() {
     welcome_admin: '¡Bienvenido Admin!',
     clubs_intro: '¿Quieres agregar un nuevo club o agrgar una cancha?',
     tournaments_intro: '¿Quieres eliminar un torneo existente?',
-    delete_event_intro: '¿Quieres eliminar un evento existente?'
-};
+    delete_event_intro: '¿Quieres eliminar un evento existente?',
+    date_restrictions: 'Los eventos se pueden crear con una anticipación de no más de 7 días y no menos que 1 día.'
+  };
 });

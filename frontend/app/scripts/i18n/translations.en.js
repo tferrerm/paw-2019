@@ -112,6 +112,18 @@ define([], function() {
     Friday: 'Friday',
     Saturday: 'Saturday',
     Sunday: 'Sunday',
+    Jan: 'Jan',
+    Feb: 'Feb',
+    Mar: 'Mar',
+    Apr: 'Apr',
+    May: 'May',
+    Jun: 'Jun',
+    Jul: 'Jul',
+    Aug: 'Aug',
+    Sep: 'Sep',
+    Oct: 'Oct',
+    Nov: 'Nov',
+    Dec: 'Dec',
     SOCCER: 'Soccer',
     TENNIS: 'Tennis',
     BASKETBALL: 'Basketball',
@@ -250,6 +262,7 @@ define([], function() {
     welcome_admin: 'Welcome Admin!',
     clubs_intro: 'Do you want to add a new club or add a new pitch?',
     tournaments_intro: 'Do you want to delete a tournament?',
-    delete_event_intro: 'Do you want to delete an exisiting event?'
-};
+    delete_event_intro: 'Do you want to delete an exisiting event?',
+    date_restrictions: 'Events can be created with no more than 7 days of anticipation and no less than a day.'
+  };
 });
