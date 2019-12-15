@@ -1,6 +1,4 @@
 .bottom-home-a {
-    align-items: center;
-    justify-content: center;
     width: 70%;
 }
 
@@ -21,7 +19,6 @@
 .bottom-home-item button {
     align-self: center;
     width: 100%;
-    margin-top: 0;
     height: 50px;
     border-radius: 5px;
     border-width: 0;
@@ -67,6 +64,7 @@
   .home-ev-column {
     display: flex;
     flex: 1;
+    min-height: 50px;
     width: 100%;
     flex-direction: column;
     align-items: center;
