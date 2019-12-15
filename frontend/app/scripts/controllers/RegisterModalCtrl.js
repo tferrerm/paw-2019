@@ -44,7 +44,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 		$scope.showLoginModal = function() {
-	    	$uibModalInstance.close(true);
+	    	$uibModalInstance.dismiss('cancel');
 	    	modalService.loginModal();
 	    };
 

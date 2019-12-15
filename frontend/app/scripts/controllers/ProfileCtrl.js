@@ -42,10 +42,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 alert(error.data || ' Error');
 });
 
-	    $scope.goToProfile = function(id) {
-			$location.url('users/' + id);
-		};
-
 		restService.getUserComments(user.userid, commentParams)
 		    .then(function(data) {
 				$scope.comments = data.comments;

@@ -7,7 +7,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    $scope.user = {};
 	    
 	    $scope.showRegisterModal = function() {
-	    	$uibModalInstance.close(true);
+	    	$uibModalInstance.dismiss('cancel');
 	    	modalService.registerModal();
 	    };
 

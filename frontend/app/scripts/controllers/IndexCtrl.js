@@ -69,7 +69,15 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		};
 
 		$scope.goToProfile = function(id) {
-			$location.url('users/' + id);
+			if ($scope.isLoggedIn) {
+				$location.url('users/' + id);
+			} else {
+				$scope.showLoginModal().result.then(function(data) {
+					$location.url('users/' + id);
+				}).catch(function(error) {
+					
+				});
+			}
 		};
 
 		$scope.goToHome = function() {
