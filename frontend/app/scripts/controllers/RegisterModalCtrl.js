@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/modalService'], function(frontend) {
 
-	frontend.controller('RegisterModalCtrl', ['$scope', '$uibModalInstance', 'restService', 'authService', 'Upload', function($scope, $uibModalInstance, restService, authService, Upload) {
+	frontend.controller('RegisterModalCtrl', ['$scope', '$uibModalInstance', 'restService', 'authService', 'modalService', 'Upload', function($scope, $uibModalInstance, restService, authService, modalService, Upload) {
     
 	    $scope.usernamePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 	    $scope.namePattern = '^[a-zA-Z]+$';
@@ -42,6 +42,11 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		$scope.passwordsMatch = function() {
 			return $scope.user.password === $scope.user.repeatPassword;
 		};
+
+		$scope.showLoginModal = function() {
+	    	$uibModalInstance.close(true);
+	    	modalService.loginModal();
+	    };
 
 	}]);
 
