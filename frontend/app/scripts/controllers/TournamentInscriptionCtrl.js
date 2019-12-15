@@ -116,8 +116,8 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 		}
 
 		function updateInscriptionEnded() {
-			var inscriptionEnd = $filter('date')(tournament.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-			var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var inscriptionEnd = $filter('date')(new Date(Date.parse(tournament.inscriptionEnd)), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
+			var now = $filter('date')(new Date(), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
 			$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
 		}
 

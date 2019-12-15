@@ -164,10 +164,10 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 		function updateDates() {
-			var inscriptionEnd = $filter('date')(event.inscriptionEnd, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-			var eventStart = $filter('date')(event.startsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-			var eventEnd = $filter('date')(event.endsAt, 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
-			var now = $filter('date')(new Date(), 'dd/MM/yyyy HH:mm:ss', 'GMT-3');
+			var inscriptionEnd = $filter('date')(new Date(Date.parse(event.inscriptionEnd)), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
+			var eventStart = $filter('date')(new Date(Date.parse(event.startsAt)), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
+			var eventEnd = $filter('date')(new Date(Date.parse(event.endsAt)), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
+			var now = $filter('date')(new Date(), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
 			$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
 			$scope.eventHasStarted = Date.parse(eventStart) < Date.parse(now);
 			$scope.eventHasEnded = Date.parse(eventEnd) < Date.parse(now);

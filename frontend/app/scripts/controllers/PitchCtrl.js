@@ -11,6 +11,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    $scope.schedule = [];
 	    $scope.startsAtHours = [];
 	    $scope.endsAtHours = [];
+	    $scope.tableHours = [];
 
     	restService.getPitchPicture(pitch.pitchid).then(function(data) {
     		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
@@ -34,12 +35,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    	
 	    	for (var i = $scope.minHour; i <= $scope.maxHour; i++) {
 	    		if (i !== $scope.maxHour) {
+	    			$scope.tableHours.push(i + ':00');
 	    			$scope.startsAtHours.push({id: i, format: i + ':00'});
 	    		}
 	    		if (i !== $scope.minHour) {
 	    			$scope.endsAtHours.push({id: i, format: i + ':00'});
 	    		}
 	    	}
+
 	    }).then(function(data) {
 	    	restService.getPitchWeekEvents(pitch.pitchid).then(function(data) {
 	    		$scope.schedule = Array.apply(null, Array($scope.maxHour - $scope.minHour));
@@ -51,9 +54,9 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		    	angular.forEach(weekEvents, function(event, index) {
 		    		var startsDate = new Date(Date.parse(event.startsAt));
 		    		var endsDate = new Date(Date.parse(event.endsAt));
-		    		/* Sunday = 0 --> Sunday = 6 */
-		    		var todayDayIndex = (((new Date()).getDay() - 1) + 7) % 7;
-		    		var eventDayIndex = (((((startsDate.getDay() - 1) + 7) % 7) - todayDayIndex) + 7) % 7;
+		    		/* Sunday = 0 */
+		    		var todayDayIndex = (new Date()).getDay();
+		    		var eventDayIndex = ((startsDate.getDay() - (todayDayIndex + 1)) + 7) % 7;
 		    		var startHourIndex = startsDate.getHours() - $scope.minHour;
 		    		var endHourIndex = endsDate.getHours() - $scope.minHour - 1;
 		    		
@@ -146,8 +149,8 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		var now = ($filter('date')(new Date(), 'EEEE'));
 		var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		var minDays = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
-		var indexOfToday = weekDays.indexOf(now);
-		$scope.dayHeaders = minDays.slice(indexOfToday, 7).concat(minDays.slice(0, indexOfToday));
+		var indexOfTomorrow = (weekDays.indexOf(now) + 1) % 7;
+		$scope.dayHeaders = minDays.slice(indexOfTomorrow, 7).concat(minDays.slice(0, indexOfTomorrow));
 
 	    $scope.$watch('event.selectedEndsAtHour', function (newValue) {
 	    	var startVal = parseInt($('#startsAtHour').val(), 10);

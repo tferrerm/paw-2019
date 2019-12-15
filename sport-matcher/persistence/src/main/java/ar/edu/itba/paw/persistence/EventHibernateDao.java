@@ -161,16 +161,16 @@ public class EventHibernateDao implements EventDao {
 	@Override
 	public List<Event> findCurrentEventsInPitch(final long pitchid) {
 		LocalDate ld = LocalDate.now();
-		// Today at 00:00
-		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
-		// In seven days at 23:00
-		Instant inAWeek = today.plus(7, ChronoUnit.DAYS); // ARREGLAR
+		// Tomorrow at 00:00
+		Instant tomorrow = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant().plus(1, ChronoUnit.DAYS);
+		// In the following week at 00:00
+		Instant inAWeek = tomorrow.plus(7, ChronoUnit.DAYS);
 
 		Map<String, Object> paramsMap = new HashMap<>();
 		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events "
-				+ " WHERE pitchid = :pitchid AND starts_at > :today AND starts_at < :inAWeek");
+				+ " WHERE pitchid = :pitchid AND starts_at > :tomorrow AND starts_at < :inAWeek");
 		paramsMap.put("pitchid", pitchid);
-		paramsMap.put("today", Timestamp.from(today));
+		paramsMap.put("tomorrow", Timestamp.from(tomorrow));
 		paramsMap.put("inAWeek", Timestamp.from(inAWeek));
 		
 		Query idQuery = em.createNativeQuery(idQueryString.toString());
