@@ -84,14 +84,6 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 			}
 		};
 
-		$scope.goToPitch = function(id) {
-			$location.url('pitches/' + id);
-		};
-
-		$scope.goToProfile = function(id) {
-			$location.url('users/' + id);
-		};
-
 		$scope.getCommentsFirstPage = function() {
 			commentParams.pageNum = 1;
 			updateComments(club.clubid, commentParams);
