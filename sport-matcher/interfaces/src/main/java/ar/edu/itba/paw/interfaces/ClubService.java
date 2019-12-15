@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.model.Club;
 import ar.edu.itba.paw.model.ClubComment;
@@ -42,7 +43,7 @@ public interface ClubService {
 	public int countPastEvents(final long clubid);
 	
 	public ClubComment createComment(final long userid, final long clubid, final String comment)
-			throws UserNotAuthorizedException;
+			throws UserNotAuthorizedException, EntityNotFoundException;
 	
 	public Optional<ClubComment> findComment(final long commentid);
 
@@ -53,8 +54,9 @@ public interface ClubService {
 	 * @param clubid		The Club's id.
 	 * @return true if the commenter has an Inscription for a past Event which took place in the Club
 	 * or if the User has owned a past Event which took place in the Club.
+	 * @throws EntityNotFoundException If the commenter or club are not found
 	 */
-	public boolean haveRelationship(final long commenterid, final long clubid);
+	public boolean haveRelationship(final long commenterid, final long clubid) throws EntityNotFoundException;
 	
 	public List<ClubComment> getCommentsByClub(final long clubid, final int pageNum);
 	

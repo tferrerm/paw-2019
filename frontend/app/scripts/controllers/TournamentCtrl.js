@@ -10,7 +10,7 @@ define(['frontend', 'services/restService', 'services/titleService'], function(f
 		$scope.now = Date.parse(new Date());
 		var params = {roundPageNum: round.round};
 
-		titleService.setTitle(tournament.name);
+    titleService.setTitle(tournament.name);
 
 		$scope.goToTournamentEvent = function (tournamentid, eventid) {
 			$location.url('tournaments/' + tournamentid + '/events/' + eventid);

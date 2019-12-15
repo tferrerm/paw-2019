@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -29,6 +28,7 @@ import ar.edu.itba.paw.exception.EndsBeforeStartsException;
 import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.EventHasNotEndedException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.IllegalParamException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.InsufficientPitchesException;
 import ar.edu.itba.paw.exception.InvalidTeamAmountException;
@@ -83,7 +83,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public Optional<Tournament> findById(final long tournamentid) {
 		if(tournamentid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return td.findById(tournamentid);
 	}
@@ -91,7 +91,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public List<Tournament> findBy(final int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 
 		return td.findBy(pageNum);
@@ -100,7 +100,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public Optional<TournamentTeam> findByTeamId(final long teamid) {
 		if(teamid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 
 		return td.findByTeamId(teamid);
@@ -156,14 +156,14 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public void joinTournament(long tournamentid, long teamid, final long userid) 
 			throws UserBusyException, UserAlreadyJoinedException, InscriptionClosedException,
-			TeamAlreadyFilledException {
+			TeamAlreadyFilledException, EntityNotFoundException {
 		if(tournamentid <= 0 || teamid <= 0 || userid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		
-		final User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
+		final User user = us.findById(userid).orElseThrow(EntityNotFoundException::new);
 		
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		Tournament tournament = td.findById(tournamentid).orElseThrow(EntityNotFoundException::new);
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
 			throw new InscriptionClosedException();
 		}
@@ -172,7 +172,7 @@ public class TournamentServiceImpl implements TournamentService {
 			throw new UserAlreadyJoinedException();
 		}
 		
-		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(NoSuchElementException::new);
+		TournamentTeam team = td.findByTeamId(teamid).orElseThrow(EntityNotFoundException::new);
 		if(team.getInscriptions().size() == tournament.getTeamSize() * tournament.getRounds()) {
 			throw new TeamAlreadyFilledException();
 		}
@@ -184,11 +184,11 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public void leaveTournament(final long tournamentid, final long userid) 
 			throws InscriptionClosedException, EntityNotFoundException {
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		Tournament tournament = td.findById(tournamentid).orElseThrow(EntityNotFoundException::new);
 		if(tournament.getEndsInscriptionAt().compareTo(Instant.now()) <= 0) {
 			throw new InscriptionClosedException();
 		}
-		User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
+		User user = us.findById(userid).orElseThrow(EntityNotFoundException::new);
 		TournamentTeam team = td.findUserTeam(tournament, user).orElseThrow(EntityNotFoundException::new);
 		td.deleteTournamentInscriptions(team, user);
 	}
@@ -204,21 +204,21 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 	
 	@Override
-	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid) {
+	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid) throws EntityNotFoundException {
 		if(tournamentid <= 0 || userid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
-		final User user = us.findById(userid).orElseThrow(NoSuchElementException::new);
+		Tournament tournament = td.findById(tournamentid).orElseThrow(EntityNotFoundException::new);
+		final User user = us.findById(userid).orElseThrow(EntityNotFoundException::new);
 		return td.findUserTeam(tournament, user);
 	}
 
 	@Override
-	public Map<Long, List<User>> mapTeamMembers(long tournamentid) {
+	public Map<Long, List<User>> mapTeamMembers(long tournamentid) throws EntityNotFoundException {
 		if(tournamentid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		Tournament tournament = td.findById(tournamentid).orElseThrow(EntityNotFoundException::new);
 		Map<Long, List<User>> teamsUsersMap = new TreeMap<>();
 		for(TournamentTeam team : tournament.getTeams()) {
 			List<User> teamMembers = td.findTeamMembers(team);
@@ -249,14 +249,14 @@ public class TournamentServiceImpl implements TournamentService {
 	}
 
 	@Override
-	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage) {
+	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage) throws EntityNotFoundException {
 		if(tournamentid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		if(roundPage <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
-		Tournament tournament = td.findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		Tournament tournament = td.findById(tournamentid).orElseThrow(EntityNotFoundException::new);
 		List<TournamentEvent> events = td.findTournamentEventsByRound(tournament, roundPage);
 		Collections.sort(events, new Comparator<TournamentEvent>() {
 			@Override
@@ -270,13 +270,13 @@ public class TournamentServiceImpl implements TournamentService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult,
-			final Integer secondResult) throws EventHasNotEndedException {
+			final Integer secondResult) throws EventHasNotEndedException, EntityNotFoundException {
 		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
-		TournamentEvent event = td.findTournamentEventById(eventid).orElseThrow(NoSuchElementException::new);
+		TournamentEvent event = td.findTournamentEventById(eventid).orElseThrow(EntityNotFoundException::new);
 		if(!event.getTournament().equals(tournament)) {
-			throw new IllegalArgumentException("Event " + eventid + " does not belong to tournament " + tournament.getTournamentid());
+			throw new IllegalParamException("Event " + eventid + " does not belong to tournament " + tournament.getTournamentid());
 		}
 		if(event.getEndsAt().compareTo(Instant.now()) > 0) {
 			throw new EventHasNotEndedException();
@@ -287,7 +287,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public Optional<TournamentEvent> findTournamentEventById(final long eventid) {
 		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 
 		return td.findTournamentEventById(eventid);
@@ -318,7 +318,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Override
 	public int getPageInitialTournamentIndex(int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return td.getPageInitialTournamentIndex(pageNum);
 	}
@@ -335,11 +335,11 @@ public class TournamentServiceImpl implements TournamentService {
 
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void deleteTournament(final long tournamentid) throws InscriptionClosedException {
+	public void deleteTournament(final long tournamentid) throws InscriptionClosedException, EntityNotFoundException {
 		if(tournamentid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
-		Tournament tournament = findById(tournamentid).orElseThrow(NoSuchElementException::new);
+		Tournament tournament = findById(tournamentid).orElseThrow(EntityNotFoundException::new);
 		if(tournament.getEndsInscriptionAt().isBefore(Instant.now())) {
 			throw new InscriptionClosedException();
 		}
@@ -350,7 +350,7 @@ public class TournamentServiceImpl implements TournamentService {
 	@Scheduled(fixedDelay = 1800000) /* Runs every half hour */
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void checkTournamentInscriptions() {
+	public void checkTournamentInscriptions() throws EntityNotFoundException {
 		List<Tournament> inscriptionTournaments = td.getInscriptionProcessTournaments();
 		for(Tournament t : inscriptionTournaments) {
 			Map<Long, List<User>> teamsMap = mapTeamMembers(t.getTournamentid());

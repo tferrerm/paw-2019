@@ -12,6 +12,7 @@ import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
 import org.springframework.stereotype.Service;
 
+import ar.edu.itba.paw.exception.IllegalParamException;
 import ar.edu.itba.paw.interfaces.PictureService;
 
 @Service
@@ -24,19 +25,19 @@ public class PictureServiceImpl implements PictureService {
 	private static final int HEIGHT = 1;
 	
 	@Override
-	public byte[] convert(byte[] picture) throws IOException {
+	public byte[] convert(byte[] picture) throws IOException, IllegalParamException {
 		return convert(picture, DEFAULT_MAX_WIDTH, DEFAULT_MAX_HEIGHT);
 	}
 
 	@Override
-	public byte[] convert(byte[] picture, int maxWidth, int maxHeight) throws IOException {
+	public byte[] convert(byte[] picture, int maxWidth, int maxHeight) throws IOException, IllegalParamException {
 		
 		if(picture.length == 0 || picture == null)
 			return picture;
 		BufferedImage img = ImageIO.read(new ByteArrayInputStream(picture));
 		
 		if(img == null || img.getType() == BufferedImage.TYPE_CUSTOM) {
-			throw new IllegalArgumentException("Unsupported picture format");
+			throw new IllegalParamException("Unsupported picture format");
 		}
 		
 		int[] dimensions = processImageSize(img.getWidth(), img.getHeight(), maxWidth, maxHeight);

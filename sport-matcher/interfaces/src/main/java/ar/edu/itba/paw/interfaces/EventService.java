@@ -125,7 +125,7 @@ public interface EventService {
 											EventOverlapException, HourOutOfRangeException, DateInPastException;
 
 	public void joinEvent(final long userid, final long eventid)
-			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException;
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException, EntityNotFoundException;
 
 	public void leaveEvent(final long eventid, final long userid) throws DateInPastException, EntityNotFoundException;
 
@@ -156,9 +156,10 @@ public interface EventService {
 	/**
 	 * Deletes an Event from database along with all User related participations.
 	 * @param	eventid		The Event's id.
-	 * @throws DateInPastException 
+	 * @throws DateInPastException If the event already took place
+	 * @throws EntityNotFoundException If the event is not found
 	 */
-	public void deleteEvent(long eventid) throws DateInPastException;
+	public void deleteEvent(long eventid) throws DateInPastException, EntityNotFoundException;
 	
 	/**
 	 * Gets the sum of User votes for an Event.

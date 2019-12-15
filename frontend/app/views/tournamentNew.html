@@ -46,7 +46,7 @@
                     <div class="form-field flex-space-between">
                         <div class="form-field-horizontal flex-1">
                             <span>{{'start_date' | translate}}</span>
-                            <input class="form-control date-input p-6 w-90" type="date" ng-min="currentDate" name="date" ng-model="tournament.selectedDate" required/>
+                            <input class="form-control date-input p-6 w-90" type="date" min="{{tomorrowDate}}" max="{{sevenDaysFromTomorrow}}" ng-min="currentDate" name="date" ng-model="tournament.selectedDate" required/>
                             <div ng-show="(createTournamentForm.date.$touched ||  createTournamentForm.$submitted)">
                                 <span ng-show="createTournamentForm.date.$error.required" class="form-error">{{'form_required' | translate}}</span>
                             </div>
@@ -92,7 +92,7 @@
     				</div>
                     <div class="my-events-tbl-sub">
                         <span>{{'end_date' | translate}}</span>
-                        <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="tournament.selectedInscriptionDate" required/>
+                      <input class="form-control date-input w-100" type="datetime-local" min={{todayDate}}} max={{maxInscriptionDate}}  ng-min="currentDate" name="inscriptionEndDate" ng-model="tournament.selectedInscriptionDate" required/>
                         <div ng-show="(createTournamentForm.inscriptionEndDate.$touched ||  createTournamentForm.$submitted)">
                             <span ng-show="createTournamentForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
                         </div>

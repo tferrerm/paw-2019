@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -19,7 +20,7 @@ public interface UserService {
 	public int countVotesReceived(final long userid);
 	
 	public UserComment createComment(final long commenterid, final long receiverid, final String comment)
-			throws UserNotAuthorizedException;
+			throws UserNotAuthorizedException, EntityNotFoundException;
 	
 	public Optional<UserComment> getComment(final long id);
 	
@@ -30,8 +31,9 @@ public interface UserService {
 	 * @param receiverid	The receiver's id.
 	 * @return true if the commenter and receiver have an Inscription for a common past Event
 	 * or if the commenter has an Inscription for a past Event which was owned by the receiver.
+	 * @throws EntityNotFoundException if the commenter or receiver do not exist
 	 */
-	public boolean haveRelationship(final long commenterid, final long receiverid);
+	public boolean haveRelationship(final long commenterid, final long receiverid) throws EntityNotFoundException;
 	
 	/**
 	 * 

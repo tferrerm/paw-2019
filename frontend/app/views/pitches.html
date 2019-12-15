@@ -2,7 +2,7 @@
   <div class="profile-title">
     <h2>{{'choosePitch' | translate}}</h2>
   </div>
-  <span class="help-message notice w-80 justify-center">{{'pitch_list_help' | translate}}</span>
+  <span class="help-message notice w-70 justify-center" ng-if="!isAdmin">{{'pitch_list_help' | translate}}</span>
   <div class="tbl">
     <div class="table-header">
       <form id="searchfilters" class="searchfilters">
