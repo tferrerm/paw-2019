@@ -50,9 +50,9 @@
 					<div ng-show="isAdmin">
 						<form ng-submit = setTournamentResultSubmit(event) name="tournamentResultForm{{index}}" method="post" novalidate>
 							<div class="score score-tournament" ng-show="parseDate(event.endsAt) <= now">
-								<input class="form-control" type="number" min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
-								<input class="form-control" type="number" min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
-								<div class="justify-center">
+								<input class="form-control flex-05" type="number" min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
+								<input class="form-control flex-05" type="number" min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
+								<div class="justify-center flex-1">
 									<button type="submit" ng-disabled="!tournamentResultForm{{index}}.$valid" class="btn btn-primary minw-150 btn-primary">{{'upload_score' | translate}}</button>
 								</div>
 							</div>
