@@ -239,6 +239,7 @@ define([], function() {
     min_error:'El mínimo es {{min}}.',
     max_error:'El máximo es {{max}}.',
     zero_events:'Aún no hay eventos, pero, ¡tu puedes ser el primero en crear uno!',
-    empty_history:'No has participado en ningún evento. ¡Hay muchos eventos esperándote!'
+    empty_history:'No has participado en ningún evento. ¡Hay muchos eventos esperándote!',
+    empty_my_events:'No has creado ningún evento todavía. ¡Inténtalo!'
 };
 });

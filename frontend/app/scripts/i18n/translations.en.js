@@ -145,7 +145,7 @@ define([], function() {
     club_location:'Location:',
     home_help:'Get a quick overview of all events you have this week!',
     event_list_help:'You can join any existing events by selecting one from the list below.',
-    my_events_help:'You can manage from here all events you\'ve created.',
+    my_events_help:'Manage all events you\'ve created.',
     history_help:'You can search among all matches you\'ve played previously.',
     club_list_help:'Select any club from the list below for more information.',
     pitch_list_help:'Select any pitch from the list below to start creating your own events.',
@@ -238,6 +238,7 @@ define([], function() {
     min_error:'Field minimum is {{min}}.',
     max_error:'Field maximum is {{max}}.',
     zero_events:'There are no events yet, but, you can be the first who creates one!',
-    empty_history:'You have not participated in any events yet. There\'s plenty of matches waiting for you!'
+    empty_history:'You have not participated in any events yet. There\'s plenty of matches waiting for you!',
+    empty_my_events:'You haven\'t created any events yet. Give it a try!'
 };
 });

@@ -21,6 +21,10 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			$location.url('pitches/' + pitchid + '/events/' + eventid);
 		};
 
+		$scope.goToPitches = function() {
+			$location.url('pitches/');
+		};
+
 		$scope.getPastEventsFirstPage = function() {
 			pastEventParams.pageNum = 1;
 			updatePastEvents(pastEventParams);
