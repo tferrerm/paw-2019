@@ -9,6 +9,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 		$scope.lastPageNum = events.lastPageNum;
 		$scope.initialPageIndex = events.initialPageIndex;
 		$scope.pageNum = params.pageNum;
+		$scope.filterPresence = false;
 
 		$scope.filters = {};
 		$scope.currentDate = new Date();
@@ -22,6 +23,10 @@ define(['frontend', 'services/restService'], function(frontend) {
 		$scope.$watch('filters.selectedDate', function (newValue) {
 			$scope.filters.date = $filter('date')(newValue, 'yyyy-MM-dd');
 		});
+
+		$scope.goToPitches = function() {
+			$location.url('pitches/');
+		};
 
 		$scope.getFirstPage = function() {
 			params.pageNum = 1;
@@ -46,6 +51,7 @@ define(['frontend', 'services/restService'], function(frontend) {
 		$scope.filterEvents = function() {
 			params = $scope.filters;
 			params.pageNum = 1;
+			$scope.filterPresence = true;
 			updateEvents(params);
 		};
 

@@ -236,6 +236,7 @@ define([], function() {
     delete_message:'¿Estás seguro de querrer borrar esto?',
     delete_confirmation:'Confirmación de Eliminación',
     min_error:'El mínimo es {{min}}.',
-    max_error:'El máximo es {{max}}.'
+    max_error:'El máximo es {{max}}.',
+    zero_events:'Aún no hay eventos, pero, ¡tu puedes ser el primero en crear uno!'
 };
 });

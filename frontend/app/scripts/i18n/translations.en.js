@@ -235,7 +235,7 @@ define([], function() {
     delete_message:'Are you sure you want to delete this?',
     delete_confirmation:'Delete Confirmation',
     min_error:'Field minimum is {{min}}.',
-    max_error:'Field maximum is {{max}}.'
-
+    max_error:'Field maximum is {{max}}.',
+    zero_events:'There are no events yet, but, you can be the first who creates one!'
 };
 });
