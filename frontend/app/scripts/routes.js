@@ -19,7 +19,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/my-events': { // SOLO SI ESTAS LOGEADO
+			'/my-events': {
 				templateUrl: 'views/myEvents.html',
 				controller: 'MyEventsCtrl',
 				resolve: {
@@ -161,13 +161,18 @@ define([], function() {
 				templateUrl: 'views/tournamentInscription.html',
 				controller: 'TournamentInscriptionCtrl',
 				resolve: {
-					tournament: ['$route', 'restService', function($route, restService) {
+					tournament: ['$route', '$location', '$q', 'restService', function($route, $location, $q, restService) {
+						var defer = $q.defer();
 						var params = $route.current.params;
-						return restService.getTournament(params.id);
-					}],
-					teamInscriptions: ['$route', 'restService', function($route, restService) {
-						var params = $route.current.params;
-						return restService.getTournamentTeamsInscriptions(params.id);
+						restService.getTournament(params.id).then(function(data) {
+							var t = data;
+							if (t.inscriptionSuccess) {
+								$location.path('/tournaments/' + t.tournamentid);
+							} else {
+								defer.resolve(data);
+							}
+						});
+						return defer.promise;
 					}]
 				}
 			},
