@@ -16,6 +16,10 @@ define(['frontend', 'services/restService', 'services/titleService'], function(f
 			$location.url('tournaments/' + tournamentid + '/events/' + eventid);
 		};
 
+		$scope.goToClub = function(clubid) {
+			$location.url('clubs/' + clubid);
+		}
+
 		$scope.getFirstPage = function () {
 			params.roundPageNum = 1;
 			updateRound(params);
