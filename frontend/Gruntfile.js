@@ -178,14 +178,14 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/styles/fonts/*',
           '<%= yeoman.dist %>/views/**/*.html',
           '<%= yeoman.dist %>/scripts/**/*.js',
-          '!<%= yeoman.dist %>/scripts/**/paths.js',
+          // '!<%= yeoman.dist %>/scripts/**/paths.js',
           '<%= yeoman.dist %>/bower_components/**/*.js',
           '!<%= yeoman.dist %>/images/static/*.jpg'
         ]
-      }// ,
-      // paths: {
-      //     src: ['<%= yeoman.dist %>/scripts/paths.js']
-      // }
+      },
+      paths: {
+        src: ['<%= yeoman.dist %>/scripts/paths.js']
+      }
     },
 
     useminPrepare: {
@@ -443,8 +443,8 @@ module.exports = function (grunt) {
 
     var outFile = options.outputFile;
 
-    grunt.log.writeln('Skipping "' + options.outputFile + '" file revving.');
-    // grunt.task.run('filerev:paths');
+    // grunt.log.writeln('Skipping "' + options.outputFile + '" file revving.');
+    grunt.task.run('filerev:paths');
     // grunt.log.warn(assets[outFile]);
 
     // if the outFile is revved, respect that
