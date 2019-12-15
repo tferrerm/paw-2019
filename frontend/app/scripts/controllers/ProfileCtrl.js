@@ -26,87 +26,42 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 	    }
 
 		function _arrayBufferToBase64(buffer) {
-		    var binary = '';
-		    var bytes = new Uint8Array(buffer);
-		    var len = bytes.byteLength;
-		    for (var i = 0; i < len; i++) {
-		      binary += String.fromCharCode(bytes[i]);
-		    }
-		    return window.btoa(binary);
+			var binary = '';
+			var bytes = new Uint8Array(buffer);
+			var len = bytes.byteLength;
+			for (var i = 0; i < len; i++) {
+				binary += String.fromCharCode(bytes[i]);
+			}
+			return window.btoa(binary);
 		}
 
-	    restService.hasRelationshipWithUser(user.userid)
-	    	.then(function(data) {
-	    		$scope.hasRelationship = data.relationship;
-	    	}).catch(function(error) {
-					$scope.hasRelationship = false;
-				});
-
-		restService.getUserComments(user.userid, commentParams)
-		    .then(function(data) {
-				$scope.comments = data.comments;
-				$scope.commentCount = data.commentCount;
-				$scope.commentsLastPageNum = data.pageCount;
-				$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-				$scope.commentsPageNum = commentParams.pageNum;
+		restService.hasRelationshipWithUser(user.userid)
+			.then(function(data) {
+				$scope.hasRelationship = data.relationship;
 			}).catch(function(error) {
-alert(error.data || ' Error');
-});
+					$scope.hasRelationship = false;
+			});
+
+		updateComments(user, commentParams);
 
 		$scope.getFirstPage = function() {
 			commentParams.pageNum = 1;
-			restService.getUserComments(user.userid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {
-alert(error.data || ' Error');
-});
+			updateComments(user, commentParams);
 		};
 
 		$scope.getPrevPage = function() {
 			commentParams.pageNum--;
-			restService.getUserComments(user.userid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {
-alert(error.data || ' Error');
-});
+			updateComments(user, commentParams);
 		};
 
 		$scope.getNextPage = function() {
 			commentParams.pageNum++;
-			restService.getUserComments(user.userid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {
-alert(error.data || ' Error');
-});
+			updateComments(user, commentParams);
 		};
 
 		$scope.getLastPage = function() {
 			commentParams.pageNum = $scope.commentsLastPageNum;
-			restService.getUserComments(user.userid, commentParams)
-			    .then(function(data) {
-					$scope.comments = data.comments;
-					$scope.commentCount = data.commentCount;
-					$scope.commentsLastPageNum = data.pageCount;
-					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {
-alert(error.data || ' Error');
-});
+			updateComments(user, commentParams);
 		};
 
 		$scope.commentText = {};
@@ -115,17 +70,23 @@ alert(error.data || ' Error');
 			if ($scope.commentForm.$valid) {
 				restService.commentUser(user.userid, $scope.commentText.comment).then(function(data) {
 					commentParams.pageNum = 1;
-					restService.getUserComments(user.userid, commentParams)
-						.then(function(data) {
-							$scope.comments = data.comments;
-							$scope.commentCount = data.commentCount;
-							$scope.commentsLastPageNum = data.pageCount;
-							$scope.commentsPageInitIndex = data.commentsPageInitIndex;
-							$scope.commentsPageNum = commentParams.pageNum;
-						});
+					updateComments(user, commentParams);
 				});
 			}
 		};
+
+		function updateComments(user, commentParams) {
+			restService.getUserComments(user.userid, commentParams)
+			    .then(function(data) {
+					$scope.comments = data.comments;
+					$scope.commentCount = data.commentCount;
+					$scope.commentsLastPageNum = data.pageCount;
+					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
+					$scope.commentsPageNum = commentParams.pageNum;
+				}).catch(function(error) {
+					alert(error.data || ' Error');
+				});
+		}
 
 	}]);
 });
