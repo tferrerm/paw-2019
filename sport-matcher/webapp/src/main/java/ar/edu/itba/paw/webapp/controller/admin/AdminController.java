@@ -20,6 +20,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.exception.DateInPastException;
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.model.Event;
@@ -46,7 +47,7 @@ public class AdminController extends BaseController {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteEvent(@PathParam("id") final long id)
-			throws EventNotFoundException, DateInPastException {
+			throws DateInPastException, EntityNotFoundException {
 		Event event = es.findByEventId(id).orElseThrow(EventNotFoundException::new);
 		
 		List<User> inscriptedUsers = event.getInscriptions().stream().map(i -> i.getInscriptedUser()).collect(Collectors.toList());

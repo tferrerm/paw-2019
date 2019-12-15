@@ -43,25 +43,25 @@ public interface TournamentService {
 
 	public void joinTournament(final long tournamentid, final long teamid, final long userid) 
 			throws UserBusyException, UserAlreadyJoinedException, 
-			TeamAlreadyFilledException, InscriptionClosedException;
+			TeamAlreadyFilledException, InscriptionClosedException, EntityNotFoundException;
 	
 	public void leaveTournament(final long tournamentid, final long userid) 
 			throws InscriptionClosedException, EntityNotFoundException;
 	
 	public void kickFromTournament(final User kickedUser, final Tournament tournament) throws InscriptionClosedException, EntityNotFoundException;
 	
-	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid);
+	public Optional<TournamentTeam> findUserTeam(final long tournamentid, final long userid) throws EntityNotFoundException;
 
-	public Map<Long, List<User>> mapTeamMembers(final long tournamentid);
+	public Map<Long, List<User>> mapTeamMembers(final long tournamentid) throws EntityNotFoundException;
 
 	public boolean inscriptionEnded(final Tournament tournament);
 
 	public Map<TournamentTeam, Integer> getTeamsScores(final Tournament tournament);
 
-	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage);
+	public List<TournamentEvent> findTournamentEventsByRound(final long tournamentid, final int roundPage) throws EntityNotFoundException;
 
 	public void postTournamentEventResult(final Tournament tournament, final long eventid, final Integer firstResult, final Integer secondResult) 
-			throws EventHasNotEndedException;
+			throws EventHasNotEndedException, EntityNotFoundException;
 	
 	public Optional<TournamentEvent> findTournamentEventById(final long eventid);
 
@@ -77,9 +77,9 @@ public interface TournamentService {
 
 	public int countTotalTournamentPages();
 
-	public void deleteTournament(final long tournamentid) throws InscriptionClosedException;
+	public void deleteTournament(final long tournamentid) throws InscriptionClosedException, EntityNotFoundException;
 	
-	public void checkTournamentInscriptions();
+	public void checkTournamentInscriptions() throws EntityNotFoundException;
 
 	public boolean hasFinished(final int rounds, final int currentRound, final List<TournamentEvent> roundEvents);
 

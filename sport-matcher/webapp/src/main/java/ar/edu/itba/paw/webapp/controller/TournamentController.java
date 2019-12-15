@@ -61,7 +61,7 @@ public class TournamentController extends BaseController {
 	@GET
     @Path("/{id}")
     public Response retrieveTournament(@PathParam("id") long tournamentid)
-    		throws TournamentNotFoundException {
+    		throws EntityNotFoundException {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	
@@ -91,7 +91,7 @@ public class TournamentController extends BaseController {
     @GET
     @Path("/{id}/inscriptions")
     public Response retrieveTournamentInscriptions(@PathParam("id") long tournamentid)
-    		throws TournamentNotFoundException {
+    		throws EntityNotFoundException {
 
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	List<TournamentTeam> teams = tournament.getTeams().stream().map(t ->
@@ -113,8 +113,8 @@ public class TournamentController extends BaseController {
     @POST
     @Path("/{id}/teams/{teamId}/join")
     public Response joinTeam(@PathParam("id") long tournamentid, @PathParam("teamId") long teamid) 
-    		throws UserAlreadyJoinedException, TournamentNotFoundException, InscriptionClosedException,
-    			TeamAlreadyFilledException, UserBusyException {
+    		throws UserAlreadyJoinedException, InscriptionClosedException,
+    			TeamAlreadyFilledException, UserBusyException, EntityNotFoundException {
     	
     	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		ts.joinTournament(tournamentid, teamid, loggedUser().getUserid());
@@ -193,7 +193,7 @@ public class TournamentController extends BaseController {
     @GET
     @Path("/{id}/round")
     public Response retrieveTournamentRound(@PathParam("id") long tournamentid,
-    	@QueryParam("roundPageNum") final Integer roundPage) throws TournamentNotFoundException {
+    	@QueryParam("roundPageNum") final Integer roundPage) throws EntityNotFoundException {
     	
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
     	

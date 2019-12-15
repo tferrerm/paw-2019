@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.IllegalParamException;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PictureService;
 import ar.edu.itba.paw.interfaces.ProfilePictureDao;
@@ -29,7 +30,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 	@Override
 	public Optional<ProfilePicture> findByUserId(long userid) {
 		if(userid <= 0) {
-			throw new IllegalArgumentException("Id must be greater than zero.");
+			throw new IllegalParamException("Id must be greater than zero.");
 		}
 		return ppd.findByUserId(userid);
 	}
@@ -43,7 +44,7 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 		try {
 			byte[] convertedPicture = ps.convert(data, MAX_WIDTH, MAX_HEIGHT);
 			ppd.create(user, convertedPicture);
-		} catch(IllegalArgumentException | IOException e) {
+		} catch(IllegalParamException | IOException e) {
 			throw new PictureProcessingException("PictureProcessingError");
 		}
 	}

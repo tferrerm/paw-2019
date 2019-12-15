@@ -85,7 +85,7 @@ public class AdminTournamentController extends BaseController {
     public Response setTournamentEventResult(@PathParam("clubId") long clubid,
     		@PathParam("id") long tournamentid, @PathParam("eventId") long eventid,
     		@FormDataParam("tournamentResultForm") final TournamentResultForm form)
-    				throws TournamentNotFoundException, FormValidationException, EventHasNotEndedException, ClubNotFoundException {
+    				throws FormValidationException, EventHasNotEndedException, EntityNotFoundException {
 		if(form == null) {
     		return Response.status(Status.BAD_REQUEST).build();
     	}
@@ -133,7 +133,7 @@ public class AdminTournamentController extends BaseController {
     @DELETE
     @Path("/{id}")
 	public Response deleteTournament(@PathParam("clubId") long clubid, @PathParam("id") final long tournamentid)
-			throws TournamentNotFoundException, InscriptionClosedException, ClubNotFoundException {
+			throws InscriptionClosedException, EntityNotFoundException {
     	
     	cs.findById(clubid).orElseThrow(ClubNotFoundException::new);
     	Tournament tournament = ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);

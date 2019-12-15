@@ -31,6 +31,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.exception.UserAlreadyExistsException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
@@ -111,7 +112,7 @@ public class UserController extends BaseController {
     
 	@GET
 	@Path("/{id}/has-relationship")
-	public Response hasRelationship(@PathParam("id") long userid) {
+	public Response hasRelationship(@PathParam("id") long userid) throws EntityNotFoundException {
 		final boolean haveRelationship = loggedUser() != null ?
 				us.haveRelationship(loggedUser().getUserid(), userid) : false;
 		return Response.ok(RelationshipDto.ofRelationship(haveRelationship)).build();
@@ -158,7 +159,7 @@ public class UserController extends BaseController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response comment(@PathParam("id") long userId, 
     		@FormDataParam("commentForm") final CommentForm form)
-			throws UserNotAuthorizedException, UserNotFoundException, FormValidationException {
+			throws UserNotAuthorizedException, FormValidationException, EntityNotFoundException {
     	if(form == null) {
     		return Response.status(Status.BAD_REQUEST).build();
     	}

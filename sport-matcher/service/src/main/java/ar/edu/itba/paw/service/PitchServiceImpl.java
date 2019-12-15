@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.IllegalParamException;
 import ar.edu.itba.paw.exception.PictureProcessingException;
 import ar.edu.itba.paw.interfaces.PitchDao;
 import ar.edu.itba.paw.interfaces.PitchPictureService;
@@ -30,7 +31,7 @@ public class PitchServiceImpl implements PitchService {
 	@Override
 	public Optional<Pitch> findById(long pitchid) {
 		if(pitchid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return pd.findById(pitchid);
 	}
@@ -38,7 +39,7 @@ public class PitchServiceImpl implements PitchService {
 	@Override
 	public List<Pitch> findByClubId(long clubid, int page) {
 		if(clubid <= 0 || page <= 0) {
-			throw new IllegalArgumentException("Parameters must be greater than zero.");
+			throw new IllegalParamException("Parameters must be greater than zero.");
 		}
 		return pd.findByClubId(clubid, page);
 	}
@@ -47,7 +48,7 @@ public class PitchServiceImpl implements PitchService {
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
 			Optional<String> location, Optional<String> clubName, int page) {
 		if(page <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		String sportString = null;
 		if(sport.isPresent()) {

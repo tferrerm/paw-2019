@@ -2,13 +2,14 @@ package ar.edu.itba.paw.service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
+import ar.edu.itba.paw.exception.IllegalParamException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubDao;
 import ar.edu.itba.paw.interfaces.ClubService;
@@ -39,7 +40,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public Optional<Club> findById(long clubid) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return cd.findById(clubid);
 	}
@@ -47,7 +48,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public List<Club> findAll(int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return cd.findAll(pageNum);
 	}
@@ -61,7 +62,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public int getPageInitialClubIndex(final int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return cd.getPageInitialClubIndex(pageNum);
 	}
@@ -70,7 +71,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public void deleteClub(final long clubid) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		cd.deleteClub(clubid);
 	}
@@ -83,7 +84,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public List<Club> findBy(Optional<String> clubName, Optional<String> location, int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return cd.findBy(clubName, location, pageNum);
 	}
@@ -96,7 +97,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public int countPastEvents(final long clubid) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return cd.countPastEvents(clubid);
 	}
@@ -104,13 +105,13 @@ public class ClubServiceImpl implements ClubService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public ClubComment createComment(final long userid, final long clubid, final String comment) 
-			throws UserNotAuthorizedException {
+			throws UserNotAuthorizedException, EntityNotFoundException {
 		if(userid <= 0 || clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		
-		User commenter = ud.findById(userid).orElseThrow(NoSuchElementException::new);
-		Club club = cd.findById(clubid).orElseThrow(NoSuchElementException::new);
+		User commenter = ud.findById(userid).orElseThrow(EntityNotFoundException::new);
+		Club club = cd.findById(clubid).orElseThrow(EntityNotFoundException::new);
 		
 		if(!idao.haveRelationship(commenter, club))
 			throw new UserNotAuthorizedException("User is not authorized to comment if no shared events.");
@@ -119,13 +120,13 @@ public class ClubServiceImpl implements ClubService {
 	}
 	
 	@Override
-	public boolean haveRelationship(final long userid, final long clubid) {
+	public boolean haveRelationship(final long userid, final long clubid) throws EntityNotFoundException {
 		if(userid <= 0 || clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		
-		User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
-		Club club = cd.findById(clubid).orElseThrow(NoSuchElementException::new);
+		User user = ud.findById(userid).orElseThrow(EntityNotFoundException::new);
+		Club club = cd.findById(clubid).orElseThrow(EntityNotFoundException::new);
 		
 		return idao.haveRelationship(user, club);
 	}
@@ -133,10 +134,10 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public List<ClubComment> getCommentsByClub(long clubid, int pageNum) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return cd.getCommentsByClub(clubid, pageNum);
 	}
@@ -144,7 +145,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public int countByClubComments(long clubid) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return cd.countByClubComments(clubid);
 	}
@@ -152,7 +153,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public int getCommentsPageInitIndex(int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return cd.getCommentsPageInitIndex(pageNum);
 	}
@@ -160,7 +161,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public int getCommentsMaxPage(long clubid) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return cd.getCommentsMaxPage(clubid);
 	}
@@ -168,7 +169,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public List<Event> findCurrentEventsInClub(final long clubid, final Sport sport) {
 		if(clubid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return cd.findCurrentEventsInClub(clubid, sport);
 	}

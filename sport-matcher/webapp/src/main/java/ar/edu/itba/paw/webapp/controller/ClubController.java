@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.paw.exception.EntityNotFoundException;
 import ar.edu.itba.paw.exception.UserNotAuthorizedException;
 import ar.edu.itba.paw.interfaces.ClubService;
 import ar.edu.itba.paw.interfaces.PitchService;
@@ -79,7 +80,7 @@ public class ClubController extends BaseController {
 	
 	@GET
 	@Path("/{id}/has-relationship")
-	public Response hasRelationship(@PathParam("id") long clubid) {
+	public Response hasRelationship(@PathParam("id") long clubid) throws EntityNotFoundException {
 		final boolean haveRelationship = loggedUser() != null ?
 				cs.haveRelationship(loggedUser().getUserid(), clubid) : false;
 		return Response.ok(RelationshipDto.ofRelationship(haveRelationship)).build();
@@ -110,7 +111,7 @@ public class ClubController extends BaseController {
 	@Path("/{id}/comment")
     public Response comment(@PathParam("id") long clubId,
     		@FormDataParam("commentForm") final CommentForm form)
-    				throws UserNotAuthorizedException, ClubNotFoundException, FormValidationException {
+    				throws UserNotAuthorizedException, FormValidationException, EntityNotFoundException {
 		if(form == null) {
     		return Response.status(Status.BAD_REQUEST).build();
     	}
