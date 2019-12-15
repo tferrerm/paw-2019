@@ -1,6 +1,11 @@
 <div class="content-container">
-	<div class="background-home-image w-90 flex-column">
-		<h1 class="home-image-title font-bold">SportMatcher</h1>
+	<div class="background-home-image w-90 flex-column" ng-if="!isAdmin">
+		<div class="home-title-bgd-container flex-column">
+			<h1 class="home-image-title font-bold">SportMatcher</h1>
+			<div class="w-90 mb-20" ng-if="!isLoggedIn">
+				<h1 class="title text-center font-bold">{{'registration_intro_text' | translate}}</h1>
+			</div>
+		</div>
 		<div class="content-container upcoming-participation-container" ng-if="isLoggedIn">
 			<h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
 			<div ng-if="!noParticipations" class="w-90">
@@ -31,11 +36,8 @@
 				</span>
 			</div>
 		</div>
-		<div class="w-90" ng-if="!isLoggedIn">
-			<h1 class="title text-center font-bold">{{'registration_intro_text' | translate}}</h1>
-		</div>
 	</div>
-	<div class="bottom-home-container">
+	<div class="bottom-home-container" ng-if="!isAdmin">
 		<div class="bottom-home-item">
 			<h3>{{'introAllEvents' | translate}}</h3>
 			<a class="w-70" ng-click="goToEvents()"><button>{{'allEvents' | translate}}</button></a>
@@ -43,6 +45,23 @@
 		<div class="bottom-home-item">
 			<h3>{{'introCreateEvent' | translate}}</h3>
 			<a class="w-70" ng-click="goToPitches()"><button>{{'create_event' | translate}}</button></a>
+		</div>
+	</div>
+	<div ng-if="isAdmin">
+		<h1 class="text-center color-black mt-30">{{'welcome_admin' | translate}}</h1>
+		<div class="bottom-home-container">
+			<div class="bottom-home-item">
+				<h3>{{'clubs_intro' | translate}}</h3>
+				<a class="w-70" ng-click="goToClubs()"><button>{{'clubs' | translate}}</button></a>
+			</div>
+			<div class="bottom-home-item">
+				<h3>{{'tournaments_intro' | translate}}</h3>
+				<a class="w-70" ng-click="goToTournaments()"><button>{{'tournaments' | translate}}</button></a>
+			</div>
+			<div class="bottom-home-item">
+				<h3>{{'delete_event_intro' | translate}}</h3>
+				<a class="w-70" ng-click="goToEvents()"><button>{{'events' | translate}}</button></a>
+			</div>
 		</div>
 	</div>
 </div>

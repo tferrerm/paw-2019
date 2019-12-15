@@ -121,9 +121,18 @@ define([], function() {
 				templateUrl: 'views/tournament.html',
 				controller: 'TournamentCtrl',
 				resolve: {
-					tournament: ['$route', 'restService', function($route, restService) {
+					tournament: ['$route', '$location', '$q', 'restService', function($route, $location, $q, restService) {
+						var defer = $q.defer();
 						var params = $route.current.params;
-						return restService.getTournament(params.id);
+						restService.getTournament(params.id).then(function(data) {
+							var t = data;
+							if (!t.inscriptionSuccess) {
+								$location.path('/tournaments/' + t.tournamentid + '/inscription');
+							} else {
+								defer.resolve(data);
+							}
+						});
+						return defer.promise;
 					}],
 					teams: ['$route', 'restService', function($route, restService) {
 						var params = $route.current.params;
@@ -139,21 +148,22 @@ define([], function() {
 				templateUrl: 'views/tournamentEvent.html',
 				controller: 'TournamentEventCtrl',
 				resolve: {
-					tournament: ['$route', 'restService', function($route, restService) {
+					tournament: ['$route', '$q', 'restService', function($route, $q, restService) {
+						var defer = $q.defer();
 						var params = $route.current.params;
-						return restService.getTournament(params.tournamentid);
+						restService.getTournament(params.tournamentid).then(function(data) {
+							var t = data;
+							if (!t.inscriptionSuccess) {
+								defer.reject('Access blocked');
+							} else {
+								defer.resolve(data);
+							}
+						});
+						return defer.promise;
 					}],
 					event: ['$route', 'restService', function($route, restService) {
 						var params = $route.current.params;
 						return restService.getTournamentEvent(params.tournamentid, params.eventid);
-					}],
-					firstTeamMembers: ['$route', 'restService', function($route, restService) {
-						var params = $route.current.params;
-						return restService.getTournamentEventFirstTeam(params.tournamentid, params.eventid);
-					}],
-					secondTeamMembers: ['$route', 'restService', function($route, restService) {
-						var params = $route.current.params;
-						return restService.getTournamentEventSecondTeam(params.tournamentid, params.eventid);
 					}]
 				}
 			},

@@ -260,6 +260,10 @@ define([], function() {
     zero_events: 'Aún no hay eventos, pero, ¡tu puedes ser el primero en crear uno!',
     empty_history: 'No has participado en ningún evento. ¡Hay muchos eventos esperándote!',
     empty_my_events: 'No has creado ningún evento todavía. ¡Inténtalo!',
+    welcome_admin: '¡Bienvenido Admin!',
+    clubs_intro: '¿Quieres agregar un nuevo club o agregar una cancha?',
+    tournaments_intro: '¿Quieres modificar un torneo existente?',
+    delete_event_intro: '¿Quieres eliminar un evento existente?',
     date_restrictions: 'Los eventos se pueden crear con una anticipación de no más de 7 días y no menos que 1 día.'
-};
+  };
 });
