@@ -30,10 +30,9 @@
 								</div>
 							</a>
 						</div>
-						<span ng-if="pastEventCount !== 0" class="flex justify-center mv-5">{{'showing_items' | translate}} {{pastEventsInitialPageIndex}}-{{pastEventsInitialPageIndex + pastEvents.length - 1}} {{'of' | translate}} {{pastEventCount}}</span>
-						<div ng-hide="pastEventsLastPageNum == 1 || pastEventsLastPageNum == 0" class="flex-row flex-space-around table-header">
-							<div class="w-100">
-								<div ng-hide="pastEventsPageNum == 1" class="flex-row w-100 flex-space-around">
+						<div ng-hide="pastEventsLastPageNum == 1 || pastEventsLastPageNum == 0" class="flex-row text-center flex-space-around table-header">
+							<div class="flex-1">
+								<div ng-hide="pastEventsPageNum == 1" class="flex-row flex-space-around">
 									<a ng-click="getPastEventsFirstPage()">
 										<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
 									</a>
@@ -42,8 +41,9 @@
 									</a>
 								</div>
 							</div>
-							<div class="w-100">
-								<div ng-hide="pastEventsPageNum == pastEventsLastPageNum" class="flex-row w-100 flex-space-around">
+							<span ng-if="pastEventCount !== 0" class="flex flex-1 justify-center mv-5">{{'showing_items' | translate}} {{pastEventsInitialPageIndex}}-{{pastEventsInitialPageIndex + pastEvents.length - 1}} {{'of' | translate}} {{pastEventCount}}</span>
+							<div class="flex-1">
+								<div ng-hide="pastEventsPageNum == pastEventsLastPageNum" class="flex-row flex-space-around">
 									<a ng-click="getPastEventsNextPage()">
 										<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 									</a>
@@ -82,10 +82,9 @@
 								</div>
 							</a>
 						</div>
-						<span ng-if="futureEventCount !== 0" class="flex justify-center mv-5">{{'showing_items' | translate}} {{futureEventsInitialPageIndex}}-{{futureEventsInitialPageIndex + futureEvents.length - 1}} {{'of' | translate}} {{futureEventCount}}</span>
-						<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around  table-header">
-							<div class="w-100">
-								<div ng-hide="futureEventsPageNum == 1" class="flex-row w-100 flex-space-around">
+						<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around align-center text-center table-header">
+							<div class="flex-1">
+								<div ng-hide="futureEventsPageNum == 1" class="flex-row flex-space-around">
 									<a ng-click="getFutureEventsFirstPage()">
 										<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
 									</a>
@@ -94,8 +93,9 @@
 									</a>
 								</div>
 							</div>
-							<div class="w-100">
-								<div ng-hide="futureEventsPageNum == futureEventsLastPageNum" class="flex-row w-100 flex-space-around">
+							<span ng-if="futureEventCount !== 0" class="flex flex-1 justify-center mv-5">{{'showing_items' | translate}} {{futureEventsInitialPageIndex}}-{{futureEventsInitialPageIndex + futureEvents.length - 1}} {{'of' | translate}} {{futureEventCount}}</span>
+							<div class="flex-1">
+								<div ng-hide="futureEventsPageNum == futureEventsLastPageNum" class="flex-row flex-space-around">
 									<a ng-click="getFutureEventsNextPage()">
 										<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 									</a>
