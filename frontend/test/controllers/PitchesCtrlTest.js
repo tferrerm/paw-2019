@@ -29,7 +29,7 @@ define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
       scope = {
         pitches: TEST_PITCH_ARRAY,
         pitchCount: TEST_PITCH_COUNT,
-        lastPageNum:TEST_LAST_PAGE_NUM,
+        lastPageNum: TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM
       };

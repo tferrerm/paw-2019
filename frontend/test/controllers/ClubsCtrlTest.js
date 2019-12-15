@@ -29,7 +29,7 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       scope = {
         clubs: TEST_CLUB_ARRAY,
         clubCount: TEST_CLUB_COUNT,
-        lastPageNum:TEST_LAST_PAGE_NUM,
+        lastPageNum: TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM
       };
