@@ -39,6 +39,7 @@ define([], function() {
     sport:'Sport',
     vacancies:'Vacancies',
     view_event:'View event',
+    view_events:'View events',
     address:'Address',
     organizer:'Organizer',
     join:'Join Now',
@@ -236,6 +237,7 @@ define([], function() {
     delete_confirmation:'Delete Confirmation',
     min_error:'Field minimum is {{min}}.',
     max_error:'Field maximum is {{max}}.',
-    zero_events:'There are no events yet, but, you can be the first who creates one!'
+    zero_events:'There are no events yet, but, you can be the first who creates one!',
+    empty_history:'You have not participated in any events yet. There\'s plenty of matches waiting for you!'
 };
 });
