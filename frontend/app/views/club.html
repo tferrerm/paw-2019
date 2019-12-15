@@ -3,8 +3,20 @@
 		<div class="profile-title">
 			<h2>{{club.name}}</h2>
 		</div>
-		<div class="flex-row w-90">
-			<div class="club-detail-container flex-1">
+		<div ng-if="isAdmin" class="club-buttons w-80 justify-end mb-35">
+			<a ng-click="newTournament(club.clubid)" class="mr-40">
+				<button type="button" class="btn btn-primary join-button">
+					{{'create_tournament' | translate}}
+				</button>
+			</a>
+			<a ng-click="deleteClub(club.clubid)">
+				<button type="button" class="btn btn-danger join-button">
+					{{'delete_club' | translate}}
+				</button>
+			</a>
+		</div>
+		<div class="flex-row w-90 mb-20">
+			<div class="club-detail-container flex-1 align-self-start">
 				<div class="club-description">
 					<div class="club-item club-pitches-list">
 						<div class="flex">
@@ -92,7 +104,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="tbl profile-cont club-comments flex-1">
+			<div class="tbl profile-cont club-comments flex-1 align-self-start">
 				<div ng-show="hasRelationship" class="w-100">
 					<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
 						<input class="form-control" type="text" placeholder="{{'comment' | translate}}" maxlength="500" name="comment" ng-model="commentText.comment" required/>
@@ -145,18 +157,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div ng-if="isAdmin" class="club-buttons">
-			<a ng-click="newTournament(club.clubid)">
-				<button type="button" class="btn btn-primary join-button">
-					{{'create_tournament' | translate}}
-				</button>
-			</a>
-			<a ng-click="deleteClub(club.clubid)">
-				<button type="button" class="btn btn-danger join-button">
-					{{'delete_club' | translate}}
-				</button>
-			</a>
 		</div>
 	</div>
 </div>
