@@ -17,13 +17,13 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
     	});
 
 			function _arrayBufferToBase64(buffer) {
-		    var binary = '';
-		    var bytes = new Uint8Array(buffer);
-		    var len = bytes.byteLength;
-		    for (var i = 0; i < len; i++) {
-		      binary += String.fromCharCode(bytes[i]);
-		    }
-		    return window.btoa(binary);
+			    var binary = '';
+			    var bytes = new Uint8Array(buffer);
+			    var len = bytes.byteLength;
+			    for (var i = 0; i < len; i++) {
+			      binary += String.fromCharCode(bytes[i]);
+			    }
+			    return window.btoa(binary);
 			}
 	    
 	    restService.getHourRange().then(function(data) {
@@ -32,13 +32,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    	
 	    	for (var i = $scope.minHour; i <= $scope.maxHour; i++) {
 	    		if (i !== $scope.maxHour) {
-	    			$scope.startsAtHours.push(i);
+	    			$scope.startsAtHours.push({id: i, format: i + ':00'});
 	    		}
 	    		if (i !== $scope.minHour) {
-	    			$scope.endsAtHours.push(i);
+	    			$scope.endsAtHours.push({id: i, format: i + ':00'});
 	    		}
 	    	}
-	    	
 	    }).then(function(data) {
 	    	restService.getPitchWeekEvents(pitch.pitchid).then(function(data) {
 	    		$scope.schedule = Array.apply(null, Array($scope.maxHour - $scope.minHour));
@@ -81,7 +80,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 	    $scope.createEventSubmit = function() {
-			if ($scope.createEventForm.$valid) {
+			if ($scope.createEventForm.$valid && isFinite($scope.event.endsAtHour)) {
 				resetErrors();
 				if ($scope.isLoggedIn) {
 					restService.createEvent($scope.pitch.pitchid, $scope.event).then(function(data) {
@@ -148,7 +147,31 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		var indexOfToday = weekDays.indexOf(now);
 		$scope.dayHeaders = minDays.slice(indexOfToday, 7).concat(minDays.slice(0, indexOfToday));
 
-		
+	    $scope.$watch('event.selectedEndsAtHour', function (newValue) {
+	    	var startVal = parseInt($('#startsAtHour').val(), 10);
+	       	var endVal = parseInt($('#endsAtHour').val(), 10);
+	       	if (startVal >= endVal || !isFinite(startVal)) {
+	         	var endIndex = $('#endsAtHour').prop('selectedIndex');
+	         	$('#startsAtHour').prop('selectedIndex', endIndex);
+	         	$scope.event.startsAtHour = endVal - 1;
+	       	}
+			$scope.event.endsAtHour = endVal;
+		});
+
+		$scope.$watch('event.selectedStartsAtHour', function (newValue) {
+	    	var startVal = parseInt($('#startsAtHour').val(), 10);
+	       	var endVal = parseInt($('#endsAtHour').val(), 10);
+	       	if (startVal >= endVal || !isFinite(endVal)) {
+	         	var startIndex = $('#startsAtHour').prop('selectedIndex');
+	         	$('#endsAtHour').prop('selectedIndex', startIndex);
+	         	$scope.event.endsAtHour = startVal + 1;
+	       	}
+			$scope.event.startsAtHour = startVal;
+		});
+
+		$scope.isFinite = function(n) {
+			return isFinite(n);
+		};
 
 	}]);
 });

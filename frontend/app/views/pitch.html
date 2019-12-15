@@ -102,11 +102,11 @@
                                 </div>
                                 <div>
                                     <span>{{'event_startsAt' | translate}}</span>
-                                    <select class="form-control" name="startsAtHour" ng-model="event.startsAtHour" ng-options="hour for hour in startsAtHours" required>
+                                    <select class="form-control" name="startsAtHour" ng-model="event.selectedStartsAtHour" ng-options="hour.id as hour.format for hour in startsAtHours track by hour.id" id="startsAtHour">
                                         <option></option>
                                     </select>
                                     <div ng-show="(createEventForm.startsAtHour.$touched ||  createEventForm.$submitted)">
-                                        <span ng-show="createEventForm.startsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                        <span ng-show="!isFinite(event.startsAtHour)" class="form-error">{{'form_required' | translate}}</span>
                                     </div>
                                     <div ng-if="endsBeforeStartsError">
                                         <span class="form-error">
@@ -116,11 +116,11 @@
                                 </div>
                                 <div>
                                     <span>{{'event_endsAt' | translate}}</span>
-                                    <select class="form-control" name="endsAtHour" ng-model="event.endsAtHour" ng-options="hour for hour in endsAtHours" required>
+                                    <select class="form-control" name="endsAtHour" ng-model="event.selectedEndsAtHour" ng-options="hour.id as hour.format for hour in endsAtHours track by hour.id" id="endsAtHour">
                                         <option></option>
                                     </select>
                                     <div ng-show="(createEventForm.endsAtHour.$touched ||  createEventForm.$submitted)">
-                                        <span ng-show="createEventForm.endsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                        <span ng-show="!isFinite(event.endsAtHour)" class="form-error">{{'form_required' | translate}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             <div class="justify-center">
-                                <button ng-disabled="!createEventForm.$valid" type="submit" class="btn btn-primary submit-btn">{{'create' | translate}}</button>
+                                <button ng-disabled="!createEventForm.$valid || !isFinite(event.endsAtHour) || !isFinite(event.startsAtHour)" type="submit" class="btn btn-primary submit-btn">{{'create' | translate}}</button>
                             </div>
                         </form>
                     </div>
