@@ -1,17 +1,20 @@
+/* eslint-env es6 */
+'use strict';
+
 define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
   describe('All Events Controller', function () {
-    var controller, scope;
+    var controller, scope, eventsInjection;
 
     var TEST_EVENT_ARRAY =
       [{
         eventid: 1,
-        createdAt: "2019-12-12T14:55:18.752Z",
-        name: "Argentina"
+        createdAt: '2019-12-12T14:55:18.752Z',
+        name: 'Argentina'
       },
       {
         eventid: 2,
-        createdAt: "2019-13-12T14:55:18.752Z",
-        name: "Event"
+        createdAt: '2019-13-12T14:55:18.752Z',
+        name: 'Event'
       }];
     var TEST_EVENT_COUNT = 2;
     var TEST_LAST_PAGE_NUM = 1;
@@ -27,10 +30,17 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         lastPageNum:TEST_LAST_PAGE_NUM,
         initialPageIndex: TEST_INITIAL_PAGE_INDEX,
         pageNum: TEST_PAGE_NUM,
-        $on: function(){},
-        $watch: function(){},
+        $on: function() {},
+        $watch: function() {}
       };
-      controller = $controller('AllEventsCtrl', {$scope: scope, events: [TEST_EVENT_ARRAY]});
+      eventsInjection = {
+        events: TEST_EVENT_ARRAY,
+        eventCount: TEST_EVENT_COUNT,
+        lastPageNum:TEST_LAST_PAGE_NUM,
+        initialPageIndex: TEST_INITIAL_PAGE_INDEX,
+        pageNum: TEST_PAGE_NUM
+      };
+      controller = $controller('AllEventsCtrl', {$scope: scope, events: eventsInjection});
     }));
 
     describe('$scope.events', function () {
@@ -43,9 +53,11 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.events.map(function (event) {return event.eventid})
-        var isDuplicate = ids.some(function(item, idx){
-          return ids.indexOf(item) !== idx
+        const ids = scope.events.map(function (event) {
+          return event.eventid;
+        });
+        var isDuplicate = ids.some(function(item, idx) {
+          return ids.indexOf(item) !== idx;
         });
 
         expect(isDuplicate).toBe(false);
@@ -84,5 +96,5 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         expect(scope.lastPageNum).toBe(1);
       });
     });
-  })
-})
+  });
+});

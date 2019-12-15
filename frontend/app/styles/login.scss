@@ -17,10 +17,12 @@
 .remember-container {
     display: flex;
     width: 40%;
-    justify-content: space-between;
+    min-width: 175px;
+    justify-content: center;
     align-items: center;
 }
 
 .remember-text {
     margin-top: 8px;
+    margin-right: 16px;
 }

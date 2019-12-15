@@ -1,3 +1,6 @@
+/* eslint-env es6 */
+'use strict';
+
 define(['controllers/TournamentsCtrl', 'angular-mocks'], function() {
   describe('Tournaments Controller', function () {
     var controller, scope;
@@ -5,13 +8,13 @@ define(['controllers/TournamentsCtrl', 'angular-mocks'], function() {
     var TEST_TOURNAMENT_ARRAY =
       [{
         tournamentid: 1,
-        createdAt: "2019-12-12T14:55:18.752Z",
-        name: "Argentina"
+        createdAt: '2019-12-12T14:55:18.752Z',
+        name: 'Argentina'
       },
       {
         tournamentid: 2,
-        createdAt: "2019-13-12T14:55:18.752Z",
-        name: "Tournament"
+        createdAt: '2019-13-12T14:55:18.752Z',
+        name: 'Tournament'
       }];
     var TEST_TOURNAMENT_COUNT = 2;
     var TEST_LAST_PAGE_NUM = 1;
@@ -41,9 +44,11 @@ define(['controllers/TournamentsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.tournaments.map(function (tournament) {return tournament.tournamentid})
-        var isDuplicate = ids.some(function(item, idx){
-          return ids.indexOf(item) !== idx
+        const ids = scope.tournaments.map(function (tournament) {
+          return tournament.tournamentid;
+        });
+        var isDuplicate = ids.some(function(item, idx) {
+          return ids.indexOf(item) !== idx;
         });
 
         expect(isDuplicate).toBe(false);
@@ -82,5 +87,5 @@ define(['controllers/TournamentsCtrl', 'angular-mocks'], function() {
         expect(scope.lastPageNum).toBe(1);
       });
     });
-  })
-})
+  });
+});

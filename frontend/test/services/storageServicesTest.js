@@ -1,3 +1,5 @@
+'use strict';
+
 define(['services/storageService', 'angular-mocks'], function() {
   describe('Storage Service', function () {
     var storageService;

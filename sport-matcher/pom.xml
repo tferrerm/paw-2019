@@ -329,18 +329,12 @@
                 <goals>
                   <goal>npm</goal>
                 </goals>
-                <configuration>
-                  <arguments>install --verbose</arguments>
-                </configuration>
               </execution>
               <execution>
                 <id>bower install</id>
                 <goals>
                   <goal>bower</goal>
                 </goals>
-                <configuration>
-                  <arguments>install --verbose</arguments>
-                </configuration>
               </execution>
               <execution>
                 <id>grunt build</id>
@@ -348,7 +342,7 @@
                   <goal>grunt</goal>
                 </goals>
                 <configuration>
-                  <arguments>build --verbose</arguments>
+                  <arguments>build</arguments>
                 </configuration>
               </execution>
             </executions>

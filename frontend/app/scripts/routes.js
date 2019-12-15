@@ -8,7 +8,7 @@ define([], function() {
 				templateUrl: 'views/home.html',
 				controller: 'HomeCtrl'
 			},
-			'/events' : {
+			'/events': {
 				templateUrl: 'views/events.html',
 				controller: 'AllEventsCtrl',
 				resolve: {
@@ -19,7 +19,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/my-events' : { // SOLO SI ESTAS LOGEADO
+			'/my-events': { // SOLO SI ESTAS LOGEADO
 				templateUrl: 'views/myEvents.html',
 				controller: 'MyEventsCtrl',
 				resolve: {
@@ -45,7 +45,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/history' : {
+			'/history': {
 				templateUrl: 'views/history.html',
 				controller: 'HistoryCtrl',
 				resolve: {
@@ -61,15 +61,15 @@ define([], function() {
 					}]
 				}
 			},
-			'/clubs' : {
+			'/clubs': {
 				templateUrl: 'views/clubs.html',
 				controller: 'ClubsCtrl'
 			},
-			'/pitches' : {
+			'/pitches': {
 				templateUrl: 'views/pitches.html',
 				controller: 'PitchesCtrl'
 			},
-			'/pitches/:pitchid/events/:eventid' : {
+			'/pitches/:pitchid/events/:eventid': {
 				templateUrl: 'views/event.html',
 				controller: 'EventCtrl',
 				resolve: {
@@ -83,7 +83,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/clubs/:id' : {
+			'/clubs/:id': {
 				templateUrl: 'views/club.html',
 				controller: 'ClubCtrl',
 				resolve: {
@@ -93,7 +93,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/pitches/:id' : {
+			'/pitches/:id': {
 				templateUrl: 'views/pitch.html',
 				controller: 'PitchCtrl',
 				resolve: {
@@ -103,7 +103,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/users/:id' : {
+			'/users/:id': {
 				templateUrl: 'views/profile.html',
 				controller: 'ProfileCtrl',
 				resolve: {
@@ -113,11 +113,11 @@ define([], function() {
 					}]
 				}
 			},
-			'/tournaments' : {
+			'/tournaments': {
 			  templateUrl: 'views/tournaments.html',
 			  controller: 'TournamentsCtrl'
 			},
-			'/tournaments/:id' : {
+			'/tournaments/:id': {
 				templateUrl: 'views/tournament.html',
 				controller: 'TournamentCtrl',
 				resolve: {
@@ -135,7 +135,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/tournaments/:tournamentid/events/:eventid' : {
+			'/tournaments/:tournamentid/events/:eventid': {
 				templateUrl: 'views/tournamentEvent.html',
 				controller: 'TournamentEventCtrl',
 				resolve: {
@@ -157,7 +157,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/tournaments/:id/inscription' : {
+			'/tournaments/:id/inscription': {
 				templateUrl: 'views/tournamentInscription.html',
 				controller: 'TournamentInscriptionCtrl',
 				resolve: {
@@ -171,7 +171,7 @@ define([], function() {
 					}]
 				}
 			},
-			'/admin/clubs/:id/tournaments/new' : {
+			'/admin/clubs/:id/tournaments/new': {
 				templateUrl: 'views/tournamentNew.html',
 				controller: 'TournamentNewCtrl',
 				resolve: {

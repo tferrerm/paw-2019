@@ -56,10 +56,10 @@
 			</div>
 		</div>
 	</div>
-		<div ng-if="events.length <= 0">
-			<div class="notice">{{'empty_history' | translate}}</div>
-			<a ng-click="goToEvents()">
-				<button type="button" class="btn">{{'view_events' | translate}}</button>
+		<div class="empty-section-container" ng-if="events.length <= 0">
+			<span class="mv-5">{{'empty_history' | translate}}</span>
+			<a class="mv-5" ng-click="goToEvents()">
+				<button type="button no-results-button" class="btn">{{'view_events' | translate}}</button>
 			</a>
 		</div>
 	</div>
