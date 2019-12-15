@@ -1,42 +1,48 @@
 <div class="content-container">
-	<div class="content-container" ng-if="isLoggedIn">
-		<h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
-		<div ng-if="!noParticipations" class="w-90">
-			<span class="help-message notice justify-center">{{'home_help' | translate}}</span>
-			<div class="home-evs-container">
-				<div class="home-evs-group flex">
-					<span class="home-ev-title flex flex-1" ng-repeat="header in scheduleHeaders">
-						{{header | translate}}
-					</span>
-				</div>
-				
-			</div>
-			<div class="home-all-events">
-				<div ng-repeat="row in schedule" class="home-ev-column">
-					<a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
-						<span class="event-link">
-							{{event.name}}
+	<div class="background-home-image w-90 flex-column">
+		<h1 class="home-image-title font-bold">SportMatcher</h1>
+		<div class="content-container upcoming-participation-container" ng-if="isLoggedIn">
+			<h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
+			<div ng-if="!noParticipations" class="w-90">
+				<span class="help-message notice justify-center">{{'home_help' | translate}}</span>
+				<div class="home-evs-container">
+					<div class="home-evs-group flex">
+						<span class="home-ev-title flex flex-1" ng-repeat="header in scheduleHeaders">
+							{{header | translate}}
 						</span>
-					</a>
+					</div>
+					
 				</div>
+				<div class="home-all-events">
+					<div ng-repeat="row in schedule" class="home-ev-column">
+						<a ng-repeat="event in row.events track by $index" ng-if="event != null" class="event-link" ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
+							<span class="event-link">
+								{{event.name}}
+							</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div ng-if="noParticipations">
+				<h4>{{'home_default' | translate}}</h4>
+				<span ng-if="!isLoggedIn" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
+					<span class="registration-sport-matcher event-info-label">{{'sport_matcher' | translate}}</span>
+					<span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
+				</span>
 			</div>
 		</div>
-		<div ng-if="noParticipations">
-			<h4>{{'home_default' | translate}}</h4>
-			<span ng-if="!isLoggedIn" class="description-body pitch-item justify-center mt-30 mh-30 w-70">
-				<span class="registration-sport-matcher event-info-label">{{'sport_matcher' | translate}}</span>
-				<span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
-			</span>
+		<div class="w-90" ng-if="!isLoggedIn">
+			<h1 class="title text-center font-bold">{{'registration_intro_text' | translate}}</h1>
 		</div>
 	</div>
 	<div class="bottom-home-container">
 		<div class="bottom-home-item">
 			<h3>{{'introAllEvents' | translate}}</h3>
-			<a class="bottom-home-a" ng-click="goToEvents()"><button>{{'allEvents' | translate}}</button></a>
+			<a class="w-70" ng-click="goToEvents()"><button>{{'allEvents' | translate}}</button></a>
 		</div>
 		<div class="bottom-home-item">
 			<h3>{{'introCreateEvent' | translate}}</h3>
-			<a class="bottom-home-a" ng-click="goToPitches()"><button>{{'create_event' | translate}}</button></a>
+			<a class="w-70" ng-click="goToPitches()"><button>{{'create_event' | translate}}</button></a>
 		</div>
 	</div>
 </div>
