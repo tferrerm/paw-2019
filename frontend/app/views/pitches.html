@@ -43,27 +43,29 @@
       </div>
     </div>
   </div>
-  <div ng-if="pitches.length > 0" class="table-navigator w-90 justify-center">
-    <div class="flex-1">
-        <div ng-hide="pageNum == 1" class="flex-row flex-space-between">
-          <a ng-click="getFirstPage()"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
-          <a ng-click="getPrevPage()"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
-        </div>
-    </div>
-    <span class="flex flex-1 create-event">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + pitches.length - 1}} {{'of' | translate}} {{pitchCount}}</span>
-    <div class="flex-1">
-      <div ng-hide="pageNum == lastPageNum" class="flex-row flex-space-between">
-        <a ng-click="getNextPage()">
-          <button type="button" class="btn btn-secondary">
-            {{'next' | translate}}
-          </button>
-        </a>
-        <a ng-click="getLastPage()">
-          <button type="button" class="btn btn-secondary">
-            {{'last' | translate}}
-          </button>
-        </a>
+  <div class="table-navigator w-90 justify-center">
+    <div ng-if="pitches.length > 0" class="w-100 flex-row justify-center">
+      <div class="flex-1">
+          <div ng-hide="pageNum == 1" class="flex-row flex-space-between">
+            <a ng-click="getFirstPage()"><button type="button" class="btn btn-secondary">{{'first' | translate}}</button></a>
+            <a ng-click="getPrevPage()"><button type="button" class="btn btn-secondary">{{'back' | translate}}</button></a>
+          </div>
       </div>
+      <span class="flex flex-1 create-event">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + pitches.length - 1}} {{'of' | translate}} {{pitchCount}}</span>
+      <div class="flex-1">
+        <div ng-hide="pageNum == lastPageNum" class="flex-row flex-space-between">
+          <a ng-click="getNextPage()">
+            <button type="button" class="btn btn-secondary">
+              {{'next' | translate}}
+            </button>
+          </a>
+          <a ng-click="getLastPage()">
+            <button type="button" class="btn btn-secondary">
+              {{'last' | translate}}
+            </button>
+          </a>
+        </div>
+      </div>    
     </div>
     <div ng-if="pitches.length == 0" class="notice">
       {{'no_results' | translate}}
