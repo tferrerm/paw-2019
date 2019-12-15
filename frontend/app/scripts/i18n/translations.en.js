@@ -192,7 +192,7 @@ define([], function() {
     tournament_description_two:' rounds, in which matches will be played at the same time with a week between rounds. Starts on',
     tournament_inscription:'Join any team you like to participate in the tournament',
     create_account:'Create account',
-    not_account:'Do not have an account?',
+    not_account:'Don\'t have an account?',
     start_date:'Start date',
     new_tournament_description:'The chart shows the amount of availables soccer pitches in this club for the current week.',
     event_creation_description:'Check out this pitch\'s available hours this week to create a match!',
