@@ -258,6 +258,7 @@ define([], function() {
     max_error: 'Field maximum is {{max}}.',
     zero_events: 'There are no events yet, but, you can be the first who creates one!',
     empty_history: 'You have not participated in any events yet. There\'s plenty of matches waiting for you!',
-    empty_my_events: 'You haven\'t created any events yet. Give it a try!'
-};
+    empty_my_events: 'You haven\'t created any events yet. Give it a try!',
+    date_restrictions: 'Events can be created with no more than 7 days of anticipation and no less than a day.'
+  };
 });
