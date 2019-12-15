@@ -1,4 +1,3 @@
-/* eslint-env es6 */
 'use strict';
 
 define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
@@ -46,7 +45,7 @@ define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.pitches.map(function (pitch) {
+        var ids = scope.pitches.map(function (pitch) {
           return pitch.pitchid;
         });
         var isDuplicate = ids.some(function(item, idx) {

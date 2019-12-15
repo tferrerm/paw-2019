@@ -1,4 +1,3 @@
-/* eslint-env es6 */
 'use strict';
 
 define(['controllers/TournamentsCtrl', 'angular-mocks'], function() {
@@ -44,7 +43,7 @@ define(['controllers/TournamentsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.tournaments.map(function (tournament) {
+        var ids = scope.tournaments.map(function (tournament) {
           return tournament.tournamentid;
         });
         var isDuplicate = ids.some(function(item, idx) {

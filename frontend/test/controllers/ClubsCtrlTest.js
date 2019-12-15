@@ -1,4 +1,3 @@
-/* eslint-env es6 */
 'use strict';
 
 define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
@@ -46,7 +45,7 @@ define(['controllers/ClubsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.clubs.map(function (club) {
+        var ids = scope.clubs.map(function (club) {
           return club.clubid;
         });
         var isDuplicate = ids.some(function(item, idx) {

@@ -1,4 +1,3 @@
-/* eslint-env es6 */
 'use strict';
 
 define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
@@ -53,7 +52,7 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.events.map(function (event) {
+        var ids = scope.events.map(function (event) {
           return event.eventid;
         });
         var isDuplicate = ids.some(function(item, idx) {
