@@ -20,7 +20,12 @@
 									<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
 									<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
 									<span class="flex flex-1 justify-center home-header">
-										<div>{{event.startsAt | date:'EEEE d, MMM yyyy'}}</div>
+										<div>
+											{{event.startsAt | date: 'EEEE ' | translate}}
+											{{event.startsAt | date: 'd, ' | translate}}
+											{{event.startsAt | date: 'MMM ' | translate}}
+											{{event.startsAt | date:'yyyy HH:mm' | translate}}
+										</div>
 									</span>
 								</div>
 							</a>
@@ -67,7 +72,12 @@
 									<div>{{event.inscriptionCount}}/{{event.maxParticipants}}</div>
 									<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
 									<span class="flex flex-1 justify-center home-header">
-										<div>{{event.startsAt | date:'EEEE d H:mm, MMM yyyy'}}</div>
+										<div>
+											{{event.startsAt | date: 'EEEE ' | translate}}
+											{{event.startsAt | date: 'd, ' | translate}}
+											{{event.startsAt | date: 'MMM ' | translate}}
+											{{event.startsAt | date:'yyyy HH:mm' | translate}}
+										</div>
 									</span>
 								</div>
 							</a>

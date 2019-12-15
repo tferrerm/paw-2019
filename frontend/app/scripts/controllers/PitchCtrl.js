@@ -109,7 +109,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 
 		function validateForm(error) {
 			if (error.status === 422) {
-				if (error.data.constraintViolations != null) {
+				if (error.data.constraintViolations != null) { // eslint-disable-line eqeqeq
 					/* Controller violation */
 					angular.forEach(error.data.constraintViolations, function(cv) {
 						switch (cv.propertyPath) {

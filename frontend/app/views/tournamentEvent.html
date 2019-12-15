@@ -16,10 +16,20 @@
 				<div class="detail-box-data">{{'club' | translate}}: {{tournament.tournamentClub.name}}</div>
 				<div class="detail-box-data">{{'pitch' | translate}}: {{event.pitch.name}}</div>
 				<div class="detail-box-data">
-					<span>{{'start' | translate}}: {{event.startsAt | date:'EEEE d, MMM yyyy H:mm'}}</span>
+					<span>{{'start' | translate}}:
+						{{event.startsAt | date: ' EEEE ' | translate}}
+						{{event.startsAt | date: 'd, ' | translate}}
+						{{event.startsAt | date: 'MMM ' | translate}}
+						{{event.startsAt | date:'yyyy HH:mm' | translate}}
+					</span>
 				</div>
 				<div class="detail-box-data">
-					<span>{{'end' | translate}}: {{event.endsAt | date:'EEEE d, MMM yyyy H:mm'}}</span>
+					<span>{{'end' | translate}}:
+						{{event.endsAt | date: ' EEEE ' | translate}}
+						{{event.endsAt | date: 'd, ' | translate}}
+						{{event.endsAt | date: 'MMM ' | translate}}
+						{{event.endsAt | date:'yyyy HH:mm' | translate}}
+					</span>
 				</div>
 			</div>
 		</div>

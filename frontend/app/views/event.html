@@ -30,8 +30,13 @@
 						<div class="event-item-box">
 							<span class="event-info-label">{{'date' | translate}}</span>
 							<span class="just-row">
-								<span>{{event.startsAt | date:'EEEE d, MMM yyyy HH:mm'}}</span>
-									<span>-</span>
+								<span>
+									{{event.startsAt | date: 'EEEE ' | translate}}
+									{{event.startsAt | date: 'd, ' | translate}}
+									{{event.startsAt | date: 'MMM ' | translate}}
+									{{event.startsAt | date:'yyyy HH:mm' | translate}}
+								</span>
+								<span>-</span>
 								<span>{{event.endsAt | date:'HH:mm'}}</span>
 							</span>
 						</div>
@@ -41,7 +46,12 @@
 						</div>
 						<div class="event-item-box">
 							<span class="event-info-label">{{'end_date' | translate}}</span>
-							<span>{{event.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm'}}</span>
+							<span>
+								{{event.inscriptionEnd | date: 'EEEE ' | translate}}
+								{{event.inscriptionEnd | date: 'd, ' | translate}}
+								{{event.inscriptionEnd | date: 'MMM ' | translate}}
+								{{event.inscriptionEnd | date:'yyyy HH:mm' | translate}}
+							</span>
 						</div>
 					</div>
 					<div class="flex-1">

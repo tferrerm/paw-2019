@@ -26,7 +26,10 @@
 			<span ng-if="roundPageNum != currentRound" class="event-info-label notice">{{'round' | translate}} {{roundPageNum}}</span>
 			<span>
 				{{'date' | translate}}:
-				{{roundEvents[0].startsAt | date:'EEEE d, MMM yyyy H:mm'}} -
+				{{roundEvents[0].startsAt | date: 'EEEE ' | translate}}
+				{{roundEvents[0].startsAt | date: 'd, ' | translate}}
+				{{roundEvents[0].startsAt | date: 'MMM ' | translate}}
+				{{roundEvents[0].startsAt | date:'yyyy HH:mm' | translate}} -
 				{{roundEvents[0].endsAt | date:'H:mm'}}
 			</span>
 			<div ng-repeat="event in roundEvents" class="flex pitch-item w-100 justify-center flex-column">
