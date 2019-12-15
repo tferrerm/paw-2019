@@ -65,16 +65,12 @@ define(['routes',
 				['$rootScope',
 				'$location',
 				function($rootScope, $location) {
-					// $rootScope.isViewLoading = false;
 					$rootScope.$on('$routeChangeStart', function() {
-						// $rootScope.isViewLoading = true;
 					});
 					$rootScope.$on('$routeChangeSuccess', function() {
-						// $rootScope.isViewLoading = false;
 						document.body.scrollTop = document.documentElement.scrollTop = 0;
 					});
 					$rootScope.$on('$routeChangeError', function() {
-						// $rootScope.isViewLoading = false;
 						$location.path('/404');
 					});
 				}])
