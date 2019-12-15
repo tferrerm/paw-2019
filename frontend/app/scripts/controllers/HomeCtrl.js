@@ -1,9 +1,11 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('HomeCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', function($scope, $filter, $location, restService, authService) {
+	frontend.controller('HomeCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'titleService', function($scope, $filter, $location, restService, authService, titleService) {
 		
     	$scope.scheduleHeaders = [];
+
+    titleService.setDefaultTitle();
 
 		updateSchedule();
 

@@ -1,8 +1,10 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('HistoryCtrl', ['$scope', '$location', '$q', 'restService', 'authService', function($scope, $location, $q, restService, authService) {
+	frontend.controller('HistoryCtrl', ['$scope', '$location', '$q', '$filter', 'restService', 'authService', 'titleService', function($scope, $location, $q, $filter, restService, authService, titleService) {
 	    var params = {pageNum: 1};
+
+	    titleService.setTitle($filter('translate')('history'));
 
 	    restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
 			$scope.events = data.events;

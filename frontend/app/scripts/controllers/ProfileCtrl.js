@@ -1,9 +1,10 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('ProfileCtrl', ['$http', 'url', '$scope', '$location', 'restService', 'authService', 'user', function($http, url, $scope, $location, restService, authService, user) {
+	frontend.controller('ProfileCtrl', ['$http', 'url', '$scope', '$location', 'restService', 'authService', 'titleService', 'user', function($http, url, $scope, $location, restService, authService, titleService, user) {
 		var commentParams = {pageNum: 1};
 		$scope.user = user;
+		titleService.setTitle(user.firstname + ' ' + user.lastname);
 	    if ($scope.isLoggedIn) {
 	    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
 	    	if (!$scope.isLoggedUser) {

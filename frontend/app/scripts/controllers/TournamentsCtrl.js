@@ -1,12 +1,14 @@
 'use strict';
-define(['frontend'], function(frontend) {
+define(['frontend', 'services/restService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('TournamentsCtrl', ['$scope', '$location', 'restService', function ($scope, $location, restService) {
+	frontend.controller('TournamentsCtrl', ['$scope', '$location', '$filter','restService', 'titleService', function ($scope, $location, $filter, restService, titleService) {
 		var params = {pageNum: 1};
 
 		$scope.now = new Date();
 
 		updateTournaments(params);
+
+		titleService.setTitle($filter('translate')('tournaments'));
 
 		$scope.goToTournament = function (tournament) {
 			if (tournament.inscriptionSuccess) {

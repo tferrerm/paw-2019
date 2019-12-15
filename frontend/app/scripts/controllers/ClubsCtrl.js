@@ -1,8 +1,9 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('ClubsCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
+	frontend.controller('ClubsCtrl', ['$scope', '$filter', '$location', 'restService', 'titleService', function($scope, $filter, $location, restService, titleService) {
 		var params = {pageNum: 1};
+		titleService.setTitle($filter('translate')('Clubs'));
 		$scope.filters = {};
 		if ($scope.isAdmin) {
 			$scope.createdClub = {};

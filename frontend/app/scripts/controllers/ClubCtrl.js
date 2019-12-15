@@ -1,10 +1,12 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/modalService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/modalService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'modalService', 'club', 'Upload', function($scope, $location, restService, modalService, club, Upload) {
+	frontend.controller('ClubCtrl', ['$scope', '$location', 'restService', 'modalService', 'titleService', 'Upload', 'club', function($scope, $location, restService, modalService, titleService, Upload, club) {
 		var pitchParams = {pageNum: 1};
 		var commentParams = {pageNum: 1};
 	    $scope.club = club;
+
+	    titleService.setTitle(club.name);
 
 	    if ($scope.isAdmin) {
 			$scope.createdPitch = {};

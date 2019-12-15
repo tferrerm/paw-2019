@@ -1,9 +1,11 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('PitchesCtrl', ['$scope', '$location', 'restService', function($scope, $location, restService) {
+	frontend.controller('PitchesCtrl', ['$scope', '$location', '$filter', 'restService', 'titleService', function($scope, $location, $filter, restService, titleService) {
     	var params = {pageNum: 1};
 	    $scope.filters = {};
+
+	    titleService.setTitle($filter('translate')('pitches'));
 
 	    updatePitches(params);
 

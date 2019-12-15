@@ -1,8 +1,10 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService', 'services/modalService', 'directives/tooltip'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/modalService', 'services/titleService', 'directives/tooltip'], function(frontend) {
 
-	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'modalService', 'pitch', function($scope, $filter, $location, restService, authService, modalService, pitch) {
-    	
+	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'modalService', 'titleService', 'pitch', function($scope, $filter, $location, restService, authService, modalService, titleService, pitch) {
+    
+    titleService.setTitle(pitch.name);
+
 		$scope.minHour = 0;
 		$scope.maxHour = 0;
 	    $scope.pitch = pitch;

@@ -2,120 +2,111 @@
 	<div class="profile-title">
 		<h2>{{'myEvents' | translate}}</h2>
 	</div>
-	<span class="help-message notice w-70 justify-center">{{'my_events_help' | translate}}</span>
 	<!--<div class="notice" ng-if="noEvents">
 		{{'no_past_or_future_events' | translate}}
 	</div>-->
-	<div class="flex-row w-100">
-		<div class="align-self-start tbl w-100" ng-if="!noEvents">
-			<div class="table-header background-dodgerblue justify-center my-events-tbl-sub">
-				<span class="event-info-label color-white">{{'pastEvents' | translate}}</span>
-			</div>
-			<div class="flex-grow w-100">
-				<div class="events-column flex-grow flex-column">
-					<div ng-repeat="event in pastEvents">
-						<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
-							<div class="my-event-item">
-								<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
-								<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
-								<span class="flex flex-1 justify-center home-header">
-									<div>{{event.startsAt | date:'EEEE d, MMM yyyy'}}</div>
-								</span>
-							</div>
-						</a>
-					</div>
-					<span class="flex justify-center mv-5">{{'showing_items' | translate}} {{pastEventsInitialPageIndex}}-{{pastEventsInitialPageIndex + pastEvents.length - 1}} {{'of' | translate}} {{pastEventCount}}</span>
-					<div ng-hide="pastEventsLastPageNum == 1 || pastEventsLastPageNum == 0" class="flex-row flex-space-around table-header">
-						<div class="w-100">
-							<div ng-hide="pastEventsPageNum == 1" class="flex-row w-100 flex-space-around">
-								<a ng-click="getPastEventsFirstPage()">
-									<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
-								</a>
-								<a ng-click="getPastEventsPrevPage()">
-									<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
-								</a>
-							</div>
+	<div ng-if="pastEventCount !== 0 || futureEventCount !== 0">
+		<span class="help-message notice w-70 justify-center">{{'my_events_help' | translate}}</span>
+		<div class="flex-row w-100">
+			<div class="align-self-start tbl w-100">
+				<div class="table-header background-dodgerblue justify-center my-events-tbl-sub">
+					<span class="event-info-label color-white">{{'pastEvents' | translate}}</span>
+				</div>
+				<div class="flex-grow w-100">
+					<div class="events-column flex-grow flex-column">
+						<div ng-repeat="event in pastEvents">
+							<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
+								<div class="my-event-item">
+									<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+									<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
+									<span class="flex flex-1 justify-center home-header">
+										<div>{{event.startsAt | date:'EEEE d, MMM yyyy'}}</div>
+									</span>
+								</div>
+							</a>
 						</div>
-						<div class="w-100">
-							<div ng-hide="pastEventsPageNum == pastEventsLastPageNum" class="flex-row w-100 flex-space-around">
-								<a ng-click="getPastEventsNextPage()">
-									<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-								</a>
-								<a ng-click="getPastEventsLastPage()">
-									<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-								</a>
+						<span ng-if="pastEventCount !== 0" class="flex justify-center mv-5">{{'showing_items' | translate}} {{pastEventsInitialPageIndex}}-{{pastEventsInitialPageIndex + pastEvents.length - 1}} {{'of' | translate}} {{pastEventCount}}</span>
+						<div ng-hide="pastEventsLastPageNum == 1 || pastEventsLastPageNum == 0" class="flex-row flex-space-around table-header">
+							<div class="w-100">
+								<div ng-hide="pastEventsPageNum == 1" class="flex-row w-100 flex-space-around">
+									<a ng-click="getPastEventsFirstPage()">
+										<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
+									</a>
+									<a ng-click="getPastEventsPrevPage()">
+										<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
+									</a>
+								</div>
+							</div>
+							<div class="w-100">
+								<div ng-hide="pastEventsPageNum == pastEventsLastPageNum" class="flex-row w-100 flex-space-around">
+									<a ng-click="getPastEventsNextPage()">
+										<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+									</a>
+									<a ng-click="getPastEventsLastPage()">
+										<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<div class="notice" ng-if="pastEventCount === 0">
+					{{'no_results' | translate}}
+				</div>
 			</div>
+			<div class="align-self-start tbl w-100">
+				<div class="table-header background-dodgerblue justify-center my-events-tbl-sub">
+					<span class="event-info-label color-white">{{'upcomingEvents' | translate}}</span>
+				</div>
+				<div class="flex-grow w-100">
+					<div class="events-column flex-grow flex-column">
+						<div ng-repeat="event in futureEvents" ng-class="event.inscriptionCount === event.maxParticipants ? 'background-light-green' : 'background-color-white'">
+							<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
+								<div class="my-event-item">
+									<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
+									<div>{{event.inscriptionCount}}/{{event.maxParticipants}}</div>
+									<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
+									<span class="flex flex-1 justify-center home-header">
+										<div>{{event.startsAt | date:'EEEE d H:mm, MMM yyyy'}}</div>
+									</span>
+								</div>
+							</a>
+						</div>
+						<span ng-if="futureEventCount !== 0" class="flex justify-center mv-5">{{'showing_items' | translate}} {{futureEventsInitialPageIndex}}-{{futureEventsInitialPageIndex + futureEvents.length - 1}} {{'of' | translate}} {{futureEventCount}}</span>
+						<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around  table-header">
+							<div class="w-100">
+								<div ng-hide="futureEventsPageNum == 1" class="flex-row w-100 flex-space-around">
+									<a ng-click="getFutureEventsFirstPage()">
+										<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
+									</a>
+									<a ng-click="getFutureEventsPrevPage()">
+										<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
+									</a>
+								</div>
+							</div>
+							<div class="w-100">
+								<div ng-hide="futureEventsPageNum == futureEventsLastPageNum" class="flex-row w-100 flex-space-around">
+									<a ng-click="getFutureEventsNextPage()">
+										<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+									</a>
+									<a ng-click="getFutureEventsLastPage()">
+										<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<span class="flex justify-center mv-5" ng-if="futureEventCount === 0">
+					{{'no_results' | translate}}
+				</span>
+			</div>	
 		</div>
-		<div class="align-self-start tbl w-100" ng-if="!noEvents">
-			<div class="table-header background-dodgerblue justify-center my-events-tbl-sub">
-				<span class="event-info-label color-white">{{'upcomingEvents' | translate}}</span>
-			</div>
-			<div class="flex-grow w-100">
-				<div class="events-column flex-grow flex-column">
-					<div ng-repeat="event in futureEvents" ng-class="event.inscriptionCount === event.maxParticipants ? 'background-light-green' : 'background-color-white'">
-						<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">
-							<div class="my-event-item">
-								<span class="flex flex-1 justify-center home-header">{{event.name}}</span>
-								<div>{{event.inscriptionCount}}/{{event.maxParticipants}}</div>
-								<span class="flex flex-1 justify-center home-header">{{event.pitch.sport | translate}}</span>
-								<span class="flex flex-1 justify-center home-header">
-									<div>{{event.startsAt | date:'EEEE d H:mm, MMM yyyy'}}</div>
-								</span>
-							</div>
-						</a>
-					</div>
-					<span class="flex justify-center mv-5">{{'showing_items' | translate}} {{futureEventsInitialPageIndex}}-{{futureEventsInitialPageIndex + futureEvents.length - 1}} {{'of' | translate}} {{futureEventCount}}</span>
-					<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around  table-header">
-						<div class="w-100">
-							<div ng-hide="futureEventsPageNum == 1" class="flex-row w-100 flex-space-around">
-								<a ng-click="getFutureEventsFirstPage()">
-									<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
-								</a>
-								<a ng-click="getFutureEventsPrevPage()">
-									<button type="button" class="btn btn-secondary">{{'back' | translate}}</button>
-								</a>
-							</div>
-						</div>
-						<div class="w-100">
-							<div ng-hide="futureEventsPageNum == futureEventsLastPageNum" class="flex-row w-100 flex-space-around">
-								<a ng-click="getFutureEventsNextPage()">
-									<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-								</a>
-								<a ng-click="getFutureEventsLastPage()">
-									<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-								</a>
-							</div>
-						</div>	
-					</div>
-				</div>
-			</div>
-		</div>	
 	</div>
-	<!--<div class="table-navigator w-100 justify-center">
-		<div class="{{page != 1 ? '' : 'hidden'}}">
-			<a href="/my-events/1">
-				<button type="button" class="btn btn-secondary">
-					{{'first' | translate}}
-				</button>
-			</a>
-			<a href="/my-events/{{page-1}}">
-				<button type="button" class="btn btn-secondary">
-					{{'back' | translate}}
-				</button>
-			</a>
-		</div>
-		<span class="flex">{{'showing_pages' | translate}} {{page}} {{'of' | translate}} {{lastPageNum}}</span>
-		<div class="{{page != lastPageNum ? '' : 'hidden'}}">
-			<a href="/my-events/{{page+1}}">
-				<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-			</a>
-			<a href="/my-events/{{lastPageNum}}">
-				<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-			</a>
-		</div>
-	</div>-->
+	<div ng-if="pastEventCount === 0 && futureEventCount === 0">
+		<div class="notice">{{'empty_my_events' | translate}}</div>
+		<a ng-click="goToPitches()">
+			<button type="button" class="btn">{{'create_event' | translate}}	</button>
+		</a>
+	</div>
 </div>
