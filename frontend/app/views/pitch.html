@@ -117,7 +117,7 @@
                             </div>
                             <div class="my-events-tbl-sub">
                               <span>{{'end_date' | translate}}</span>
-                                <input class="form-control date-input w-100" type="datetime-local" ng-min="currentDate" name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
+                                <input class="form-control date-input w-100" type="date" min={{todayDate}} max={{maxInscriptionDate}} name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
                                 <div ng-show="(createEventForm.inscriptionEndDate.$touched ||  createEventForm.$submitted)">
                                     <span ng-show="createEventForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
                                 </div>
