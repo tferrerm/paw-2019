@@ -2,7 +2,6 @@ package ar.edu.itba.paw.interfaces;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import ar.edu.itba.paw.exception.DateInPastException;
@@ -109,8 +108,6 @@ public interface EventService {
 			final Optional<String> clubName, final Optional<Sport> sport, Optional<String> organizer, 
 			final Optional<Integer> vacancies, final Optional<Instant> date);
 
-	public List<List<Boolean>> convertEventListToBooleanSchedule(List<Event> events);
-	
 	public List<List<Event>> convertEventListToSchedule(List<Event> events);
 
 	public int countFutureEventPages();
@@ -134,10 +131,6 @@ public interface EventService {
 
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
 			throws UserNotAuthorizedException, DateInPastException, EntityNotFoundException;
-
-	public String[] getScheduleDaysHeader();
-
-	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour);
 
 	/**
 	 * Returns a User's favorite Sport(s) based on Events joined.

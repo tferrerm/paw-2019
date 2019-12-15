@@ -1,13 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import java.time.DayOfWeek;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -39,10 +33,8 @@ public class ClubServiceImpl implements ClubService {
 	@Autowired
 	private InscriptionDao idao;
 	
-	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
 	private static final String NEGATIVE_ID_ERROR = "Id must be greater than zero.";
 	private static final String NEGATIVE_PAGE_ERROR = "Page number must be greater than zero.";
-	private static final String TIME_ZONE = "America/Buenos_Aires";
 
 	@Override
 	public Optional<Club> findById(long clubid) {
@@ -179,54 +171,6 @@ public class ClubServiceImpl implements ClubService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return cd.findCurrentEventsInClub(clubid, sport);
-	}
-	
-	@Override
-	public List<List<Integer>> convertEventListToSchedule(final List<Event> clubEvents, final int minHour, final int maxHour,
-			final int dayAmount) {
-		if(maxHour - minHour <= 0)
-			return null;
-		
-		List<List<Integer>> schedule = new ArrayList<>();
-		for(int i = 0; i < maxHour - minHour; i++) {
-			schedule.add(new ArrayList<Integer>());
-			for(int j = 0; j < dayAmount; j++) {
-				schedule.get(i).add(0);
-			}
-		}
-
-		for(Event event : clubEvents) {
-			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDate().getDayOfWeek();
-			DayOfWeek currentDayOfWeek = LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek();
-
-			Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
-
-			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7; // Should change if dayAmount != 7
-			if(dayIndex < 0)
-				dayIndex += 7;
-
-			int initialHourIndex = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDateTime().getHour() - minHour;
-			int finalHourIndex = event.getEndsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDateTime().getHour() - minHour;
-
-			for(int i = initialHourIndex; i < finalHourIndex; i++) {
-				schedule.get(i).set(dayIndex, schedule.get(i).get(dayIndex) + 1);
-			}
-		}
-		return schedule;
-	}
-	
-	private Map<DayOfWeek, Integer> getDaysOfWeek() {
-		if(DAYS_OF_WEEK_NUM.isEmpty()) {
-			int i = 0;
-			for(DayOfWeek dow : DayOfWeek.values()) {
-				DAYS_OF_WEEK_NUM.put(dow, i);
-				i++;
-			}
-		}
-		return DAYS_OF_WEEK_NUM;
 	}
 
 	@Override
