@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             <div class="justify-center">
-                                <button type="submit" class="btn btn-primary submit-btn">{{'create' | translate}}</button>
+                                <button ng-disabled="!createEventForm.$valid" type="submit" class="btn btn-primary submit-btn">{{'create' | translate}}</button>
                             </div>
                         </form>
                     </div>

@@ -10,41 +10,41 @@
 				<form ng-submit = registerSubmit(picture) name="registerForm" method="post" novalidate>
 					<div>
 						<input  class="form-control" type="text" placeholder="{{'username' | translate}}" name="username" ng-model="user.username" ng-pattern="usernamePattern" required maxlength="100"/>
-						<div ng-show="(registerForm.username.$touched ||  registerForm.$submitted)">
+						<span ng-show="(registerForm.username.$touched ||  registerForm.$submitted)">
 		                    <span ng-show="registerForm.username.$error.required" class="form-error">{{'form_required' | translate}}</span>
 		                    <span ng-show="registerForm.username.$error.pattern" class="form-error">{{'username_pattern_error' | translate}}</span>
 		                    <span ng-show="duplicateUsernameError" class="form-error">
 		                        {{'duplicate_username_error' | translate}}</span>
-		                </div>
+		                </span>
 					</div>
 					<div>
 						<input class="form-control" type="text" placeholder="{{'first_name' | translate}}" maxlength="100" name="firstName" ng-model="user.firstName" ng-pattern="namePattern" required/>
-						<div ng-show="(registerForm.firstName.$touched ||  registerForm.$submitted)">
+						<span ng-show="(registerForm.firstName.$touched ||  registerForm.$submitted)">
 		                    <span ng-show="registerForm.firstName.$error.required" class="form-error">{{'form_required' | translate}}</span>
 		                    <span ng-show="registerForm.firstName.$error.pattern" class="form-error">{{'letter_name_pattern_error' | translate}}</span>
-		                </div>
+		                </span>
 					</div>
 					<div>
 						<input  class="form-control" type="text" placeholder="{{'last_name' | translate}}" maxlength="100" name="lastName" ng-model="user.lastName" ng-pattern="namePattern" required/>
-						<div ng-show="(registerForm.lastName.$touched ||  registerForm.$submitted)">
+						<span ng-show="(registerForm.lastName.$touched ||  registerForm.$submitted)">
 		                    <span ng-show="registerForm.lastName.$error.required" class="form-error">{{'form_required' | translate}}</span>
 		                    <span ng-show="registerForm.lastName.$error.pattern" class="form-error">{{'letter_name_pattern_error' | translate}}</span>
-		                </div>
+		                </span>
 					</div>
 					<div>
 						<input class="form-control" type="password" placeholder="{{'password' | translate}}" minlength="6" maxlength="100" name="password" ng-model="user.password" required/>
-						<div ng-show="(registerForm.password.$touched ||  registerForm.$submitted)">
+						<span ng-show="(registerForm.password.$touched ||  registerForm.$submitted)">
 		                    <span ng-show="registerForm.password.$error.required" class="form-error">{{'form_required' | translate}}</span>
 		                    <span ng-show="registerForm.password.$error.minlength" class="form-error">{{'password_length_error' | translate}}</span>
-		                </div>
+		                </span>
 					</div>
 					<div>
 						<input class="form-control" type="password" placeholder="{{'repeat_password' | translate}}" minlength="6" maxlength="100" name="repeatPassword" ng-model="user.repeatPassword" required/>
-						<div ng-show="(registerForm.repeatPassword.$touched ||  registerForm.$submitted)">
+						<span ng-show="(registerForm.repeatPassword.$touched ||  registerForm.$submitted)">
 		                    <span ng-show="registerForm.repeatPassword.$error.required" class="form-error">{{'form_required' | translate}}</span>
 		                    <span ng-show="!passwordsMatch()" class="form-error">{{'different_passwords' | translate}}</span>
 		                    <span ng-show="registerForm.repeatPassword.$error.minlength" class="form-error">{{'password_length_error' | translate}}</span>
-		                </div>
+		                </span>
 					</div>
 					<div class="registration-image-container">
 						<input class="registration-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}">
@@ -56,7 +56,7 @@
             <img class="registration-image" ngf-src="picture">
 					</div>
 					<div class="justify-center">
-						<button type="submit" class="btn btn-primary submit-btn">{{'register' | translate}}</button>
+						<button ng-disabled="!registerForm.$valid" type="submit" class="btn btn-primary submit-btn">{{'register' | translate}}</button>
 					</div>
 					<div class="bottom-message mb-10">
 						<span>{{'already_have_account' | translate}}</span>
