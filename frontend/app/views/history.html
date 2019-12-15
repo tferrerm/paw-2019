@@ -2,7 +2,7 @@
 	<div class="profile-title">
 		<h2>{{'myParticipations' | translate }}</h2>
 	</div>
-	<span class="help-message notice w-70 justify-center">{{'history_help' | translate }}</span>
+	<span ng-if="events.length > 0" class="help-message notice w-70 justify-center">{{'history_help' | translate }}</span>
 	<div ng-if="events.length > 0" class="w-100">
 		<div class="tbl">
 			<div class="table-header background-dodgerblue">
@@ -57,9 +57,10 @@
 		</div>
 	</div>
 		<div ng-if="events.length <= 0">
-			<div class="notice">{{'no_results' | translate}}</div>
+			<div class="notice">{{'empty_history' | translate}}</div>
+			<a ng-click="goToEvents()">
+				<button type="button" class="btn">{{'view_events' | translate}}</button>
+			</a>
 		</div>
 	</div>
 </div>
-
-

@@ -16,6 +16,10 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			$location.url('pitches/' + pitchid + '/events/' + eventid);
 		};
 
+		$scope.goToEvents = function() {
+			$location.url('events/');
+		};
+
 		$scope.getFirstPage = function() {
 			params.pageNum = 1;
 			restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
