@@ -34,33 +34,31 @@
 					</a>
 				</div>
 			</div>
-			<div class="table-navigator w-100 justify-center flex-column">
-				<span class="flex justify-center">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + tournaments.length - 1}} {{'of' | translate}} {{tournamentCount}}</span>
-				<div ng-hide="lastPageNum == 1 || lastPageNum == 0" class="flex-row flex-space-around table-header"></div>
-					<div class="w-100">
-						<div ng-hide="pageNum == 1" class="flex-row w-100 flex-space-around">
-							<a ng-click="getFirstPage()">
-								<button type="button" class="btn btn-secondary">
-									{{'first' | translate}}
-								</button>
-							</a>
-							<a ng-click="getPreviousPage()">
-								<button type="button" class="btn btn-secondary">
-									{{'back' | translate}}
-								</button>
-							</a>
-						</div>
+			<div class="table-navigator w-100 justify-center align-center flex-row">
+				<div class="flex-1">
+					<div ng-hide="pageNum == 1" class="flex-space-around flex-row">
+						<a ng-click="getFirstPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'first' | translate}}
+							</button>
+						</a>
+						<a ng-click="getPrevPage()">
+							<button type="button" class="btn btn-secondary">
+								{{'back' | translate}}
+							</button>
+						</a>
 					</div>
-					<div class="w-100">
-						<div ng-hide="pageNum == lastPageNum" class="flex-row w-100 flex-space-around">
-							<a ng-click="getNextPage()">
-								<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
-							</a>
-							<a ng-click="getLastPage()">
-								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
-							</a>
-						</div>			
-					</div>
+				</div>
+				<span class="flex flex-1 justify-center">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + tournaments.length - 1}} {{'of' | translate}} {{tournamentCount}}</span>
+				<div class="flex-1">
+					<div ng-hide="pageNum == lastPageNum" class="flex-space-around flex-row">
+						<a ng-click="getNextPage()">
+							<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
+						</a>
+						<a ng-click="getLastPage()">
+							<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
+						</a>
+					</div>			
 				</div>
 			</div>
 		</div>
