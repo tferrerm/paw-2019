@@ -3,9 +3,9 @@
 		<div class="profile-title">
 			<h2>{{'choose_event' | translate}}</h2>
 		</div>
-		<div class="notice" ng-if="eventCount === 0 && !filterPresence">
-			<span>{{'zero_events' | translate}}</span>
-			<a ng-click="goToPitches()">
+		<div class="notice empty-section-container" ng-if="eventCount === 0 && !filterPresence">
+			<span class="mv-5">{{'zero_events' | translate}}</span>
+			<a class="mv-5" ng-click="goToPitches()">
 				<button type="button" class="btn">{{'create_event' | translate}}</button>
 			</a>
 		</div>

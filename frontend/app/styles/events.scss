@@ -110,3 +110,9 @@ a.event-link {
 .no-res-my-ev {
     align-self: center;
 }
+
+.empty-section-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
