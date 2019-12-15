@@ -268,16 +268,18 @@ public class ClubHibernateDao implements ClubDao {
 	public List<Event> findCurrentEventsInClub(final long clubid, final Sport sport) {
 		LocalDate ld = LocalDate.now();
 		// Today at 00:00
-		Instant today = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant();
-		// In seven days at 23:00
-		Instant inAWeek = today.plus(7, ChronoUnit.DAYS); // ARREGLAR
-
+		Instant tomorrow = ld.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant().plus(1, ChronoUnit.DAYS);
+		// In the following week at 00:00
+		Instant inAWeek = tomorrow.plus(7, ChronoUnit.DAYS);
+		
 		Map<String, Object> paramsMap = new HashMap<>();
-		StringBuilder idQueryString = new StringBuilder("SELECT eventid FROM events NATURAL JOIN pitches "
-				+ " WHERE clubid = :clubid AND sport = :sport AND starts_at > :today AND starts_at < :inAWeek");
+		StringBuilder idQueryString = new StringBuilder("(SELECT eventid FROM events NATURAL JOIN pitches "
+				+ " WHERE clubid = :clubid AND sport = :sport AND starts_at > :tomorrow AND starts_at < :inAWeek) "
+				+ " UNION (SELECT eventid FROM tournament_events NATURAL JOIN pitches WHERE clubid = :clubid AND "
+				+ " sport = :sport AND starts_at > :tomorrow AND starts_at < :inAWeek)");
 		paramsMap.put("clubid", clubid);
 		paramsMap.put("sport", sport.toString());
-		paramsMap.put("today", Timestamp.from(today));
+		paramsMap.put("tomorrow", Timestamp.from(tomorrow));
 		paramsMap.put("inAWeek", Timestamp.from(inAWeek));
 		
 		Query idQuery = em.createNativeQuery(idQueryString.toString());
