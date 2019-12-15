@@ -7,7 +7,7 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		$scope.minHour = 0;
 		$scope.maxHour = 0;
 	    $scope.club = club;
-	    //$scope.schedule = [];
+	    $scope.schedule = [];
 	    $scope.startsAtHours = [];
 	    $scope.endsAtHours = [];
 	    
@@ -25,27 +25,29 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    	}
 	    	
 	    }).then(function(data) {
-	    	/*restService.getPitchWeekEvents(pitch.pitchid, {}).then(function(data) {
+	    	restService.getClubWeekEvents(club.clubid).then(function(data) {
+	    		$scope.pitchCount = data.pitchCount;
 	    		$scope.schedule = Array.apply(null, Array($scope.maxHour - $scope.minHour));
-			    for(var i = 0; i < ($scope.maxHour - $scope.minHour); i++) {
-			    	$scope.schedule[i] = Array.apply(null, Array(7));
+			    for (var i = 0; i < ($scope.maxHour - $scope.minHour); i++) {
+			    	var arr = [0, 0, 0, 0, 0, 0, 0];
+			    	$scope.schedule[i] = arr;
 			    }
-
+			    
 		    	var weekEvents = data.events;
 		    	angular.forEach(weekEvents, function(event, index) {
 		    		var startsDate = new Date(Date.parse(event.startsAt));
 		    		var endsDate = new Date(Date.parse(event.endsAt));
 		    		/* Sunday = 0 --> Sunday = 6 */
-		    		/*var todayDayIndex = (((new Date()).getDay() - 1) + 7) % 7;
+		    		var todayDayIndex = (((new Date()).getDay() - 1) + 7) % 7;
 		    		var eventDayIndex = (((((startsDate.getDay() - 1) + 7) % 7) - todayDayIndex) + 7) % 7;
 		    		var startHourIndex = startsDate.getHours() - $scope.minHour;
 		    		var endHourIndex = endsDate.getHours() - $scope.minHour - 1;
 		    		
-		    		for(var i = startHourIndex; i <= endHourIndex; i++) {
-		    			$scope.schedule[i][eventDayIndex] = {name: event.name, maxParticipants: event.maxParticipants, inscriptionCount: event.inscriptionCount};
+		    		for (var i = startHourIndex; i <= endHourIndex; i++) {
+		    			$scope.schedule[i][eventDayIndex] += 1;
 		    		}
-		    	})
-		    });*/
+		    	});
+		    });
 		});
 
 	    $scope.tournament = {};

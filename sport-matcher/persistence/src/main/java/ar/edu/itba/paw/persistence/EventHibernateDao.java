@@ -185,7 +185,7 @@ public class EventHibernateDao implements EventDao {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 		Root<Event> from = cq.from(Event.class);
-		from.fetch("inscriptions", JoinType.LEFT);
+		
 		final TypedQuery<Event> query = em.createQuery(
 				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
 			);
