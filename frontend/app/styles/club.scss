@@ -10,9 +10,8 @@
 .club-buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-items: center;
-    width: 60%;
 }
 
 .club-comments {

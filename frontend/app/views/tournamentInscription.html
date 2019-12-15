@@ -11,17 +11,17 @@
 			{{tournament.startsAt | date: 'EEEE ' | translate}}
 			{{tournament.startsAt | date: 'd, ' | translate}}
 			{{tournament.startsAt | date: 'MMM ' | translate}}
-			{{tournament.startsAt | date:'yyyy HH:mm' | translate}}
+			{{tournament.startsAt | date:'yyyy HH:mm' | translate}}.
 		</span>
 		<div class="w-50 mv-10">
-			<div class="comment-profile-row">
-				<span class="event-info-label">{{'club' | translate}}</span>
+			<div class="comment-profile-row flex-row align-center">
+				<span class="event-info-label mr-10">{{'club' | translate}}</span>
 				<a class="link-text" ng-click="goToClub(tournament.tournamentClub.clubid)">
 					<span>{{tournament.tournamentClub.name}}</span>
 				</a>
 			</div>
-			<div>
-				<span class="event-info-label">{{'end_date' | translate}}<span>
+			<div class="flex-row align-center">
+				<span class="event-info-label mr-10">{{'end_date' | translate}}</span>
 				<span>
 					{{tournament.inscriptionEnd | date: 'EEEE ' | translate}}
 					{{tournament.inscriptionEnd | date: 'd, ' | translate}}
