@@ -10,6 +10,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 	    $scope.schedule = [];
 	    $scope.startsAtHours = [];
 	    $scope.endsAtHours = [];
+	    $scope.tableHours = [];
 
 	    titleService.setTitle($filter('translate')('create_tournament'));
 	    
@@ -19,10 +20,11 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 	    	
 	    	for (var i = $scope.minHour; i <= $scope.maxHour; i++) {
 	    		if (i !== $scope.maxHour) {
-	    			$scope.startsAtHours.push(i);
+	    			$scope.tableHours.push(i + ':00');
+	    			$scope.startsAtHours.push({id: i, format: i + ':00'});
 	    		}
 	    		if (i !== $scope.minHour) {
-	    			$scope.endsAtHours.push(i);
+	    			$scope.endsAtHours.push({id: i, format: i + ':00'});
 	    		}
 	    	}
 	    	
@@ -39,9 +41,9 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 		    	angular.forEach(weekEvents, function(event, index) {
 		    		var startsDate = new Date(Date.parse(event.startsAt));
 		    		var endsDate = new Date(Date.parse(event.endsAt));
-		    		/* Sunday = 0 --> Sunday = 6 */
-		    		var todayDayIndex = (((new Date()).getDay() - 1) + 7) % 7;
-		    		var eventDayIndex = (((((startsDate.getDay() - 1) + 7) % 7) - todayDayIndex) + 7) % 7;
+		    		/* Sunday = 0 */
+		    		var todayDayIndex = (new Date()).getDay();
+		    		var eventDayIndex = ((startsDate.getDay() - (todayDayIndex + 1)) + 7) % 7;
 		    		var startHourIndex = startsDate.getHours() - $scope.minHour;
 		    		var endHourIndex = endsDate.getHours() - $scope.minHour - 1;
 		    		
@@ -119,6 +121,38 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 
 		$scope.evenInputTeams = function() {
 			return $scope.tournament.maxTeams % 2 === 0;
+		};
+
+		var now = ($filter('date')(new Date(), 'EEEE'));
+		var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var minDays = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
+		var indexOfTomorrow = (weekDays.indexOf(now) + 1) % 7;
+		$scope.dayHeaders = minDays.slice(indexOfTomorrow, 7).concat(minDays.slice(0, indexOfTomorrow));
+
+	    $scope.$watch('event.selectedEndsAtHour', function (newValue) {
+	    	var startVal = parseInt($('#startsAtHour').val(), 10);
+	       	var endVal = parseInt($('#endsAtHour').val(), 10);
+	       	if (startVal >= endVal || !isFinite(startVal)) {
+	         	var endIndex = $('#endsAtHour').prop('selectedIndex');
+	         	$('#startsAtHour').prop('selectedIndex', endIndex);
+	         	$scope.event.startsAtHour = endVal - 1;
+	       	}
+			$scope.event.endsAtHour = endVal;
+		});
+
+		$scope.$watch('event.selectedStartsAtHour', function (newValue) {
+	    	var startVal = parseInt($('#startsAtHour').val(), 10);
+	       	var endVal = parseInt($('#endsAtHour').val(), 10);
+	       	if (startVal >= endVal || !isFinite(endVal)) {
+	         	var startIndex = $('#startsAtHour').prop('selectedIndex');
+	         	$('#endsAtHour').prop('selectedIndex', startIndex);
+	         	$scope.event.endsAtHour = startVal + 1;
+	       	}
+			$scope.event.startsAtHour = startVal;
+		});
+
+		$scope.isFinite = function(n) {
+			return isFinite(n);
 		};
 		
 	}]);
