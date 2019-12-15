@@ -25,7 +25,7 @@
         "func-names": 0,
         "func-style": 0,
         "guard-for-in": 1,
-        "key-spacing": off,
+        "key-spacing": 1,
         "keyword-spacing": [2, {"before": true, "after": true}],
         "max-nested-callbacks": [2, 5],
         "new-cap": 2,
