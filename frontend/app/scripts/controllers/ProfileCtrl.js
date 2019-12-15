@@ -39,8 +39,8 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	}).catch(function(error) {
-alert(error.data || ' Error');
-});
+					$scope.hasRelationship = false;
+				});
 
 		restService.getUserComments(user.userid, commentParams)
 		    .then(function(data) {

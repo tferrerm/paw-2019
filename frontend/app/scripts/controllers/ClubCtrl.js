@@ -20,7 +20,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	}).catch(function(error) {
-				alert(error.data || ' Error');
+					$scope.hasRelationship = false;
 			});
 
 	    updatePitches(club.clubid, pitchParams);
