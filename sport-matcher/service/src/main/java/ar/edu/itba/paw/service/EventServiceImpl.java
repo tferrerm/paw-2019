@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -65,8 +64,6 @@ public class EventServiceImpl implements EventService {
 
 	private static final String TIME_ZONE = "America/Buenos_Aires";
 	private static final Map<DayOfWeek, Integer> DAYS_OF_WEEK_NUM = new HashMap<>();
-	private static final String[] DAYS_OF_WEEK_ABR = {"day_mon", "day_tue", "day_wed", "day_thu",
-			"day_fri", "day_sat", "day_sun"};
 	private static final int DAY_LIMIT = 7;
 	private static final int MIN_HOUR = 9;
 	private static final int MAX_HOUR = 23;
@@ -135,38 +132,6 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<List<Boolean>> convertEventListToBooleanSchedule(List<Event> events) {
-		List<List<Boolean>> booleanSchedule = new ArrayList<>();
-		for(int i = 0; i < MAX_HOUR - MIN_HOUR; i++) {
-			booleanSchedule.add(new ArrayList<Boolean>());
-			for(int j = 0; j < DAY_LIMIT; j++) {
-				booleanSchedule.get(i).add(false);
-			}
-		}
-		for(Event event : events) {
-			DayOfWeek startsAtDayOfWeek = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDate().getDayOfWeek();
-			DayOfWeek currentDayOfWeek = LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek();
-
-			Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
-
-			int dayIndex = (daysOfWeek.get(startsAtDayOfWeek) - daysOfWeek.get(currentDayOfWeek)) % 7; // Should change if dayAmount != 7
-			if(dayIndex < 0)
-				dayIndex += 7;
-
-			int initialHourIndex = event.getStartsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDateTime().getHour() - MIN_HOUR;
-			int finalHourIndex = event.getEndsAt().atZone(ZoneId.of(TIME_ZONE))
-					.toLocalDateTime().getHour() - MIN_HOUR;
-
-			for(int i = initialHourIndex; i < finalHourIndex; i++) {
-				booleanSchedule.get(i).set(dayIndex, true);
-			}
-		}
-		return booleanSchedule;
-	}
-
-	@Override
 	public List<List<Event>> convertEventListToSchedule(List<Event> events) {
 		List<List<Event>> schedule = new ArrayList<>();
 		for(int i = 0; i < DAY_LIMIT; i++) {
@@ -205,21 +170,6 @@ public class EventServiceImpl implements EventService {
 			}
 		}
 		return DAYS_OF_WEEK_NUM;
-	}
-
-	@Override
-	public String[] getScheduleDaysHeader() {
-		Map<DayOfWeek, Integer> daysOfWeek = getDaysOfWeek();
-		int currDayOfWeek = daysOfWeek.get(LocalDate.now(ZoneId.of(TIME_ZONE)).getDayOfWeek());
-		String[] nextSevenDays = new String[7];
-		for(int i = 0; i < 7; i++) {
-			if(i < currDayOfWeek) {
-				nextSevenDays[7 - currDayOfWeek + i] = DAYS_OF_WEEK_ABR[i];
-			} else {
-				nextSevenDays[i - currDayOfWeek] = DAYS_OF_WEEK_ABR[i];
-			}
-		}
-		return nextSevenDays;
 	}
 	
 	@Override
@@ -356,15 +306,6 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
 		}
 		return ed.countParticipants(eventid);
-	}
-
-	@Override
-	public Map<Integer, String> getAvailableHoursMap(int minHour, int maxHour) {
-		Map<Integer, String> availableHoursMap = new LinkedHashMap<>();
-		for(int i = minHour; i <= maxHour; i++) {
-			availableHoursMap.put(i, i + ":00");
-		}
-		return availableHoursMap;
 	}
 
 	@Override

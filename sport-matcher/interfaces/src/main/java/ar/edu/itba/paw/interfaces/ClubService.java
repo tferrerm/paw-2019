@@ -69,7 +69,4 @@ public interface ClubService {
 	public List<Pitch> getAvailablePitches(final long clubid, final Sport sport, 
 			Instant startsAt, Instant endsAt, int amount);
 
-	public List<List<Integer>> convertEventListToSchedule(final List<Event> clubEvents, final int minHour, final int maxHour,
-			final int dayAmount);
-
 }
