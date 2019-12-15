@@ -145,23 +145,21 @@
 				{{'event_started_error' | translate}}
 			</span>
 		</div>
-		<div class="club-buttons w-60" ng-if="!inscriptionHasEnded">
-			<div ng-if="!isAdmin">
-				<div ng-if="event.participant">
-					<a ng-click="leaveEvent(event.pitch.pitchid, event.eventid)">
-						<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
-					</a>
-				</div>
-				<div ng-if="!event.participant && event.inscriptionCount < event.maxParticipants">
-					<a ng-click="joinEvent(event.pitch.pitchid, event.eventid)">
-						<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
-					</a>
-				</div>
-				<div class ="cancel-event" ng-if="isOwner">
-					<a ng-click="cancelEvent(event.pitch.pitchid, event.eventid)">
-						<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
-					</a>
-				</div>
+		<div class="w-60 flex-row flex-space-around" ng-if="!inscriptionHasEnded && !isAdmin">
+			<div ng-if="event.participant">
+				<a ng-click="leaveEvent(event.pitch.pitchid, event.eventid)">
+					<button type="submit" class="btn btn-danger join-button">{{'leave' | translate}}</button>
+				</a>
+			</div>
+			<div ng-if="!event.participant && event.inscriptionCount < event.maxParticipants">
+				<a ng-click="joinEvent(event.pitch.pitchid, event.eventid)">
+					<button type="submit" class="btn btn-success join-button">{{'join' | translate}}</button>
+				</a>
+			</div>
+			<div class ="cancel-event" ng-if="isOwner">
+				<a ng-click="cancelEvent(event.pitch.pitchid, event.eventid)">
+					<button type="submit" class="btn btn-danger join-button mb-10">{{'cancel_event' | translate}}</button>
+				</a>
 			</div>
 		</div>
 		<div ng-if="isAdmin">
