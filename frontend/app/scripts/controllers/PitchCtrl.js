@@ -13,6 +13,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 	    $scope.endsAtHours = [];
 	    $scope.tableHours = [];
 
+    const today = new Date();
+    const tomorrow = new Date(today);
+    $scope.tomorrow = tomorrow.setDate(tomorrow.getDate() + 1);
+    $scope.tomorrowDate = tomorrow.getFullYear() + '-' + (tomorrow.getMonth() + 1  < 10 ? '0' : '') + (tomorrow.getMonth() + 1 ) + '-' + (tomorrow.getDate()  < 10 ? '0' : '') + tomorrow.getDate();
+    var sevenDaysadd = new Date(tomorrow);
+    sevenDaysadd.setDate(sevenDaysadd.getDate() + 7);
+    $scope.sevenDaysFromTomorrow = sevenDaysadd.getFullYear() + '-' + (sevenDaysadd.getMonth() + 1  < 10 ? '0' : '') + (sevenDaysadd.getMonth() + 1) + '-' + (sevenDaysadd.getDate()  < 10 ? '0' : '') + sevenDaysadd.getDate();
+
     	restService.getPitchPicture(pitch.pitchid).then(function(data) {
     		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
     	}).catch(function(error) {
