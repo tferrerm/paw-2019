@@ -82,7 +82,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 			console.log(error);
 			console.log($scope.tournament.firstRoundDate);
 			if (error.status === 422) {
-				if (error.data.constraintViolations !== null) {
+				if (error.data.constraintViolations != null) {
 					/* Controller violation */
 					angular.forEach(error.data.constraintViolations, function(cv) {
 						switch (cv.propertyPath) {

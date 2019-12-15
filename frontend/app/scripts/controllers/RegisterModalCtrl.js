@@ -19,14 +19,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 						$uibModalInstance.close(true);
 					}).catch(function(error) {
 						if (error.status === 422) {
-							if (error.data.constraintViolations === null) {
+							if (error.data.constraintViolations == null) {
 								/* Service violation */
 								if (error.data.error === 'PictureProcessingError') {
 									$scope.pictureProcessingError = true;
 								}
 							}
 						} else if (error.status === 409) {
-							if (error.data.constraintViolations === null) {
+							if (error.data.constraintViolations == null) {
 								/* Service violation */
 								if (error.data.error === 'UserAlreadyExists') {
 									$scope.duplicateUsernameError = true;

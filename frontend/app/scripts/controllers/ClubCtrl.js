@@ -128,7 +128,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 								updatePitches(club.clubid, pitchParams);
 							}).catch(function(error) {
 								if (error.status === 422) {
-									if (error.data.constraintViolations === null) {
+									if (error.data.constraintViolations == null) {
 										/* Service violation */
 										if (error.data.error === 'PictureProcessingError') {
 											$scope.pictureProcessingError = true;
