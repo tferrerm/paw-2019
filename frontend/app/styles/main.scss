@@ -494,6 +494,11 @@ div.background-dodgerblue {
   justify-content: center;
 }
 
+.justify-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .kick-user-btn {
   background-color: #fff2e6;
   color: red;
@@ -552,6 +557,10 @@ div.background-dodgerblue {
 
 .mr-5 {
   margin-right: 5px;
+}
+
+.mr-10 {
+  margin-right: 10px;
 }
 
 .mr-40 {
@@ -925,6 +934,10 @@ div.background-dodgerblue {
 
 .w-50 {
   width: 50%;
+}
+
+.w-60 {
+  width: 60%;
 }
 
 .w-70 {
