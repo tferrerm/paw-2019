@@ -57,7 +57,11 @@
 					<div class="home-header">{{event.pitch.club.name}}</div>
 					<div>{{event.pitch.sport | translate}}</div>
 					<div>{{event.maxParticipants - event.inscriptionCount}}</div>
-					<div>{{event.startsAt | date: 'EEEE' | translate}} {{event.startsAt | date:'d HH:mm, MMM yyyy'}}
+					<div>
+						{{event.startsAt | date: 'EEEE ' | translate}}
+						{{event.startsAt | date: 'd, ' | translate}}
+						{{event.startsAt | date: 'MMM ' | translate}}
+						{{event.startsAt | date:'yyyy HH:mm' | translate}}
 					</div>
 					<div>
 						<a ng-click="goToEvent(event.pitch.pitchid, event.eventid)">

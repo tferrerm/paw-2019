@@ -8,7 +8,10 @@
 			{{'tournament_description_one' | translate}}
 			{{tournament.rounds}}
 			{{'tournament_description_two' | translate}}
-			{{tournament.startsAt | date:'EEEE d, MMM yyyy HH:mm'}}
+			{{tournament.startsAt | date: 'EEEE ' | translate}}
+			{{tournament.startsAt | date: 'd, ' | translate}}
+			{{tournament.startsAt | date: 'MMM ' | translate}}
+			{{tournament.startsAt | date:'yyyy HH:mm' | translate}}
 		</span>
 		<div class="w-50 mv-10">
 			<div class="comment-profile-row">
@@ -20,7 +23,10 @@
 			<div>
 				<span class="event-info-label">{{'end_date' | translate}}<span>
 				<span>
-					{{tournament.inscriptionEnd | date:'EEEE d, MMM yyyy HH:mm'}}
+					{{tournament.inscriptionEnd | date: 'EEEE ' | translate}}
+					{{tournament.inscriptionEnd | date: 'd, ' | translate}}
+					{{tournament.inscriptionEnd | date: 'MMM ' | translate}}
+					{{tournament.inscriptionEnd | date:'yyyy HH:mm' | translate}}
 				</span>
 			</div>
 		</div>
