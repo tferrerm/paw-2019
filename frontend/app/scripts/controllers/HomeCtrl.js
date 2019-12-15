@@ -17,6 +17,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 			$location.url('pitches/');
 		};
 
+		$scope.goToClubs = function() {
+			$location.url('clubs/');
+		};
+
+		$scope.goToTournaments = function() {
+			$location.url('tournaments/');
+		};
+
 		$scope.$on('user:updated', function() {
 			updateSchedule();
 		});

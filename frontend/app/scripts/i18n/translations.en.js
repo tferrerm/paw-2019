@@ -246,6 +246,10 @@ define([], function() {
     max_error: 'Field maximum is {{max}}.',
     zero_events: 'There are no events yet, but, you can be the first who creates one!',
     empty_history: 'You have not participated in any events yet. There\'s plenty of matches waiting for you!',
-    empty_my_events: 'You haven\'t created any events yet. Give it a try!'
+    empty_my_events: 'You haven\'t created any events yet. Give it a try!',
+    welcome_admin: 'Welcome Admin!',
+    clubs_intro: 'Do you want to add a new club or add a new pitch?',
+    tournaments_intro: 'Do you want to delete a tournament?',
+    delete_event_intro: 'Do you want to delete an exisiting event?'
 };
 });
