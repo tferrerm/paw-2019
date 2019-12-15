@@ -34,7 +34,7 @@ import ar.edu.itba.paw.model.User;
 @Repository
 public class TournamentHibernateDao implements TournamentDao {
 	
-	private static final int MAX_ROWS = 1;
+	private static final int MAX_ROWS = 10;
 	private static final int WON = 3;
 	private static final int DRAW = 1;
 	private static final int LOST = 0;
