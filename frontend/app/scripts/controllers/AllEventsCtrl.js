@@ -1,8 +1,10 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('AllEventsCtrl', ['$scope', '$filter', '$location', 'restService', 'events', function($scope, $filter, $location, restService, events) {
+	frontend.controller('AllEventsCtrl', ['$scope', '$filter', '$location', 'restService', 'titleService', 'events', function($scope, $filter, $location, restService, titleService, events) {
 		var params = {pageNum: 1};
+
+		titleService.setTitle($filter('translate')('events'));
 
 		$scope.events = events.events;
 		$scope.eventCount = events.eventCount;

@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('TournamentNewCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'club', function ($scope, $filter, $location, restService, authService, club) {
+	frontend.controller('TournamentNewCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'titleService', 'club', function ($scope, $filter, $location, restService, authService, titleService, club) {
 		
 		$scope.namePattern = '^[a-zA-Z0-9 ]+$';
 		$scope.minHour = 0;
@@ -10,6 +10,8 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 	    $scope.schedule = [];
 	    $scope.startsAtHours = [];
 	    $scope.endsAtHours = [];
+
+	    titleService.setTitle($filter('translate')('create_tournament'));
 	    
 	    restService.getHourRange().then(function(data) {
 	    	$scope.minHour = data.minHour;

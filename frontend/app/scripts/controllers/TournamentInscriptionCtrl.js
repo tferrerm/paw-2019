@@ -1,13 +1,15 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/modalService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/modalService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', '$filter', 'restService', 'modalService', 'tournament', 'teamInscriptions', function ($scope, $location, $filter, restService, modalService, tournament, teamInscriptions) {
+	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', '$filter', 'restService', 'modalService', 'titleService', 'tournament', 'teamInscriptions', function ($scope, $location, $filter, restService, modalService, titleService, tournament, teamInscriptions) {
 		
 		$scope.tournament = tournament;
 		$scope.hasJoined = teamInscriptions.hasJoined;
 		setTournamentTeamPairs(teamInscriptions.teams);
 		$scope.showLoginModal = modalService.loginModal;
 		updateInscriptionEnded();
+
+		titleService.setTitle(tournament.name);
 
 		if ($scope.isAdmin) {
 			$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;

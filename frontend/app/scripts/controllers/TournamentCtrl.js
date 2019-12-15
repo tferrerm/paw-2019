@@ -1,7 +1,7 @@
 'use strict';
-define(['frontend', 'services/restService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('TournamentCtrl', ['$scope', '$location', 'restService', 'tournament', 'teams', 'round', function ($scope, $location, restService, tournament, teams, round) {
+	frontend.controller('TournamentCtrl', ['$scope', '$location', 'restService', 'titleService', 'tournament', 'teams', 'round', function ($scope, $location, restService, titleService, tournament, teams, round) {
 		$scope.tournament = tournament;
 		$scope.teams = teams.teams;
 		$scope.roundEvents = round.events;
@@ -9,6 +9,8 @@ define(['frontend', 'services/restService'], function(frontend) {
 		$scope.roundPageNum = round.round;
 		$scope.now = Date.parse(new Date());
 		var params = {roundPageNum: round.round};
+
+		titleService.setTitle(tournament.name);
 
 		$scope.goToTournamentEvent = function (tournamentid, eventid) {
 			$location.url('tournaments/' + tournamentid + '/events/' + eventid);

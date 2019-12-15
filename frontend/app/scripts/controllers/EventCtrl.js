@@ -1,11 +1,13 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService', 'services/modalService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/modalService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('EventCtrl', ['$scope', '$filter', '$location', '$route', 'restService', 'authService', 'modalService', 'event', 'inscriptions', function($scope, $filter, $location, $route, restService, authService, modalService, event, inscriptions) {
+	frontend.controller('EventCtrl', ['$scope', '$filter', '$location', '$route', 'restService', 'authService', 'modalService', 'titleService', 'event', 'inscriptions', function($scope, $filter, $location, $route, restService, authService, modalService, titleService, event, inscriptions) {
 		
 		$scope.event = event;
 		$scope.inscriptions = inscriptions.inscriptions;
 		$scope.showLoginModal = modalService.loginModal;
+
+		titleService.setTitle(event.name);
 
 		updateOwner();
 		updateDates();

@@ -1,9 +1,11 @@
 'use strict';
-define(['frontend', 'services/restService', 'services/authService'], function(frontend) {
+define(['frontend', 'services/restService', 'services/authService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('MyEventsCtrl', ['$scope', '$location', '$q', 'restService', 'authService', 'pastEvents', 'futureEvents', function($scope, $location, $q, restService, authService, pastEvents, futureEvents) {
+	frontend.controller('MyEventsCtrl', ['$scope', '$location', '$filter', '$q', 'restService', 'authService', 'titleService', 'pastEvents', 'futureEvents', function($scope, $location, $filter, $q, restService, authService, titleService, pastEvents, futureEvents) {
 	    var pastEventParams = {pageNum: 1};
 	    var futureEventParams = {pageNum: 1};
+
+	    titleService.setTitle($filter('translate')('myEvents'));
 
     	$scope.pastEvents = pastEvents.events;
 		$scope.pastEventCount = pastEvents.eventCount;
