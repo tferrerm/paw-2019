@@ -1,7 +1,8 @@
 <div class="main-container">
 	<div class="content-container">
-		<div class="profile-title">
+		<div class="tournament-title">
 			<h2>{{tournament.name}}</h2>
+			<h4>{{'club' | translate}}: <a class="club-link" ng-click="goToClub(tournament.tournamentClub.clubid)">{{tournament.tournamentClub.name}}</a></h3>
 		</div>
 		<span class="help-message notice w-70 justify-center">{{'tournament_description' | translate}}</span>
 		<div ng-if="currentRound != null">
@@ -53,9 +54,9 @@
 					<div ng-show="isAdmin">
 						<form ng-submit = setTournamentResultSubmit(event) name="tournamentResultForm{{index}}" method="post" novalidate>
 							<div class="score score-tournament" ng-show="parseDate(event.endsAt) <= now">
-								<input class="form-control" type="number" min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
-								<input class="form-control" type="number" min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
-								<div class="justify-center">
+								<input class="form-control flex-05" type="number" min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
+								<input class="form-control flex-05" type="number" min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
+								<div class="justify-center flex-1">
 									<button type="submit" ng-disabled="!tournamentResultForm{{index}}.$valid" class="btn btn-primary minw-150 btn-primary">{{'upload_score' | translate}}</button>
 								</div>
 							</div>

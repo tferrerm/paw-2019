@@ -67,7 +67,6 @@
     flex-flow: row wrap;
     justify-content: space-between;
     list-style: none;
-    background-color: white;
 }
   
   .home-ev-column {
@@ -107,7 +106,6 @@
     text-align: center;
     font-size: 70px;
     color: white;
-    margin-bottom: 40px;
 }
   
 .home-header {
@@ -116,6 +114,14 @@
   
 .home-title {
     margin: 20px 0 10px;
+}
+
+.home-title-bgd-container {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 20px;
+    width: 90%;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 .upcoming-participation-container {
