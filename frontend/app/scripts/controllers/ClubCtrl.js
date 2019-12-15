@@ -26,16 +26,18 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 		updateComments(club.clubid, commentParams);
 
 		$scope.$on('user:updated', function() {
-			restService.hasRelationshipWithClub(club.clubid)
-		    	.then(function(data) {
-		    		$scope.hasRelationship = data.relationship;
-		    	});
-		    if ($scope.isAdmin) {
-				$scope.createdPitch = {};
-				restService.getSports().then(function(data) {
-					$scope.sports = data.sports;
-					$scope.createdPitch.sport = $scope.sports[0];
-				});
+			if ($scope.isLoggedIn) {
+				restService.hasRelationshipWithClub(club.clubid)
+			    	.then(function(data) {
+			    		$scope.hasRelationship = data.relationship;
+			    	});
+			    if ($scope.isAdmin) {
+					$scope.createdPitch = {};
+					restService.getSports().then(function(data) {
+						$scope.sports = data.sports;
+						$scope.createdPitch.sport = $scope.sports[0];
+					});
+				}
 			}
 		});
 

@@ -11,10 +11,12 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		updateDates();
 
 		$scope.$on('user:updated', function() {
-			updateEvent(event.pitch.pitchid, event.eventid);
-			updateOwner();
-			if ($scope.isOwner || $scope.isAdmin) {
-				$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+			if ($scope.isLoggedIn) {
+				updateEvent(event.pitch.pitchid, event.eventid);
+				updateOwner();
+				if ($scope.isOwner || $scope.isAdmin) {
+					$scope.showDeleteConfirmModal = modalService.deleteConfirmModal;
+				}
 			}
 		});
 

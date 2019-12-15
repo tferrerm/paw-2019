@@ -11,22 +11,6 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 			$scope.initialPageIndex = data.initialPageIndex;
 			$scope.pageNum = params.pageNum;
 		});
-	    
-		$scope.$on('user:updated', function() {
-		    if ($scope.isLoggedIn) {
-	    		restService.getHistory($scope.loggedUser.userid, params).then(function(data) {
-					$scope.events = data.events;
-					$scope.eventCount = data.eventCount;
-					$scope.lastPageNum = data.lastPageNum;
-					$scope.initialPageIndex = data.initialPageIndex;
-					$scope.pageNum = params.pageNum;
-				});
-		    } else {
-	    		var defer = $q.defer();
-	    		defer.reject('Access blocked');
-				$location.path('/home');
-	    	}
-		});
 
 		$scope.goToEvent = function(pitchid, eventid) {
 			$location.url('pitches/' + pitchid + '/events/' + eventid);

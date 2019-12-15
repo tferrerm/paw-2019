@@ -3,7 +3,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 
 	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'modalService', 'pitch', function($scope, $filter, $location, restService, authService, modalService, pitch) {
     	
-		$scope.isLoggedIn = authService.isLoggedIn();
 		$scope.minHour = 0;
 		$scope.maxHour = 0;
 	    $scope.pitch = pitch;
@@ -68,10 +67,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 
 	    $scope.event = {};
 	    $scope.showLoginModal = modalService.loginModal;
-
-	    $scope.$on('user:updated', function() {
-			$scope.isLoggedIn = authService.isLoggedIn();
-		});
 
 		$scope.$watch('event.selectedDate', function (newValue) {
 			$scope.event.date = $filter('date')(newValue, 'yyyy-MM-dd');

@@ -49,19 +49,12 @@ define(['frontend', 'services/restService'], function(frontend) {
 		}
 
 		$scope.setTournamentResultSubmit = function(event) {
-			//checkPasswordsMatch();
-			//if ($scope.createEventForm.$valid) {
-				//$scope.duplicateEmailError = false;
-				
-				if ($scope.isAdmin) {
-					restService.setTournamentEventResult(tournament.tournamentClub.clubid, tournament.tournamentid, event.eventid, event).then(function(data) {
-						updateTeams();
-						updateRound(params);
-					});
-
-				}
-
-			//}
+			if ($scope.isAdmin) {
+				restService.setTournamentEventResult(tournament.tournamentClub.clubid, tournament.tournamentid, event.eventid, event).then(function(data) {
+					updateTeams();
+					updateRound(params);
+				});
+			}
 		};
 
 		$scope.parseDate = function(date) {

@@ -33,6 +33,7 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 
 		$scope.logout = function() {
 			authService.logout();
+			$location.url('home');
 		};
 		
 		$scope.$on('user:updated', function() {

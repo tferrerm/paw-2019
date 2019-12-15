@@ -45,16 +45,6 @@ alert(error.data || ' Error');
 			$location.url('users/' + id);
 		};
 
-		$scope.$on('user:updated', function() {
-			$scope.isLoggedIn = authService.isLoggedIn();
-			if ($scope.isLoggedIn) {
-		    	$scope.loggedUser = authService.getLoggedUser();
-		    	$scope.isLoggedUser = $scope.loggedUser.userid === user.userid;
-		    } else {
-		    	$scope.isLoggedUser = false;
-		    }
-		});
-
 		restService.getUserComments(user.userid, commentParams)
 		    .then(function(data) {
 				$scope.comments = data.comments;

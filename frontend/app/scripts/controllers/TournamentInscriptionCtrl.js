@@ -123,7 +123,6 @@ define(['frontend', 'services/restService', 'services/modalService'], function(f
 			if ($scope.isLoggedIn) {
 		    	restService.getTournamentTeamsInscriptions(tournament.tournamentid).then(function(data) {
 					$scope.hasJoined = data.hasJoined;
-					//setTournamentTeamPairs(data.teams);
                 });
 		    } else {
 		    	$scope.hasJoined = false;

@@ -16,17 +16,6 @@ define(['frontend', 'services/restService', 'services/authService'], function(fr
 		$scope.futureEventsLastPageNum = futureEvents.lastPageNum;
 		$scope.futureEventsInitialPageIndex = futureEvents.initialPageIndex;
 		$scope.futureEventsPageNum = futureEventParams.pageNum;
-	    
-		$scope.$on('user:updated', function() {
-		    if ($scope.isLoggedIn) {
-		    	updatePastEvents(pastEventParams);
-		    	updateFutureEvents(futureEventParams);
-		    } else {
-	    		var defer = $q.defer();
-	    		defer.reject('Access blocked');
-				$location.path('/home');
-	    	}
-		});
 
 		$scope.goToEvent = function(pitchid, eventid) {
 			$location.url('pitches/' + pitchid + '/events/' + eventid);

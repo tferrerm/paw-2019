@@ -47,20 +47,22 @@
 							</div>
 						</div>
 					</div>
-					<div ng-if="isAdmin">
-						<form ng-submit = setTournamentResultSubmit(event) name="tournamentResultForm" method="post" novalidate>
-							<div class="score score-tournament" ng-if="parseDate(event.endsAt) <= now">
+					<div ng-show="isAdmin">
+						<form ng-submit = setTournamentResultSubmit(event) name="tournamentResultForm{{index}}" method="post" novalidate>
+							<div class="score score-tournament" ng-show="parseDate(event.endsAt) <= now">
 								<input class="form-control" type="number" min="0" name="firstResult" ng-model="event.firstTeamScore" required/>
 								<input class="form-control" type="number" min="0" name="secondResult" ng-model="event.secondTeamScore" required/>
 								<div class="justify-center">
-									<button type="submit" class="btn btn-primary minw-150 btn-primary">{{'upload_score' | translate}}</button>
+									<button type="submit" ng-disabled="!tournamentResultForm{{index}}.$valid" class="btn btn-primary minw-150 btn-primary">{{'upload_score' | translate}}</button>
 								</div>
 							</div>
 							<div ng-show="(tournamentResultForm.firstResult.$touched ||  tournamentResultForm.$submitted)">
 	                    		<span ng-show="tournamentResultForm.firstResult.$error.required" class="form-error">{{'form_required' | translate}}</span>
+	                    		<span ng-show="tournamentResultForm.firstResult.$error.min" class="form-error" translate="min_error" translate-values='{ min: 0}'></span>
 	                		</div>
 	                		<div ng-show="(tournamentResultForm.secondResult.$touched ||  tournamentResultForm.$submitted)">
 	                    		<span ng-show="tournamentResultForm.secondResult.$error.required" class="form-error">{{'form_required' | translate}}</span>
+	                    		<span ng-show="tournamentResultForm.secondResult.$error.min" class="form-error" translate="min_error" translate-values='{ min: 0}'></span>
 	                		</div>
 							<div class="score score-tournament" ng-if="parseDate(event.endsAt) > now">
 								<span>-</span>
