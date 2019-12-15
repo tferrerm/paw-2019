@@ -9,7 +9,7 @@
 				<button type="button" class="btn">{{'create_event' | translate}}</button>
 			</a>
 		</div>
-		<div ng-if="eventCount !== 0 || filterPresence">
+		<div class="empty-section-container w-100 text-center" ng-if="eventCount !== 0 || filterPresence">
 			<span class="help-message notice w-70 justify-center">{{'event_list_help' | translate}}</span>
 			<div class="tbl">
 				<div class="table-header">
