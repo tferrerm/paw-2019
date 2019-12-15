@@ -240,6 +240,7 @@ define([], function() {
     max_error: 'El máximo es {{max}}.',
     zero_events: 'Aún no hay eventos, pero, ¡tu puedes ser el primero en crear uno!',
     empty_history: 'No has participado en ningún evento. ¡Hay muchos eventos esperándote!',
-    empty_my_events: 'No has creado ningún evento todavía. ¡Inténtalo!'
+    empty_my_events: 'No has creado ningún evento todavía. ¡Inténtalo!',
+    date_restrictions: 'Los eventos se pueden crear con una anticipación de no más de 7 días y no menos que 1 día.'
 };
 });
