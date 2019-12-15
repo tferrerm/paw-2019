@@ -68,9 +68,11 @@
                         </div>
                         <div class="flex-05">
                             <span>{{'event_startsAt' | translate}}</span>
-                            <select class="form-control w-90" name="startsAtHour" ng-model="tournament.startsAtHour" ng-options="hour for hour in startsAtHours" required></select>
+                            <select class="form-control w-90" name="startsAtHour" ng-model="tournament.selectedStartsAtHour" ng-options="hour.id as hour.format for hour in startsAtHours track by hour.id" id="startsAtHour">
+                                <option></option>
+                            </select>
                             <div ng-show="(createTournamentForm.startsAtHour.$touched ||  createTournamentForm.$submitted)">
-                                <span ng-show="createTournamentForm.startsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                <span ng-show="!isFinite(tournament.startsAtHour)" class="form-error">{{'form_required' | translate}}</span>
                             </div>
                             <div ng-if="endsBeforeStartsError">
                                 <span class="form-error">
@@ -80,10 +82,11 @@
                         </div>
                         <div class="flex-05">
                             <span>{{'event_endsAt' | translate}}</span>
-                            <select class="form-control w-90" name="endsAtHour" ng-model="tournament.endsAtHour" ng-options="hour for hour in endsAtHours" required>
+                            <select class="form-control w-90" name="endsAtHour" ng-model="tournament.selectedEndsAtHour" ng-options="hour.id as hour.format for hour in endsAtHours track by hour.id" id="endsAtHour">
+                                <option></option>
                             </select>
                             <div ng-show="(createTournamentForm.endsAtHour.$touched ||  createTournamentForm.$submitted)">
-                                <span ng-show="createTournamentForm.endsAtHour.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                <span ng-show="!isFinite(tournament.endsAtHour)" class="form-error">{{'form_required' | translate}}</span>
                             </div>
                         </div>
     				</div>
@@ -105,7 +108,7 @@
                         </div>
                     </div>
                     <div class="justify-center">
-                        <button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+                        <button type="submit" ng-disabled="!createTournamentForm.$valid || !isFinite(tournament.endsAtHour) || !isFinite(tournament.startsAtHour)" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
                     </div>
     			</form>
 			</div>

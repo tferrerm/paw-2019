@@ -82,6 +82,9 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 				restService.commentClub(club.clubid, $scope.commentText.comment).then(function(data) {
 					commentParams.pageNum = 1;
 					updateComments(club.clubid, commentParams);
+					$scope.commentForm.$setPristine();
+					$scope.commentForm.$setUntouched();
+					$scope.commentText = {};
 				});
 			}
 		};
@@ -126,9 +129,12 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 							.then(function(data) {
 								pitchParams.pageNum = 1;
 								updatePitches(club.clubid, pitchParams);
+								$scope.createPitchForm.$setPristine();
+								$scope.createPitchForm.$setUntouched();
+								$scope.createdPitch = {};
 							}).catch(function(error) {
 								if (error.status === 422) {
-									if (error.data.constraintViolations === null) {
+									if (error.data.constraintViolations == null) {
 										/* Service violation */
 										if (error.data.error === 'PictureProcessingError') {
 											$scope.pictureProcessingError = true;

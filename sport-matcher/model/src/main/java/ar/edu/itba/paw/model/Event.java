@@ -67,6 +67,7 @@ public class Event {
 	@PrePersist
 	protected void onCreate() {
 		createdAt = Instant.now();
+		inscriptionSuccess = false;
 	}
 	
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "inscriptionEvent")

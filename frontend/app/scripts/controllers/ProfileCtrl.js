@@ -71,6 +71,9 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 				restService.commentUser(user.userid, $scope.commentText.comment).then(function(data) {
 					commentParams.pageNum = 1;
 					updateComments(user, commentParams);
+					$scope.commentForm.$setPristine();
+					$scope.commentForm.$setUntouched();
+					$scope.commentText = {};
 				});
 			}
 		};
