@@ -28,6 +28,41 @@
 						<h4>{{'hosted' | translate}} {{club.pastEventsCount}} {{'event_s' | translate}}</h4>
 					</div>
 				</div>
+				<div ng-show="isAdmin" class="status no-margin">
+					<div class="pitch-form-container">
+						<h3>{{'create_pitch' | translate}}</h3>
+						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post" novalidate>
+							<div class="form-field">
+								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" maxlength="100" name="name" ng-model="createdPitch.name" ng-pattern="/^[a-zA-Z0-9 ]+$/" required/>
+								<div ng-show="(createPitchForm.name.$touched ||  createPitchForm.$submitted)">
+                                    <span ng-show="createPitchForm.name.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    <span ng-show="createPitchForm.name.$error.pattern" class="form-error">{{'name_pattern_error' | translate}}</span>
+                                </div>
+							</div>
+							<div class="form-field">
+								<label>{{'sport' | translate}}</label>
+								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports" name="sport" required>
+									<option></option>
+								</select>
+								<div ng-show="(createPitchForm.sport.$touched ||  createPitchForm.$submitted)">
+                                    <span ng-show="createPitchForm.sport.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                </div>
+							</div>
+							<div class="pitch-creation-image-container">
+								<input class="pitch-creation-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
+								<div ng-if="pictureProcessingError">
+                                    <span class="form-error">
+                                        {{'picture_processing_error' | translate}}
+                                    </span>
+                                </div>
+                				<img class="pitch-creation-image" ngf-src="picture">
+							</div>
+							<div class="justify-center">
+								<button ng-disabled="!createPitchForm.$valid" type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+							</div>
+						</form>
+					</div>
+				</div>
 				<div class="club-item club-pitches-list">
 					<span class="h4 pitch-info-label">{{'pitches' | translate}}</span>
 					<div ng-if="pitches.length == 0">
@@ -66,41 +101,6 @@
 								<button type="button" class="btn btn-secondary">{{'last' | translate}}</button>
 							</a>
 						</div>
-					</div>
-				</div>
-				<div ng-show="isAdmin" class="status no-margin">
-					<div class="pitch-form-container">
-						<h3>{{'create_pitch' | translate}}</h3>
-						<form ng-submit = createPitchSubmit(picture) name="createPitchForm" method="post" novalidate>
-							<div class="form-field">
-								<input class="form-control" type="text" placeholder="{{'event_name' | translate}}" maxlength="100" name="name" ng-model="createdPitch.name" ng-pattern="/^[a-zA-Z0-9 ]+$/" required/>
-								<div ng-show="(createPitchForm.name.$touched ||  createPitchForm.$submitted)">
-                                    <span ng-show="createPitchForm.name.$error.required" class="form-error">{{'form_required' | translate}}</span>
-                                    <span ng-show="createPitchForm.name.$error.pattern" class="form-error">{{'name_pattern_error' | translate}}</span>
-                                </div>
-							</div>
-							<div class="form-field">
-								<label>{{'sport' | translate}}</label>
-								<select class="form-control" ng-model="createdPitch.sport" ng-options="sport | translate for sport in sports" name="sport" required>
-									<option></option>
-								</select>
-								<div ng-show="(createPitchForm.sport.$touched ||  createPitchForm.$submitted)">
-                                    <span ng-show="createPitchForm.sport.$error.required" class="form-error">{{'form_required' | translate}}</span>
-                                </div>
-							</div>
-							<div class="pitch-creation-image-container">
-								<input class="pitch-creation-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
-								<div ng-if="pictureProcessingError">
-                                    <span class="form-error">
-                                        {{'picture_processing_error' | translate}}
-                                    </span>
-                                </div>
-                				<img class="pitch-creation-image" ngf-src="picture">
-							</div>
-							<div class="justify-center">
-								<button ng-disabled="!createPitchForm.$valid" type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
-							</div>
-						</form>
 					</div>
 				</div>
 			</div>

@@ -80,7 +80,7 @@ public class EventHibernateDao implements EventDao {
 		Root<Event> from = cq.from(Event.class);
 		from.fetch("inscriptions", JoinType.LEFT);
 		final TypedQuery<Event> query = em.createQuery(
-				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true).orderBy((futureEvents) ? cb.asc(from.get("startsAt")) : cb.desc(from.get("startsAt")))
 			);
 		
 		return query.getResultList();
@@ -118,7 +118,7 @@ public class EventHibernateDao implements EventDao {
 		CriteriaQuery<Event> cq = cb.createQuery(Event.class);
 		Root<Event> from = cq.from(Event.class);
 		final TypedQuery<Event> query = em.createQuery(
-				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true).orderBy(cb.desc(from.get("startsAt")))
 			);
 		
 		return query.getResultList();
@@ -129,7 +129,7 @@ public class EventHibernateDao implements EventDao {
 		StringBuilder queryString = new StringBuilder("SELECT inscriptionEvent FROM Inscription AS i "
 				+ " WHERE i.inscriptedUser.userid = :userid AND i.inscriptionEvent.startsAt > :now ");
 		if(withinWeek)
-			queryString.append(" AND i.inscriptionEvent.startsAt < :aWeekFromNow");
+			queryString.append(" AND i.inscriptionEvent.startsAt < :aWeekFromNow ORDER BY i.inscriptionEvent.startsAt ASC");
 		
 		TypedQuery<Event> query = em.createQuery(queryString.toString(), Event.class);
 		query.setParameter("userid", userid);
@@ -217,7 +217,7 @@ public class EventHibernateDao implements EventDao {
 		Root<Event> from = cq.from(Event.class);
 		from.fetch("inscriptions", JoinType.LEFT);
 		final TypedQuery<Event> query = em.createQuery(
-				cq.select(from).where(from.get("eventid").in(ids)).distinct(true)
+				cq.select(from).where(from.get("eventid").in(ids)).distinct(true).orderBy(cb.asc(from.get("startsAt")), cb.asc(from.get("eventid")))
 			);
 		
 		return query.getResultList();

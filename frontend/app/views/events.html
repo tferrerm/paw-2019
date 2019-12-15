@@ -9,8 +9,8 @@
 				<button type="button" class="btn">{{'create_event' | translate}}</button>
 			</a>
 		</div>
-		<div ng-if="eventCount !== 0 || filterPresence" class="flex-column align-center">
-			<span class="help-message notice w-70 justify-center text-center" ng-if="!isAdmin">{{'event_list_help' | translate}}</span>
+		<div ng-if="eventCount !== 0 || filterPresence" class="flex-column align-center text-center">
+			<span class="help-message notice w-90 justify-center" ng-if="!isAdmin">{{'event_list_help' | translate}}</span>
 			<div class="tbl">
 				<div class="table-header">
 					<form id="searchfilters" class="searchfilters">
