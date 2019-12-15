@@ -4,6 +4,12 @@ define(['frontend', 'services/restService'], function(frontend) {
 	frontend.controller('AllEventsCtrl', ['$scope', '$filter', '$location', 'restService', 'events', function($scope, $filter, $location, restService, events) {
 		var params = {pageNum: 1};
 
+		$scope.events = events.events;
+		$scope.eventCount = events.eventCount;
+		$scope.lastPageNum = events.lastPageNum;
+		$scope.initialPageIndex = events.initialPageIndex;
+		$scope.pageNum = params.pageNum;
+
 		$scope.filters = {};
 		$scope.currentDate = new Date();
     	
