@@ -6,23 +6,23 @@
 		<form ng-submit = loginSubmit() name="loginForm" method="post" novalidate>
 			<div>
 				<input  class="form-control" type="text" placeholder="{{'username' | translate}}" name="username" ng-model="user.username" required maxlength="100" ng-pattern="usernamePattern"/>
-				<div ng-show="(loginForm.username.$touched ||  loginForm.$submitted)">
+				<span ng-show="(loginForm.username.$touched ||  loginForm.$submitted)">
                     <span ng-show="loginForm.username.$error.required" class="form-error">{{'form_required' | translate}}</span>
                     <span ng-show="loginForm.username.$error.pattern" class="form-error">{{'username_pattern_error' | translate}}</span>
-                </div>
+                </span>
 			</div>
 			<div>
 				<input  class="form-control" type="password" placeholder="{{'password' | translate}}" name="password" ng-model="user.password" required maxlength="100"/>
-				<div ng-show="(loginForm.password.$touched ||  loginForm.$submitted)">
+				<span ng-show="(loginForm.password.$touched ||  loginForm.$submitted)">
                     <span ng-show="loginForm.password.$error.required" class="form-error">{{'form_required' | translate}}</span>
-                </div>
+                </span>
 			</div>
 			<div class="remember-container">
 				<span class="remember-text">{{'remember_me' | translate}}</span>
 				<input type="checkbox" name="remember_me" ng-model="user.rememberMe" class="check-container" />
 			</div>
 			<div class="justify-center">
-				<button type="submit" class="btn btn-primary submit-btn">{{'login' | translate}}</button>
+				<button ng-disabled="!loginForm.$valid" type="submit" class="btn btn-primary submit-btn">{{'login' | translate}}</button>
 			</div>
 		    <div ng-if="invalidCredentials">
 		    	<div class="form-error login-error">{{'login_error' | translate}}</div>

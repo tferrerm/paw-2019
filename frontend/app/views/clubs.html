@@ -53,19 +53,19 @@
 			<form ng-submit = createClubSubmit() name="createClubForm" method="post" novalidate>
 				<div class="form-field">
                     <input class="form-control" type="text" placeholder="{{'name' | translate}}" maxlength="100" name="name" ng-model="createdClub.name" ng-pattern="/^[a-zA-Z0-9 ]+$/" required/>
-                    <div ng-show="(createClubForm.name.$touched ||  createClubForm.$submitted)">
+                    <span ng-show="(createClubForm.name.$touched ||  createClubForm.$submitted)">
                         <span ng-show="createClubForm.name.$error.required" class="form-error">{{'form_required' | translate}}</span>
                         <span ng-show="createClubForm.name.$error.pattern" class="form-error">{{'name_pattern_error' | translate}}</span>
-                    </div>
+                    </span>
                 </div>
                 <div class="form-field">
                     <input class="form-control" type="text" placeholder="{{'event_location' | translate}}" maxlength="100" name="location" ng-model="createdClub.location" required/>
-                    <div ng-show="(createClubForm.location.$touched ||  createClubForm.$submitted)">
+                    <span ng-show="(createClubForm.location.$touched ||  createClubForm.$submitted)">
                         <span ng-show="createClubForm.location.$error.required" class="form-error">{{'form_required' | translate}}</span>
-                    </div>
+                    </span>
                 </div>
 				<div class="justify-center">
-					<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+					<button ng-disabled="!createClubForm.$valid" type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
 				</div>
 			</form>
 		</div>

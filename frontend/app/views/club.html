@@ -86,7 +86,7 @@
                 <img class="pitch-creation-image" ngf-src="picture">
 							</div>
 							<div class="justify-center">
-								<button type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
+								<button ng-disabled="!createPitchForm.$valid" type="submit" class="btn btn-primary submit-btn btn-success">{{'create' | translate}}</button>
 							</div>
 						</form>
 					</div>
