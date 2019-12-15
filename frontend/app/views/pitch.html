@@ -62,7 +62,7 @@
                                 <!--<c:set var="hours" value="${hours + 1}"/>-->
                         </table>
                     </div>
-                    <div class="flex flex-column create-event-form">
+                    <div class="flex flex-column create-event-form" ng-show="!isAdmin">
                         <h2 class="create-event-title">{{'create_event' | translate}}</h2>
                         <form ng-submit = createEventSubmit() name="createEventForm" method="post" novalidate>
                             <div class="form-field">
