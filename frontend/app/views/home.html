@@ -1,6 +1,11 @@
 <div class="content-container">
 	<div class="background-home-image w-90 flex-column" ng-if="!isAdmin">
-		<h1 class="home-image-title font-bold">SportMatcher</h1>
+		<div class="home-title-bgd-container flex-column">
+			<h1 class="home-image-title font-bold">SportMatcher</h1>
+			<div class="w-90 mb-20" ng-if="!isLoggedIn">
+				<h1 class="title text-center font-bold">{{'registration_intro_text' | translate}}</h1>
+			</div>
+		</div>
 		<div class="content-container upcoming-participation-container" ng-if="isLoggedIn">
 			<h2 class="home-title">{{'upcomingParticipations' | translate}}</h2>
 			<div ng-if="!noParticipations" class="w-90">
@@ -30,9 +35,6 @@
 					<span class="mb-10 ml-10 align-self-end comment-text">{{'introduction' | translate}}</span>
 				</span>
 			</div>
-		</div>
-		<div class="w-90" ng-if="!isLoggedIn">
-			<h1 class="title text-center font-bold">{{'registration_intro_text' | translate}}</h1>
 		</div>
 	</div>
 	<div class="bottom-home-container" ng-if="!isAdmin">
