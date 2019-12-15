@@ -80,7 +80,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 			console.log(error);
 			console.log($scope.tournament.firstRoundDate);
 			if (error.status === 422) {
-				if (error.data.constraintViolations != null) {
+				if (error.data.constraintViolations !== null) {
 					/* Controller violation */
 					angular.forEach(error.data.constraintViolations, function(cv) {
 						switch (cv.propertyPath) {
@@ -95,7 +95,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 					});
 				} else {
 					/* Service violation */
-					if (error.data.error === 'EndsBeforeStarts') {
+					if (error.data.error === 'EndsBeforeStarts') { // eslint-disable-line no-lonely-if
 						$scope.endsBeforeStartsError = true;
 					} else if (error.data.error === 'MaximumStartDateExceeded') {
 						$scope.maximumStartDateExceededError = true;

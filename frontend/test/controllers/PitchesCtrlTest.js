@@ -1,3 +1,6 @@
+/* eslint-env es6 */
+'use strict';
+
 define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
   describe('Pitches Controller', function () {
     var controller, scope;
@@ -5,15 +8,15 @@ define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
     var TEST_PITCH_ARRAY =
       [{
         pitchid: 1,
-        createdAt: "2019-12-12T14:55:18.752Z",
-        location: "Buenos Aires",
-        name: "Argentina"
+        createdAt: '2019-12-12T14:55:18.752Z',
+        location: 'Buenos Aires',
+        name: 'Argentina'
       },
       {
         pitchid: 2,
-        createdAt: "2019-13-12T14:55:18.752Z",
-        location: "Buenos Aires",
-        name: "Pitch"
+        createdAt: '2019-13-12T14:55:18.752Z',
+        location: 'Buenos Aires',
+        name: 'Pitch'
       }];
     var TEST_PITCH_COUNT = 2;
     var TEST_LAST_PAGE_NUM = 1;
@@ -43,9 +46,11 @@ define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
       });
 
       it('should not have duplicate ids ', function () {
-        const ids = scope.pitches.map(function (pitch) {return pitch.pitchid})
-        var isDuplicate = ids.some(function(item, idx){
-          return ids.indexOf(item) !== idx
+        const ids = scope.pitches.map(function (pitch) {
+          return pitch.pitchid;
+        });
+        var isDuplicate = ids.some(function(item, idx) {
+          return ids.indexOf(item) !== idx;
         });
 
         expect(isDuplicate).toBe(false);
@@ -54,7 +59,7 @@ define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
       it('should have the field location defined', function () {
         scope.pitches.forEach(function (pitch) {
           expect(pitch.location).toBeDefined();
-        })
+        });
       });
     });
 
@@ -89,5 +94,5 @@ define(['controllers/PitchesCtrl', 'angular-mocks'], function() {
         expect(scope.lastPageNum).toBe(1);
       });
     });
-  })
-})
+  });
+});

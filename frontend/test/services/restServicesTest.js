@@ -1,3 +1,5 @@
+'use strict';
+
 define(['services/restService', 'angular-mocks'], function() {
 
   describe('Rest Service', function () {

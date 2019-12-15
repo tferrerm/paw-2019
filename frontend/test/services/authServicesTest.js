@@ -1,3 +1,5 @@
+'use strict';
+
 define(['services/authService', 'angular-mocks'], function() {
 
   describe('Auth Service', function() {
