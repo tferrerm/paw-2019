@@ -1,6 +1,6 @@
 define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
   describe('All Events Controller', function () {
-    var controller, scope;
+    var controller, scope, eventsInjection;
 
     var TEST_EVENT_ARRAY =
       [{
@@ -30,7 +30,14 @@ define(['controllers/AllEventsCtrl', 'angular-mocks'], function() {
         $on: function(){},
         $watch: function(){},
       };
-      controller = $controller('AllEventsCtrl', {$scope: scope, events: scope});
+      eventsInjection = {
+        events: TEST_EVENT_ARRAY,
+        eventCount: TEST_EVENT_COUNT,
+        lastPageNum:TEST_LAST_PAGE_NUM,
+        initialPageIndex: TEST_INITIAL_PAGE_INDEX,
+        pageNum: TEST_PAGE_NUM,
+      };
+      controller = $controller('AllEventsCtrl', {$scope: scope, events: eventsInjection});
     }));
 
     describe('$scope.events', function () {
