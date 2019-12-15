@@ -5,8 +5,8 @@
 	<!--<div class="notice" ng-if="noEvents">
 		{{'no_past_or_future_events' | translate}}
 	</div>-->
-	<div ng-if="pastEventCount !== 0 || futureEventCount !== 0">
-		<span class="help-message notice w-70 justify-center">{{'my_events_help' | translate}}</span>
+	<div class="w-100" ng-if="pastEventCount !== 0 || futureEventCount !== 0">
+		<span class="help-message notice justify-center hlp-msg">{{'my_events_help' | translate}}</span>
 		<div class="flex-row w-100">
 			<div class="align-self-start tbl w-100">
 				<div class="table-header background-dodgerblue justify-center my-events-tbl-sub">
@@ -50,7 +50,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="notice" ng-if="pastEventCount === 0">
+				<div class="mv-5 no-res-my-ev" ng-if="pastEventCount === 0">
 					{{'no_results' | translate}}
 				</div>
 			</div>
@@ -97,7 +97,7 @@
 						</div>
 					</div>
 				</div>
-				<span class="flex justify-center mv-5" ng-if="futureEventCount === 0">
+				<span class="mv-5 no-res-my-ev" ng-if="futureEventCount === 0">
 					{{'no_results' | translate}}
 				</span>
 			</div>	
