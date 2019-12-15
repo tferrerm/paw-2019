@@ -65,7 +65,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 		});
 
 	    $scope.createTournamentSubmit = function() {
-			if ($scope.evenInputTeams() && $scope.createTournamentForm.$valid) {
+			if ($scope.evenInputTeams() && $scope.createTournamentForm.$valid && isFinite($scope.tournament.endsAtHour) && isFinite($scope.tournament.startsAtHour)) {
 				if ($scope.isAdmin) {
 					resetErrors();
 					restService.createTournament($scope.club.clubid, $scope.tournament).then(function(data) {
@@ -129,26 +129,26 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 		var indexOfTomorrow = (weekDays.indexOf(now) + 1) % 7;
 		$scope.dayHeaders = minDays.slice(indexOfTomorrow, 7).concat(minDays.slice(0, indexOfTomorrow));
 
-	    $scope.$watch('event.selectedEndsAtHour', function (newValue) {
+	    $scope.$watch('tournament.selectedEndsAtHour', function (newValue) {
 	    	var startVal = parseInt($('#startsAtHour').val(), 10);
 	       	var endVal = parseInt($('#endsAtHour').val(), 10);
 	       	if (startVal >= endVal || !isFinite(startVal)) {
 	         	var endIndex = $('#endsAtHour').prop('selectedIndex');
 	         	$('#startsAtHour').prop('selectedIndex', endIndex);
-	         	$scope.event.startsAtHour = endVal - 1;
+	         	$scope.tournament.startsAtHour = endVal - 1;
 	       	}
-			$scope.event.endsAtHour = endVal;
+			$scope.tournament.endsAtHour = endVal;
 		});
 
-		$scope.$watch('event.selectedStartsAtHour', function (newValue) {
+		$scope.$watch('tournament.selectedStartsAtHour', function (newValue) {
 	    	var startVal = parseInt($('#startsAtHour').val(), 10);
 	       	var endVal = parseInt($('#endsAtHour').val(), 10);
 	       	if (startVal >= endVal || !isFinite(endVal)) {
 	         	var startIndex = $('#startsAtHour').prop('selectedIndex');
 	         	$('#endsAtHour').prop('selectedIndex', startIndex);
-	         	$scope.event.endsAtHour = startVal + 1;
+	         	$scope.tournament.endsAtHour = startVal + 1;
 	       	}
-			$scope.event.startsAtHour = startVal;
+			$scope.tournament.startsAtHour = startVal;
 		});
 
 		$scope.isFinite = function(n) {

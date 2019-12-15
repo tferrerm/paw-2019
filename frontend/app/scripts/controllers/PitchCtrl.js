@@ -85,7 +85,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		};
 
 	    $scope.createEventSubmit = function() {
-			if ($scope.createEventForm.$valid && isFinite($scope.event.endsAtHour)) {
+			if ($scope.createEventForm.$valid && isFinite($scope.event.endsAtHour) && isFinite($scope.event.startsAtHour)) {
 				resetErrors();
 				if ($scope.isLoggedIn) {
 					restService.createEvent($scope.pitch.pitchid, $scope.event).then(function(data) {
