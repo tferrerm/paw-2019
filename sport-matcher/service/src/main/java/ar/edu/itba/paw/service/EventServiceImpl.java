@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,7 @@ import ar.edu.itba.paw.exception.EventFullException;
 import ar.edu.itba.paw.exception.EventNotFinishedException;
 import ar.edu.itba.paw.exception.EventOverlapException;
 import ar.edu.itba.paw.exception.HourOutOfRangeException;
+import ar.edu.itba.paw.exception.IllegalParamException;
 import ar.edu.itba.paw.exception.InscriptionClosedException;
 import ar.edu.itba.paw.exception.MaximumDateExceededException;
 import ar.edu.itba.paw.exception.UserAlreadyJoinedException;
@@ -74,7 +74,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Optional<Event> findByEventId(long eventid) {
 		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return ed.findByEventId(eventid);
 	}
@@ -92,7 +92,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> findByOwner(final boolean futureEvents, final long userid, final int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return ed.findByOwner(futureEvents, userid, pageNum);
 	}
@@ -100,17 +100,17 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public int countByOwner(final boolean futureEvents, final long userid) {
 		if(userid <= 0)
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		return ed.countByOwner(futureEvents, userid);
 	}
 	
 	@Override
 	public List<Event> findPastUserInscriptions(final long userid, final int pageNum) {
 		if(userid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return ed.findPastUserInscriptions(userid, pageNum);
 	}
@@ -118,7 +118,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> findFutureUserInscriptions(final long userid, final boolean withinWeek) {
 		if(userid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return ed.findFutureUserInscriptions(userid, withinWeek);
 	}
@@ -126,7 +126,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<Event> findCurrentEventsInPitch(final long pitchid) {
 		if(pitchid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return ed.findCurrentEventsInPitch(pitchid);
 	}
@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Integer countByUserInscriptions(final boolean futureEvents, final long userid) {
 		if(userid <= 0)
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		return ed.countByUserInscriptions(futureEvents, userid);
 	}
 	
@@ -195,7 +195,7 @@ public class EventServiceImpl implements EventService {
 			Optional<Sport> sport, Optional<String> organizer, Optional<Integer> vacancies, 
 			Optional<Instant> date, int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 
 		List<Event> events = ed.findBy(onlyJoinable, eventName, clubName, sport.map(Sport::toString), organizer,
@@ -255,13 +255,13 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void joinEvent(final long userid, final long eventid)
-			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException {
+			throws UserAlreadyJoinedException, EventFullException, UserBusyException, InscriptionClosedException, EntityNotFoundException {
 
 		if(userid <= 0 || eventid <= 0)
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		
-		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
-		final User user = ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		final Event event = ed.findByEventId(eventid).orElseThrow(EntityNotFoundException::new);
+		final User user = ud.findById(userid).orElseThrow(EntityNotFoundException::new);
 		
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
 			throw new InscriptionClosedException();
@@ -277,8 +277,8 @@ public class EventServiceImpl implements EventService {
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
 	public void leaveEvent(final long eventid, final long userid) throws DateInPastException, EntityNotFoundException {
-		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
-		ud.findById(userid).orElseThrow(NoSuchElementException::new);
+		final Event event = ed.findByEventId(eventid).orElseThrow(EntityNotFoundException::new);
+		ud.findById(userid).orElseThrow(EntityNotFoundException::new);
 		if(event.getEndsInscriptionAt().isBefore(Instant.now())) {
 			throw new DateInPastException("InscriptionClosed");
 		}
@@ -289,7 +289,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public void kickFromEvent(final User owner, final long kickedUserId, final Event event)
 		throws UserNotAuthorizedException, DateInPastException, EntityNotFoundException {
-		ud.findById(kickedUserId).orElseThrow(NoSuchElementException::new);
+		ud.findById(kickedUserId).orElseThrow(EntityNotFoundException::new);
 		if(owner.getUserid() != event.getOwner().getUserid())
 			throw new UserNotAuthorizedException("User is not the owner of the event.");
 		if(owner.getUserid() == kickedUserId)
@@ -303,7 +303,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public int countParticipants(final long eventid) {
 		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		return ed.countParticipants(eventid);
 	}
@@ -321,18 +321,18 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public int getPageInitialEventIndex(final int pageNum) {
 		if(pageNum <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_PAGE_ERROR);
+			throw new IllegalParamException(NEGATIVE_PAGE_ERROR);
 		}
 		return ed.getPageInitialEventIndex(pageNum);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class })
 	@Override
-	public void deleteEvent(long eventid) throws DateInPastException {
+	public void deleteEvent(long eventid) throws DateInPastException, EntityNotFoundException {
 		if(eventid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
-		final Event event = ed.findByEventId(eventid).orElseThrow(NoSuchElementException::new);
+		final Event event = ed.findByEventId(eventid).orElseThrow(EntityNotFoundException::new);
 		if(event.getStartsAt().isBefore(Instant.now())) {
 			throw new DateInPastException("EventStarted");
 		}
@@ -344,7 +344,7 @@ public class EventServiceImpl implements EventService {
 	public void cancelEvent(final Event event, final long userid) 
 			throws UserNotAuthorizedException, DateInPastException {
 		if(event.getEventId() <= 0 || userid <= 0) {
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		}
 		if(event.getOwner().getUserid() != userid) {
 			throw new UserNotAuthorizedException("Cannot cancel event if now the owner");
@@ -381,14 +381,14 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public int countUserInscriptionPages(final boolean onlyFuture, final long userid) {
 		if(userid <= 0)
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		return ed.countUserInscriptionPages(onlyFuture, userid);
 	}
 	
 	@Override
 	public int countUserOwnedPages(final boolean onlyFuture, final long userid) {
 		if(userid <= 0)
-			throw new IllegalArgumentException(NEGATIVE_ID_ERROR);
+			throw new IllegalParamException(NEGATIVE_ID_ERROR);
 		return ed.countUserOwnedPages(onlyFuture, userid);
 	}
 	
