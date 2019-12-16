@@ -87,13 +87,13 @@
 				</div>
 			</div>
 			
-			<div ng-if="eventHasEnded && event.participant">
-				<div class="event-points">
+			<div ng-if="eventHasEnded && event.participant" class="flex-column align-center w-100 mt-30">
+				<div class="flex-row align-center">
 					<h4 class="pitch-info-label">{{'event_points' | translate}}</h4>
 					<h5 class="pitch-info-label vote-balance">{{event.voteBalance}}</h5>
 				</div>
 				<div class="voting-buttons" ng-if="isLoggedIn && loggedUser.userid != event.owner.userid">
-					<div ng-if="event.userVote > 0">
+					<div ng-if="event.userVote > 0" class="flex-row">
 						<a ng-click="downvote(event.pitch.pitchid, event.eventid)">
 							<button type="submit" class="btn btn-danger join-button vote-balance mb-10">{{'downvote' | translate}}</button>
 						</a>
@@ -101,7 +101,7 @@
 							<button type="submit" class="btn btn-success join-button vote-balance mb-10" ng-disabled="true">{{'upvoted' | translate}}</button>
 						</div>
 					</div>
-					<div ng-if="event.userVote < 0">
+					<div ng-if="event.userVote < 0" class="flex-row">
 						<div>
 							<button type="submit" class="btn btn-danger join-button vote-balance mb-10" ng-disabled="true">{{'downvoted' | translate}}</button>
 						</div>
@@ -109,7 +109,7 @@
 							<button type="submit" class="btn btn-success join-button vote-balance mb-10">{{'upvote' | translate}}</button>
 						</a>
 					</div>
-					<div ng-if="event.userVote == 0">
+					<div ng-if="event.userVote == 0" class="flex-row">
 						<a ng-click="downvote(event.pitch.pitchid, event.eventid)">
 							<button type="submit" class="btn btn-danger join-button vote-balance mb-10">{{'downvote' | translate}}</button>
 						</a>
