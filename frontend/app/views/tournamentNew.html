@@ -43,12 +43,15 @@
                             <span ng-show="createTournamentForm.teamSize.$error.max" class="form-error" translate="max_error" translate-values='{ max: 11}'></span>
                         </div>
                     </div>
+                    <div class="mt-10"><span>{{'tourn_date_restrictions' | translate}}</span></div>
                     <div class="form-field flex-space-between">
                         <div class="form-field-horizontal flex-1">
                             <span>{{'start_date' | translate}}</span>
-                            <input class="form-control date-input p-6 w-90" type="date" min="{{tomorrowDate}}" max="{{sevenDaysFromTomorrow}}" ng-min="currentDate" name="date" ng-model="tournament.selectedDate" required/>
+                            <input class="form-control date-input p-6 w-90" type="date" min="{{tomorrowDate}}" max="{{sevenDaysFromTomorrow}}" name="date" ng-model="tournament.selectedDate" required/>
                             <div ng-show="(createTournamentForm.date.$touched ||  createTournamentForm.$submitted)">
                                 <span ng-show="createTournamentForm.date.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                <span ng-show="createTournamentForm.date.$error.min" class="form-error">{{'event_in_past' | translate}}</span>
+                                <span ng-show="createTournamentForm.date.$error.max" class="form-error">{{'date_exceeded' | translate}}</span>
                             </div>
                             <div ng-if="dateError">
                                 <span class="form-error">
@@ -92,9 +95,11 @@
     				</div>
                     <div class="my-events-tbl-sub">
                         <span>{{'end_date' | translate}}</span>
-                      <input class="form-control date-input w-100" type="datetime-local" min={{todayDate}}} max={{maxInscriptionDate}}  ng-min="currentDate" name="inscriptionEndDate" ng-model="tournament.selectedInscriptionDate" required/>
+                      <input class="form-control date-input w-100" type="datetime-local" min={{todayDate}} max={{maxInscriptionDate}} name="inscriptionEndDate" ng-model="tournament.selectedInscriptionDate" required/>
                         <div ng-show="(createTournamentForm.inscriptionEndDate.$touched ||  createTournamentForm.$submitted)">
                             <span ng-show="createTournamentForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                            <span ng-show="createTournamentForm.inscriptionEndDate.$error.min" class="form-error">{{'inscription_date_in_past' | translate}}</span>
+                            <span ng-show="createTournamentForm.inscriptionEndDate.$error.max" class="form-error">{{'inscription_date_maximum_exceeded' | translate}}</span>
                         </div>
                         <div ng-if="inscriptionDateError">
                             <span class="form-error">

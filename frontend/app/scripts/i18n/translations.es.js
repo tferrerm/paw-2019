@@ -265,6 +265,7 @@ define([], function() {
     tournaments_intro: '¿Quieres modificar un torneo existente?',
     delete_event_intro: '¿Quieres eliminar un evento existente?',
     date_restrictions: 'Los eventos deben llevarse a cabo dentro de los siguientes siete días:',
+    tourn_date_restrictions: 'Los torneos deben comenzar dentro de los siguientes siete días:',
     inscription_date_maximum_exceeded: 'Inscripción fuera de rango'
   };
 });
