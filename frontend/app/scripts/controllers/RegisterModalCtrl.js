@@ -11,7 +11,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			if ($scope.passwordsMatch() && $scope.registerForm.$valid) {
 				$scope.pictureProcessingError = false;
 				$scope.duplicateUsernameError = false;
-				if (picture != null) {
+				if (picture != null) { // eslint-disable-line eqeqeq
 					Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
 				  	  restService.register($scope.user, blob)
 				   	 	.then(function(data) {

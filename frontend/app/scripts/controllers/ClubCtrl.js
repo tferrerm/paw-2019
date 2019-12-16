@@ -121,26 +121,27 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 			$scope.pictureProcessingError = false;
 			if ($scope.createPitchForm.$valid) {
 				if ($scope.isAdmin) {
-					// CHEQUEAR SI picture es undefined (si subieron imagen mala)
-					Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
-						restService.createPitch(club.clubid, $scope.createdPitch, blob)
-							.then(function(data) {
-								pitchParams.pageNum = 1;
-								updatePitches(club.clubid, pitchParams);
-								$scope.createPitchForm.$setPristine();
-								$scope.createPitchForm.$setUntouched();
-								$scope.createdPitch = {};
-							}).catch(function(error) {
-								if (error.status === 422) {
-									if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
-										/* Service violation */
-										if (error.data.error === 'PictureProcessingError') {
-											$scope.pictureProcessingError = true;
-										}
-									}
-								}
-							});
-					});
+					if (picture != null) { // eslint-disable-line eqeqeq
+						Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
+							restService.createPitch(club.clubid, $scope.createdPitch, blob)
+								.then(function(data) {
+									pitchParams.pageNum = 1;
+									updatePitches(club.clubid, pitchParams);
+									$scope.createPitchForm.$setPristine();
+									$scope.createPitchForm.$setUntouched();
+									$scope.createdPitch = {};
+								}).catch(catchError);
+						});
+					} else {
+							restService.createPitch(club.clubid, $scope.createdPitch, null)
+								.then(function(data) {
+									pitchParams.pageNum = 1;
+									updatePitches(club.clubid, pitchParams);
+									$scope.createPitchForm.$setPristine();
+									$scope.createPitchForm.$setUntouched();
+									$scope.createdPitch = {};
+								}).catch(catchError);
+					}
 				};
 			}
 		};
@@ -167,6 +168,17 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 				});
 			});
 		};
+
+		function catchError(error) {
+			if (error.status === 422) {
+				if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
+					/* Service violation */
+					if (error.data.error === 'PictureProcessingError') {
+						$scope.pictureProcessingError = true;
+					}
+				}
+			}
+		}
 
 	}]);
 });
