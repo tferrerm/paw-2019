@@ -64,6 +64,8 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 						if (error.data.error === 'UserBusy') {
 							$scope.userBusyError = true;
 						} else if (error.data.error === 'EventFull') {
+							updateEvent(pitchid, eventid);
+							updateInscriptions(pitchid, eventid);
 							$scope.eventFullError = true;
 						} else if (error.data.error === 'InscriptionClosed') {
 							$scope.inscriptionClosedError = true;

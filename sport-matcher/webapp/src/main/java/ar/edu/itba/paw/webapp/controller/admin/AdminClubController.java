@@ -86,7 +86,7 @@ public class AdminClubController extends BaseController {
 		int pitchCount = club.getClubPitches().stream()
 				.filter(p -> p.getSport() == Sport.SOCCER).collect(Collectors.toList()).size();
 		
-		return Response.ok(SoccerClubEventsCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD
+		return Response.ok(SoccerClubEventsCollectionDto.ofEvents(weekEvents.stream()
 				.map(ev -> EventDto.ofEvent(ev, false)).collect(Collectors.toList()), pitchCount)).build();
 	}
 //	

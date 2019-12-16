@@ -105,7 +105,8 @@
 .home-image-title {
     text-align: center;
     font-size: 70px;
-    color: white;
+    color: antiquewhite;
+    text-shadow: 0 0 10px black;
 }
   
 .home-header {
@@ -121,7 +122,6 @@
     border-radius: 20px;
     width: 90%;
     align-items: center;
-    margin-bottom: 40px;
 }
 
 .upcoming-participation-container {
@@ -129,4 +129,10 @@
     border-radius: 20px;
     width: 90%;
     padding-bottom: 20px;
+    margin-top: 40px;
+}
+
+.white {
+    color: white;
+    text-shadow: 0 0 10px black;
 }

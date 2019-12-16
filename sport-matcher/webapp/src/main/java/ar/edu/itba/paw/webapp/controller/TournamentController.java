@@ -127,7 +127,7 @@ public class TournamentController extends BaseController {
     @POST
     @Path("/{id}/leave")
     public Response leaveTournament(@PathParam("id") long tournamentid) 
-    		throws UserBusyException, InscriptionClosedException, EntityNotFoundException {
+    		throws InscriptionClosedException, EntityNotFoundException {
     	
     	ts.findById(tournamentid).orElseThrow(TournamentNotFoundException::new);
 		ts.leaveTournament(tournamentid, loggedUser().getUserid());

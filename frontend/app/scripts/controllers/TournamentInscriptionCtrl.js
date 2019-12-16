@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/modalService', 'services/titleService'], function(frontend) {
 
-	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', '$filter', 'restService', 'modalService', 'titleService', 'tournament', function ($scope, $location, $filter, restService, modalService, titleService, tournament) {
+	frontend.controller('TournamentInscriptionCtrl', ['$scope', '$location', '$route', '$filter', 'restService', 'modalService', 'titleService', 'tournament', function ($scope, $location, $route, $filter, restService, modalService, titleService, tournament) {
 		
 		$scope.tournament = tournament;
 		updateTeams();
@@ -78,7 +78,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 				if (error.status === 403) {
 					if (error.data.error === 'InscriptionClosed') {
 						$scope.inscriptionClosedError = true;
-						$scope.inscriptionHasEnded = true;
+						updateInscriptionEnded();
 					}
 				}
 			});
@@ -118,6 +118,9 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 			var inscriptionEnd = $filter('date')(new Date(Date.parse(tournament.inscriptionEnd)), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
 			var now = $filter('date')(new Date(), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
 			$scope.inscriptionHasEnded = Date.parse(inscriptionEnd) < Date.parse(now);
+			if ($scope.inscriptionHasEnded) {
+				$route.reload();
+			}
 		}
 
 		$scope.$on('user:updated', function() {

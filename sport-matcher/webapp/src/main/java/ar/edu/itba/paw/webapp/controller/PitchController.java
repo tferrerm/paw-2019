@@ -126,7 +126,7 @@ public class PitchController extends BaseController {
 		ps.findById(id).orElseThrow(PitchNotFoundException::new);
 		List<Event> weekEvents = es.findCurrentEventsInPitch(id);
 		
-		return Response.ok(EventCollectionDto.ofEvents(weekEvents.stream() // CAMBIAR METHOD
+		return Response.ok(EventCollectionDto.ofEvents(weekEvents.stream()
 				.map(ev -> EventDto.ofEvent(ev, true)).collect(Collectors.toList()))).build();
 	}
 	
