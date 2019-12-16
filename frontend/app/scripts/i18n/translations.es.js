@@ -207,7 +207,7 @@ define([], function() {
     start: 'Comienzo',
     end: 'Fin',
     go_to_tournament: 'Ir al torneo',
-    tournament_description: 'Aquí puedes ver el progreso del torneo y los proximos eventos del mismo.',
+    tournament_description: 'Aquí puedes ver el progreso del torneo y los próximos eventos del mismo.',
     tournament_description_one: 'Este torneo cuenta con',
     tournament_description_two: ' rondas, donde los partidos se jugarán a la misma hora y con una semana de diferencia. Comienza el',
     tournament_inscription: '¡Únete al equipo que quieras para participar del torneo!',
