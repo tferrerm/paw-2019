@@ -37,10 +37,9 @@
 				</div>
 			</div>
 		</div>
-		<span class="flex justify-center">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
-		<div ng-hide="lastPageNum == 1 || lastPageNum == 0" class="flex-row flex-space-around table-header">
-			<div class="w-100">
-				<div ng-hide="pageNum == 1"  class="flex-row w-100 flex-space-around">
+		<div class="flex-row justify-center">
+			<div class="flex-1">
+				<div ng-hide="pageNum == 1"  class="flex-row flex-space-around">
 					<a ng-click="getFirstPage()">
 						<button type="button" class="btn btn-secondary">{{'first' | translate}}</button>
 					</a>
@@ -49,8 +48,9 @@
 					</a>
 				</div>
 			</div>
-			<div class="w-100">
-				<div ng-hide="pageNum == lastPageNum"  class="flex-row w-100 flex-space-around">
+			<span class="flex flex-1 justify-center">{{'showing_items' | translate}} {{initialPageIndex}}-{{initialPageIndex + events.length - 1}} {{'of' | translate}} {{eventCount}}</span>
+			<div class="flex-1">
+				<div ng-hide="pageNum == lastPageNum"  class="flex-row flex-space-around">
 					<a ng-click="getNextPage()">
 						<button type="button" class="btn btn-secondary">{{'next' | translate}}</button>
 					</a>
@@ -61,11 +61,10 @@
 			</div>
 		</div>
 	</div>
-		<div class="empty-section-container" ng-if="events.length <= 0">
-			<span class="mv-5">{{'empty_history' | translate}}</span>
-			<a class="mv-5" ng-click="goToEvents()">
-				<button type="button no-results-button" class="btn">{{'view_events' | translate}}</button>
-			</a>
-		</div>
+	<div class="empty-section-container" ng-if="events.length <= 0">
+		<span class="mv-5">{{'empty_history' | translate}}</span>
+		<a class="mv-5" ng-click="goToEvents()">
+			<button type="button no-results-button" class="btn">{{'view_events' | translate}}</button>
+		</a>
 	</div>
 </div>

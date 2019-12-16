@@ -7,7 +7,7 @@
 		</div>
 		<div ng-if="!isLoggedUser">
 			<div class="profile-title">
-                <h2>{{user.firstname}} {{user.lastname}}</h2>
+                <h2 class="text-center">{{user.firstname}} {{user.lastname}}</h2>
             </div>
 		</div>
 		<div class="tbl profile-cont">
@@ -44,8 +44,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="tbl profile-cont">
-			<div ng-show="hasRelationship">
+		<div class="profile-comments-container align-center flex-column justify-center w-60">
+			<div ng-show="hasRelationship" class="w-90 mt-30">
 				<form ng-submit = commentSubmit() name="commentForm" method="post" novalidate class="comments_form">
 					<input class="form-control" type="text" placeholder="{{'comment' | translate}}" maxlength="500" name="comment" ng-model="commentText.comment" required/>
 					<div ng-show="(commentForm.comment.$touched ||  commentForm.$submitted)">
@@ -64,32 +64,36 @@
 				<span class="comment-text ml-10">{{cmt.comment}}</span>
 				<div class="comment-date ml-10 mt-10">{{cmt.createdAt | date:'dd/MM/yyyy HH:mm'}}</div>
 			</div>
-			<div class="table-navigator">
+			<div class="table-navigator justify-center flex-row">
 				<div ng-if="comments.length > 0">
-					<div ng-hide="commentsPageNum == 1">
-						<a ng-click="getFirstPage()">
-							<button type="button" class="btn btn-secondary">
-								{{'first' | translate}}
-							</button>
-						</a>
-						<a ng-click="getPrevPage()">
-							<button type="button" class="btn btn-secondary">
-								{{'back' | translate}}
-							</button>
-						</a>
+					<div class="flex-1">
+						<div ng-hide="commentsPageNum == 1" class="flex-row flex-space-around">
+							<a ng-click="getFirstPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'first' | translate}}
+								</button>
+							</a>
+							<a ng-click="getPrevPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'back' | translate}}
+								</button>
+							</a>
+						</div>
 					</div>
-					<span class="flex">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + comments.length - 1}} {{'of' | translate}} {{commentCount}}</span>
-					<div ng-hide="commentsPageNum == commentsLastPageNum">
-						<a ng-click="getNextPage()">
-							<button type="button" class="btn btn-secondary">
-								{{'next' | translate}}
-							</button>
-						</a>
-						<a ng-click="getLastPage()">
-							<button type="button" class="btn btn-secondary">
-								{{'last' | translate}}
-							</button>
-						</a>
+					<span class="flex flex-1">{{'showing_items' | translate}} {{commentsPageInitIndex}}-{{commentsPageInitIndex + comments.length - 1}} {{'of' | translate}} {{commentCount}}</span>
+					<div class="flex-1">
+						<div ng-hide="commentsPageNum == commentsLastPageNum" class="flex-row flex-space-around">
+							<a ng-click="getNextPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'next' | translate}}
+								</button>
+							</a>
+							<a ng-click="getLastPage()">
+								<button type="button" class="btn btn-secondary">
+									{{'last' | translate}}
+								</button>
+							</a>
+						</div>
 					</div>
 				</div>
 				<div ng-if="comments.length == 0" class="notice">

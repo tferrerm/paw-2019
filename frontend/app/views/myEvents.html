@@ -31,7 +31,7 @@
 							</a>
 						</div>
 					</div>
-					<div ng-hide="pastEventsLastPageNum == 1 || pastEventsLastPageNum == 0" class="flex-row text-center flex-space-around table-header">
+					<div class="flex-row text-center flex-space-around bbr-10">
 						<div class="flex-1">
 							<div ng-hide="pastEventsPageNum == 1" class="flex-row flex-space-around">
 								<a ng-click="getPastEventsFirstPage()">
@@ -83,7 +83,7 @@
 							</a>
 						</div>
 					</div>
-					<div ng-hide="futureEventsLastPageNum == 1 || futureEventsLastPageNum == 0" class="flex-row flex-space-around align-center text-center table-header">
+					<div class="flex-row flex-space-around align-center text-center bbr-10">
 						<div class="flex-1">
 							<div ng-hide="futureEventsPageNum == 1" class="flex-row flex-space-around">
 								<a ng-click="getFutureEventsFirstPage()">
@@ -113,10 +113,10 @@
 			</div>	
 		</div>
 	</div>
-	<div ng-if="pastEventCount === 0 && futureEventCount === 0">
-		<div class="notice">{{'empty_my_events' | translate}}</div>
+	<div ng-if="pastEventCount === 0 && futureEventCount === 0" class="flex-column align-center">
+		<div class="notice mb-35">{{'empty_my_events' | translate}}</div>
 		<a ng-click="goToPitches()">
-			<button type="button" class="btn">{{'create_event' | translate}}	</button>
+			<button type="button" class="btn username">{{'create_event' | translate}}	</button>
 		</a>
 	</div>
 </div>

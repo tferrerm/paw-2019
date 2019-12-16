@@ -5,11 +5,16 @@
 			<h4>{{'club' | translate}}: <a class="club-link" ng-click="goToClub(tournament.tournamentClub.clubid)">{{tournament.tournamentClub.name}}</a></h3>
 		</div>
 		<span class="help-message notice w-70 justify-center">{{'tournament_description' | translate}}</span>
-		<div ng-if="currentRound != null">
-			<div style="width: 60%;margin: 20px 0">
-				<div class="progress">
-					<!--<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:${hasFinished ?100 : ((currentRound-1) * 100 / maxRoundPage)}%; background-color: ${hasFinished ? "green" : "dodgerblue"};"></div>-->
-				</div>
+		<div ng-if="currentRound != null" class="w-80 mv-10">
+			<div class="progress">
+				<div
+					class="progress-bar progress-bar-striped progress-bar-animated"
+					role="progressbar"
+					ng-style="currentRound == tournament.rounds ? {'background-color': 'green', 'width': (currentRound * 100 / tournament.rounds) + '%'} : {'background-color': 'dodgerblue', 'width': (currentRound * 100 / tournament.rounds) + '%'}"
+					aria-valuenow="currentRound"
+					aria-valuemin="0"
+					aria-valuemax="tournament.rounds"
+				></div>
 			</div>
 		</div>
 		<div class="tbl w-80">

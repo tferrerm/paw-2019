@@ -1,0 +1,38 @@
+.profile-comments-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    margin: 10px 20px;
+}
+
+.profile-cont {
+    padding: 30px;
+    max-width: 800px;
+}
+  
+.profile-title {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    word-break: break-word;
+    margin-top: 10px;
+}
+  
+.profile-second {
+    margin-top:  30px;
+    margin-bottom: 15px;
+}
+  
+.profile-top {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+  
+.profile-pic {
+    margin: 15px;
+    max-height: 200px;
+    max-width: 600px;
+    object-fit: cover;
+}

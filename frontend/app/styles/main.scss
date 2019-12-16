@@ -4,6 +4,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // endbower
 
 @import 'partials/home';
+@import 'partials/fonts';
 
 .browsehappy {
   margin: 0.2em 0;
@@ -261,6 +262,11 @@ div.background-dodgerblue {
 
 .background-yellow {
   background: #ffdf00;
+}
+
+.bbr-10 {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .border-radius-20 {
@@ -650,38 +656,6 @@ div.background-dodgerblue {
 
 .pointer {
   cursor: pointer;
-}
-
-.profile-cont {
-  padding: 30px;
-  max-width: 800px;
-}
-
-.profile-title {
-  display: flex;
-  justify-content: center;
-  width: 90%;
-  word-break: break-word;
-  margin-top: 10px;
-}
-
-.profile-second {
-  margin-top:  30px;
-  margin-bottom: 15px;
-}
-
-.profile-top {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.profile-pic {
-  margin: 15px;
-  max-height: 200px;
-  max-width: 600px;
-  object-fit: cover;
 }
 
 .progress-bar-completion {
