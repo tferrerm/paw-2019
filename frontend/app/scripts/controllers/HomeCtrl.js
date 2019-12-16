@@ -5,7 +5,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 		
     	$scope.scheduleHeaders = [];
 
-    titleService.setDefaultTitle();
+    	titleService.setDefaultTitle();
 
 		updateSchedule();
 

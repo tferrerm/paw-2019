@@ -52,8 +52,6 @@ define(['frontend', 'services/restService', 'services/titleService'], function(f
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		}
 

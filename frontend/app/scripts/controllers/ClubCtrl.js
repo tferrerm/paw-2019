@@ -20,7 +20,7 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 	    	.then(function(data) {
 	    		$scope.hasRelationship = data.relationship;
 	    	}).catch(function(error) {
-					$scope.hasRelationship = false;
+				$scope.hasRelationship = false;
 			});
 
 	    updatePitches(club.clubid, pitchParams);
@@ -70,8 +70,6 @@ define(['frontend', 'services/restService', 'services/modalService', 'services/t
 				$scope.lastPageNum = data.pageCount;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = pitchParams.pageNum;
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		};
 

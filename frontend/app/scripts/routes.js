@@ -154,7 +154,9 @@ define([], function() {
 						restService.getTournament(params.tournamentid).then(function(data) {
 							var t = data;
 							if (!t.inscriptionSuccess) {
+								$location.path('/404');
 								defer.reject('Access blocked');
+								
 							} else {
 								defer.resolve(data);
 							}
@@ -196,7 +198,7 @@ define([], function() {
 						  	defer.resolve();
 						} else {
 						  	defer.reject('Access blocked');
-						  	$location.path('/home');
+						  	$location.path('/403');
 						}
 
 					}],
@@ -209,6 +211,14 @@ define([], function() {
 			'/404': {
 				templateUrl: '404.html',
 				controller: 'NotFoundCtrl'
+			},
+			'/403': {
+				templateUrl: '403.html',
+				controller: 'UnauthorizedCtrl'
+			},
+			'/oops': {
+				templateUrl: 'oops.html',
+				controller: 'OopsCtrl'
 			}
 			/* ===== yeoman hook ===== */
 			/* Do not remove these commented lines! Needed for auto-generation */

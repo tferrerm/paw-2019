@@ -86,8 +86,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 					$scope.commentsLastPageNum = data.pageCount;
 					$scope.commentsPageInitIndex = data.commentsPageInitIndex;
 					$scope.commentsPageNum = commentParams.pageNum;
-				}).catch(function(error) {
-					alert(error.data || ' Error');
 				});
 		}
 

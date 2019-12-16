@@ -83,6 +83,10 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				}
 				errorService.setError(error);
 				$location.url('/404');
+			} else if (response.status === 403) {
+				$location.url('/403');
+			} else if (response.status === -1) {
+				$location.url('/oops');
 			}
 		}
 
