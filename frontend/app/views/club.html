@@ -74,7 +74,7 @@
 								<div class="custom-row flex-space-around club-pitches-list">
 									<div>{{pitch.name}}</div>
 									<div>{{pitch.sport | translate}}</div>
-									<a ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
+									<a class="mh-10" ng-click="goToPitch(pitch.pitchid)"> <button type="button" class="btn btn-primary view-club">{{'view_pitch' | translate}}</button></a>
 									<div ng-if="isAdmin">
 										<a ng-click="deletePitch(club.clubid, pitch.pitchid)"> <button type="button" class="btn btn-primary btn-danger">{{'delete_pitch' | translate}}</button></a>
 									</div>
