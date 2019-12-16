@@ -47,7 +47,7 @@
 		                </span>
 					</div>
 					<div class="registration-image-container">
-						<input class="registration-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}">
+						<input class="registration-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}" ng-required="false">
 						<div ng-if="pictureProcessingError">
                             <span class="form-error">
                                 {{'picture_processing_error' | translate}}

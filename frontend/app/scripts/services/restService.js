@@ -121,7 +121,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				var pitchData = {name: data.name, sport: data.sport /* PICTURE */};
 				var formData = new FormData();
 				formData.append('pitchForm', new Blob([JSON.stringify(pitchData)], {type: 'application/json'}));
-				formData.append('picture', picture);
+				if (picture != null) { // eslint-disable-line eqeqeq
+					formData.append('picture', picture);
+				}
 				// formData.append('sport', pitchData.sport);
 				/* PICTURE */
 
@@ -277,7 +279,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
 				var formData = new FormData();
 				formData.append('userForm', new Blob([JSON.stringify(userData)], {type: 'application/json'}));
-				formData.append('picture', picture);
+				if (picture != null) { // eslint-disable-line eqeqeq
+					formData.append('picture', picture);
+				}
 				return httpPost('/users', formData, {});
 			},
 			setTournamentEventResult: function(clubid, tournamentid, eventid, data) {

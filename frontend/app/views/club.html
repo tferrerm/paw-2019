@@ -49,7 +49,7 @@
                                 </div>
 							</div>
 							<div class="pitch-creation-image-container">
-								<input class="pitch-creation-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}"/>
+								<input class="pitch-creation-image-input" type="file" ngf-select="" ng-model="picture" name="picture" ngf-accept="'image/*'" ngf-validate="{size: {max: '20MB'}, pattern: '.jpg,.png,image/*'}" ng-require="false"/>
 								<div ng-if="pictureProcessingError">
                                     <span class="form-error">
                                         {{'picture_processing_error' | translate}}

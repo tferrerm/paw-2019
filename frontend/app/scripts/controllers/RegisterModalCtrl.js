@@ -11,30 +11,23 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 			if ($scope.passwordsMatch() && $scope.registerForm.$valid) {
 				$scope.pictureProcessingError = false;
 				$scope.duplicateUsernameError = false;
-				Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
-				    restService.register($scope.user, blob)
-				    .then(function(data) {
-						return authService.login($scope.user.username, $scope.user.password, false);
-					}).then(function() {
-						$uibModalInstance.close(true);
-					}).catch(function(error) {
-						if (error.status === 422) {
-							if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
-								/* Service violation */
-								if (error.data.error === 'PictureProcessingError') {
-									$scope.pictureProcessingError = true;
-								}
-							}
-						} else if (error.status === 409) {
-							if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
-								/* Service violation */
-								if (error.data.error === 'UserAlreadyExists') {
-									$scope.duplicateUsernameError = true;
-								}
-							}
-						}
-					});
+				if (picture != null) { // eslint-disable-line eqeqeq
+					Upload.urlToBlob(picture.$ngfBlobUrl).then(function(blob) {
+				  	  restService.register($scope.user, blob)
+				   	 	.then(function(data) {
+								return authService.login($scope.user.username, $scope.user.password, false);
+							}).then(function() {
+								$uibModalInstance.close(true);
+							}).catch(catchError);
 				});
+			} else {
+					restService.register($scope.user, null)
+				   	 	.then(function(data) {
+								return authService.login($scope.user.username, $scope.user.password, false);
+							}).then(function() {
+								$uibModalInstance.close(true);
+							}).catch(catchError);
+			}
 
 			};
 		};
@@ -46,7 +39,25 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
 		$scope.showLoginModal = function() {
 	    	$uibModalInstance.dismiss('cancel');
 	    	modalService.loginModal();
-	    };
+	  };
+
+	  function catchError(error) {
+			if (error.status === 422) {
+				if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
+					/* Service violation */
+					if (error.data.error === 'PictureProcessingError') {
+						$scope.pictureProcessingError = true;
+					}
+				}
+			} else if (error.status === 409) {
+				if (error.data.constraintViolations == null) { // eslint-disable-line eqeqeq
+					/* Service violation */
+					if (error.data.error === 'UserAlreadyExists') {
+						$scope.duplicateUsernameError = true;
+					}
+				}
+			}
+	  }
 
 	}]);
 
