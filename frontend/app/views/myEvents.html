@@ -113,10 +113,10 @@
 			</div>	
 		</div>
 	</div>
-	<div ng-if="pastEventCount === 0 && futureEventCount === 0">
-		<div class="notice">{{'empty_my_events' | translate}}</div>
+	<div ng-if="pastEventCount === 0 && futureEventCount === 0" class="flex-column align-center">
+		<div class="notice mb-35">{{'empty_my_events' | translate}}</div>
 		<a ng-click="goToPitches()">
-			<button type="button" class="btn">{{'create_event' | translate}}	</button>
+			<button type="button" class="btn username">{{'create_event' | translate}}	</button>
 		</a>
 	</div>
 </div>
