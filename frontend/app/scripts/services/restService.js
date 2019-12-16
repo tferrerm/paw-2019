@@ -273,7 +273,9 @@ define(['frontend', 'jquery', 'services/storageService', 'services/errorService'
 				var userData = {username: data.username, password: data.password, firstname: data.firstName, lastname: data.lastName/*, picture: data.picture*/};
 				var formData = new FormData();
 				formData.append('userForm', new Blob([JSON.stringify(userData)], {type: 'application/json'}));
-				formData.append('picture', picture);
+				if (picture != null) {
+					formData.append('picture', picture);
+				}
 				return httpPost('/users', formData, {});
 			},
 			setTournamentEventResult: function(clubid, tournamentid, eventid, data) {
