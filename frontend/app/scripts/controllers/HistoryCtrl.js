@@ -43,8 +43,6 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 				$scope.lastPageNum = data.lastPageNum;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {
-				alert(error.data || ' Error');
 			});
 		}
 

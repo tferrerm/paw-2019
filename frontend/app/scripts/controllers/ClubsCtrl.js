@@ -48,9 +48,7 @@ define(['frontend', 'services/restService', 'services/titleService'], function(f
 				$scope.lastPageNum = data.pagesCountMatching;
 				$scope.initialPageIndex = data.initialPageIndex;
 				$scope.pageNum = params.pageNum;
-			}).catch(function(error) {
-alert(error.data || ' Error');
-});
+			});
 		}
 
 		$scope.createClubSubmit = function() {

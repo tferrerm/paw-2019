@@ -102,7 +102,7 @@ module.exports = function (grunt) {
 
     eslint: {
       options: {
-        fix: false
+        fix: true
       },
       all: [
       '<%= yeoman.app %>/scripts/**/*.js',

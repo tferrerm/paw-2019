@@ -409,6 +409,12 @@ div.background-dodgerblue {
   padding: 0;
 }
 
+.error-image {
+  width: 25%;
+  height: 25%;
+  align-self: center;
+}
+
 .font-bold {
   font-weight: bold;
 }
@@ -475,7 +481,9 @@ div.background-dodgerblue {
 }
 
 .http-error {
-  margin: 30px;
+  margin: 10%;
+  flex-direction: column;
+  display: flex;
 }
 
 .input-number {

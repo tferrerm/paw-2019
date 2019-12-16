@@ -65,13 +65,8 @@ define(['routes',
 				['$rootScope',
 				'$location',
 				function($rootScope, $location) {
-					$rootScope.$on('$routeChangeStart', function() {
-					});
 					$rootScope.$on('$routeChangeSuccess', function() {
 						document.body.scrollTop = document.documentElement.scrollTop = 0;
-					});
-					$rootScope.$on('$routeChangeError', function() {
-						$location.path('/404');
 					});
 				}])
 			.value('url', 'http://localhost:8080/webapp/api');

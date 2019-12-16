@@ -15,14 +15,14 @@ define(['frontend', 'services/restService', 'services/authService', 'services/ti
 
     var today = new Date();
     var tomorrow = new Date(today);
-    $scope.todayDate = tomorrow.getFullYear() + '-' + (tomorrow.getMonth() + 1  < 10 ? '0' : '') + (tomorrow.getMonth() + 1 ) + '-' + (tomorrow.getDate()  < 10 ? '0' : '') + tomorrow.getDate();
-    tomorrow.setDate(today.getDate() + 1)
-    $scope.tomorrowDate = tomorrow.getFullYear() + '-' + (tomorrow.getMonth() + 1  < 10 ? '0' : '') + (tomorrow.getMonth() + 1 ) + '-' + (tomorrow.getDate()  < 10 ? '0' : '') + tomorrow.getDate();
+    $scope.todayDate = tomorrow.getFullYear() + '-' + (tomorrow.getMonth() + 1 < 10 ? '0' : '') + (tomorrow.getMonth() + 1) + '-' + (tomorrow.getDate() < 10 ? '0' : '') + tomorrow.getDate();
+    tomorrow.setDate(today.getDate() + 1);
+    $scope.tomorrowDate = tomorrow.getFullYear() + '-' + (tomorrow.getMonth() + 1 < 10 ? '0' : '') + (tomorrow.getMonth() + 1) + '-' + (tomorrow.getDate() < 10 ? '0' : '') + tomorrow.getDate();
     var sevenDaysadd = new Date(tomorrow);
     sevenDaysadd.setDate(sevenDaysadd.getDate() + 6);
-    $scope.sevenDaysFromTomorrow = sevenDaysadd.getFullYear() + '-' + (sevenDaysadd.getMonth() + 1  < 10 ? '0' : '') + (sevenDaysadd.getMonth() + 1) + '-' + (sevenDaysadd.getDate()  < 10 ? '0' : '') + sevenDaysadd.getDate();
-    sevenDaysadd.setDate(sevenDaysadd.getDate() -1);
-    $scope.maxInscriptionDate = sevenDaysadd.getFullYear() + '-' + (sevenDaysadd.getMonth() + 1  < 10 ? '0' : '') + (sevenDaysadd.getMonth() + 1) + '-' + (sevenDaysadd.getDate()  < 10 ? '0' : '') + sevenDaysadd.getDate();
+    $scope.sevenDaysFromTomorrow = sevenDaysadd.getFullYear() + '-' + (sevenDaysadd.getMonth() + 1 < 10 ? '0' : '') + (sevenDaysadd.getMonth() + 1) + '-' + (sevenDaysadd.getDate() < 10 ? '0' : '') + sevenDaysadd.getDate();
+    sevenDaysadd.setDate(sevenDaysadd.getDate() - 1);
+    $scope.maxInscriptionDate = sevenDaysadd.getFullYear() + '-' + (sevenDaysadd.getMonth() + 1 < 10 ? '0' : '') + (sevenDaysadd.getMonth() + 1) + '-' + (sevenDaysadd.getDate() < 10 ? '0' : '') + sevenDaysadd.getDate();
 
 
     titleService.setTitle($filter('translate')('create_tournament'));
