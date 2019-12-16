@@ -47,5 +47,11 @@ define(['frontend', 'services/restService', 'services/titleService'], function(f
 				$scope.pageNum = params.pageNum;
 			});
 		}
+
+		$scope.inscriptionPhase = function(inscription) {
+			var inscriptionEnd = $filter('date')(new Date(Date.parse(inscription)), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
+			var now = $filter('date')(new Date(), 'MM/dd/yyyy HH:mm:ss', 'GMT-3');
+			return Date.parse(inscriptionEnd) > Date.parse(now);
+		};
 	}]);
 });
