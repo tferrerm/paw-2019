@@ -345,6 +345,15 @@
                   <arguments>build</arguments>
                 </configuration>
               </execution>
+              <execution>
+                <id>javascript tests</id>
+                <goals>
+                  <goal>karma</goal>
+                </goals>
+                <configuration>
+                  <karmaConfPath>../frontend/karma.conf.js</karmaConfPath>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
         </plugins>
