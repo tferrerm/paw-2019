@@ -263,6 +263,7 @@ define([], function() {
     clubs_intro: 'Do you want to add a new club or add a new pitch?',
     tournaments_intro: 'Do you want to modify an existing tournament?',
     delete_event_intro: 'Do you want to delete an exisiting event?',
-    date_restrictions: 'Events can be created with no more than 7 days of anticipation and no less than a day.'
+    date_restrictions: 'Events must take place within the next seven days:',
+    inscription_date_maximum_exceeded: 'Inscription date limit exceeded'
   };
 });

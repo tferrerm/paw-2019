@@ -264,6 +264,7 @@ define([], function() {
     clubs_intro: '¿Quieres agregar un nuevo club o agregar una cancha?',
     tournaments_intro: '¿Quieres modificar un torneo existente?',
     delete_event_intro: '¿Quieres eliminar un evento existente?',
-    date_restrictions: 'Los eventos se pueden crear con una anticipación de no más de 7 días y no menos que 1 día.'
+    date_restrictions: 'Los eventos deben llevarse a cabo dentro de los siguientes siete días:',
+    inscription_date_maximum_exceeded: 'Inscripción fuera de rango'
   };
 });

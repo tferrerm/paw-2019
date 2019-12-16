@@ -76,9 +76,11 @@
                             <div class="form-field flex-space-between">
                                 <div class="form-field-horizontal">
                                   <span>{{'new_event_date' | translate}}</span>
-                                    <input class="form-control date-input p-6" type="date" min="{{tomorrowDate}}" max="{{sevenDaysFromTomorrow}}" ng-min="currentDate" name="date" ng-model="event.selectedDate" required/>
+                                    <input class="form-control date-input p-6" type="date" min="{{tomorrowDate}}" max="{{sevenDaysFromTomorrow}}" min="{{currentDate}}" name="date" ng-model="event.selectedDate" required/>
                                     <div ng-show="(createEventForm.date.$touched ||  createEventForm.$submitted)">
                                         <span ng-show="createEventForm.date.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                        <span ng-show="createEventForm.date.$error.min" class="form-error">{{'event_in_past' | translate}}</span>
+                                        <span ng-show="createEventForm.date.$error.max" class="form-error">{{'date_exceeded' | translate}}</span>
                                     </div>
                                     <div ng-if="dateError">
                                         <span class="form-error">
@@ -117,9 +119,11 @@
                             </div>
                             <div class="my-events-tbl-sub">
                               <span>{{'end_date' | translate}}</span>
-                                <input class="form-control date-input w-100" type="date" min={{todayDate}}} max={{maxInscriptionDate}} name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
+                                <input class="form-control date-input w-100" type="datetime-local" min={{todayDate}} max={{maxInscriptionDate}} name="inscriptionEndDate" ng-model="event.selectedInscriptionDate" required/>
                                 <div ng-show="(createEventForm.inscriptionEndDate.$touched ||  createEventForm.$submitted)">
                                     <span ng-show="createEventForm.inscriptionEndDate.$error.required" class="form-error">{{'form_required' | translate}}</span>
+                                    <span ng-show="createEventForm.inscriptionEndDate.$error.min" class="form-error">{{'inscription_date_in_past' | translate}}</span>
+                                    <span ng-show="createEventForm.inscriptionEndDate.$error.max" class="form-error">{{'inscription_date_maximum_exceeded' | translate}}</span>
                                 </div>
                                 <div ng-if="inscriptionDateError">
                                     <span class="form-error">
