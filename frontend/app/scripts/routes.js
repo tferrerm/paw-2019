@@ -209,15 +209,15 @@ define([], function() {
 				}
 			},
 			'/404': {
-				templateUrl: '404.html',
+				templateUrl: 'views/404.html',
 				controller: 'NotFoundCtrl'
 			},
 			'/403': {
-				templateUrl: '403.html',
+				templateUrl: 'views/403.html',
 				controller: 'UnauthorizedCtrl'
 			},
 			'/oops': {
-				templateUrl: 'oops.html',
+				templateUrl: 'views/oops.html',
 				controller: 'OopsCtrl'
 			}
 			/* ===== yeoman hook ===== */
