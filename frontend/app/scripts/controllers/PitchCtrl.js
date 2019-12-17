@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/restService', 'services/authService', 'services/modalService', 'services/titleService', 'directives/tooltip'], function(frontend) {
 
-	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'restService', 'authService', 'modalService', 'titleService', 'pitch', function($scope, $filter, $location, restService, authService, modalService, titleService, pitch) {
+	frontend.controller('PitchCtrl', ['$scope', '$filter', '$location', 'url', 'restService', 'authService', 'modalService', 'titleService', 'pitch', function($scope, $filter, $location, url, restService, authService, modalService, titleService, pitch) {
     
     titleService.setTitle(pitch.name);
 
@@ -23,22 +23,7 @@ define(['frontend', 'services/restService', 'services/authService', 'services/mo
     $scope.sevenDaysFromTomorrow = sevenDaysadd.getFullYear() + '-' + (sevenDaysadd.getMonth() + 1 < 10 ? '0' : '') + (sevenDaysadd.getMonth() + 1) + '-' + (sevenDaysadd.getDate() < 10 ? '0' : '') + sevenDaysadd.getDate();
     sevenDaysadd.setDate(sevenDaysadd.getDate() - 1);
     $scope.maxInscriptionDate = $filter('date')(sevenDaysadd, 'yyyy-MM-ddT23:59');
-
-    restService.getPitchPicture(pitch.pitchid).then(function(data) {
-    		$scope.picture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
-    	}).catch(function(error) {
-    		$scope.picture = 'images/pitch_default.jpg';
-    	});
-
-			function _arrayBufferToBase64(buffer) {
-			    var binary = '';
-			    var bytes = new Uint8Array(buffer);
-			    var len = bytes.byteLength;
-			    for (var i = 0; i < len; i++) {
-			      binary += String.fromCharCode(bytes[i]);
-			    }
-			    return window.btoa(binary);
-			}
+		$scope.picture = url + '/users/' + pitch.pitchid + '/picture';
 	    
 	    restService.getHourRange().then(function(data) {
 	    	$scope.minHour = data.minHour;

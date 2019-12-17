@@ -12,7 +12,7 @@
 		</div>
 		<div class="tbl profile-cont">
 			<div class="profile-top">
-				<img class="profile-pic" data-ng-src="{{picture}}"/>
+				<img class="profile-pic" onerror="this.src='images/profile_default.png'" src="{{picture}}" />
 				<div class="stats">
 					<div class="notice" style="padding: 5px 0">
 						{{'curr_event_participant' | translate}}

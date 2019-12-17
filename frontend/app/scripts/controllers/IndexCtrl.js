@@ -1,7 +1,7 @@
 'use strict';
 define(['frontend', 'services/authService', 'services/storageService', 'services/restService', 'services/modalService'], function(frontend) {
 
-	frontend.controller('IndexCtrl', ['$scope', '$filter', '$location', 'authService', 'storageService', 'restService', 'modalService', function($scope, $filter, $location, authService, storageService, restService, modalService) {
+	frontend.controller('IndexCtrl', ['$scope', '$filter', '$location', 'url', 'authService', 'storageService', 'restService', 'modalService', function($scope, $filter, $location, url, authService, storageService, restService, modalService) {
 		
 		$scope.sidebarElements = [
 			{name: 'home', link: '#/home'},
@@ -24,12 +24,8 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		$scope.showLoginModal = modalService.loginModal;
 
 		if ($scope.isLoggedIn) {
-			restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {
-	    		$scope.profilePicture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
-	    	}).catch(function(error) {
-	    		$scope.profilePicture = 'images/profile_default.png';
-	    	});
-    	}
+    		$scope.profilePicture = url + '/users/' + $scope.loggedUser.userid + '/picture';
+  	}
 
 		$scope.logout = function() {
 			authService.logout();
@@ -48,12 +44,8 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 				$scope.sidebarElements = $filter('filter')($scope.sidebarElements, {name: '!history'});
 			}
 			if ($scope.isLoggedIn) {
-				restService.getUserProfilePicture($scope.loggedUser.userid).then(function(data) {
-		    		$scope.profilePicture = 'data:image/png;base64,' + _arrayBufferToBase64(data);
-		    	}).catch(function(error) {
-		    		$scope.profilePicture = 'images/profile_default.png';
-		    	});
-	    	}
+				$scope.profilePicture = url + '/users/' + $scope.loggedUser.userid + '/picture';
+	    }
 		});
 
 		$scope.goToEvent = function(pitchid, eventid) {
@@ -83,16 +75,6 @@ define(['frontend', 'services/authService', 'services/storageService', 'services
 		$scope.goToHome = function() {
 			$location.url('home');
 		};
-
-		function _arrayBufferToBase64(buffer) {
-		    var binary = '';
-		    var bytes = new Uint8Array(buffer);
-		    var len = bytes.byteLength;
-		    for (var i = 0; i < len; i++) {
-		      binary += String.fromCharCode(bytes[i]);
-		    }
-		    return window.btoa(binary);
-		}
 
 	}]);
 });
