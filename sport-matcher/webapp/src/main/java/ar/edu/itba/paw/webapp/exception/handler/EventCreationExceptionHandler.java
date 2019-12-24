@@ -6,7 +6,7 @@ import javax.ws.rs.ext.Provider;
 
 import ar.edu.itba.paw.exception.EventCreationException;
 import ar.edu.itba.paw.webapp.dto.exception.ExceptionDto;
-import ar.edu.itba.paw.webapp.http.CustomStatus;
+import ar.edu.itba.paw.webapp.http.HttpStatus;
 
 @Provider
 public class EventCreationExceptionHandler implements ExceptionMapper<EventCreationException> {
@@ -14,7 +14,7 @@ public class EventCreationExceptionHandler implements ExceptionMapper<EventCreat
 	@Override
 	public Response toResponse(EventCreationException exception) {
 		return Response
-				.status(CustomStatus.UNPROCESSABLE_ENTITY)
+				.status(HttpStatus.UNPROCESSABLE_ENTITY)
 				.entity(ExceptionDto.ofException(exception))
 				.build();
 	}

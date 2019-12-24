@@ -123,6 +123,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public String tokenSecretKey() {
+    	// TODO: read secret key from file
     	return Base64.getEncoder().encodeToString(
     			"E176EA76D237D19395AD4FBA2B605B82A9BCFB4F8ECBFE7E06C237889BB64EFA".getBytes());
     }

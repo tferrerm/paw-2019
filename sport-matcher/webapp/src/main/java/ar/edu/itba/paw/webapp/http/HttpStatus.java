@@ -3,7 +3,7 @@ package ar.edu.itba.paw.webapp.http;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
-public enum CustomStatus implements StatusType {
+public enum HttpStatus implements StatusType {
 	
 	UNPROCESSABLE_ENTITY(422, "Unprocessable Entity");
 	
@@ -11,7 +11,7 @@ public enum CustomStatus implements StatusType {
 	private Family family;
 	private String reasonPhrase;
 
-	CustomStatus(int statusCode, String reasonPhrase) {
+	HttpStatus(int statusCode, String reasonPhrase) {
 		this.statusCode = statusCode;
 		this.family = Family.familyOf(statusCode);
 		this.reasonPhrase = reasonPhrase;

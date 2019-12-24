@@ -19,7 +19,7 @@ public interface PitchService {
 	public List<Pitch> findBy(Optional<String> name, Optional<Sport> sport,
 			Optional<String> location, Optional<String> clubName, int page);
 	
-	public Integer countFilteredPitches(final Optional<String> pitchName, 
+	public int countFilteredPitches(final Optional<String> pitchName, 
 			final Optional<Sport> sport, final Optional<String> location, 
 			final Optional<String> clubName);
 	

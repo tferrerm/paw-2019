@@ -58,7 +58,7 @@ public class PitchServiceImpl implements PitchService {
 	}
 	
 	@Override
-	public Integer countFilteredPitches(final Optional<String> pitchName, 
+	public int countFilteredPitches(final Optional<String> pitchName, 
 			final Optional<Sport> sport, final Optional<String> location, 
 			final Optional<String> clubName) {
 		String sportString = null;

@@ -18,7 +18,7 @@ public interface PitchDao {
 	public List<Pitch> findBy(Optional<String> name, Optional<String> sport,
 			Optional<String> location, Optional<String> clubName, int page);
 	
-	public Integer countFilteredPitches(final Optional<String> pitchName, 
+	public int countFilteredPitches(final Optional<String> pitchName, 
 			final Optional<String> sport, final Optional<String> location, 
 			final Optional<String> clubName);
 	

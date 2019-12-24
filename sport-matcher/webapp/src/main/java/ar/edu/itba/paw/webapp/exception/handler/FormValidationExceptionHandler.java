@@ -6,7 +6,7 @@ import javax.ws.rs.ext.Provider;
 
 import ar.edu.itba.paw.webapp.dto.exception.FormValidationExceptionDto;
 import ar.edu.itba.paw.webapp.exception.FormValidationException;
-import ar.edu.itba.paw.webapp.http.CustomStatus;
+import ar.edu.itba.paw.webapp.http.HttpStatus;
 
 @Provider
 public class FormValidationExceptionHandler implements ExceptionMapper<FormValidationException> {
@@ -14,7 +14,7 @@ public class FormValidationExceptionHandler implements ExceptionMapper<FormValid
 	@Override
 	public Response toResponse(FormValidationException exception) {
 		return Response
-				.status(CustomStatus.UNPROCESSABLE_ENTITY)
+				.status(HttpStatus.UNPROCESSABLE_ENTITY)
 				.entity(FormValidationExceptionDto.ofException(exception))
 				.build();
 	}

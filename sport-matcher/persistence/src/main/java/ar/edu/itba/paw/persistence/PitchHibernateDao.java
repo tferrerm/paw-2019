@@ -99,7 +99,7 @@ public class PitchHibernateDao implements PitchDao {
 	}
 
 	@Override
-	public Integer countFilteredPitches(Optional<String> pitchName, Optional<String> sport, 
+	public int countFilteredPitches(Optional<String> pitchName, Optional<String> sport, 
 			Optional<String> location, Optional<String> clubName) {
 
 		Map<String, Object> paramsMap = new HashMap<>();
